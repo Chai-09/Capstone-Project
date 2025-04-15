@@ -107,9 +107,32 @@ body {
     margin-bottom: 2rem;
 }
 
+#loginforms h2 {
+    text-align: center;
+}
+
+#loginforms img {
+    width: 120px;
+    height: auto;
+    margin: 0 auto 20px auto;
+    display: block;
+}
+
+
 .form-group {
     margin-bottom: 1rem;
 }
+
+.form-group .g-recaptcha {
+    padding-top: 16px;
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;display: block;
+    margin: 0 auto;
+
+}
+
 
 #loginforms label {
     display: block;
@@ -178,6 +201,28 @@ body {
     color: #00753F;
     text-decoration: none;
     font-weight: 500;
+}
+
+.alert-box {
+    background-color: #fff4f4;
+    border: 1px solid #ff4d4d;
+    color: #cc0000;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    text-align: left;
+}
+
+.alert-box i {
+    margin-right: 8px;
+    color: #cc0000;
+}
+
+.alert-box p {
+    margin: 0 0 0 0;
+    line-height: 1.5;
 }
 
 /* Modal Styles */
@@ -354,19 +399,34 @@ body {
     .wrapper1 {
         padding: 2rem;
         background-position: center;
+
     }
     
     .wrapper1 .container {
         width: 100%;
         padding: 1rem;
+        text-align: center;
+    }
+
+    .wrapper1 .contents {
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        padding-left: 18%;
+    }
+
+    .wrapper1 img {
+        align-self: center;
     }
     
     .contents h1 {
         font-size: 48px;
+        text-align: center;
     }
     
     .contents h2 {
         font-size: 32px;
+        text-align: center;
     }
     
     .contents p {
@@ -376,5 +436,14 @@ body {
     .wrapper2 {
         border-radius: 0;
         padding: 2rem 1rem;
+    }
+}
+
+@media (max-width: 670px) {
+    .wrapper1 .contents {
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        padding: 0;
     }
 }

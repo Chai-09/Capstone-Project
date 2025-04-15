@@ -48,9 +48,20 @@ class SignupFormsController extends Controller
 
 
         DB::transaction(function () use ($request) {
+            // Format middle names with a period if not present
+            $guardianMname = strtoupper($request->guardian_mname);
+            if ($guardianMname && !str_ends_with($guardianMname, '.')) {
+                $guardianMname .= '.';
+            }
+
+            $applicantMname = strtoupper($request->applicant_mname);
+            if ($applicantMname && !str_ends_with($applicantMname, '.')) {
+                $applicantMname .= '.';
+            }
+
             // Create account for login
             $account = Accounts::create([
-                'name' => $request->guardian_fname . ' ' . $request->guardian_mname . ' ' . $request->guardian_lname,
+                'name' => strtoupper($request->guardian_fname) . ' ' . $guardianMname . ' ' . strtoupper($request->guardian_lname),
                 'email' => $request->guardian_email,
                 'password' => Hash::make($request->password),
                 'role' => 'applicant',
@@ -59,14 +70,14 @@ class SignupFormsController extends Controller
             // Create applicant details
             Applicant::create([
                 'account_id' => $account->id,
-                'guardian_fname' => $request->guardian_fname,
-                'guardian_mname' => $request->guardian_mname ?? '',
-                'guardian_lname' => $request->guardian_lname,
-                'applicant_fname' => $request->applicant_fname,
-                'applicant_mname' => $request->applicant_mname ?? '',
-                'applicant_lname' => $request->applicant_lname,
-                'current_school' => $request->current_school,
-                'incoming_grlvl' => $request->incoming_grlvl,
+                'guardian_fname' => strtoupper($request->guardian_fname),
+                'guardian_mname' => $guardianMname,
+                'guardian_lname' => strtoupper($request->guardian_lname),
+                'applicant_fname' => strtoupper($request->applicant_fname),
+                'applicant_mname' => $applicantMname,
+                'applicant_lname' => strtoupper($request->applicant_lname),
+                'current_school' => strtoupper($request->current_school),
+                'incoming_grlvl' => strtoupper($request->incoming_grlvl),
             ]);
         });
 

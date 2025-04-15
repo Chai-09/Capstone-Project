@@ -36,7 +36,18 @@
         <div id="loginforms">
             <form action="{{ route('login.store') }}" method="POST">
                 @csrf
-                <h2>Welcome!</h2>
+                <img src="feudiliman_logo.png">
+
+                @if ($errors->any())
+                <div class="alert-box">
+                    @foreach ($errors->all() as $error)
+                        <p><i class="fa-solid fa-circle-exclamation"></i> {{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
+
+
+
                 <div class="form-group">
                     <label>Email address</label>
                     <input type="email" name="email" required>
@@ -49,22 +60,9 @@
 
                 <div class="form-group">
                     <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
-                    @if ($errors->has('g-recaptcha-response'))
-                        <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span> 
-                    @endif
                 </div>
 
                 <button type="submit">LOGIN</button>
-
-                @if ($errors->any())
-                    <div class="text-danger mt-2">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
 
                 <p class="signup-link">Not yet registered? <a href="#" id="openForms">Sign Up</a></p>
             </form>                
@@ -161,9 +159,6 @@
 
                 <div class="form-group">
                     <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
-                    @if ($errors->has('g-recaptcha-response'))
-                        <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span> 
-                    @endif
                 </div>
 
                 <button type="submit" class="submit-btn">Sign Up</button>
