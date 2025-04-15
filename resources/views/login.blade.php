@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/2c99ab7d67.js" crossorigin="anonymous"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @vite('resources/css/login/login.css')
     @vite('resources/js/app.js')
@@ -170,6 +171,16 @@
         </div>
     </div>
 </div>
+
+@if (session()->has('success'))
+<script>
+Swal.fire({
+    title: "Success!",
+    text: "You have succesfully made an account!",
+    icon: "success"
+  });
+  </script>
+  @endif
 
 </body>
 </html>
