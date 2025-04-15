@@ -2,26 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Applicant extends Model
 {
-    
-    use HasFactory;
-    public $timestamps = false;
     protected $fillable = [
-        //'guardian_id',
-        'applicant_fname', 
-        'applicant_mname', 
-        'applicant_lname', 
-        'current_school', 
-        'incoming_grlvl',
+        'account_id',
+        'guardian_fname',
+        'guardian_mname',
+        'guardian_lname',
+        'applicant_fname',
+        'applicant_mname',
+        'applicant_lname',
+        'current_school',
+        'incoming_grlvl'
     ];
+    public $timestamps = false;
 
-    // An applicant belongs to a guardian
-    public function guardian()
+    public function account()
     {
-        return $this->belongsTo(Guardian::class);
+        return $this->belongsTo(Accounts::class);
     }
 }

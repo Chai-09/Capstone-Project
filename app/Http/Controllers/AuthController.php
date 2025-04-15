@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Guardian;
+use App\Models\Accounts;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -15,41 +15,46 @@ class AuthController extends Controller
             'password' => 'required',
             'g-recaptcha-response' => 'required',
         ]);
-            #For verification of ReCaptcha from google
+
+        // reCAPTCHA check
         $client = new \GuzzleHttp\Client();
         $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
             'form_params' => [
-                    'secret' => config('services.recaptcha.secret_key'),
-                    'response' => $request ->input('g-recaptcha-response'),
-                    'remoteip' => $request->ip(),
+                'secret' => config('services.recaptcha.secret_key'),
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+            ],
+        ]);
 
+        $body = json_decode((string) $response->getBody());
 
-                ],
-            ]);
-                #JSON request to make sure the system parses the response
-            $body = json_decode((string) $response->getBody());
-
-            if (!$body->success) {
-
-                return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA verification failed'])->withInput();
-
-            }
-
-        $guardian = Guardian::where('guardian_email', $request->email)->first();
-
-        if ($guardian && Hash::check($request->password, $guardian->password)) {
-            session(['guardian_id' => $guardian->id]);
-            return redirect()->route('applicantdashboard')->with('success', 'Login successful!');
-        } else {
-            return back()->withErrors(['Invalid email or password']);
+        if (!$body->success) {
+            return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA verification failed'])->withInput();
         }
+
+        $account = Accounts::where('email', $request->email)->first();
+
+        if ($account && Hash::check($request->password, $account->password)) {
+            session()->regenerate();
+            session([
+                'account_id' => $account->id,
+                'role' => $account->role,
+            ]);
+
+            return match ($account->role) {
+                'applicant' => redirect()->route('applicantdashboard'),
+                'admission' => redirect()->route('admissiondashboard'),
+                'accounting' => redirect()->route('accountingdashboard'),
+                default => redirect()->route('login'),
+            };
+        }
+
+        return back()->withErrors(['Invalid email or password']);
     }
 
     public function logout()
     {
-        session()->forget('guardian_id');
+        session()->flush();
         return redirect()->route('login')->with('success', 'Logged out successfully.');
     }
-
-
 }
