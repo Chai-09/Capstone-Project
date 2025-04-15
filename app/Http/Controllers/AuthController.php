@@ -13,7 +13,27 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            'g-recaptcha-response' => 'required',
         ]);
+            #For verification of ReCaptcha from google
+        $client = new \GuzzleHttp\Client();
+        $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+                    'secret' => config('services.recaptcha.secret_key'),
+                    'response' => $request ->input('g-recaptcha-response'),
+                    'remoteip' => $request->ip(),
+
+
+                ],
+            ]);
+                #JSON request to make sure the system parses the response
+            $body = json_decode((string) $response->getBody());
+
+            if (!$body->success) {
+
+                return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA verification failed'])->withInput();
+
+            }
 
         $guardian = Guardian::where('guardian_email', $request->email)->first();
 

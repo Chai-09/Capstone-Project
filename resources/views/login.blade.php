@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/2c99ab7d67.js" crossorigin="anonymous"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     
     @vite('resources/css/login/login.css')
     @vite('resources/js/app.js')
@@ -60,6 +62,14 @@
                             <input type="checkbox" name="remember"> Keep me signed in
                         </label>
                         <a href="#" class="forgot">Forgot password?</a>
+                    </div>
+
+                    {{-- Para sa Recaptcha validation (LOGIN) --}}
+                    <div class="form-group">
+                        <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                        @if ($errors-> has('g-recaptcha-response'))
+                            <span class="text-danger">{{ $errors-> first('g-recaptcha-response') }}</span> 
+                            @endif
                     </div>
                     
                     <button type="submit">LOGIN</button>
@@ -156,6 +166,14 @@
                         <div class="terms">
                             <p>By signing up, you agree to the <a href="#">Terms of Service</a>, <a href="#">Privacy Policy</a>, including <a href="#">Cookie Use</a></p>
                         </div>
+
+                        {{-- Para sa Recaptcha validation (SIGN-UP) --}}
+                    <div class="form-group">
+                        <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                        @if ($errors-> has('g-recaptcha-response'))
+                            <span class="text-danger">{{ $errors-> first('g-recaptcha-response') }}</span> 
+                            @endif
+                    </div>
                         
                         <button type="submit" class="submit-btn">Sign Up</button>
                     </form>
