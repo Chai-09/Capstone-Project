@@ -14,8 +14,8 @@ class SignupFormsController extends Controller
             'guardian_fname'=>'required|max:64', 
             'guardian_mname'=>'nullable|max:64', 
             'guardian_lname'=>'required|max:64', 
-            'guardian_email'=>'required|email|unique:guardian,guardian_email', 
-            'password'=>'required|min:6', 
+            'guardian_email'=>'required|email|unique:guardians,guardian_email', //yung unique:guardian ginawa ko to unique:guardians
+            'password'=>'required|min:6|same:repassword', 
             'repassword'=>'required', 
             'applicant_fname'=>'required|max:64', 
             'applicant_mname'=>'nullable|max:64', 
@@ -39,6 +39,7 @@ class SignupFormsController extends Controller
             'applicant_lname' => $request->applicant_lname,
             'current_school' => $request->current_school,
             'incoming_grlvl' => $request->incoming_grlvl,
+            //'guardian_id' => $guardian->id,
         ]);
     
         return redirect()->route('login')->with('success', 'Account created successfully!');

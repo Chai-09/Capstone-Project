@@ -1,6 +1,15 @@
 {
+  "public/images/login/login-bg.png": {
+    "file": "assets/login-bg-DOMhYrel.png",
+    "src": "public/images/login/login-bg.png"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-QZWqp6a0.css",
+    "file": "assets/app-BOamSkc3.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/login/login.css": {
+    "file": "assets/app-BOamSkc3.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },

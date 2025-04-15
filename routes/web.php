@@ -13,14 +13,7 @@ Route::get('/', function () {
 Route::get('/login', [AccountController::class, 'showForm'])->name('loginforms.form');
 Route::post('/login', [AccountController::class, 'store'])->name('login.store');
 Route::get('/accounts', [AccountController::class, 'index'])->name('accounts.list');
-//Route::get('/login', function(){ return view('login'); })->name('login');
-//Route::post('/register', [LoginFormsController::class, 'store'])->name('loginForms.store');
 
-//Route::post('/login#formsModal', [LoginFormsController::class, 'store'])->name('/login#loginForms.store');
-
-
-
-//Route::get('/login#formsModal', [SignupFormsController::class, 'store'])->name('formsModal.store');
 Route::post('/loginForms/store', [SignupFormsController::class, 'store'])->name('loginForms.store');
 Route::get('/login', function () {
     return view('login');  // Or point to your login view
@@ -32,3 +25,9 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.store');
 Route::get('/dashboard', function () {
     return view('applicantdashboard');
 })->name('applicantdashboard');
+
+Route::get('/applicants/create', [ApplicantController::class, 'create'])->name('applicants.create');
+Route::post('/applicants', [ApplicantController::class, 'store'])->name('applicants.store');
+
+Route::get('/guardians/create', [GuardianController::class, 'create'])->name('guardians.create');
+Route::post('/guardians', [GuardianController::class, 'store'])->name('guardians.store');

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Guardian extends Model
 { 
     use HasFactory;
-    //protected $table = 'guardians';
+    protected $table = 'guardians';
     public $timestamps = false;
 
     protected $fillable = [
@@ -16,7 +16,6 @@ class Guardian extends Model
     ];
 
     
-    // A guardian can have many applicants
     public function applicants()
     {
         return $this->hasMany(Applicant::class);

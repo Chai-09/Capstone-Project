@@ -7,15 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Applicant extends Model
 {
+    
     use HasFactory;
     public $timestamps = false;
     protected $fillable = [
-        'applicant_fname', 'applicant_mname', 'applicant_lname', 'current_school', 'incoming_grlvl',
+        //'guardian_id',
+        'applicant_fname', 
+        'applicant_mname', 
+        'applicant_lname', 
+        'current_school', 
+        'incoming_grlvl',
     ];
 
     // An applicant belongs to a guardian
-    public function guardians()
+    public function guardian()
     {
-        return $this->belongsTo(Guardians::class);
+        return $this->belongsTo(Guardian::class);
     }
 }
