@@ -24,7 +24,28 @@ class SignupFormsController extends Controller
             'applicant_lname' => 'required|max:64',
             'current_school' => 'required|max:255',
             'incoming_grlvl' => 'required|in:Kinder,Grade 1,Grade 2,Grade 3,Grade 4,Grade 5,Grade 6,Grade 7,Grade 8,Grade 9,Grade 10,Grade 11,Grade 12',
+            'g-recaptcha-response' => 'required',
         ]);
+
+        #For verification of ReCaptcha from google
+        $client = new \GuzzleHttp\Client();
+        $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+                'secret' => config('services.recaptcha.secret_key'),
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+
+
+            ],
+        ]);
+        #JSON request to make sure the system parses the response
+        $body = json_decode((string) $response->getBody());
+
+        if (!$body->success) {
+
+            return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA verification failed'])->withInput();
+        }
+
 
         DB::transaction(function () use ($request) {
             // Create account for login
