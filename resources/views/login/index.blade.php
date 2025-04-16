@@ -43,15 +43,27 @@
     </div>
 </div>
 
+{{-- Validation when account is created successfully. --}}
 @if (session()->has('success'))
 <script>
 Swal.fire({
     title: "Success!",
-    text: "You have succesfully made an account!",
-    icon: "success"
+    text: "{{ session('success') }}",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    background: '#f0fff4',
+    iconColor: '#16a34a', 
+    customClass: {
+        popup: 'rounded-xl shadow-lg',
+        title: 'text-lg font-semibold text-green-800',
+        htmlContainer: 'text-sm text-green-700'
+    }
 });
 </script>
 @endif
+
 
 </body>
 </html>
