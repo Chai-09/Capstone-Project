@@ -34,7 +34,11 @@
 
     <div class="wrapper2">
         <div id="loginforms">
-            @include('login.login-form')
+            @hasSection('content')
+                @yield('content')
+            @else
+                @include('login.login-form')
+            @endif
         </div>
 
         <div id="formsModal">
