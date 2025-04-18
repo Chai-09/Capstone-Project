@@ -1,4 +1,4 @@
-<form action="{{ route('login.store') }}" method="POST">
+<form id="login-form" action="{{ route('login.store') }}" method="POST">
     @csrf
     <img src="feudiliman_logo.png">
 
@@ -20,11 +20,14 @@
             <a href="{{ route('password.request') }}" class="forgot">Forgot Password?</a>
     </div>
 
-    <div class="form-group">
-        <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
-    </div>
-
-    <button type="submit">LOGIN</button>
+    {{-- Button para ma trigger recaptcha check check js sa index--}}
+    <button
+            class="g-recaptcha"
+            data-sitekey="{{ config('services.recaptcha.site_key') }}"
+            data-callback="onLoginSubmit"
+            data-badge="bottomright"
+            data-action="login"
+         >LOGIN</button>
 
     <p class="signup-link">Not yet registered? <a href="#" id="openForms">Sign Up</a></p>
 </form>

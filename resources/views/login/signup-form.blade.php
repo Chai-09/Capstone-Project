@@ -1,7 +1,7 @@
 <span id="close">&times;</span>
 <h3>Create your account</h3>
 
-<form action="{{ route('loginForms.store') }}" method="POST">
+<form id="signup-form" action="{{ route('loginForms.store') }}" method="POST">
     @csrf
 
     <!-- Guardian Section -->
@@ -76,9 +76,13 @@
         <p>By signing up, you agree to the <a href="#">Terms of Service</a>, <a href="#">Privacy Policy</a>, including <a href="#">Cookie Use</a></p>
     </div>
 
-    <div class="form-group">
-        <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
-    </div>
+    {{-- Button para ma trigger recaptcha check check js sa index--}}
+    <button
+    class="g-recaptcha submit-btn"
+    data-sitekey="{{ config('services.recaptcha.site_key') }}"
+    data-callback="onSignupSubmit"
+    data-badge="bottomright"
+    data-action="signup"
+    >Sign Up</button>
 
-    <button type="submit" class="submit-btn">Sign Up</button>
 </form>

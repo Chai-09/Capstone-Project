@@ -68,6 +68,18 @@ Swal.fire({
 </script>
 @endif
 
+{{-- Since si putakteng invisible kailangan i bind sa button eh di yan --}}
+<script>
+    function onLoginSubmit(token) {
+        document.getElementById("login-form").submit();
+    }
+
+    function onSignupSubmit(token) {
+        document.getElementById("signup-form").submit();
+    }
+</script>
+
+
 
 </body>
 </html>
