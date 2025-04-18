@@ -4,19 +4,30 @@
     "src": "public/images/login/login-bg.png"
   },
   "resources/css/app.css": {
-    "file": "assets/app-BOamSkc3.css",
+    "file": "assets/app-D2c3oOot.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
+  "resources/css/fillupforms/fillupforms.css": {
+    "file": "assets/fillupforms-BXt2jZ0n.css",
+    "src": "resources/css/fillupforms/fillupforms.css",
+    "isEntry": true
+  },
   "resources/css/login/login.css": {
-    "file": "assets/app-BOamSkc3.css",
-    "src": "resources/css/app.css",
+    "file": "assets/login-CBw_yMi0.css",
+    "src": "resources/css/login/login.css",
     "isEntry": true
   },
   "resources/js/app.js": {
     "file": "assets/app-D9aPql33.js",
     "name": "app",
     "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/fillupforms/fillupforms.js": {
+    "file": "assets/fillupforms-BqW08Ono.js",
+    "name": "fillupforms",
+    "src": "resources/js/fillupforms/fillupforms.js",
     "isEntry": true
   }
 }
