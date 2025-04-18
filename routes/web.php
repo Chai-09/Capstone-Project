@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SignupFormsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\FillupFormsController;
 
 
 // Log in Routes
@@ -24,3 +25,15 @@ Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->n
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
 Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
+
+//index applicant to fillup forms
+Route::get('/fillupforms', function () {
+    return view('steps.fillupforms.fillupforms');
+})->name('fillupforms');
+
+
+// Display the fill-up form
+Route::get('/fillupforms/create', [FillupFormsController::class, 'create'])->name('fillupforms.create');
+
+// Handle form submission
+Route::post('/fillupforms', [FillupFormsController::class, 'store'])->name('fillupforms.store');

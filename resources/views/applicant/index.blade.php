@@ -10,5 +10,9 @@
 </head>
 <body>
     <p>This is the applicant dashboard. Gabe ikaw na lang magtuloy neto :></p>
+    <a href="{{ route('fillupforms') }}">
+        <button type="submit">Go to Fill-up Forms</button>
+    </a>
+
 </body>
 </html>
