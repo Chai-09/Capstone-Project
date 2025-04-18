@@ -14,6 +14,7 @@
 
     @vite('resources/css/login/login.css')
     @vite('resources/js/app.js')
+
 </head>
 <body>
 
@@ -47,6 +48,9 @@
     </div>
 </div>
 
+</body>
+</html>
+
 {{-- Validation when account is created successfully. --}}
 @if (session()->has('success'))
 <script>
@@ -68,7 +72,6 @@ Swal.fire({
 </script>
 @endif
 
-{{-- Since si putakteng invisible kailangan i bind sa button eh di yan --}}
 <script>
     function onLoginSubmit(token) {
         document.getElementById("login-form").submit();
@@ -78,8 +81,6 @@ Swal.fire({
         document.getElementById("signup-form").submit();
     }
 </script>
-
-
 
 </body>
 </html>

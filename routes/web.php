@@ -31,7 +31,6 @@ Route::get('/fillupforms', function () {
     return view('steps.fillupforms.fillupforms');
 })->name('fillupforms');
 
-
 // Display the fill-up form
 Route::get('/fillupforms/create', [FillupFormsController::class, 'create'])->name('fillupforms.create');
 
