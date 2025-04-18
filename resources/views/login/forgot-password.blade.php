@@ -18,9 +18,13 @@
         <input type="email" name="email" required>
     </div>
 
-    <button type="submit">Send Reset Link</button>
+    <div class="form-group">
+        <button type="submit">Send Reset Link</button>
+    </div>
     {{-- Back Button baka gusto niyo ibahin --}}
-    <p><a href="{{ route('login') }}">Go Back</a></p>
+    <div class="form-group">
+        <a href="{{ route('login') }}" >Go Back</a>
+    </div>
 </form>
 
 

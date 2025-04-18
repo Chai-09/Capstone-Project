@@ -30,8 +30,12 @@
         <input type="password" name="password_confirmation" required>
     </div>
 
-    <button type="submit">Reset Password</button>
-    {{-- Back Button baka gusto niyo ibahin --}}
-    <p><a href="{{ route('login') }}">Go Back</a></p>
+    <div class="form-group">
+        <button type="submit">Reset Password</button>
+    </div>
+
+    <div class="form-group">
+        <a href="{{ route('login') }}">Go Back</a>
+    </div>
 </form>
 @endsection

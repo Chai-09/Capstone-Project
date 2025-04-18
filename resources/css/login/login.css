@@ -130,8 +130,18 @@ body {
     margin-left: auto;
     margin-right: auto;display: block;
     margin: 0 auto;
-
 }
+
+.form-group a{
+    text-decoration: none;
+    font-size: 0.9rem;
+    color: #00753F;
+}
+
+.form-group a:hover {
+    color:#05492a;
+}
+
 
 
 #loginforms label {
@@ -169,9 +179,14 @@ body {
     text-decoration: none;
 }
 
+.forgot:hover {
+    color:#05492a;
+}
+
 .required {
     color: red;
 }
+
 
 #loginforms button {
     width: 100%;
@@ -223,6 +238,10 @@ body {
 .alert-box p {
     margin: 0 0 0 0;
     line-height: 1.5;
+}
+
+#openForms:hover {
+    color:#005a32;
 }
 
 /* Modal Styles */

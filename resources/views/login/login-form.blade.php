@@ -14,8 +14,11 @@
         <input type="password" name="password" required>
     </div>
 
-    {{-- Forgot Password Button Baka gusto niyo ibahin --}}
-    <p><a href="{{ route('password.request') }}">Forgot Password?</a></p>
+    <div class="remember-forgot">
+        <label class="remember-me">
+            <input type="checkbox" name="remember"> Keep me signed in</label>
+            <a href="{{ route('password.request') }}" class="forgot">Forgot Password?</a>
+    </div>
 
     <div class="form-group">
         <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
