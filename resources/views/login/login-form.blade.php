@@ -40,50 +40,67 @@
 <script>
     let widgetId;
 
-function initRecaptcha() {
-    const container = document.createElement('div');
-    container.style.display = 'none';
-    document.body.appendChild(container);
+    function initRecaptcha() {
+        const container = document.createElement('div');
+        container.style.display = 'none';
+        document.body.appendChild(container);
 
-    widgetId = grecaptcha.render(container, {
-        sitekey: "{{ config('services.recaptcha.site_key') }}",
-        size: "invisible",
-        callback: onSubmitRecaptcha
-    });
-}
+        widgetId = grecaptcha.render(container, {
+            sitekey: "{{ config('services.recaptcha.site_key') }}",
+            size: "invisible",
+            callback: onSubmitRecaptcha
+        });
+    }
 
-document.getElementById('login-btn').addEventListener('click', function () {
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
+    document.getElementById('login-btn').addEventListener('click', function () {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const alertContainer = document.getElementById('alert-container') || document.createElement('div');
 
-    // Trigger blade-based error if fields are empty
-    if (!email || !password) {
-        const errorBox = document.createElement('div');
-        errorBox.classList.add('alert-box');
-        errorBox.innerHTML = `<p><i class="fa-solid fa-circle-exclamation"></i> Please fill in all required fields.</p>`;
-
-        // Remove existing errors before appending new
+        // Remove previous errors
         const existing = document.querySelector('.alert-box');
         if (existing) existing.remove();
 
+        let message = '';
+
+        // Validation
+        if (!email && !password) {
+            message = 'Please fill in all required fields.';
+        } else if (email && !email.includes('@')) {
+            message = 'Invalid email address.';
+        } else if (email && email.includes('@') && !password) {
+            message = 'Invalid password.';
+        }
+
+        // Error display
+        if (message !== '') {
+            const errorBox = document.createElement('div');
+            errorBox.classList.add('alert-box');
+            errorBox.innerHTML = `
+                <div class="alert-content">
+                    <span class="alert-message"><i class="fa-solid fa-circle-exclamation"></i> ${message}</span>
+                    <span class="alert-close" onclick="this.parentElement.parentElement.remove()">&times;</span>
+                </div>
+            `;
+
+            const form = document.getElementById('login-form');
+            form.insertBefore(errorBox, form.children[2]);
+            return;
+        }
+
+        // reCAPTCHA
+        grecaptcha.execute(widgetId);
+    });
+
+    function onSubmitRecaptcha(token) {
         const form = document.getElementById('login-form');
-        form.insertBefore(errorBox, form.children[2]); // insert after img + csrf + errors
-        return;
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'g-recaptcha-response';
+        input.value = token;
+        form.appendChild(input);
+        form.submit();
     }
-
-    grecaptcha.execute(widgetId);
-});
-
-function onSubmitRecaptcha(token) {
-    const form = document.getElementById('login-form');
-
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'g-recaptcha-response';
-    input.value = token;
-    form.appendChild(input);
-
-    form.submit();
-}
 </script>
 </html>

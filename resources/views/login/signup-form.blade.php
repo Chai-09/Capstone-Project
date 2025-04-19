@@ -7,6 +7,8 @@
 <body>
     <span id="close">&times;</span>
     <h3>Create your account</h3>
+    <div id="alert-container"></div>
+
 
     <form id="signup-form" action="{{ route('loginForms.store') }}" method="POST">
         @csrf
@@ -92,55 +94,93 @@
 <script>
     let signupWidgetId;
 
-function initSignupRecaptcha() {
-    const container = document.createElement('div');
-    container.style.display = 'none';
-    document.body.appendChild(container);
+    function initSignupRecaptcha() {
+        const container = document.createElement('div');
+        container.style.display = 'none';
+        document.body.appendChild(container);
 
-    signupWidgetId = grecaptcha.render(container, {
-        sitekey: document.querySelector('meta[name="recaptcha-site-key"]').content,
-        size: 'invisible',
-        callback: onSignupCaptchaSuccess
-    });
-}
+        signupWidgetId = grecaptcha.render(container, {
+            sitekey: document.querySelector('meta[name="recaptcha-site-key"]').content,
+            size: 'invisible',
+            callback: onSignupCaptchaSuccess
+        });
+    }
 
-document.getElementById('signup-btn').addEventListener('click', function () {
-    const form = document.getElementById('signup-form');
-    const requiredFields = form.querySelectorAll('[required]');
-    let allValid = true;
+    function showSignupError(message) {
+        const alertContainer = document.getElementById('alert-container');
 
-    requiredFields.forEach(field => {
-        if (!field.value.trim()) {
-            allValid = false;
-            field.classList.add('border-danger');
-        } else {
-            field.classList.remove('border-danger');
+        // Clear existing alerts
+        const existing = document.querySelector('.alert-box');
+        if (existing) existing.remove();
+
+        const errorBox = document.createElement('div');
+        errorBox.classList.add('alert-box');
+        errorBox.innerHTML = `
+            <div class="alert-content">
+                <div class="alert-message">
+                    <span class="alert-message"><i class="fa-solid fa-circle-exclamation"></i> ${message}</span>
+                </div>
+                <span class="alert-close" onclick="this.parentElement.parentElement.remove()">&times;</span>
+            </div>
+        `;
+
+        alertContainer.appendChild(errorBox);
+    }
+
+    document.getElementById('signup-btn').addEventListener('click', function () {
+        const form = document.getElementById('signup-form');
+        const requiredFields = form.querySelectorAll('[required]');
+        let allValid = true;
+        let invalidEmail = false;
+
+        requiredFields.forEach(field => {
+            const value = field.value.trim();
+
+            if (!value) {
+                allValid = false;
+                field.classList.add('border-danger');
+            } else {
+                field.classList.remove('border-danger');
+            }
+
+            if (field.name === 'guardian_email' && value && !value.includes('@')) {
+                invalidEmail = true;
+                field.classList.add('border-danger');
+            }
+        });
+
+        const password = document.getElementById('password').value.trim();
+        const repassword = document.getElementById('repassword').value.trim();
+
+        if (password && repassword && password !== repassword) {
+            showSignupError('Passwords do not match.');
+            return;
         }
+
+        if (!allValid) {
+            showSignupError('Please fill in all required fields.');
+            return;
+        }
+
+        if (invalidEmail) {
+            showSignupError('Invalid email address.');
+            return;
+        }
+
+        grecaptcha.execute(signupWidgetId);
     });
 
-    // Password match check
-    const password = document.getElementById('password').value.trim();
-    const repassword = document.getElementById('repassword').value.trim();
-    if (password && repassword && password !== repassword) {
-        allValid = false;
-        alert('Passwords do not match.');
+    function onSignupCaptchaSuccess(token) {
+        const form = document.getElementById('signup-form');
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'g-recaptcha-response';
+        input.value = token;
+        form.appendChild(input);
+
+        form.submit();
     }
-
-    if (allValid) {
-        grecaptcha.execute(signupWidgetId);
-    }
-});
-
-function onSignupCaptchaSuccess(token) {
-    const form = document.getElementById('signup-form');
-
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'g-recaptcha-response';
-    input.value = token;
-    form.appendChild(input);
-
-    form.submit();
-}
 </script>
+
 </html>

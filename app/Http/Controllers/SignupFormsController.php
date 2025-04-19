@@ -25,6 +25,8 @@ class SignupFormsController extends Controller
             'current_school' => 'required|max:255',
             'incoming_grlvl' => 'required|in:Kinder,Grade 1,Grade 2,Grade 3,Grade 4,Grade 5,Grade 6,Grade 7,Grade 8,Grade 9,Grade 10,Grade 11,Grade 12',
             'g-recaptcha-response' => 'required',
+        ], [
+            'password.same' => 'Password do not match.',
         ]);
 
         #For verification of ReCaptcha from google
