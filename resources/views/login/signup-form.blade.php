@@ -38,12 +38,12 @@
 
             <div class="form-group">
                 <label for="password">Password <span class="required">*</span></label>
-                <input type="password" name="password" id="password" required>
+                <input type="password" name="password" id="signup-password">
             </div>
 
             <div class="form-group">
                 <label for="repassword">Confirm Password <span class="required">*</span></label>
-                <input type="password" name="repassword" id="repassword" required>
+                <input type="password" name="repassword" id="signup-repassword">
             </div>
         </fieldset>
 
@@ -149,13 +149,8 @@
             }
         });
 
-        const password = document.getElementById('password').value.trim();
-        const repassword = document.getElementById('repassword').value.trim();
-
-        if (password && repassword && password !== repassword) {
-            showSignupError('Passwords do not match.');
-            return;
-        }
+        const password = document.getElementById('signup-password').value.trim();
+        const repassword = document.getElementById('signup-repassword').value.trim();
 
         if (!allValid) {
             showSignupError('Please fill in all required fields.');
@@ -167,8 +162,28 @@
             return;
         }
 
+        if (password.length < 6) {
+            showSignupError('Password must be at least 6 characters.');
+            document.getElementById('signup-password').classList.add('border-danger');
+            document.getElementById('signup-repassword').classList.add('border-danger'); 
+            return;
+        }
+
+        if (password !== repassword) {
+            showSignupError('Passwords do not match.');
+            document.getElementById('signup-repassword').classList.add('border-danger');
+            return;
+        }
+
         grecaptcha.execute(signupWidgetId);
     });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof initSignupRecaptcha === 'function') {
+            initSignupRecaptcha(); // ✅ This is the correct one for sign-up
+        }
+    });
+
 
     function onSignupCaptchaSuccess(token) {
         const form = document.getElementById('signup-form');

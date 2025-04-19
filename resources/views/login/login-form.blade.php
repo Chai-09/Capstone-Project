@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <head>
+    <meta name="recaptcha-site-key" content="{{ config('services.recaptcha.site_key') }}">
     <script src="https://www.google.com/recaptcha/api.js?onload=initRecaptcha&render=explicit" async defer></script> 
 </head>
 <body>
@@ -90,6 +91,12 @@
 
         // reCAPTCHA
         grecaptcha.execute(widgetId);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof initRecaptcha === 'function') {
+            initRecaptcha();
+        }
     });
 
     function onSubmitRecaptcha(token) {
