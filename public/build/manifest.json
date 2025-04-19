@@ -4,7 +4,7 @@
     "src": "public/images/login/login-bg.png"
   },
   "resources/css/app.css": {
-    "file": "assets/app-D2c3oOot.css",
+    "file": "assets/app-BsPA6HG0.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -14,7 +14,7 @@
     "isEntry": true
   },
   "resources/css/login/login.css": {
-    "file": "assets/login-CBw_yMi0.css",
+    "file": "assets/login-EPYLlmuL.css",
     "src": "resources/css/login/login.css",
     "isEntry": true
   },
@@ -28,6 +28,18 @@
     "file": "assets/fillupforms-BqW08Ono.js",
     "name": "fillupforms",
     "src": "resources/js/fillupforms/fillupforms.js",
+    "isEntry": true
+  },
+  "resources/js/login/login.js": {
+    "file": "assets/login-D1MGold2.js",
+    "name": "login",
+    "src": "resources/js/login/login.js",
+    "isEntry": true
+  },
+  "resources/js/login/sign-up.js": {
+    "file": "assets/sign-up-DPYqE72-.js",
+    "name": "sign-up",
+    "src": "resources/js/login/sign-up.js",
     "isEntry": true
   }
 }

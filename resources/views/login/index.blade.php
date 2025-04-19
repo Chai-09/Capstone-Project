@@ -15,6 +15,7 @@
     @vite('resources/css/login/login.css')
     @vite('resources/js/app.js')
 
+
 </head>
 <body>
 
