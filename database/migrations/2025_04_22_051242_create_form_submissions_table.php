@@ -42,9 +42,9 @@ return new class extends Migration
             $table->string('school_type');
             $table->string('educational_level');
             $table->string('incoming_grlvl');
-            $table->string('applicant_bday');
-            $table->string('lrn_no');
-            $table->string('strand');
+            $table->string('applicant_bday')->nullable();
+            $table->string('lrn_no')->nullable();
+            $table->string('strand')->nullable();
             $table->string('source');
 
         });

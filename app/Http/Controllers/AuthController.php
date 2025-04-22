@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Accounts;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -35,11 +36,9 @@ class AuthController extends Controller
         $account = Accounts::where('email', $request->email)->first();
 
         if ($account && Hash::check($request->password, $account->password)) {
+            Auth::login($account);
             session()->regenerate();
-            session([
-                'account_id' => $account->id,
-                'role' => $account->role,
-            ]);
+            
 
             return match ($account->role) {
                 'applicant' => redirect()->route('applicantdashboard'),

@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class FillupForms extends Model
 {
-    protected $table = 'forms';
-
+    protected $table = 'form_submissions'; //changed form forms to forms submissions
+    public $timestamps = false; //added this to make sure it doesnt expect update and created at
     protected $fillable = [
         //applicant
         'applicant_fname',
