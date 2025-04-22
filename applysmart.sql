@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 22, 2025 at 04:24 PM
+-- Generation Time: Apr 22, 2025 at 06:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -56,7 +56,8 @@ INSERT INTO `accounts` (`id`, `name`, `email`, `password`, `role`) VALUES
 (14, 'SDSAD DASSAD. ASDAS', 'asdas@gmail.com', '$2y$12$zrNeigHtflbe9IvXTPdTdeQpkkuMkCrM8YUwHeQHOuhRb105SuJ7u', 'applicant'),
 (15, 'JEDI J. JEDI', 'jacob@gmail.com', '$2y$12$rREe5jPuU50y4D5/hv.NVe7uilRjjsRSberwPRTvuxcKbwAo6gHbK', 'applicant'),
 (27, 'ANDREW O. GUILLERMO', 'paulaeronguillermo2@gmail.com', '$2y$12$Tlg4teSmSyK0rzGRmrUqqu.D5Fu2ecamcDyPTanWu5ULvL2UbcyiS', 'applicant'),
-(32, 'RAND RAND. RAND', 'gabebarcenas08@gmail.com', '$2y$12$eMRKDcleXTYuzbtQGjapQ.Nf7YPE4Bd1dWixXqPxQchU1eZV1CySa', 'applicant');
+(32, 'RAND RAND. RAND', 'gabebarcenas08@gmail.com', '$2y$12$eMRKDcleXTYuzbtQGjapQ.Nf7YPE4Bd1dWixXqPxQchU1eZV1CySa', 'applicant'),
+(33, 'TEST TEST. TEST', 'eiryk.sardalla30@gmail.com', '$2y$12$zfR4808abYkxy2BXQQ3Kf.oay6n3dgdS8qyLfUMaHAm6JRUgmeQRC', 'applicant');
 
 -- --------------------------------------------------------
 
@@ -98,7 +99,8 @@ INSERT INTO `applicants` (`id`, `account_id`, `guardian_fname`, `guardian_mname`
 (14, 14, 'SDSAD', 'DASSAD.', 'ASDAS', 'SDSAD', 'ASDA.', 'ASDAS', 'ADSA', 'GRADE 8'),
 (15, 15, 'JEDI', 'J.', 'JEDI', 'JACOB', 'J.', 'JEDI', 'PASIG GREEN PASTURES', 'GRADE 11'),
 (27, 27, 'ANDREW', 'O.', 'GUILLERMO', 'ANDREI', 'O.', 'GUILLERMO', 'VIRGEN DEL PILAR SCHOOL', 'GRADE 11'),
-(32, 32, 'RAND', 'RAND.', 'RAND', 'RAND', 'RAND.', 'RAND', 'RAND', 'GRADE 11');
+(32, 32, 'RAND', 'RAND.', 'RAND', 'RAND', 'RAND.', 'RAND', 'RAND', 'GRADE 11'),
+(33, 33, 'TEST', 'TEST.', 'TEST', 'FORTESTING', 'FORTESTING.', 'FORTESTING', 'TESTING', 'GRADE 11');
 
 -- --------------------------------------------------------
 
@@ -113,10 +115,11 @@ CREATE TABLE `form_submissions` (
   `applicant_lname` varchar(255) NOT NULL,
   `applicant_contact_number` varchar(255) NOT NULL,
   `applicant_email` varchar(255) NOT NULL,
-  `numstreet` varchar(255) NOT NULL,
-  `barangay` varchar(255) NOT NULL,
-  `cityormunicipality` varchar(255) NOT NULL,
+  `region` varchar(255) NOT NULL,
   `province` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `barangay` varchar(255) NOT NULL,
+  `numstreet` varchar(255) NOT NULL,
   `postal_code` varchar(255) NOT NULL,
   `age` int(11) NOT NULL,
   `gender` varchar(255) NOT NULL,
@@ -138,21 +141,6 @@ CREATE TABLE `form_submissions` (
   `source` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `form_submissions`
---
-
-INSERT INTO `form_submissions` (`id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_contact_number`, `applicant_email`, `numstreet`, `barangay`, `cityormunicipality`, `province`, `postal_code`, `age`, `gender`, `nationality`, `guardian_fname`, `guardian_mname`, `guardian_lname`, `guardian_contact_number`, `guardian_email`, `relation`, `current_school`, `current_school_city`, `school_type`, `educational_level`, `incoming_grlvl`, `applicant_bday`, `lrn_no`, `strand`, `source`) VALUES
-(1, 'gabe', 'gabe', 'gabe', '2312131', '2343@gmail.com', '2341234', '1323', '12313', 'province', '121', 23, 'Male', 'filipino', 'h', 'ihi', 'hi', '1231312', 'awdsas@gmail.com', 'Parents', 'dfdssd', 'sfsd', 'Private', 'Grade School', 'Grade 1', '2025-04-01', '12321321', NULL, 'Career Fair/Career Orientation'),
-(2, 'gdfgdf', 'gdfgdf', 'dgdf', '01123123', 'dfsdfdf@gmail.com', '231312', '1231', '12313', 'efs', '21321', 23, 'Male', '2312', '2312', '232', '123', '312312', '12312@gmail.com', 'Parents', 'gfdgfdg', 'dgdfgd', 'Private', 'Grade School', 'Grade 1', '2025-04-15', '3432432', NULL, 'Events'),
-(3, 'dfgdfgdffd', 'dfgdfg', 'fgdfg', '21312134', 'fsd@gmail.com', '321', 'fdsfds', 'sfsd', 'sfsdf', '43', 32, 'Male', 'filipino', 'dfgdf', 'g', 'gdfgd', '34324324', 'dsd@gmail.com', 'Parents', '32423', '23423', 'Private', 'Grade School', 'Kinder', '2025-04-10', '232131', NULL, 'Events'),
-(4, 'fdsfsfsdf', 'sdfsdfsdf', 'sdfsdfsd', '3123123213', 'dadsd@gmail.com', '123', 'sdaas', 'dasdad', 'dadas', '213', 21, 'Male', 'filipino', 'dasda', 'asd', 'ads', '23423', 'asda@gmail.com', 'Brother/Sister', 'sdfsd', 'sdfsd', 'Private', 'Grade School', 'Grade 1', '2025-04-02', '2324', NULL, 'Friends/Family/Relatives'),
-(5, 'fdsfsfsdf', 'sdfsdfsdf', 'sdfsdfsd', '3123123213', 'dadsd@gmail.com', '123', 'sdaas', 'dasdad', 'dadas', '213', 21, 'Male', 'filipino', 'adas', 'asdas', 'dasas', '1231', 'dsada@gmail.com', 'Parents', 'dsdsa', 'dadasd', 'Private', 'Grade School', 'Grade 1', '2025-04-03', '21321', NULL, 'Career Fair/Career Orientation'),
-(6, 'adas', 'adas', 'dasdas', '231312', 'gabe@gmail.com', '2313', '2312', '131', 'daad', '1231', 2131, 'Female', 'filipino', 'sdad', 'a', 'dsa', '12231', 'gabe@gmail.com', 'Parents', '2313', '12312', 'Public', 'Grade School', 'Grade 1', '2025-04-16', '233123', NULL, 'Career Fair/Career Orientation'),
-(7, 'adas', 'asda', 'ada', '3242', 'dad@gmail.com', 'sdadasd', 'adas', 'dasd', 'dad', '2321', 21, 'Female', 'fadsf', 'sdfsdf', 'fsd', 'sdfs', '124234', 'sdas@gmail.com', 'Brother/Sister', 'sdadas', 'adas', 'Private', 'Grade School', 'Kinder', '2025-04-30', '32424', NULL, 'Friends/Family/Relatives'),
-(8, 'dfdssdf', 's', 'sfsd', '234234', 'da@gmail.com', 'dfdsf', 'sdf', 'fsd', 'fsdf', '34543', 34, 'Male', 'dfsfs', 'sdad', 'ada', 'adda', '3242', 'gabebarcenas01@gmail.com', 'Parents', 'dfs', 'fsdf', 'Private', 'Junior High School', 'Grade 8', NULL, '343', NULL, 'Career Fair/Career Orientation'),
-(9, 'adasa', 'adas', 'adasd', '21312', 'ada@gmail.com', 'asdas', 'adas', 'adasdas', 'sdsa', '1231', 12, 'Male', 'asda', 'asd', 'das', 'ada', '3423', 'sda@gmail.com', 'Parents', 'fsdsd', 'sfsd', 'Private', 'Senior High School', 'Grade 12', NULL, NULL, 'ABM Accountancy', 'Events');
-
 -- --------------------------------------------------------
 
 --
@@ -172,7 +160,8 @@ CREATE TABLE `migrations` (
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (4, '2025_04_16_091659_create_password_resets_table', 1),
 (5, '2025_04_20_074003_create_signup_otps_table', 1),
-(6, '2025_04_22_051242_create_form_submissions_table', 2);
+(6, '2025_04_22_051242_create_form_submissions_table', 2),
+(7, '2025_04_22_162302_create_form_submissions', 3);
 
 -- --------------------------------------------------------
 
@@ -211,6 +200,7 @@ INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, 
 ('BQnZko9czmercCzE00CGVYjPggExBrXwSXXQQ1NJ', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6ImM1Nk8zVTlxYUxYMmtvdkFUcGdhSXR0bVRaUFpxNzJRZ2FkTjF0MnYiO30=', 1745326458),
 ('cVDETW6Wae9nUozZaoEQWi9NdHcD2icKO4wDbDgL', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6Imw3bk5QVVpYRG93cktEaWtaS0FzSFdtWmFDYVVrdUZJMWtOcXlxUjUiO30=', 1745331505),
 ('hMqGQ3DAGAkqUauqkZChfc1XUbn01yPikp0XcPaY', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6InRpMk14NnoxMm82allKMFJGbTVSTHhhOXF5STVDNW9UM0xyR01paWYiO30=', 1745324707),
+('i92oNXtr12jl5qaaazfvKL3oIRiZz6oUEiqCtOt2', 33, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiWVlCUTBKdkd6bkYxT29vNHZLaHFQY0x0MzNlRWhSbmRKOExaZ0xHZSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hcHBsaWNhbnQvcGF5bWVudC9wYXltZW50Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MzM7czo0OiJuYW1lIjtzOjE1OiJURVNUIFRFU1QuIFRFU1QiO3M6NToiZW1haWwiO3M6MjY6ImVpcnlrLnNhcmRhbGxhMzBAZ21haWwuY29tIjt9', 1745339119),
 ('qP7rZZ8ZYeMDatf6lPVU5WpyT1GDDbiXeEASmwxE', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6IktSa0pFSFNCMHpjM2xNS1ptNDFaNldrOXBNbTFoYUlCd2RBcUZaUUEiO30=', 1745328143),
 ('TEW6SUl4sfJKKQp6sBijQu3rbFmKDe4YTbtXmoLe', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo2OntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6ImxtN0FFVVNscWsxNjMyYmFmb2M2Um0xcjVuWDFkMFY0UWZUTEY1dGQiO3M6MzoidXJsIjthOjE6e3M6ODoiaW50ZW5kZWQiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQiO31zOjEwOiJhY2NvdW50X2lkIjtpOjMyO3M6NDoicm9sZSI7czo5OiJhcHBsaWNhbnQiO30=', 1745329674),
 ('ZljK8NMZGAqAzWsws5sr2CsqOwQacDg6p77NLZNA', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6IjZLUkJOTDBhdUkxbmJsdnJvM0p4ajlFM09kdjk5SHRSZXViTk9vRGwiO30=', 1745324934);
@@ -288,31 +278,31 @@ ALTER TABLE `signup_otps`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `applicants`
 --
 ALTER TABLE `applicants`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `form_submissions`
 --
 ALTER TABLE `form_submissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `signup_otps`
 --
 ALTER TABLE `signup_otps`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
