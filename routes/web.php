@@ -36,3 +36,10 @@ Route::get('/fillupforms/create', [FillupFormsController::class, 'create'])->nam
 
 // Handle form submission
 Route::post('/fillupforms', [FillupFormsController::class, 'store'])->name('fillupforms.store');
+
+// SignUp OTP Routes
+Route::post('/signup/request-otp', [SignupFormsController::class, 'requestOtp'])->name('signup.requestOtp');
+Route::get('/signup/verify', [SignupFormsController::class, 'showOtpForm'])->name('signup.showOtpForm');
+Route::post('/signup/verify', [SignupFormsController::class, 'verifyOtpAndCreate'])->name('signup.verifyOtp');
+Route::post('/signup/resend-otp', [SignupFormsController::class, 'resendOtp'])->name('signup.resendOtp');
+

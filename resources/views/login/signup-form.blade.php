@@ -10,7 +10,7 @@
     <div id="alert-container"></div>
 
 
-    <form id="signup-form" action="{{ route('loginForms.store') }}" method="POST">
+    <form id="signup-form" action="{{ route('signup.requestOtp') }}" method="POST">
         @csrf
 
         <!-- Guardian Section -->
@@ -38,12 +38,12 @@
 
             <div class="form-group">
                 <label for="password">Password <span class="required">*</span></label>
-                <input type="password" name="password" id="signup-password">
+                <input type="password" name="password" id="signup-password" required>
             </div>
 
             <div class="form-group">
                 <label for="repassword">Confirm Password <span class="required">*</span></label>
-                <input type="password" name="repassword" id="signup-repassword">
+                <input type="password" name="repassword" id="signup-repassword" required>
             </div>
         </fieldset>
 
@@ -180,7 +180,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof initSignupRecaptcha === 'function') {
-            initSignupRecaptcha(); // ✅ This is the correct one for sign-up
+            initSignupRecaptcha(); 
         }
     });
 

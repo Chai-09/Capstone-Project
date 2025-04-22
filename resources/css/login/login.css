@@ -501,3 +501,20 @@
     }
 }
 
+form.resend-otp-form button.resend-otp-fake-link {
+    all: unset !important;
+    color: #00753F !important;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: inherit;
+    text-decoration: underline;
+    display: inline;
+  }
+  
+  form.resend-otp-form button.resend-otp-fake-link:hover {
+    color: #05492a !important;
+  }
+  
+  
+  
+
