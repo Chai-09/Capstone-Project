@@ -38,7 +38,11 @@ class AuthController extends Controller
         if ($account && Hash::check($request->password, $account->password)) {
             Auth::login($account);
             session()->regenerate();
-            
+            session([
+                'name' => $account->name,
+                'email' => $account->email,
+            ]);
+
 
             return match ($account->role) {
                 'applicant' => redirect()->route('applicantdashboard'),
