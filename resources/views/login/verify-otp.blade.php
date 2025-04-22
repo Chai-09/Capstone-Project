@@ -1,13 +1,21 @@
 @extends('login.index')
 
 @section('content')
-<div class="otp-verification" style="padding: 2rem;">
+<div class="otp-verification">
     
     <img src="{{ asset('feudiliman_logo.png') }}" alt="FEU Diliman Logo">
 
-    <h3 class="mb-3">Email Verification</h3>
+    <div class="form-group">
+      <h3 class="mb-3">Email Verification</h3>
+      <div class="note">
+        <p>We’ve sent a 6-digit OTP code to your email. Please enter it below to complete your sign up <strong>(Check Spam Folder)</strong>.</p>
+      </div>
+    </div>
 
-    <p class="mb-4">We’ve sent a 6-digit OTP code to your email. Please enter it below to complete your sign up (Check Spam Folder).</p>
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    
 
     @include('login.alert-errors')
 

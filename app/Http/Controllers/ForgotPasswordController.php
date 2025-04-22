@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class ForgotPasswordController extends Controller
     {
         return view('login.forgot-password');
     }
-        // sending of reset link to user
+    // sending of reset link to user
     public function sendResetLink(Request $request)
     {
         $request->validate(['email' => 'required|email']);
@@ -43,26 +44,26 @@ class ForgotPasswordController extends Controller
     }
 
     public function showResetForm($token)
-{
-    //remove expired tokens, older than 10 mins
-    DB::table('password_resets')
-        ->where('created_at', '<', now()->subMinutes(10))
-        ->delete();
-    
-    //find token in database 
-    $reset = DB::table('password_resets')->where('token', $token)->first();
+    {
+        //remove expired tokens, older than 10 mins
+        DB::table('password_resets')
+            ->where('created_at', '<', now()->subMinutes(10))
+            ->delete();
 
-    // if hindi nahanap so token/expired/already used
-    if (!$reset) {
-        return redirect()->route('password.request')
-            ->with('error', 'This password reset link is invalid or has expired.');
+        //find token in database 
+        $reset = DB::table('password_resets')->where('token', $token)->first();
+
+        // if hindi nahanap so token/expired/already used
+        if (!$reset) {
+            return redirect()->route('password.request')
+                ->with('error', 'This password reset link is invalid or has expired.');
+        }
+
+        return view('login.reset-password', [
+            'token' => $token,
+            'email' => $reset ? $reset->email : ''
+        ]);
     }
-
-    return view('login.reset-password', [
-        'token' => $token,
-        'email' => $reset ? $reset->email : ''
-    ]);
-}
 
 
     public function resetPassword(Request $request)
@@ -70,12 +71,14 @@ class ForgotPasswordController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:6|confirmed',
+        ], [
+            'password.confirmed' => 'Password do not match. Please Try Again.',
         ]);
-        
+
         //same lang remove expired tokens older than 10 mins
         DB::table('password_resets')
-        ->where('created_at', '<', now()->subMinutes(10))
-        ->delete();
+            ->where('created_at', '<', now()->subMinutes(10))
+            ->delete();
 
         $reset = DB::table('password_resets')
             ->where('email', $request->email)
@@ -95,4 +98,3 @@ class ForgotPasswordController extends Controller
         return redirect()->route('login')->with('success', 'Password has been reset. You can now log in.');
     }
 }
-

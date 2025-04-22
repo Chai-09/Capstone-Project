@@ -187,6 +187,10 @@
     transition: background 0.3s ease;
 }
 
+#signup-btn:hover {
+    background: #005a32;
+}
+
 #loginforms button {
     width: 100%;
     padding: 12px;
@@ -216,6 +220,27 @@
     text-decoration: none;
     font-weight: 500;
 }
+
+.alert-header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.alert-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.alert-box .alert-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
 
 .alert-box {
     background-color: #fff4f4;
@@ -252,6 +277,10 @@
     user-select: none;
 }
 
+.note p {
+    font-size: 0.9rem;
+    text-align: justify;
+}
 
 
 

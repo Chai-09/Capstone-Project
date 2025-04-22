@@ -53,54 +53,54 @@ class SignupFormsController extends Controller
 
 
         // Generate ng random number for otp and store it
-    $otp = rand(100000, 999999);
-    SignupOtp::where('email', $request->guardian_email)->delete();
+        $otp = rand(100000, 999999);
+        SignupOtp::where('email', $request->guardian_email)->delete();
 
-    SignupOtp::create([
-        'email' => $request->guardian_email,
-        'otp' => $otp,
-        'expires_at' => now()->addMinutes(5),
-    ]);
+        SignupOtp::create([
+            'email' => $request->guardian_email,
+            'otp' => $otp,
+            'expires_at' => now()->addMinutes(5),
+        ]);
 
-    // Sending otp via email (check blade emails for editing of view file pre)
-    Mail::send('emails.email-signup-otp', ['otp' => $otp], function ($message) use ($request) {
-        $message->to($request->guardian_email)->subject('Your ApplySmart OTP Code');
-    });
-    
-    // Store form data in session
-    $request->session()->put('signup_data', $request->except(['_token', 'g-recaptcha-response']));
+        // Sending otp via email (check blade emails for editing of view file pre)
+        Mail::send('emails.email-signup-otp', ['otp' => $otp], function ($message) use ($request) {
+            $message->to($request->guardian_email)->subject('Your ApplySmart OTP Code');
+        });
 
-    return redirect()->route('signup.showOtpForm');
-}
+        // Store form data in session
+        $request->session()->put('signup_data', $request->except(['_token', 'g-recaptcha-response']));
 
-public function showOtpForm(Request $request)
-{
-    if (!$request->session()->has('signup_data')) {
-        return redirect()->route('login')->with('error', 'Access denied.');
+        return redirect()->route('signup.showOtpForm');
     }
 
-    return view('login.verify-otp');
-}
+    public function showOtpForm(Request $request)
+    {
+        if (!$request->session()->has('signup_data')) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
 
-        //Split the two since dapat dipa muna masave sa db kahit tapos na mag verification, kasi may otp pa
+        return view('login.verify-otp');
+    }
+
+    //Split the two since dapat dipa muna masave sa db kahit tapos na mag verification, kasi may otp pa
     public function verifyOtpAndCreate(Request $request)
-    {       
+    {
 
-    $data = $request->session()->get('signup_data');
+        $data = $request->session()->get('signup_data');
 
-    if (!$data) {
-        return redirect()->route('login')->with('error', 'Session expired. Please try again.');
-    }
+        if (!$data) {
+            return redirect()->route('login')->with('error', 'Session expired. Please try again.');
+        }
 
-    SignupOtp::where('expires_at', '<', now())->delete();
+        SignupOtp::where('expires_at', '<', now())->delete();
 
-    $otpRecord = SignupOtp::where('email', $data['guardian_email'])
-    ->where('otp', $request->otp)
-    ->first();
+        $otpRecord = SignupOtp::where('email', $data['guardian_email'])
+            ->where('otp', $request->otp)
+            ->first();
 
-    if (!$otpRecord) {
-        return redirect()->back()->with('error', 'Invalid or expired OTP.');
-    }
+        if (!$otpRecord) {
+            return redirect()->back()->with('error', 'Invalid or expired OTP.');
+        }
 
         DB::transaction(function () use ($data) {
             // Format middle names with a period if not present
@@ -136,7 +136,6 @@ public function showOtpForm(Request $request)
             ]);
 
             SignupOtp::where('email', $data['guardian_email'])->delete();
-
         });
 
         $request->session()->forget('signup_data');
@@ -150,43 +149,37 @@ public function showOtpForm(Request $request)
     public function resendOtp(Request $request)
     {
         $data = $request->session()->get('signup_data');
-    
+
         if (!$data || !isset($data['guardian_email'])) {
             return redirect()->route('signup.showOtpForm')->withErrors(['Session expired. Please sign up again.']);
         }
-    
+
         // Get the latest OTP sa server
         $lastOtp = SignupOtp::where('email', $data['guardian_email'])->latest()->first();
-    
+
         // Check if less than 60s have passed if hindi babato siya ng error
         if ($lastOtp && Carbon::parse($lastOtp->created_at)->diffInSeconds(now()) < 60) {
-             $secondsLeft = (int) max(0, 60 - Carbon::parse($lastOtp->created_at)->diffInSeconds(now()));
+            $secondsLeft = (int) max(0, 60 - Carbon::parse($lastOtp->created_at)->diffInSeconds(now()));
             return redirect()->back()->withErrors([
-             "You're sending too fast. Try again in {$secondsLeft} second(s)."
+                "You're sending too fast. Try again in {$secondsLeft} second(s)."
             ]);
         }
 
         // Proceed to resend OTP
         SignupOtp::where('email', $data['guardian_email'])->delete();
-    
+
         $otp = rand(100000, 999999);
-    
+
         SignupOtp::create([
             'email' => $data['guardian_email'],
             'otp' => $otp,
             'expires_at' => now()->addMinutes(5),
         ]);
-    
+
         Mail::send('emails.email-signup-otp', ['otp' => $otp], function ($message) use ($data) {
             $message->to($data['guardian_email'])->subject('Your new ApplySmart OTP Code');
         });
-    
+
         return redirect()->back()->with('success', 'A new OTP has been sent to your email.');
     }
-    
-
-
-
 }
-
-

@@ -21,7 +21,7 @@
     <div class="form-group">
         <button type="submit">Send Reset Link</button>
     </div>
-    {{-- Back Button baka gusto niyo ibahin --}}
+    
     <div class="form-group">
         <a href="{{ route('login') }}" >Go Back</a>
     </div>

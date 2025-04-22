@@ -30,55 +30,54 @@ Route::post('/signup/resend-otp', [SignupFormsController::class, 'resendOtp'])->
 //THIS IS FOR THE IMPORTANT ROUTES, THOSE THAT ARE NOT PUBLIC PUT IT IN THIS MIDDLEWARE BLOCK
 Route::middleware(['auth'])->group(function () {
 
-//index applicant to fillup forms
-Route::get('/fillupforms', function () {
-    return view('steps.fillupforms.fillupforms');
-})->name('fillupforms');
+    //index applicant to fillup forms
+    Route::get('/fillupforms', function () {
+        return view('steps.fillupforms.fillupforms');
+    })->name('fillupforms');
 
-// Display the fill-up form
-Route::get('/fillupforms/create', [FillupFormsController::class, 'create'])->name('fillupforms.create');
+    // Display the fill-up form
+    Route::get('/fillupforms/create', [FillupFormsController::class, 'create'])->name('fillupforms.create');
 
-// Handle form submission
-Route::post('/fillupforms', [FillupFormsController::class, 'store'])->name('fillupforms.store');
+    // Handle form submission
+    Route::post('/fillupforms', [FillupFormsController::class, 'store'])->name('fillupforms.store');
 
-//Redirect sa admission
-Route::get('/dashboard', function () {
-    return view('applicant.index');
-})->name('applicantdashboard');
+    //Redirect sa admission
+    Route::get('/dashboard', function () {
+        return view('applicant.index');
+    })->name('applicantdashboard');
 
-//payment page
-Route::get('/applicant/payment/payment', function () {
-    return view('applicant.payment.payment'); 
-});
+    //payment page
+    Route::get('/applicant/payment/payment', function () {
+        return view('applicant.payment.payment');
+    });
 
-//routing from index to applicant
-Route::get('/applicant/steps/forms/applicantforms', function () {
-    return view('applicant.steps.forms.applicantforms'); 
-});
+    //routing from index to applicant
+    Route::get('/applicant/steps/forms/applicantforms', function () {
+        return view('applicant.steps.forms.applicantforms');
+    });
 
-//routing from applicant to guardian
-Route::get('/applicant/steps/forms/guardianforms', function () {
-    return view('applicant.steps.forms.guardianforms'); 
-});
+    //routing from applicant to guardian
+    Route::get('/applicant/steps/forms/guardianforms', function () {
+        return view('applicant.steps.forms.guardianforms');
+    });
 
-//routing from guardian to schoolinfo
-Route::get('/applicant/steps/forms/schoolinfoforms', function () {
-    return view('applicant.steps.forms.schoolinfoforms'); 
-});
+    //routing from guardian to schoolinfo
+    Route::get('/applicant/steps/forms/schoolinfoforms', function () {
+        return view('applicant.steps.forms.schoolinfoforms');
+    });
 
 
-// Success route
-Route::get('/applicant/payment/payment', function () {
-    return view('applicant/payment/payment'); // A success view after form submission
-})->name('applicant.payment.payment');
+    // Success route
+    Route::get('/applicant/payment/payment', function () {
+        return view('applicant/payment/payment'); // A success view after form submission
+    })->name('applicant.payment.payment');
 
-Route::get('/form/step1', [FillupFormsController::class, 'createStep1'])->name('form.step1');
-Route::post('/form/step1', [FillupFormsController::class, 'postStep1']);
+    Route::get('/form/step1', [FillupFormsController::class, 'createStep1'])->name('form.step1');
+    Route::post('/form/step1', [FillupFormsController::class, 'postStep1']);
 
-Route::get('/form/step2', [FillupFormsController::class, 'createStep2'])->name('form.step2');
-Route::post('/form/step2', [FillupFormsController::class, 'postStep2']);
+    Route::get('/form/step2', [FillupFormsController::class, 'createStep2'])->name('form.step2');
+    Route::post('/form/step2', [FillupFormsController::class, 'postStep2']);
 
-Route::get('/form/step3', [FillupFormsController::class, 'createStep3'])->name('form.step3');
-Route::post('/form/step3', [FillupFormsController::class, 'postStep3']);
-
+    Route::get('/form/step3', [FillupFormsController::class, 'createStep3'])->name('form.step3');
+    Route::post('/form/step3', [FillupFormsController::class, 'postStep3']);
 });

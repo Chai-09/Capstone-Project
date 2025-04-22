@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-
+    
     <div class="wrapper2">
         <div id="loginforms">
             @hasSection('content')
