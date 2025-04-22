@@ -72,11 +72,11 @@ class FillupFormsController extends Controller
         'current_school' => 'required|max:255',
         'current_school_city' => 'required|max:255',
         'school_type' => 'required|in:Private,Public,Private Sectarian,Private Non-Sectarian',
-        'educational_level' => Rule::in([
+        'educational_level' => ['required', Rule::in([ //added required 
         'Grade School',
         'Junior High School',
         'Senior High School'
-    ]),
+    ])], 
 
         'incoming_grlvl' => 'required',
         'source' => [
@@ -117,11 +117,8 @@ class FillupFormsController extends Controller
         // no lrn, no bday
     }
     
-
-
     $validated = $request->validate($rules);
-
-
+    
     $optionalDefaults = [
         'applicant_bday' => $request->has('applicant_bday') ? $request->applicant_bday : null,
         'lrn_no' => $request->has('lrn_no') ? $request->lrn_no : null,
@@ -135,7 +132,7 @@ class FillupFormsController extends Controller
         $allData['lrn_no'] = $allData['lrn_no'] ?? null;
         $allData['strand'] = $allData['strand'] ?? null;
 
-
+    FillupForms::create($allData); //added this for session
     session()->forget('form_data');
 
     return redirect()->route('applicant.payment.payment');
