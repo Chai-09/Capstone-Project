@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 22, 2025 at 06:35 AM
+-- Generation Time: Apr 22, 2025 at 07:43 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -103,6 +103,44 @@ INSERT INTO `applicants` (`id`, `account_id`, `guardian_fname`, `guardian_mname`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `form_submissions`
+--
+
+CREATE TABLE `form_submissions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `applicant_fname` varchar(255) NOT NULL,
+  `applicant_mname` varchar(255) DEFAULT NULL,
+  `applicant_lname` varchar(255) NOT NULL,
+  `applicant_contact_number` varchar(255) NOT NULL,
+  `applicant_email` varchar(255) NOT NULL,
+  `numstreet` varchar(255) NOT NULL,
+  `barangay` varchar(255) NOT NULL,
+  `cityormunicipality` varchar(255) NOT NULL,
+  `province` varchar(255) NOT NULL,
+  `postal_code` varchar(255) NOT NULL,
+  `age` int(11) NOT NULL,
+  `gender` varchar(255) NOT NULL,
+  `nationality` varchar(255) NOT NULL,
+  `guardian_fname` varchar(255) NOT NULL,
+  `guardian_mname` varchar(255) DEFAULT NULL,
+  `guardian_lname` varchar(255) NOT NULL,
+  `guardian_contact_number` varchar(255) NOT NULL,
+  `guardian_email` varchar(255) NOT NULL,
+  `relation` varchar(255) NOT NULL,
+  `current_school` varchar(255) NOT NULL,
+  `current_school_city` varchar(255) NOT NULL,
+  `school_type` varchar(255) NOT NULL,
+  `educational_level` varchar(255) NOT NULL,
+  `incoming_grlvl` varchar(255) NOT NULL,
+  `applicant_bday` varchar(255) NOT NULL,
+  `lrn_no` varchar(255) NOT NULL,
+  `strand` varchar(255) NOT NULL,
+  `source` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `migrations`
 --
 
@@ -118,7 +156,8 @@ CREATE TABLE `migrations` (
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (1, '2025_04_16_091659_create_password_resets_table', 1),
-(2, '2025_04_20_074003_create_signup_otps_table', 2);
+(2, '2025_04_20_074003_create_signup_otps_table', 2),
+(3, '2025_04_22_051242_create_form_submissions_table', 3);
 
 -- --------------------------------------------------------
 
@@ -159,6 +198,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('dFulWaxtfpBgMxSXSqH71keNJUvO28mjF7oR7e7e', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiVHJLUGhFd3FOVHZHR0FrY3U1YWRBRGhrSUJQamhrZFdvaGdjZXRKdyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTg6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hcHBsaWNhbnQvc3RlcHMvZm9ybXMvYXBwbGljYW50Zm9ybXMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjk6ImZvcm1fZGF0YSI7YToxOTp7czoxNToiYXBwbGljYW50X2ZuYW1lIjtzOjQ6ImZpbm4iO3M6MTU6ImFwcGxpY2FudF9tbmFtZSI7TjtzOjE1OiJhcHBsaWNhbnRfbG5hbWUiO3M6NzoibWVydGVucyI7czoyNDoiYXBwbGljYW50X2NvbnRhY3RfbnVtYmVyIjtzOjEyOiIwMDAtMDAwLTAwMDAiO3M6MTU6ImFwcGxpY2FudF9lbWFpbCI7czoxNDoiZmlubkBnbWFpbC5jb20iO3M6OToibnVtc3RyZWV0IjtzOjEwOiJ0cmVlIGhvdXNlIjtzOjg6ImJhcmFuZ2F5IjtzOjEzOiJjYW5keSBraW5nZG9tIjtzOjE4OiJjaXR5b3JtdW5pY2lwYWxpdHkiO3M6Mzoib29vIjtzOjg6InByb3ZpbmNlIjtzOjQ6ImhlaGUiO3M6MTE6InBvc3RhbF9jb2RlIjtzOjY6IjEyMzQ1NiI7czozOiJhZ2UiO3M6MjoiMTQiO3M6NjoiZ2VuZGVyIjtzOjQ6Ik1hbGUiO3M6MTE6Im5hdGlvbmFsaXR5IjtzOjU6Imh1bWFuIjtzOjE0OiJndWFyZGlhbl9mbmFtZSI7czoxMDoiZmlyc3QgbmFtZSI7czoxNDoiZ3VhcmRpYW5fbW5hbWUiO047czoxNDoiZ3VhcmRpYW5fbG5hbWUiO3M6ODoibGFzdG5hbWUiO3M6MjM6Imd1YXJkaWFuX2NvbnRhY3RfbnVtYmVyIjtzOjEyOiIwMDAtMDAwLTAwMDAiO3M6MTQ6Imd1YXJkaWFuX2VtYWlsIjtzOjE1OiJ0ZXN0MkBnbWFpbC5jb20iO3M6ODoicmVsYXRpb24iO3M6NzoiUGFyZW50cyI7fX0=', 1745299785),
 ('rUUGCiIo5WT6K5SQqZbv8M9OvvYKOulvmoURDAbt', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6IjBKNkx3NWdnUFFRbmdOUjBWOG1tWWxUUG5rSmZWTmRYamlwdWttdjYiO30=', 1745296131),
 ('SeE4oaYK1MkPvko7v4AVG0qGQXhOxlTC8jwHUsku', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiR3pJOEQ3Q2FVQ2JPczBBYWtnbGtyemlDMmVueWF4Mnk1eTlCUUxUVCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJuZXciO2E6MDp7fXM6Mzoib2xkIjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fXM6MTM6Imxhc3Rfb3RwX3NlbnQiO086MjU6IklsbHVtaW5hdGVcU3VwcG9ydFxDYXJib24iOjM6e3M6NDoiZGF0ZSI7czoyNjoiMjAyNS0wNC0yMiAwMTo1Njo1OC44ODM3NTEiO3M6MTM6InRpbWV6b25lX3R5cGUiO2k6MztzOjg6InRpbWV6b25lIjtzOjM6IlVUQyI7fX0=', 1745294989),
 ('Z4JKs3sMwxIYUsOYIo3B3NGdLOw44TbMCr5BCfw0', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6IjB1OGtDOG41QzJ2Tzg2d21QVGJRSWtjOEJiOTFRd3d4TTBJcXNYRm8iO30=', 1745296274);
@@ -195,6 +235,12 @@ ALTER TABLE `accounts`
 ALTER TABLE `applicants`
   ADD PRIMARY KEY (`id`),
   ADD KEY `account_id` (`account_id`);
+
+--
+-- Indexes for table `form_submissions`
+--
+ALTER TABLE `form_submissions`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `migrations`
@@ -239,10 +285,16 @@ ALTER TABLE `applicants`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
+-- AUTO_INCREMENT for table `form_submissions`
+--
+ALTER TABLE `form_submissions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `signup_otps`
