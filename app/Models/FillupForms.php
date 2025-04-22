@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FillupForms extends Model
 {
-    protected $table = 'applicants';
+    protected $table = 'forms';
 
     protected $fillable = [
         //applicant
@@ -37,10 +37,10 @@ class FillupForms extends Model
         'current_school_city',
         'school_type',
         'educational_level',
-        'grade_level',
+        'incoming_grlvl',
         'applicant_bday',
         'lrn_no',
         'strand',
-        'source'
+        'source',
     ];
 }

@@ -14,7 +14,7 @@
     "isEntry": true
   },
   "resources/css/login/login.css": {
-    "file": "assets/login-EPYLlmuL.css",
+    "file": "assets/login-CSZFFUA-.css",
     "src": "resources/css/login/login.css",
     "isEntry": true
   },
@@ -25,21 +25,9 @@
     "isEntry": true
   },
   "resources/js/fillupforms/fillupforms.js": {
-    "file": "assets/fillupforms-BqW08Ono.js",
+    "file": "assets/fillupforms-BnBvhey6.js",
     "name": "fillupforms",
     "src": "resources/js/fillupforms/fillupforms.js",
-    "isEntry": true
-  },
-  "resources/js/login/login.js": {
-    "file": "assets/login-D1MGold2.js",
-    "name": "login",
-    "src": "resources/js/login/login.js",
-    "isEntry": true
-  },
-  "resources/js/login/sign-up.js": {
-    "file": "assets/sign-up-DPYqE72-.js",
-    "name": "sign-up",
-    "src": "resources/js/login/sign-up.js",
     "isEntry": true
   }
 }

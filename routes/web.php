@@ -43,3 +43,38 @@ Route::get('/signup/verify', [SignupFormsController::class, 'showOtpForm'])->nam
 Route::post('/signup/verify', [SignupFormsController::class, 'verifyOtpAndCreate'])->name('signup.verifyOtp');
 Route::post('/signup/resend-otp', [SignupFormsController::class, 'resendOtp'])->name('signup.resendOtp');
 
+
+//payment page
+Route::get('/applicant/payment/payment', function () {
+    return view('applicant.payment.payment'); 
+});
+
+//routing from index to applicant
+Route::get('/applicant/steps/forms/applicantforms', function () {
+    return view('applicant.steps.forms.applicantforms'); 
+});
+
+//routing from applicant to guardian
+Route::get('/applicant/steps/forms/guardianforms', function () {
+    return view('applicant.steps.forms.guardianforms'); 
+});
+
+//routing from guardian to schoolinfo
+Route::get('/applicant/steps/forms/schoolinfoforms', function () {
+    return view('applicant.steps.forms.schoolinfoforms'); 
+});
+
+
+// Success route
+Route::get('/applicant/payment/payment', function () {
+    return view('applicant/payment/payment'); // A success view after form submission
+})->name('applicant.payment.payment');
+
+Route::get('/form/step1', [FillupFormsController::class, 'createStep1'])->name('form.step1');
+Route::post('/form/step1', [FillupFormsController::class, 'postStep1']);
+
+Route::get('/form/step2', [FillupFormsController::class, 'createStep2'])->name('form.step2');
+Route::post('/form/step2', [FillupFormsController::class, 'postStep2']);
+
+Route::get('/form/step3', [FillupFormsController::class, 'createStep3'])->name('form.step3');
+Route::post('/form/step3', [FillupFormsController::class, 'postStep3']);

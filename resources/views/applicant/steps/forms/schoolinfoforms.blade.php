@@ -20,94 +20,10 @@
             </form>
         </div>
     </nav>
-    <form id="mainForm" action="{{ route('fillupforms.store') }}" method="POST">
+    <form id="mainForm" action="{{ route('form.step3') }}" method="POST">
         @csrf
-        <!--Applicant Information-->
-        <div id="applicant">
-            <p>Applicant's Name</p>
-            <p>Example: Jeremy E. Joseph</p>
-
-            <p>First Name</p>
-            <input type="text" name="applicant_fname" placeholder="First Name" required>
-
-            <p>Middle Initial</p>
-            <input type="text" name="applicant_mname" placeholder="Middle Initial">
-
-            <p>Last Name</p>
-            <input type="text" name="applicant_lname" placeholder="Last Name" required>
-
-            <p>Applicant's Contact Number</p>
-            <input type="tel" name="applicant_contact_number" id="applicant_contact_number" placeholder="000-000-0000 / 000-0000" required>
-
-            <p>Applicant's Email Address</p>           
-            <input type="email" name="applicant_email" id="email" placeholder="Enter email address" required>
-
-            <p>Home Address</p>
-            <p>Building Number, Street Name</p>
-            <input type="text" name="numstreet" id="numstreet" placeholder="Enter bldg number, street name" required>
-
-            <p>Barangay</p>
-            <input type="text" name="barangay" id="barangay" placeholder="Enter barangay" required>
-
-            <p>City/Municipality</p>
-            <input type="text" name="cityormunicipality" id="cityormunicipality" placeholder="Enter city/municipality" required>
-
-            <p>Province</p>
-            <input type="text" name="province" id="province" placeholder="Enter province" required>
-
-            <p>Postal Code</p>
-            <input type="number" name="postal_code" id="postal_code" placeholder="Enter postal code" required>
-
-            <p>Age</p>
-            <input type="number" name="age" id="age" placeholder="Enter age" required>
-
-            <p>Gender</p>
-            <select name="gender" id="gender" required>
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
-
-            <p>Nationality</p>
-            <input type="text" name="nationality" id="nationality" placeholder="Enter nationality" required>
-            <button type="button">Next</button>
-        </div>
-
-
-        <!--Guardian Information-->
-        <div id="guardian" class="hidden">
-            <p>Guardian's Name</p>
-            <p>Example: Jeremy E. Joseph</p>
-
-            <p>First Name</p>
-            <input type="text" name="guardian_fname" placeholder="First Name" required>
-
-            <p>Middle Initial</p>
-            <input type="text" name="guardian_mname" placeholder="Middle Initial">
-
-            <p>Last Name</p>
-            <input type="text" name="guardian_lname" placeholder="Last Name" required>
-
-            <p>Applicant's Contact Number</p>
-            <input type="tel" name="guardian_contact_number" id="guardian_contact_number" placeholder="000-000-0000 / 000-0000"  required>
-
-            <p>Applicant's Email Address</p>           
-            <input type="email" name="guardian_email" id="email" placeholder="Enter email address"  required>
-
-            <h4>How are you related to the applicant?</h4>
-            <select name="relation" id="relation" required>
-                <option value="">Select Relation</option>
-                @foreach (['Parents', 'Brother/Sister', 'Uncle/Aunt', 'Cousin', 'Grandparents'] as $relation)
-                    <option value="{{ $relation }}">{{ $relation }}</option>
-                @endforeach
-            </select>
-
-            <button type="button">Next</button>
-        </div>
-      
-        
         <!--School Information-->
-        <div id="school_info" class="hidden">
+        <div id="school_info">
             <p>Current School</p>
             <input type="text" name="current_school" id="current_school" placeholder="Enter current school name" required>
 
@@ -200,9 +116,8 @@
 
             <p>Please review your information carefully before clicking 'Submit' as you won't be able to make changes afterward.</p>
 
-            <button type="submit">Submit</button>
-            <a href="/applicant/payment/payment" class="btn btn-primary">Next</a>
-
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <!--<a href="/applicant/payment/payment" class="btn btn-primary">Next</a>-->
         </div>
     </form>
 </body>

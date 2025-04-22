@@ -1,38 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const applicantSection = document.getElementById("applicant");
-    const guardianSection = document.getElementById("guardian");
-    const schoolSection = document.getElementById("school_info");
-
-    // Next buttons for step navigation (Applicant -> Guardian -> School Info)
-    const nextButtons = document.querySelectorAll("button[type='button']");
-    const steps = [applicantSection, guardianSection, schoolSection];
-
-    nextButtons.forEach((btn, idx) => {
-        btn.addEventListener("click", function (e) {
-            e.preventDefault();
-
-            const requiredInputs = steps[idx].querySelectorAll("input[required], select[required]");
-            let allFilled = true;
-            requiredInputs.forEach(input => {
-                if (!input.value.trim()) {
-                    allFilled = false;
-                    input.classList.add("missing");
-                } else {
-                    input.classList.remove("missing");
-                }
-            });
-            
-            if (allFilled) {
-                steps[idx].classList.add("hidden");
-                if (steps[idx + 1]) {
-                    steps[idx + 1].classList.remove("hidden");
-                }
-            } else {
-                alert("Please fill out all required fields before proceeding.");
-            }
-        });
-    });
-
 
     const eduLevel = document.getElementById("educational_level");
     const gs = document.getElementById("gs");
