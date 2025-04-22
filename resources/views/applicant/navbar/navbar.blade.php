@@ -9,31 +9,29 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
-        <a class="navbar-brand d-flex align-items-center" href="#">
-            <img src="/images/applicants/feudiliman_logo.png" width="30" height="35" class="me-2" alt="">
-            <span class="school-name">FEU Diliman</span>
-        </a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light px-4 py-2">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
     
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            {{-- Left side: Logo + School name --}}
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="/images/applicants/feudiliman_logo.png" width="30" height="35" class="me-2" alt="FEU Logo">
+                <span class="school-name fw-semibold">FEU Diliman</span>
+            </a>
     
-        <div class="collapse navbar-collapse justify-content-between" id="navbarContent">
-            <!-- LEFT SIDE: Session Name -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <span class="nav-link">Hi, {{ session('name') }}</span>
-                </li>
-            </ul>
+            {{-- Right side: Session name + Logout --}}
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-uppercase small text-secondary mb-0">
+                    Hi, {{ session('name') }}
+                </span>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+                </form>
+            </div>
     
-            <!-- RIGHT SIDE: Logout -->
-            <form method="GET" action="{{ route('logout') }}" class="d-flex">
-                @csrf
-                <button type="submit" class="btn btn-outline-danger">Logout</button>
-            </form>
         </div>
     </nav>
+    
     
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
