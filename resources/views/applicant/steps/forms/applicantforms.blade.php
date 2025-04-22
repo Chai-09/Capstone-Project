@@ -10,6 +10,7 @@
     <title>Fill-up Forms</title>
     @vite('resources/css/fillupforms/fillupforms.css')
     <!--@vite('resources/js/fillupforms/fillupforms.js')-->
+    @vite('resources/js/address/address.js')
 </head>
 <body>
     
@@ -57,17 +58,28 @@
             <input type="email" name="applicant_email" id="email" placeholder="Enter email address" required>
 
             <p>Home Address</p>
-            <p>Building Number, Street Name</p>
-            <input type="text" name="numstreet" id="numstreet" placeholder="Enter bldg number, street name" required>
-
-            <p>Barangay</p>
-            <input type="text" name="barangay" id="barangay" placeholder="Enter barangay" required>
-
-            <p>City/Municipality</p>
-            <input type="text" name="cityormunicipality" id="cityormunicipality" placeholder="Enter city/municipality" required>
+            <p>Region</p>
+            <select name="region" id="region" required>
+                <option value="">Choose Region</option>
+            </select>
 
             <p>Province</p>
-            <input type="text" name="province" id="province" placeholder="Enter province" required>
+            <select name="province" id="province" required>
+                <option value="">Choose Province</option>
+            </select>
+
+            <p>City/Municipality</p>
+            <select name="city" id="city" required>
+                <option value="">Choose City/Municipality</option>
+            </select>
+
+            <p>Barangay</p>
+            <select name="barangay" id="barangay" required>
+                <option value="">Choose Barangay</option>
+            </select>
+
+            <p>Building Number, Street Name</p>
+            <input type="text" name="numstreet" id="numstreet" placeholder="Enter bldg number, street name" required>
 
             <p>Postal Code</p>
             <input type="number" name="postal_code" id="postal_code" placeholder="Enter postal code" required>

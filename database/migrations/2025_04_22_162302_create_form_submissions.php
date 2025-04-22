@@ -19,10 +19,11 @@ return new class extends Migration
             $table->string('applicant_lname');
             $table->string('applicant_contact_number');
             $table->string('applicant_email');
-            $table->string('numstreet');
-            $table->string('barangay');
-            $table->string('cityormunicipality');
+            $table->string('region');
             $table->string('province');
+            $table->string('city');
+            $table->string('barangay');
+            $table->string('numstreet');
             $table->string('postal_code');
             $table->integer('age');
             $table->string('gender');

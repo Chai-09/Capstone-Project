@@ -8,14 +8,25 @@
     "src": "resources/css/app.css",
     "isEntry": true
   },
+  "resources/css/applicants/navbar.css": {
+    "file": "assets/app-BsPA6HG0.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
   "resources/css/fillupforms/fillupforms.css": {
     "file": "assets/fillupforms-BXt2jZ0n.css",
     "src": "resources/css/fillupforms/fillupforms.css",
     "isEntry": true
   },
   "resources/css/login/login.css": {
-    "file": "assets/login-CSZFFUA-.css",
+    "file": "assets/login-DUuRca29.css",
     "src": "resources/css/login/login.css",
+    "isEntry": true
+  },
+  "resources/js/address/address.js": {
+    "file": "assets/address-BF31kmyz.js",
+    "name": "address",
+    "src": "resources/js/address/address.js",
     "isEntry": true
   },
   "resources/js/app.js": {
@@ -25,7 +36,7 @@
     "isEntry": true
   },
   "resources/js/fillupforms/fillupforms.js": {
-    "file": "assets/fillupforms-BnBvhey6.js",
+    "file": "assets/fillupforms-CQ47Hdbh.js",
     "name": "fillupforms",
     "src": "resources/js/fillupforms/fillupforms.js",
     "isEntry": true
