@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Della+Respira&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Permanent+Marker&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik+Mono+One&display=swap');
+@import '../app.css';
+
+
+.nav {
+    padding: 20px; 
+}
+
+.nav li {
+}
+
+.step-number {
+    font-size: 0.9rem;
+}
+
+.nav a, .nav i {
+    font-size: 1.3rem;
+}
+
+.nav i {
+    padding-right: 29px;
+}
+
+.double-line {
+    display: flex;
+    justify-content: center; /* centers it horizontally */
+    align-items: center;
+    gap: 20px; /* the space between the two lines */
+    margin: 1.5rem 0;
+}
+
+.double-line .line {
+    flex: 1;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 5px;
+    max-width: 45%; /* so the lines don't stretch too far */
+    opacity: 0.8;
+}

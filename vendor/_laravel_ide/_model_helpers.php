@@ -636,9 +636,9 @@ namespace App\Models {
      * App\Models\FillupForms
      *
      * @property string $source
-     * @property string $strand
-     * @property string $lrn_no
-     * @property string $applicant_bday
+     * @property string|null $strand
+     * @property string|null $lrn_no
+     * @property string|null $applicant_bday
      * @property string $incoming_grlvl
      * @property string $educational_level
      * @property string $school_type
@@ -654,26 +654,31 @@ namespace App\Models {
      * @property string $gender
      * @property mixed $age
      * @property string $postal_code
-     * @property string $province
-     * @property string $cityormunicipality
-     * @property string $barangay
      * @property string $numstreet
+     * @property string $barangay
+     * @property string $city
+     * @property string $province
+     * @property string $region
      * @property string $applicant_email
      * @property string $applicant_contact_number
      * @property string $applicant_lname
      * @property string|null $applicant_mname
      * @property string $applicant_fname
+     * @property mixed $applicant_id
      * @property int $id
+     * @property-read \App\Models\Applicant $applicant
      * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereApplicantId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereApplicantFname($value)
      * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereApplicantMname($value)
      * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereApplicantLname($value)
      * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereApplicantContactNumber($value)
      * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereApplicantEmail($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereNumstreet($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereBarangay($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereCityormunicipality($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereRegion($value)
      * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereProvince($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereCity($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereBarangay($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereNumstreet($value)
      * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms wherePostalCode($value)
      * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereAge($value)
      * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereGender($value)
