@@ -109,5 +109,10 @@
         form.appendChild(input);
         form.submit();
     }
+
+    // pag pinindot nila back button mag force reload page, para matanggal yung cached swal (di na siya magpapakita)
+    if (performance.navigation.type === 2) {
+        location.reload(); 
+    }
 </script>
 </html>
