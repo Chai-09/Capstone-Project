@@ -13,7 +13,7 @@ Route::view('/login', 'login.index')->name('login');
 
 Route::post('/signup', [SignupFormsController::class, 'store'])->name('loginForms.store');
 Route::post('/login', [AuthController::class, 'login'])->name('login.store');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //Forgot Password Routes
 Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('password.request');
