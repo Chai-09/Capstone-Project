@@ -97,12 +97,15 @@ class SignupFormsController extends Controller
         $otpRecord = SignupOtp::where('email', $data['guardian_email'])
             ->where('otp', $request->otp)
             ->first();
+            
 
         if (!$otpRecord) {
             return redirect()->back()->with('error', 'Invalid or expired OTP.');
         }
 
-        DB::transaction(function () use ($data) {
+        $applicant = null;
+
+        DB::transaction(function () use ($data, &$applicant) {
             // Format middle names with a period if not present
             $guardianMname = strtoupper($data['guardian_mname'] ?? '');
             if ($guardianMname && !str_ends_with($guardianMname, '.')) {
@@ -123,7 +126,7 @@ class SignupFormsController extends Controller
             ]);
 
             // Create applicant details
-            Applicant::create([
+            $applicant = Applicant::create([
                 'account_id' => $account->id,
                 'guardian_fname' => strtoupper($data['guardian_fname']),
                 'guardian_mname' => $guardianMname,
@@ -137,12 +140,14 @@ class SignupFormsController extends Controller
 
             SignupOtp::where('email', $data['guardian_email'])->delete();
         });
-
+        
+        session(['applicant_id' => $applicant->id]);
         $request->session()->forget('signup_data');
 
         return redirect()->route('login')->with('success', 'Account created successfully!');
     }
 
+    
 
     //resend otp logic
     //Hallo,ginawa ko nalang siyang error timer, instead of live countdown, para server mas secure since server side yung pag check niya

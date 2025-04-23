@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 22, 2025 at 06:39 PM
+-- Generation Time: Apr 23, 2025 at 05:00 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -56,7 +56,6 @@ INSERT INTO `accounts` (`id`, `name`, `email`, `password`, `role`) VALUES
 (14, 'SDSAD DASSAD. ASDAS', 'asdas@gmail.com', '$2y$12$zrNeigHtflbe9IvXTPdTdeQpkkuMkCrM8YUwHeQHOuhRb105SuJ7u', 'applicant'),
 (15, 'JEDI J. JEDI', 'jacob@gmail.com', '$2y$12$rREe5jPuU50y4D5/hv.NVe7uilRjjsRSberwPRTvuxcKbwAo6gHbK', 'applicant'),
 (27, 'ANDREW O. GUILLERMO', 'paulaeronguillermo2@gmail.com', '$2y$12$Tlg4teSmSyK0rzGRmrUqqu.D5Fu2ecamcDyPTanWu5ULvL2UbcyiS', 'applicant'),
-(32, 'RAND RAND. RAND', 'gabebarcenas08@gmail.com', '$2y$12$eMRKDcleXTYuzbtQGjapQ.Nf7YPE4Bd1dWixXqPxQchU1eZV1CySa', 'applicant'),
 (33, 'TEST TEST. TEST', 'eiryk.sardalla30@gmail.com', '$2y$12$zfR4808abYkxy2BXQQ3Kf.oay6n3dgdS8qyLfUMaHAm6JRUgmeQRC', 'applicant');
 
 -- --------------------------------------------------------
@@ -99,7 +98,6 @@ INSERT INTO `applicants` (`id`, `account_id`, `guardian_fname`, `guardian_mname`
 (14, 14, 'SDSAD', 'DASSAD.', 'ASDAS', 'SDSAD', 'ASDA.', 'ASDAS', 'ADSA', 'GRADE 8'),
 (15, 15, 'JEDI', 'J.', 'JEDI', 'JACOB', 'J.', 'JEDI', 'PASIG GREEN PASTURES', 'GRADE 11'),
 (27, 27, 'ANDREW', 'O.', 'GUILLERMO', 'ANDREI', 'O.', 'GUILLERMO', 'VIRGEN DEL PILAR SCHOOL', 'GRADE 11'),
-(32, 32, 'RAND', 'RAND.', 'RAND', 'RAND', 'RAND.', 'RAND', 'RAND', 'GRADE 11'),
 (33, 33, 'TEST', 'TEST.', 'TEST', 'FORTESTING', 'FORTESTING.', 'FORTESTING', 'TESTING', 'GRADE 11');
 
 -- --------------------------------------------------------
@@ -110,6 +108,7 @@ INSERT INTO `applicants` (`id`, `account_id`, `guardian_fname`, `guardian_mname`
 
 CREATE TABLE `form_submissions` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `applicant_id` int(10) UNSIGNED DEFAULT NULL,
   `applicant_fname` varchar(255) NOT NULL,
   `applicant_mname` varchar(255) DEFAULT NULL,
   `applicant_lname` varchar(255) NOT NULL,
@@ -161,7 +160,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (4, '2025_04_16_091659_create_password_resets_table', 1),
 (5, '2025_04_20_074003_create_signup_otps_table', 1),
 (6, '2025_04_22_051242_create_form_submissions_table', 2),
-(7, '2025_04_22_162302_create_form_submissions', 3);
+(8, '2025_04_23_012752_add_applicant_id_to_form_submissions', 3);
 
 -- --------------------------------------------------------
 
@@ -195,15 +194,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('AFlCDsb0I6b86FI8ju7P3iNfvhZJBbVbPxSnJOeb', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo0OntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6ImFIcTBJZE5URXBNY2gxeU5yTWVvYXNNaFJ6QVBRblFONEJJb3BFaHIiO3M6MzoidXJsIjthOjE6e3M6ODoiaW50ZW5kZWQiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQiO319', 1745329569),
-('BACXuIbMOIzUoGRbEtvGNwhmGYo5mDOVKESh4NaU', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo1OntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6IjdQUDZjVFVwckN4RTFOWmhLNW44T1RpMXY1ZW9EWEZjeVBsZnFqd08iO3M6MTA6ImFjY291bnRfaWQiO2k6NjtzOjQ6InJvbGUiO3M6OToiYXBwbGljYW50Ijt9', 1745328348),
-('BQnZko9czmercCzE00CGVYjPggExBrXwSXXQQ1NJ', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6ImM1Nk8zVTlxYUxYMmtvdkFUcGdhSXR0bVRaUFpxNzJRZ2FkTjF0MnYiO30=', 1745326458),
-('cVDETW6Wae9nUozZaoEQWi9NdHcD2icKO4wDbDgL', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6Imw3bk5QVVpYRG93cktEaWtaS0FzSFdtWmFDYVVrdUZJMWtOcXlxUjUiO30=', 1745331505),
-('hMqGQ3DAGAkqUauqkZChfc1XUbn01yPikp0XcPaY', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6InRpMk14NnoxMm82allKMFJGbTVSTHhhOXF5STVDNW9UM0xyR01paWYiO30=', 1745324707),
-('i92oNXtr12jl5qaaazfvKL3oIRiZz6oUEiqCtOt2', 33, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiWVlCUTBKdkd6bkYxT29vNHZLaHFQY0x0MzNlRWhSbmRKOExaZ0xHZSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hcHBsaWNhbnQvcGF5bWVudC9wYXltZW50Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MzM7czo0OiJuYW1lIjtzOjE1OiJURVNUIFRFU1QuIFRFU1QiO3M6NToiZW1haWwiO3M6MjY6ImVpcnlrLnNhcmRhbGxhMzBAZ21haWwuY29tIjt9', 1745339119),
-('qP7rZZ8ZYeMDatf6lPVU5WpyT1GDDbiXeEASmwxE', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6IktSa0pFSFNCMHpjM2xNS1ptNDFaNldrOXBNbTFoYUlCd2RBcUZaUUEiO30=', 1745328143),
-('TEW6SUl4sfJKKQp6sBijQu3rbFmKDe4YTbtXmoLe', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo2OntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6ImxtN0FFVVNscWsxNjMyYmFmb2M2Um0xcjVuWDFkMFY0UWZUTEY1dGQiO3M6MzoidXJsIjthOjE6e3M6ODoiaW50ZW5kZWQiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQiO31zOjEwOiJhY2NvdW50X2lkIjtpOjMyO3M6NDoicm9sZSI7czo5OiJhcHBsaWNhbnQiO30=', 1745329674),
-('ZljK8NMZGAqAzWsws5sr2CsqOwQacDg6p77NLZNA', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfdG9rZW4iO3M6NDA6IjZLUkJOTDBhdUkxbmJsdnJvM0p4ajlFM09kdjk5SHRSZXViTk9vRGwiO30=', 1745324934);
+('ORTgRFROyBUf4wmXNc5xrDEZy2UNF9heMw9nAAiV', 37, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo4OntzOjY6Il90b2tlbiI7czo0MDoidWpYV1ZybVBmaVl0SXU2QVM4OTNGOWVvbHhaeTRUUnhxcTlPVmlqciI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6MzoidXJsIjthOjE6e3M6ODoiaW50ZW5kZWQiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTozNztzOjQ6Im5hbWUiO3M6MTU6IlJBTkQgUkFORC4gUkFORCI7czo1OiJlbWFpbCI7czoyNDoiZ2FiZWJhcmNlbmFzMDhAZ21haWwuY29tIjtzOjEyOiJhcHBsaWNhbnRfaWQiO2k6Mzc7fQ==', 1745376825);
 
 -- --------------------------------------------------------
 
@@ -242,7 +233,8 @@ ALTER TABLE `applicants`
 -- Indexes for table `form_submissions`
 --
 ALTER TABLE `form_submissions`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `form_submissions_applicant_id_foreign` (`applicant_id`);
 
 --
 -- Indexes for table `migrations`
@@ -278,31 +270,31 @@ ALTER TABLE `signup_otps`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `applicants`
 --
 ALTER TABLE `applicants`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `form_submissions`
 --
 ALTER TABLE `form_submissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `signup_otps`
 --
 ALTER TABLE `signup_otps`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -313,6 +305,12 @@ ALTER TABLE `signup_otps`
 --
 ALTER TABLE `applicants`
   ADD CONSTRAINT `applicants_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `form_submissions`
+--
+ALTER TABLE `form_submissions`
+  ADD CONSTRAINT `form_submissions_applicant_id_foreign` FOREIGN KEY (`applicant_id`) REFERENCES `applicants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -43,5 +43,14 @@ class FillupForms extends Model
         'lrn_no',
         'strand',
         'source',
+
+        //applicant id
+        'applicant_id',
     ];
+
+    public function applicant()
+{
+    return $this->belongsTo(Applicant::class, 'applicant_id');
+}
+
 }

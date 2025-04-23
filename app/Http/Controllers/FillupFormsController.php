@@ -126,6 +126,7 @@ class FillupFormsController extends Controller
     ];
 
     $allData = array_merge(session('form_data', []), $validated, $optionalDefaults);
+    $allData['applicant_id'] = session('applicant_id');
 
             // Force-null optional fields if not present
         $allData['applicant_bday'] = $allData['applicant_bday'] ?? null;
