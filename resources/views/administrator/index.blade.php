@@ -7,6 +7,7 @@
     <link rel="website icon" type="png" href="{{ asset('applysmart_logo.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Administrator | Dashboard</title>
 </head>
 <body>
@@ -24,6 +25,16 @@
 
 <div class="container mt-4">
     <h2>Accounts List</h2>
+    <!-- ✅ Filter Dropdown -->
+    <div class="mb-3">
+        <label for="roleFilter" class="form-label">Filter by role:</label>
+        <select id="roleFilter" class="form-select w-auto">
+            <option value="">All</option>
+            <option value="Administrator" {{ request('role') == 'Administrator' ? 'selected' : '' }}>Administrator</option>
+            <option value="Admission" {{ request('role') == 'Admission' ? 'selected' : '' }}>Admission</option>
+            <option value="Accounting" {{ request('role') == 'Accounting' ? 'selected' : '' }}>Accounting</option>
+        </select>
+    </div>
     <table class="table table-bordered table-hover mt-3">
         <thead class="table-dark">
             <tr>
@@ -31,15 +42,25 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Actions</th>
+
             </tr>
         </thead>
-        <tbody>
+        <tbody id="accounts-table">
             @forelse ($accounts as $account)
                 <tr>
                     <td>{{ $account->id }}</td>
                     <td>{{ $account->name }}</td>
                     <td>{{ $account->email }}</td>
                     <td>{{ ucfirst($account->role) }}</td>
+                    <td>
+    <a href="{{ route('admin.editAccount', $account->id) }}" class="btn btn-sm btn-warning">Edit</a>
+    <form action="{{ route('admin.deleteAccount', $account->id) }}" method="POST" style="display:inline;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+    </form>
+</td>
                 </tr>
             @empty
                 <tr>
@@ -50,6 +71,25 @@
     </table>
 </div>
 
+@if (session('success'))
+<script>
+    Swal.fire({
+        title: 'Success!',
+        text: '{{ session('success') }}',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
+
+<script>
+    document.getElementById('roleFilter').addEventListener('change', function () {
+        const selectedRole = this.value;
+        const query = selectedRole ? '?role=' + encodeURIComponent(selectedRole) : '';
+        window.location.href = "{{ route('admindashboard') }}" + query;
+    });
+</script>
 
 
 </body>

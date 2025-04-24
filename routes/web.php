@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\FillupFormsController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\AdminAccountController;
 
 //THESE ARE PUBLIC ROUTES 
 // Log in Routes
@@ -83,4 +84,19 @@ Route::middleware(['auth'])->group(function () {
     })->name('admin.createaccounts');
 
     Route::post('/administrator/create-account', [App\Http\Controllers\AdminController::class, 'createAccount'])->name('admin.createAccount');
+
+    
+    //if role == admin, edi ipapakita yung dashboard ng admin
+    Route::get('/administrator/dashboard', [App\Http\Controllers\AdminAccountController::class, 'index'])->name('admindashboard');
+
+    Route::get('/administrator/create-accounts', function () {
+        return view('administrator.create-accounts');
+    })->name('admin.createaccounts');
+
+    Route::post('/administrator/create-account', [App\Http\Controllers\AdminController::class, 'createAccount'])->name('admin.createAccount');
+
+    Route::get('/administrator/account/{id}/edit', [AdminAccountController::class, 'edit'])->name('admin.editAccount');
+    Route::put('/administrator/account/{id}', [AdminAccountController::class, 'update'])->name('admin.updateAccount');
+    Route::delete('/administrator/account/{id}', [App\Http\Controllers\AdminAccountController::class, 'destroy'])->name('admin.deleteAccount');
+
 });

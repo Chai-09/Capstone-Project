@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Administrator | Create Accounts</title>
+    <title>Edit Account</title>
 </head>
 <body>
 
@@ -16,18 +16,9 @@
 <p style="color: white"> {{ auth()->user()->name }}</p>
 </nav>
 
-<form action="{{ route('admin.createAccount') }}" method="POST">
+<form action="{{ route('admin.updateAccount', $account->id) }}" method="POST">
 @csrf
-    @if ($errors->any())
-        <div style="background: #ffe0e0; padding: 10px; border: 1px solid red; margin-top: 10px;">
-            <strong>Form submission failed:</strong>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li style="color: red;">{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+@method('PUT')
 
     <p>First Name</p>
     <input type="text" name="applicant_fname" placeholder="First Name" required>
@@ -38,23 +29,24 @@
     <p>Last Name</p>
     <input type="text" name="applicant_lname" placeholder="Last Name" required>
 
-    <p>Email Address</p>           
-    <input type="email" name="applicant_email" id="email" placeholder="Enter email address" required>
+    <p>Email Address</p>
+    <input type="email" name="applicant_email" id="email" placeholder="Enter email address">
 
-    <p>Role<p>
+    <p>Role</p>
     <select name="role" id="role" required>
         <option value="">Select Role</option>
-            @foreach (['Administrator', 'Admission', 'Accounting'] as $role)
+        @foreach (['Administrator', 'Admission', 'Accounting'] as $role)
         <option value="{{ $role }}">{{ $role }}</option>
-            @endforeach
+        @endforeach
     </select>
 
     <p>Password</p>
-    <input type="text" name="password" placeholder="Password" required>
+    <input type="password" name="password" placeholder="Password (leave blank to keep current)">
 
-    <p>Last Name</p>
-    <input type="text" name="password_confirmation" placeholder="Confirm Password" required>
-    <button type="submit" class="btn btn-success">Save</button>
+    <p>Confirm Password</p>
+    <input type="password" name="password_confirmation" placeholder="Confirm Password">
+
+    <button type="submit" class="btn btn-success">Update</button>
 </form>
 @if (session('success'))
 <script>
@@ -69,3 +61,4 @@
 @endif
 </body>
 </html>
+

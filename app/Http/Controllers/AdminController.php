@@ -27,6 +27,7 @@ class AdminController extends Controller
             'role' => strtolower($request->role),
         ]);
 
-        return redirect()->back()->with('success', 'Account created successfully.');
+        return redirect()->route('admindashboard')->with('success', 'Account created successfully.');
+
     }
 }
