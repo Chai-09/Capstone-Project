@@ -54,6 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (level === "Senior High School") {
+            lrn.style.display = "block";
+            lrnField.disabled = false;
+            lrnField.required = true;
             strand.style.display = "block";
             strandField.disabled = false;
             strandField.required = true;

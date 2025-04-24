@@ -8,8 +8,10 @@ export default defineConfig({
             input: ['resources/css/app.css', 
                 'resources/css/login/login.css',
                 'resources/css/fillupforms/fillupforms.css',
+                'resources/css/applicants/layout.css',
                 'resources/css/applicants/navbar.css',
                 'resources/css/applicants/sidebar.css',
+                'resources/css/applicants/step-1.css',
 
                 'resources/js/app.js',
                 'resources/js/fillupforms/fillupforms.js',

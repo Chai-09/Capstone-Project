@@ -6,18 +6,40 @@
     <link rel="website icon" type="png" href="{{ asset('applysmart_logo.png') }}">
     <title>ApplySmart</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
+    {{-- CSS --}}
     @vite('resources/css/fillupforms/fillupforms.css')
-    @vite('resources/js/fillupforms/fillupforms.js')
-    @vite('resources/js/address/address.js')
+    @vite('resources/css/applicants/layout.css')
+    @vite('resources/css/applicants/navbar.css')
+    @vite('resources/css/applicants/sidebar.css')
+    @vite('resources/css/applicants/step-1.css')
 </head>
 <body>
+
+    {{-- Navbar always visible --}}
     @include('applicant.navbar.navbar')
-    @include('applicant.sidebar.sidebar')
 
-    <form action="{{ route('form.step3') }}" method="POST">
-        @include('applicant.steps.forms.step-1-forms')
-    </form>
+    <div class="container-fluid">
+        <div class="row">
 
+            {{-- Sidebar visible only on desktop --}}
+            <div class="col-lg-3 d-none d-lg-block bg-dark text-white p-0">
+                @include('applicant.sidebar.sidebar')
+            </div>
+
+            {{-- Main content --}}
+            <div class="col-lg-9 px-4 py-3">
+                <form action="{{ route('form.step3') }}" method="POST">
+                    @csrf
+                    @include('applicant.steps.forms.step-1-forms')
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    @vite('resources/js/fillupforms/fillupforms.js')
+    @vite('resources/js/address/address.js')
 </body>
 </html>

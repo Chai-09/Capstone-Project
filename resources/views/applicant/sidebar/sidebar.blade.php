@@ -1,15 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navbar</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    @vite('resources/css/applicants/sidebar.css')
-</head>
-<body>
-
-    <!-- layouts/sidebar.blade.php -->
 <div class="d-flex flex-column flex-shrink-0 text-white bg-dark" style="width: 450px; height: 93.5vh;">
     <ul class="nav nav-pills flex-column">
         <li class="nav-item">
@@ -75,10 +63,3 @@
         </div>
     </ul>
 </div>
-
-    
-    
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>

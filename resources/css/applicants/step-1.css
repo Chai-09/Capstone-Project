@@ -1,0 +1,55 @@
+.step-form {
+    max-width: 100%;
+    width: 100%;
+    padding: 2rem 4rem;
+    margin: 0 auto;
+}
+/* Form label + spacing */
+.step-form label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.step-form input,
+.step-form select {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 1.2rem;
+    font-size: 0.95rem;
+}
+
+/* Form grid layout */
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-col {
+    flex: 1;
+    min-width: 250px;
+}
+
+/* Right-align button */
+.text-end {
+    text-align: right;
+}
+
+/* Clean green next button */
+.btn-next {
+    background-color: #006c3c;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 6px;
+    border: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn-next:hover {
+    background-color: #004f2a;
+}

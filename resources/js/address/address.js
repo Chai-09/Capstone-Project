@@ -5,12 +5,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const barangaySelect = document.getElementById('barangay');
 
     function resetSelect(select, label = null) {
-        select.innerHTML = `<option value="">${label || "Choose " + capitalize(select.name)}</option>`;
+        const placeholder = label || "Choose " + capitalize(select.name);
+        select.innerHTML = `<option value="" disabled selected hidden>${placeholder}</option>`;
     }
+    
 
     function capitalize(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
+
+    //Initialize all selects with placeholder immediately
+    resetSelect(regionSelect, "Choose Region");
+    resetSelect(provinceSelect, "Choose Province");
+    resetSelect(citySelect, "Choose City");
+    resetSelect(barangaySelect, "Choose Barangay");
 
     function fetchData(url, select, valueKey = 'name') {
         fetch(url)
