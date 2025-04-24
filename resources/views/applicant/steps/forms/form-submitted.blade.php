@@ -13,9 +13,7 @@
     @vite('resources/js/address/address.js')
 </head>
 <body>
-    
-    @include('applicant.navbar.navbar')
-    
+
     
 <form action="{{ route('applicant.payment.payment') }}" method="GET">
     <button type="submit" class="btn btn-success">Proceed</button>

@@ -76,3 +76,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+// Step switching
+window.nextStep = function (step) {
+    document.querySelectorAll("#step1, #step2, #step3").forEach(div => {
+        div.style.display = "none";
+    });
+    document.getElementById("step" + step).style.display = "block";
+};

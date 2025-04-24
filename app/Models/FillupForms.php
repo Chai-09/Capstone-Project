@@ -49,8 +49,7 @@ class FillupForms extends Model
     ];
 
     public function applicant()
-{
-    return $this->belongsTo(Applicant::class, 'applicant_id');
-}
-
+    {
+        return $this->belongsTo(Applicant::class, 'applicant_id');
+    }
 }

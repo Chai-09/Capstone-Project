@@ -14,29 +14,8 @@
 </head>
 <body>
     
-    @include('applicant.navbar.navbar')
-    
-    @if ($errors->any())
-        <div style="color: red;">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     <form id="mainForm" action="{{ route('form.step1') }}" method="POST">
         @csrf
-        @if ($errors->any())
-    <div style="background: #ffe0e0; padding: 10px; border: 1px solid red; margin-top: 10px;">
-        <strong>Form submission failed:</strong>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li style="color: red;">{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
         <!--Applicant Information-->
         <div id="applicant">
             <p>Applicant's Name</p>

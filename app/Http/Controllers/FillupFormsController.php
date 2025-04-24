@@ -8,14 +8,15 @@ use Illuminate\Validation\Rule;
 
 class FillupFormsController extends Controller
 {
-    public function createStep1()
+    public function createStep3() // this now shows the full merged form
     {
-        return view('applicant.steps.forms.applicantforms');
+        return view('applicant.index'); // or your layout file that includes @include('applicant.steps.step-1-forms')
     }
 
-    public function postStep1(Request $request)
+    public function postStep3(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
+            // Applicant
             'applicant_fname' => 'required|max:255',
             'applicant_mname' => 'nullable|max:255',
             'applicant_lname' => 'required|max:255',
@@ -30,112 +31,81 @@ class FillupFormsController extends Controller
             'age' => 'required|max:255',
             'gender' => 'required|in:Male,Female',
             'nationality' => 'required|max:255',
-        ]);
 
-        session(['form_data' => array_merge(session('form_data', []), $validated)]);
-        return redirect()->route('form.step2');
-    }
-
-    public function createStep2()
-    {
-        return view('applicant.steps.forms.guardianforms');
-    }
-
-    public function postStep2(Request $request)
-    {
-        $validated = $request->validate([
+            // Guardian
             'guardian_fname' => 'required|max:255',
             'guardian_mname' => 'nullable|max:255',
             'guardian_lname' => 'required|max:255',
             'guardian_contact_number' => 'required|max:20',
             'guardian_email' => 'required|email',
             'relation' => 'required|in:Parents,Brother/Sister,Uncle/Aunt,Cousin,Grandparents',
-        ]);
 
-        session(['form_data' => array_merge(session('form_data', []), $validated)]);
-        return redirect()->route('form.step3');
-    }
+            // School Info
+            'current_school' => 'required|max:255',
+            'current_school_city' => 'required|max:255',
+            'school_type' => 'required|in:Private,Public,Private Sectarian,Private Non-Sectarian',
+            'educational_level' => ['required', Rule::in([
+                'Grade School',
+                'Junior High School',
+                'Senior High School'
+            ])],
+            'incoming_grlvl' => 'required',
+            'source' => ['required', Rule::in([
+                'Career Fair/Career Orientation',
+                'Events',
+                'Social Media (Facebook, TikTok, Instagram, Youtube, etc)',
+                'Friends/Family/Relatives',
+                'Billboard',
+                'Website',
+            ])],
+        ];
 
-    public function createStep3()
-    {
-        return view('applicant.steps.forms.schoolinfoforms');
-    }
+        // Conditional fields
+        $level = $request->educational_level;
+        $grade = $request->incoming_grlvl;
 
-    public function postStep3(Request $request)
-{
-    if (!session()->has('form_data')) {
-        return redirect()->route('form.step1')->with('error', 'Please complete the previous steps.');
-    }
-
-
-    $rules = [
-        'current_school' => 'required|max:255',
-        'current_school_city' => 'required|max:255',
-        'school_type' => 'required|in:Private,Public,Private Sectarian,Private Non-Sectarian',
-        'educational_level' => ['required', Rule::in([ //added required 
-        'Grade School',
-        'Junior High School',
-        'Senior High School'
-    ])], 
-
-        'incoming_grlvl' => 'required',
-        'source' => [
-    'required',
-    Rule::in([
-        'Career Fair/Career Orientation',
-        'Events',
-        'Social Media (Facebook, TikTok, Instagram, Youtube, etc)',
-        'Friends/Family/Relatives',
-        'Billboard',
-        'Website',
-        ]),
-    ],
-
-     ];
-    
-    $level = $request->educational_level;
-    $grade = $request->incoming_grlvl;
-    
-    // Grade School Logic
-    if ($level === 'Grade School') {
-        $rules['lrn_no'] = 'required|max:255';
-    
-        if (in_array($grade, ['Kinder', 'Grade 1'])) {
-            $rules['applicant_bday'] = 'required|date';
+        if ($level === 'Grade School') {
+            $rules['lrn_no'] = 'required|max:255';
+            if (in_array($grade, ['Kinder', 'Grade 1'])) {
+                $rules['applicant_bday'] = 'required|date';
+            }
         }
+
+        if ($level === 'Junior High School') {
+            $rules['lrn_no'] = 'required|max:255';
+        }
+
+        if ($level === 'Senior High School') {
+            $rules['strand'] = ['required', Rule::in([
+                'STEM Health Allied',
+                'STEM Engineering',
+                'STEM Information Technology',
+                'ABM Accountancy',
+                'ABM Business Management',
+                'HUMSS',
+                'GAS',
+                'SPORTS'
+            ])];
+        }
+
+        $validated = $request->validate($rules);
+
+        // Optional values fallback
+        $optionalDefaults = [
+            'applicant_bday' => $request->has('applicant_bday') ? $request->applicant_bday : null,
+            'lrn_no' => $request->has('lrn_no') ? $request->lrn_no : null,
+            'strand' => $request->has('strand') ? $request->strand : null,
+        ];
+
+        $allData = array_merge($validated, $optionalDefaults);
+
+        // Add applicant_id from session if you're tracking logged-in user
+        if (session()->has('applicant_id')) {
+            $allData['applicant_id'] = session('applicant_id');
+        }
+
+        FillupForms::create($allData);
+
+        return redirect()->route('applicant.steps.forms.form-submitted');
     }
-    
-    // Junior High
-    if ($level === 'Junior High School') {
-        $rules['lrn_no'] = 'required|max:255';
-        // no birthday, no strand
-    }
-    
-    // Senior High
-    if ($level === 'Senior High School') {
-        $rules['strand'] = 'required|in:STEM Health Allied,STEM Engineering,STEM Information Technology,ABM Accountancy,ABM Business Management,HUMSS,GAS,SPORTS';
-        // no lrn, no bday
-    }
-    
-    $validated = $request->validate($rules);
-    
-    $optionalDefaults = [
-        'applicant_bday' => $request->has('applicant_bday') ? $request->applicant_bday : null,
-        'lrn_no' => $request->has('lrn_no') ? $request->lrn_no : null,
-        'strand' => $request->has('strand') ? $request->strand : null,
-    ];
-
-    $allData = array_merge(session('form_data', []), $validated, $optionalDefaults);
-    $allData['applicant_id'] = session('applicant_id');
-
-            // Force-null optional fields if not present
-        $allData['applicant_bday'] = $allData['applicant_bday'] ?? null;
-        $allData['lrn_no'] = $allData['lrn_no'] ?? null;
-        $allData['strand'] = $allData['strand'] ?? null;
-
-    FillupForms::create($allData); //added this for session
-    session()->forget('form_data');
-
-    return redirect()->route('applicant.steps.forms.form-submitted');
-}
 }
