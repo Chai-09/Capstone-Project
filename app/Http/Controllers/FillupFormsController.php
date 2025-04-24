@@ -136,6 +136,6 @@ class FillupFormsController extends Controller
     FillupForms::create($allData); //added this for session
     session()->forget('form_data');
 
-    return redirect()->route('applicant.payment.payment');
+    return redirect()->route('applicant.steps.forms.form-submitted');
 }
 }

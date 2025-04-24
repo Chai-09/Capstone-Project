@@ -12,13 +12,13 @@ document.addEventListener('DOMContentLoaded', function () {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
-    function fetchData(url, select, valueKey = 'name', codeKey = 'code') {
+    function fetchData(url, select, valueKey = 'name') {
         fetch(url)
             .then(res => res.json())
             .then(data => {
                 resetSelect(select);
                 data.forEach(item => {
-                    select.innerHTML += `<option value="${item[codeKey]}" data-name="${item[valueKey]}">${item[valueKey]}</option>`;
+                    select.innerHTML += `<option value="${item[valueKey]}">${item[valueKey]}</option>`;
                 });
             });
     }
@@ -28,39 +28,62 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 2. When region is selected
     regionSelect.addEventListener('change', function () {
-        const regionCode = this.value;
+        const regionName = this.value;
 
         resetSelect(provinceSelect);
         resetSelect(citySelect);
         resetSelect(barangaySelect);
 
-        if (regionCode === '130000000') {
-            // Special case for NCR
-            provinceSelect.innerHTML = `<option value="130000000" selected>Metro Manila (NCR)</option>`;
-            fetchData(`https://psgc.gitlab.io/api/regions/${regionCode}/cities-municipalities/`, citySelect);
-        } else {
-            // Normal case
-            fetchData(`https://psgc.gitlab.io/api/regions/${regionCode}/provinces/`, provinceSelect);
-        }
+        // Find the matching region's code (because PSGC API uses code in URL)
+        fetch('https://psgc.gitlab.io/api/regions/')
+            .then(res => res.json())
+            .then(regions => {
+                const selectedRegion = regions.find(r => r.name === regionName);
+                if (!selectedRegion) return;
+
+                const regionCode = selectedRegion.code;
+
+                if (regionCode === '130000000') {
+                    provinceSelect.innerHTML = `<option value="Metro Manila (NCR)" selected>Metro Manila (NCR)</option>`;
+                    fetchData(`https://psgc.gitlab.io/api/regions/${regionCode}/cities-municipalities/`, citySelect);
+                } else {
+                    fetchData(`https://psgc.gitlab.io/api/regions/${regionCode}/provinces/`, provinceSelect);
+                }
+            });
     });
 
-    // 3. When province is selected (not for NCR)
+    // 3. When province is selected
     provinceSelect.addEventListener('change', function () {
-        const provinceCode = this.value;
+        const provinceName = this.value;
 
         resetSelect(citySelect);
         resetSelect(barangaySelect);
 
-        // Skip if NCR (already loaded)
-        if (provinceCode !== '130000000') {
-            fetchData(`https://psgc.gitlab.io/api/provinces/${provinceCode}/cities-municipalities/`, citySelect);
-        }
+        // Skip if NCR
+        if (provinceName === 'Metro Manila (NCR)') return;
+
+        fetch('https://psgc.gitlab.io/api/provinces/')
+            .then(res => res.json())
+            .then(provinces => {
+                const selectedProvince = provinces.find(p => p.name === provinceName);
+                if (!selectedProvince) return;
+
+                fetchData(`https://psgc.gitlab.io/api/provinces/${selectedProvince.code}/cities-municipalities/`, citySelect);
+            });
     });
 
     // 4. When city is selected
     citySelect.addEventListener('change', function () {
-        const cityCode = this.value;
+        const cityName = this.value;
         resetSelect(barangaySelect);
-        fetchData(`https://psgc.gitlab.io/api/cities-municipalities/${cityCode}/barangays/`, barangaySelect);
+
+        fetch('https://psgc.gitlab.io/api/cities-municipalities/')
+            .then(res => res.json())
+            .then(cities => {
+                const selectedCity = cities.find(c => c.name === cityName);
+                if (!selectedCity) return;
+
+                fetchData(`https://psgc.gitlab.io/api/cities-municipalities/${selectedCity.code}/barangays/`, barangaySelect);
+            });
     });
 });

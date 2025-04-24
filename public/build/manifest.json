@@ -13,6 +13,11 @@
     "src": "resources/css/app.css",
     "isEntry": true
   },
+  "resources/css/applicants/sidebar.css": {
+    "file": "assets/sidebar-BXHCgQtV.css",
+    "src": "resources/css/applicants/sidebar.css",
+    "isEntry": true
+  },
   "resources/css/fillupforms/fillupforms.css": {
     "file": "assets/fillupforms-BXt2jZ0n.css",
     "src": "resources/css/fillupforms/fillupforms.css",
@@ -24,7 +29,7 @@
     "isEntry": true
   },
   "resources/js/address/address.js": {
-    "file": "assets/address-BF31kmyz.js",
+    "file": "assets/address-DLhQ7Xay.js",
     "name": "address",
     "src": "resources/js/address/address.js",
     "isEntry": true

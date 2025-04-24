@@ -48,6 +48,7 @@ class AuthController extends Controller
                 'applicant' => redirect()->route('applicantdashboard'),
                 'admission' => redirect()->route('admissiondashboard'),
                 'accounting' => redirect()->route('accountingdashboard'),
+                'administrator' => redirect()->route('admindashboard'),
                 default => redirect()->route('login'),
             };
         }
@@ -60,4 +61,6 @@ class AuthController extends Controller
         session()->flush();
         return redirect()->route('login')->with('success', 'Logged out successfully.'); //kingina ginawa na pala to
     }
+
+    
 }

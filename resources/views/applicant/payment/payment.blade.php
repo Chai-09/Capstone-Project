@@ -6,6 +6,9 @@
     <title>Document</title>
 </head>
 <body>
+@include('applicant.navbar.navbar')
+
+@include('applicant.sidebar.sidebar')
     <p>payment page</p>
 </body>
 </html>

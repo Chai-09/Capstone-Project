@@ -9,6 +9,7 @@ export default defineConfig({
                 'resources/css/login/login.css',
                 'resources/css/fillupforms/fillupforms.css',
                 'resources/css/applicants/navbar.css',
+                'resources/css/applicants/sidebar.css',
 
                 'resources/js/app.js',
                 'resources/js/fillupforms/fillupforms.js',

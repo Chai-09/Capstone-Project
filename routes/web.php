@@ -5,6 +5,7 @@ use App\Http\Controllers\SignupFormsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\FillupFormsController;
+use App\Http\Controllers\RoleController;
 
 //THESE ARE PUBLIC ROUTES 
 // Log in Routes
@@ -49,7 +50,12 @@ Route::middleware(['auth'])->group(function () {
     //payment page
     Route::get('/applicant/payment/payment', function () {
         return view('applicant.payment.payment');
-    });
+    })->name('applicant.payment.payment');
+
+    //educational background to 'form has been submitted' page
+    Route::get('/applicant/steps/forms/form-submitted', function () {
+        return view('applicant.steps.forms.form-submitted');
+    })->name('applicant.steps.forms.form-submitted');
 
     //routing from index to applicant
     Route::get('/applicant/steps/forms/applicantforms', function () {
@@ -80,4 +86,18 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/form/step3', [FillupFormsController::class, 'createStep3'])->name('form.step3');
     Route::post('/form/step3', [FillupFormsController::class, 'postStep3']);
+
+    //routes for sidebar
+    Route::get('/applicant/steps/forms/applicantforms', function () {
+        return view('applicant.steps.forms.applicantforms');
+    })->name('fillupforms');
+
+    //if role == admin, edi ipapakita yung dashboard ng admin
+    Route::get('/administrator/dashboard', [App\Http\Controllers\AdminAccountController::class, 'index'])->name('admindashboard');
+
+    Route::get('/administrator/create-accounts', function () {
+        return view('administrator.create-accounts');
+    })->name('admin.createaccounts');
+    
+    Route::post('/administrator/create-account', [App\Http\Controllers\AdminController::class, 'createAccount'])->name('admin.createAccount');
 });
