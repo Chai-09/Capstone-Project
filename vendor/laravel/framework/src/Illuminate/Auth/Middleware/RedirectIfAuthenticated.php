@@ -22,18 +22,29 @@ class RedirectIfAuthenticated
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
+
+     /*  This is for making sure that every redirect goes to the appropriate role dashboard  */
     public function handle(Request $request, Closure $next, string ...$guards): Response
-    {
-        $guards = empty($guards) ? [null] : $guards;
+{
+    $guards = empty($guards) ? [null] : $guards;
 
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect($this->redirectTo($request));
-            }
+    foreach ($guards as $guard) {
+        if (Auth::guard($guard)->check()) {
+            $role = Auth::user()->role;
+
+            return match ($role) {
+                'administrator' => redirect()->route('admindashboard'),
+                'applicant' => redirect()->route('applicantdashboard'),
+                'admission' => redirect()->route('admissiondashboard'),
+                'accounting' => redirect()->route('accountingdashboard'),
+                default => redirect('/'),
+            };
         }
-
-        return $next($request);
     }
+
+    return $next($request);
+}
+
 
     /**
      * Get the path the user should be redirected to when they are authenticated.
