@@ -8,6 +8,11 @@
     "src": "resources/css/app.css",
     "isEntry": true
   },
+  "resources/css/applicants/layout.css": {
+    "file": "assets/app-BsPA6HG0.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
   "resources/css/applicants/navbar.css": {
     "file": "assets/app-BsPA6HG0.css",
     "src": "resources/css/app.css",
@@ -16,6 +21,11 @@
   "resources/css/applicants/sidebar.css": {
     "file": "assets/sidebar-BXHCgQtV.css",
     "src": "resources/css/applicants/sidebar.css",
+    "isEntry": true
+  },
+  "resources/css/applicants/step-1.css": {
+    "file": "assets/step-1-Bg5sCO1t.css",
+    "src": "resources/css/applicants/step-1.css",
     "isEntry": true
   },
   "resources/css/fillupforms/fillupforms.css": {
@@ -29,7 +39,7 @@
     "isEntry": true
   },
   "resources/js/address/address.js": {
-    "file": "assets/address-DLhQ7Xay.js",
+    "file": "assets/address-CYna0vna.js",
     "name": "address",
     "src": "resources/js/address/address.js",
     "isEntry": true
@@ -41,7 +51,7 @@
     "isEntry": true
   },
   "resources/js/fillupforms/fillupforms.js": {
-    "file": "assets/fillupforms-3ofrocTP.js",
+    "file": "assets/fillupforms--yDAagH1.js",
     "name": "fillupforms",
     "src": "resources/js/fillupforms/fillupforms.js",
     "isEntry": true

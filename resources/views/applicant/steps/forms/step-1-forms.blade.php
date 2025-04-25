@@ -181,7 +181,8 @@
             <div class="form-row">
                 <div class="form-col">
                     <label>Current School City</label>
-                    <input type="text" name="current_school_city" required>
+                    <input type="text" name="current_school_city" id="current_school_city" class="form-control" placeholder="Type city name..." autocomplete="off" required>
+                    <ul id="citySuggestions" class="list-group position-absolute w-100" style="z-index: 10; max-height: 200px; overflow-y: auto;"></ul>
                 </div>
             </div>
             <div class="form-row">
