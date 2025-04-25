@@ -1,3 +1,103 @@
 @import url('https://fonts.googleapis.com/css2?family=Della+Respira&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Permanent+Marker&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik+Mono+One&display=swap');
 @import '../app.css';
 
+.double-line {
+    display: flex;
+    justify-content: center; /* centers it horizontally */
+    align-items: center;
+    gap: 20px; /* the space between the two lines */
+    margin: 1.5rem 0;
+}
+
+.double-line .line {
+    flex: 1;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 5px;
+    max-width: 45%; /* so the lines don't stretch too far */
+    opacity: 0.8;
+}
+
+.navbar {
+    background-color: #00753F;
+}
+
+.school-name {
+    font-family: "Della Respira", serif;
+    font-weight: 200;
+    color: #fff;
+}
+
+.logout {
+    border: none;
+    color:#fff;
+    transition: background-color 0.5s ease;
+}
+
+.logout:hover {
+    color: #b8eed6;
+}
+
+/* Sidebar to Navbar */
+/* Mobile Version */
+.d-lg-none .sidebar-nav {
+    height: auto;
+    padding: 8px 12px;
+}
+
+.d-lg-none .sidebar-nav .nav-link {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    color: #ffffff71;
+}
+
+.d-lg-none .sidebar-nav .nav-link i {
+    font-size: 1rem;
+    color: #ffffff71;
+}
+
+
+.d-lg-none .sidebar-nav .nav-link i:hover {
+    font-size: 1rem;
+    color: #ffffff71;
+}
+
+.d-lg-none .sidebar-nav .step-number {
+    color: #ffffff71;
+    font-size: 0.7rem;
+}
+
+.d-lg-none .double-line .line {
+    background-color: #ffffff71;
+    opacity: 0.6;
+    max-width: 40%;
+}
+
+.d-lg-none .sidebar-nav {
+    background-color: #00753F;
+}
+
+.d-lg-none .sidebar-nav .nav-item:hover {
+    border-radius: 6px;
+}
+
+.d-lg-none .sidebar-nav .nav-item:hover .nav-link,
+.d-lg-none .sidebar-nav .nav-item:hover .nav-link i,
+.d-lg-none .sidebar-nav .nav-item:hover .step-number {
+    color: #fff;
+}
+
+.navbar-toggler {
+    border: 1.5px solid #fff;       
+    background-color: #00753F;     
+    border-radius: 4px;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='white' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-toggler:focus {
+    outline: none;                 
+    box-shadow: none;             
+}

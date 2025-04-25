@@ -6,7 +6,7 @@
     <link rel="website icon" type="png" href="{{ asset('applysmart_logo.png') }}">
     <title>ApplySmart</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <script src="https://kit.fontawesome.com/2c99ab7d67.js" crossorigin="anonymous"></script>
     {{-- CSS --}}
     @vite('resources/css/fillupforms/fillupforms.css')
     @vite('resources/css/applicants/layout.css')
@@ -23,12 +23,12 @@
         <div class="row">
 
             {{-- Sidebar visible only on desktop --}}
-            <div class="col-lg-3 d-none d-lg-block bg-dark text-white p-0">
+            <div class="col-lg-3 d-none d-lg-block p-0">
                 @include('applicant.sidebar.sidebar')
             </div>
 
             {{-- Main content --}}
-            <div class="col-lg-9 px-4 py-3">
+            <div class="forms col-lg-9 px-4 py-3">
                 <form action="{{ route('form.step3') }}" method="POST">
                     @csrf
                     @include('applicant.steps.forms.step-1-forms')

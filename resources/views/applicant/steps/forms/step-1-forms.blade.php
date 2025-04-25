@@ -1,5 +1,7 @@
 @csrf
 
+<div id="alert-container"></div>
+
 <div id="step1">
     <div class="step-form">
         <div class="form-section">
@@ -23,21 +25,21 @@
 
             <div class="form-row">
                 <div class="form-col">
-                    <label>Contact Number <span class="text-danger">*</span></label>
+                    <label>Contact Number<span class="text-danger">*</span></label>
                     <input type="tel" name="applicant_contact_number" placeholder="09XXXXXXXXX" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-col">
-                    <label>Email <span class="text-danger">*</span></label>
+                    <label>Email<span class="text-danger">*</span></label>
                     <input type="email" name="applicant_email" placeholder="Enter email address" required>
                 </div>
             </div>
         </div>
 
         <div class="form-section">
-            <label class="fw-semibold">Home Address <span class="text-danger">*</span></label>
+            <label class="fw-semibold">Home Address<span class="text-danger">*</span></label>
 
             <div class="form-row">
                 <div class="form-col">
@@ -80,11 +82,11 @@
 
         <div class="form-row">
             <div class="form-col">
-                <label>Age <span class="text-danger">*</span></label>
+                <label>Age<span class="text-danger">*</span></label>
                 <input type="number" name="age" placeholder="Enter age" required>
             </div>
             <div class="form-col">
-                <label>Gender <span class="text-danger">*</span></label>
+                <label>Gender<span class="text-danger">*</span></label>
                 <select name="gender" required>
                     <option value="">Select</option>
                     <option value="Male">Male</option>
@@ -95,7 +97,7 @@
 
         <div class="form-row">
             <div class="form-col">
-                <label>Nationality</label>
+                <label>Nationality<span class="text-danger">*</span></label>
                 <input type="text" name="nationality" placeholder="Enter nationality" required>
             </div>
         </div>
@@ -111,7 +113,7 @@
 <div id="step2" style="display: none;">
     <div class="step-form">
         <div class="form-section">
-            <label class="fw-semibold">Guardian's Name <span class="text-danger">*</span></label>
+            <label class="fw-semibold">Guardian's Name<span class="text-danger">*</span></label>
             <p class="text-muted">Example: James E. Joseph</p>
 
             <div class="form-row">
@@ -131,21 +133,21 @@
 
             <div class="form-row">
                 <div class="form-col">
-                    <label>Email</label>
+                    <label>Email<span class="text-danger">*</span></label>
                     <input type="email" name="guardian_email" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-col">
-                    <label>Contact Number</label>
+                    <label>Contact Number<span class="text-danger">*</span></label>
                     <input type="tel" name="guardian_contact_number" required>  
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-col">
-                    <label>Relation</label>
+                    <label>How are you related to the applicant?<span class="text-danger">*</span></label>
                     <select name="relation" required>
                         <option value="">Select</option>
                         <option value="Parents">Parents</option>
@@ -157,16 +159,20 @@
                 </div>
             </div>
         </div>
-        <div class="Text-start mt-4">
-            <button type="button" class="btn btn-primary" onclick="nextStep(1)">Back</button>
-        </div>
-    
-        <div class="text-end mt-4">
-            <button type="button" class="btn btn-next" onclick="nextStep(3)">Next</button>
+
+        <div class="form-row">
+            <div class="form-col">
+                <div class="text-start">
+                    <button type="button" class="btn btn-primary" onclick="nextStep(1)">Back</button>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="text-end">
+                    <button type="button" class="btn btn-next" onclick="nextStep(3)">Next</button>
+                </div>
+            </div>
         </div>
     </div>
-
-    
 </div>
 
 <div id="step3" style="display: none;">
@@ -174,20 +180,20 @@
         <div class="form-section">
             <div class="form-row">
                 <div class="form-col">
-                    <label>Current School</label>
+                    <label>Current School<span class="text-danger">*</span></label>
                     <input type="text" name="current_school" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-col">
-                    <label>Current School City</label>
+                    <label>Current School City<span class="text-danger">*</span></label>
                     <input type="text" name="current_school_city" id="current_school_city" class="form-control" placeholder="Type city name..." autocomplete="off" required>
                     <ul id="citySuggestions" class="list-group position-absolute w-100" style="z-index: 10; max-height: 200px; overflow-y: auto;"></ul>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-col">
-                    <label>School Type</label>
+                    <label>School Type<span class="text-danger">*</span></label>
                     <select name="school_type" required>
                         <option value="">Select</option>
                         <option value="Private">Private</option>
@@ -199,7 +205,7 @@
             </div>
             <div class="form-row">
                 <div class="form-col">
-                    <label>Educational Level</label>
+                    <label>Educational Level<span class="text-danger">*</span></label>
                     <select name="educational_level" id="educational_level" required>
                         <option value="">Select</option>
                         <option value="Grade School">Grade School</option>
@@ -209,8 +215,8 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-col">
-                    <label>Incoming Grade Level</label>
+                <div class="form-col" id="grade-level-container" style="display: none;">
+                    <label>Incoming Grade Level<span class="text-danger">*</span></label>
                     <select name="incoming_grlvl" id="incoming_grlvl" required></select>
                     <div class="form-col">
                         <div id="strand-container" style="display: none;">
@@ -231,7 +237,7 @@
                 </div>
                 <div class="form-col">
                     <div id="birthday-container" style="display: none;">
-                        <label>Birthday</label>
+                        <label>Birthday<span class="text-danger">*</span></label>
                         <input type="date" name="applicant_bday" id="applicant_bday">
                     </div>
                 </div>
@@ -240,13 +246,14 @@
                 <div class="form-col">
                     <div id="lrn-container" style="display: none;">
                         <label>LRN Number</label>
+                        <span class="text-muted">LRN is the Learner Reference Number that can be found on your Report Card, or School ID.</span>
                         <input type="text" name="lrn_no" id="lrn_no">
                     </div>
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-col">
-                    <label>How did you hear about us?</label>
+                <div class="form-row" id="source-container" style="display: none;">
+                    <label>How did you hear about us?<span class="text-danger">*</span></label>
                     <select name="source" required>
                         <option value="">Select</option>
                         <option value="Career Fair/Career Orientation">Career Fair/Career Orientation</option>
@@ -259,13 +266,18 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="Text-start mt-4">
-        <button type="button" class="btn btn-secondary" onclick="nextStep(2)">Back</button>
-    </div>
-
-    <div class="text-end mt-4">    
-        <button type="submit" class="btn btn-success">Submit</button>
+        <div class="form-row">
+            <div class="form-col">
+                <div class="text-start">
+                <button type="button" class="btn btn-secondary" onclick="nextStep(2)">Back</button>
+            </div>
+            </div>
+            <div class="form-col">
+                <div class="text-end">    
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+            </div>
+        </div>
     </div>
 </div>
+
