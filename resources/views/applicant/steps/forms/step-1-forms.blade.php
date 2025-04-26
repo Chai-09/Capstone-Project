@@ -1,11 +1,15 @@
 @csrf
 
-<div id="alert-container"></div>
+<div id="alert-wrapper">
+    <div id="alert-container"></div>
+</div>
+
+{{-- Appicant Information --}}
 
 <div id="step1">
     <div class="step-form">
         <div class="form-section">
-            <label class="fw-semibold">Applicant's Name <span class="text-danger">*</span></label>
+            <label class="fw-semibold">Applicant's Name<span class="text-danger">*</span></label>
             <p class="text-muted">Example: James E. Joseph</p>
 
             <div class="form-row">
@@ -25,14 +29,14 @@
 
             <div class="form-row">
                 <div class="form-col">
-                    <label>Contact Number<span class="text-danger">*</span></label>
+                    <label>Applicant's Contact Number<span class="text-danger">*</span></label>
                     <input type="tel" name="applicant_contact_number" placeholder="09XXXXXXXXX" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-col">
-                    <label>Email<span class="text-danger">*</span></label>
+                    <label>Applicant's Email Address<span class="text-danger">*</span></label>
                     <input type="email" name="applicant_email" placeholder="Enter email address" required>
                 </div>
             </div>
@@ -43,17 +47,17 @@
 
             <div class="form-row">
                 <div class="form-col">
-                    <label>Street & Number</label>
-                    <input type="text" name="numstreet" placeholder="Enter street & number" required>
+                    <label class="text-muted">Building Number, Street Name</label>
+                    <input type="text" name="numstreet" placeholder="Enter bldg number, street name" required>
                 </div>
                 <div class="form-col">
-                    <label>Region</label>
+                    <label class="text-muted">Region</label>
                     <select name="region" id="region" required>
                         <option value="">Choose Region</option>
                     </select>
                 </div>
                 <div class="form-col">
-                    <label>Province</label>
+                    <label class="text-muted">Province</label>
                     <select name="province" id="province" required>
                         <option value="">Choose Province</option>
                     </select>
@@ -62,19 +66,19 @@
 
             <div class="form-row">
                 <div class="form-col">
-                    <label>City</label>
+                    <label class="text-muted">City</label>
                     <select name="city" id="city" required>
                         <option value="">Choose City</option>
                     </select>
                 </div>
                 <div class="form-col">
-                    <label>Barangay</label>
+                    <label class="text-muted">Barangay</label>
                     <select name="barangay" id="barangay" required>
                         <option value="">Choose Barangay</option>
                     </select>
                 </div>
                 <div class="form-col">
-                    <label>Postal Code</label>
+                    <label class="text-muted">Postal Code</label>
                     <input type="number" name="postal_code" placeholder="Enter postal code" required>
                 </div>
             </div>
@@ -88,7 +92,7 @@
             <div class="form-col">
                 <label>Gender<span class="text-danger">*</span></label>
                 <select name="gender" required>
-                    <option value="">Select</option>
+                    <option value="">Select gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                 </select>
@@ -103,7 +107,7 @@
         </div>
 
         <div class="text-end mt-4">
-            <button type="button" class="btn btn-next" onclick="nextStep(2)">Next</button>
+            <button type="button" class="btn step1-next-btn" onclick="nextStep(2)">Next</button>
         </div>
     </div>
 </div>
@@ -119,29 +123,29 @@
             <div class="form-row">
                 <div class="form-col">
                     <label>First Name</label>
-                    <input type="text" name="guardian_fname" required>
+                    <input type="text" name="guardian_fname" placeholder="Enter first name" required>
                 </div>
                 <div class="form-col">
                     <label>Middle Initial</label>
-                    <input type="text" name="guardian_mname">
+                    <input type="text" name="guardian_mname" placeholder="Enter middle name">
                 </div>
                 <div class="form-col">
                     <label>Last Name</label>
-                    <input type="text" name="guardian_lname" required>
+                    <input type="text" name="guardian_lname" placeholder="Enter last name" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-col">
                     <label>Email<span class="text-danger">*</span></label>
-                    <input type="email" name="guardian_email" required>
+                    <input type="email" name="guardian_email" placeholder="Enter email address" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-col">
                     <label>Contact Number<span class="text-danger">*</span></label>
-                    <input type="tel" name="guardian_contact_number" required>  
+                    <input type="tel" name="guardian_contact_number" placeholder="09XXXXXXXXX" required>  
                 </div>
             </div>
 
@@ -149,7 +153,7 @@
                 <div class="form-col">
                     <label>How are you related to the applicant?<span class="text-danger">*</span></label>
                     <select name="relation" required>
-                        <option value="">Select</option>
+                        <option value="">Select Option</option>
                         <option value="Parents">Parents</option>
                         <option value="Brother/Sister">Brother/Sister</option>
                         <option value="Uncle/Aunt">Uncle/Aunt</option>
@@ -163,17 +167,19 @@
         <div class="form-row">
             <div class="form-col">
                 <div class="text-start">
-                    <button type="button" class="btn btn-primary" onclick="nextStep(1)">Back</button>
+                    <button type="button" class="btn step1-back-btn" onclick="nextStep(1)">Back</button>
                 </div>
             </div>
             <div class="form-col">
                 <div class="text-end">
-                    <button type="button" class="btn btn-next" onclick="nextStep(3)">Next</button>
+                    <button type="button" class="btn step1-next-btn" onclick="nextStep(3)">Next</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+{{-- School Information --}}
 
 <div id="step3" style="display: none;">
     <div class="step-form">
@@ -181,15 +187,20 @@
             <div class="form-row">
                 <div class="form-col">
                     <label>Current School<span class="text-danger">*</span></label>
-                    <input type="text" name="current_school" required>
+                    <input type="text" name="current_school" placeholder="Enter current school" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-col">
-                    <label>Current School City<span class="text-danger">*</span></label>
-                    <input type="text" name="current_school_city" id="current_school_city" class="form-control" placeholder="Type city name..." autocomplete="off" required>
-                    <ul id="citySuggestions" class="list-group position-absolute w-100" style="z-index: 10; max-height: 200px; overflow-y: auto;"></ul>
+                    <label class="form-label">Current School City</label>
+                    <div class="autocomplete-wrapper">
+                        <input type="text" name="current_school_city" id="current_school_city"
+                               class="form-control custom-input"
+                               placeholder="Enter current school city" autocomplete="off" required>
+                        <ul id="citySuggestions" class="custom-suggestions"></ul>
+                    </div>
                 </div>
+                
             </div>
             <div class="form-row">
                 <div class="form-col">
@@ -247,7 +258,7 @@
                     <div id="lrn-container" style="display: none;">
                         <label>LRN Number</label>
                         <span class="text-muted">LRN is the Learner Reference Number that can be found on your Report Card, or School ID.</span>
-                        <input type="text" name="lrn_no" id="lrn_no">
+                        <input type="text" name="lrn_no" id="lrn_no" placeholder="Enter LRN number">
                     </div>
                 </div>
             </div>
@@ -269,12 +280,12 @@
         <div class="form-row">
             <div class="form-col">
                 <div class="text-start">
-                <button type="button" class="btn btn-secondary" onclick="nextStep(2)">Back</button>
+                <button type="button" class="btn step1-back-btn" onclick="nextStep(2)">Back</button>
             </div>
             </div>
             <div class="form-col">
                 <div class="text-end">    
-                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="submit" class="btn btn-submit">Submit</button>
             </div>
             </div>
         </div>

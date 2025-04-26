@@ -98,8 +98,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+
+// Step 1 Validation
 function showFormError(message) {
     const alertContainer = document.getElementById('alert-container');
+    const alertWrapper = document.getElementById('alert-wrapper');
 
     // Clear existing alerts
     const existing = document.querySelector('.alert-box');
@@ -115,7 +118,8 @@ function showFormError(message) {
             <span class="alert-close" onclick="this.parentElement.parentElement.remove()">&times;</span>
         </div>
     `;
-
+    alertWrapper.style.display = "block"
+    alertContainer.style.display = "block";
     alertContainer.appendChild(errorBox);
 }
 
@@ -150,11 +154,11 @@ window.nextStep = function (step) {
     // Show current step
     document.getElementById("step" + step).style.display = "block";
 
-    // ✨ Remove alert if visible
+    // Remove alert if visible
     const alertBox = document.querySelector('.alert-box');
     if (alertBox) alertBox.remove();
 
-    // ✨ Remove red borders
+    // Remove red borders
     document.querySelectorAll('input, select').forEach(field => {
         field.classList.remove('border-danger');
     });
