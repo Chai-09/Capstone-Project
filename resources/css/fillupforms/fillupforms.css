@@ -103,11 +103,12 @@
 .step1-next-btn, .btn-submit {
     height: 4em;
     width: 10em;
-    background-color: #006c3c;
+    background-color: #00753F;
     color: white;
 }
 .step1-next-btn:hover, .btn-submit:hover {
-    background-color: #004f2a;
+    background-color: #05492a;
+    color: white;
 }
 
 /* Back Button */

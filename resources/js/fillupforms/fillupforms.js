@@ -125,44 +125,75 @@ function showFormError(message) {
 
 // Step switching and validation
 window.nextStep = function (step) {
-    // Validate only when going forward
     if (step > 1) {
         const currentStepFields = document.querySelectorAll(`#step${step-1} [required]`);
         let allValid = true;
 
         currentStepFields.forEach(field => {
             const value = field.value.trim();
+            const type = field.getAttribute('type');
+
             if (!value) {
                 allValid = false;
                 field.classList.add('border-danger');
-            } else {
-                field.classList.remove('border-danger');
+                showFormError('Please complete all required fields.');
+                return;
             }
+
+            if (type === 'email') {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(value)) {
+                    allValid = false;
+                    field.classList.add('border-danger');
+                    showFormError('Please enter a valid email address (e.g., name@example.com).');
+                    return;
+                }
+            }
+
+            if (type === 'tel') {
+                const phonePattern = /^09\d{9}$/;
+                if (!phonePattern.test(value)) {
+                    allValid = false;
+                    field.classList.add('border-danger');
+                    showFormError('Please enter a valid phone number starting with 09 followed by 9 digits.');
+                    return;
+                }
+            }
+
+            if (type === 'number') {
+                if (isNaN(value) || value < 0) {
+                    allValid = false;
+                    field.classList.add('border-danger');
+                    showFormError('Please enter a valid numeric value.');
+                    return;
+                }
+            }
+
+            // If everything okay for this field
+            field.classList.remove('border-danger');
         });
 
         if (!allValid) {
-            showFormError('Please complete all required fields before proceeding.');
-            return;
+            return; // Already shown the error inside the loop
         }
     }
 
-    // Hide all steps
+    // If all fields valid → continue to next step
     document.querySelectorAll("#step1, #step2, #step3").forEach(div => {
         div.style.display = "none";
     });
 
-    // Show current step
     document.getElementById("step" + step).style.display = "block";
 
-    // Remove alert if visible
+    // Remove alert if moving to next step
     const alertBox = document.querySelector('.alert-box');
     if (alertBox) alertBox.remove();
 
-    // Remove red borders
     document.querySelectorAll('input, select').forEach(field => {
         field.classList.remove('border-danger');
     });
 };
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const input = document.getElementById('current_school_city');

@@ -33,6 +33,8 @@
                     @csrf
                     @include('applicant.steps.forms.step-1-forms')
                 </form>
+
+                    
             </div>
         </div>
     </div>
