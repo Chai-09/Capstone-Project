@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 25, 2025 at 04:16 AM
+-- Generation Time: Apr 26, 2025 at 02:55 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -56,7 +56,8 @@ INSERT INTO `accounts` (`id`, `name`, `email`, `password`, `role`) VALUES
 (14, 'SDSAD DASSAD. ASDAS', 'asdas@gmail.com', '$2y$12$zrNeigHtflbe9IvXTPdTdeQpkkuMkCrM8YUwHeQHOuhRb105SuJ7u', 'applicant'),
 (15, 'JEDI J. JEDI', 'jacob@gmail.com', '$2y$12$rREe5jPuU50y4D5/hv.NVe7uilRjjsRSberwPRTvuxcKbwAo6gHbK', 'applicant'),
 (27, 'ANDREW O. GUILLERMO', 'paulaeronguillermo2@gmail.com', '$2y$12$Tlg4teSmSyK0rzGRmrUqqu.D5Fu2ecamcDyPTanWu5ULvL2UbcyiS', 'applicant'),
-(38, 'MEH . MEH', 'meh@gmail.com', '$2y$12$T1K02sY482e3/M8x02PF9eH0lW90nT//LeSkpNztNgWlC4S9v.FLu', 'administrator');
+(38, 'MEH . MEH', 'meh@gmail.com', '$2y$12$T1K02sY482e3/M8x02PF9eH0lW90nT//LeSkpNztNgWlC4S9v.FLu', 'administrator'),
+(50, 'TEST TEST. TEST', 'eiryk.sardalla30@gmail.com', '$2y$12$rKvMSGkSmdO/KNMe.uFZNusaf8ELfphsDCI0901kYcfJfcJ2X1np.', 'applicant');
 
 -- --------------------------------------------------------
 
@@ -97,7 +98,8 @@ INSERT INTO `applicants` (`id`, `account_id`, `guardian_fname`, `guardian_mname`
 (13, 13, 'DASDAS', 'ADAS.', 'DAS', 'JFGHFG', 'FHFGH.', 'FGHFG', 'FGHGF', 'GRADE 12'),
 (14, 14, 'SDSAD', 'DASSAD.', 'ASDAS', 'SDSAD', 'ASDA.', 'ASDAS', 'ADSA', 'GRADE 8'),
 (15, 15, 'JEDI', 'J.', 'JEDI', 'JACOB', 'J.', 'JEDI', 'PASIG GREEN PASTURES', 'GRADE 11'),
-(27, 27, 'ANDREW', 'O.', 'GUILLERMO', 'ANDREI', 'O.', 'GUILLERMO', 'VIRGEN DEL PILAR SCHOOL', 'GRADE 11');
+(27, 27, 'ANDREW', 'O.', 'GUILLERMO', 'ANDREI', 'O.', 'GUILLERMO', 'VIRGEN DEL PILAR SCHOOL', 'GRADE 11'),
+(49, 50, 'TEST', 'TEST.', 'TEST', 'FORTESTING', 'FORTESTING.', 'FORTESTING', 'TESTING', 'GRADE 11');
 
 -- --------------------------------------------------------
 
@@ -139,6 +141,13 @@ CREATE TABLE `form_submissions` (
   `source` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `form_submissions`
+--
+
+INSERT INTO `form_submissions` (`id`, `applicant_id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_contact_number`, `applicant_email`, `region`, `province`, `city`, `barangay`, `numstreet`, `postal_code`, `age`, `gender`, `nationality`, `guardian_fname`, `guardian_mname`, `guardian_lname`, `guardian_contact_number`, `guardian_email`, `relation`, `current_school`, `current_school_city`, `school_type`, `educational_level`, `incoming_grlvl`, `applicant_bday`, `lrn_no`, `strand`, `source`) VALUES
+(16, 49, 'ForTesting', NULL, 'ForTesting', '09999999', 'eiryk.sardalla30@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Batasan Hills', 'wrwqr', '12321', 12, 'Male', 'filipino', 'First', NULL, 'Last', '0000000000', 'eiryk.sardalla30@gmail.com', 'Parents', 'Testing', 'Quezon City, Metro Manila', 'Public', 'Senior High School', 'Grade 11', NULL, '1234', 'STEM Information Technology', 'Friends/Family/Relatives');
+
 -- --------------------------------------------------------
 
 --
@@ -159,7 +168,15 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (4, '2025_04_16_091659_create_password_resets_table', 1),
 (5, '2025_04_20_074003_create_signup_otps_table', 1),
 (6, '2025_04_22_051242_create_form_submissions_table', 2),
-(8, '2025_04_23_012752_add_applicant_id_to_form_submissions', 3);
+(8, '2025_04_23_012752_add_applicant_id_to_form_submissions', 3),
+(9, '2025_04_25_084546_create_payment_information', 4),
+(10, '2025_04_25_085805_create_payment_information', 5),
+(13, '2025_04_26_074855_create_payment', 6),
+(14, '2025_04_26_092949_add_applicant_fields_to_payment', 6),
+(15, '2025_04_26_094725_create_payment', 7),
+(16, '2025_04_26_113802_create_payment', 8),
+(17, '2025_04_26_121702_create_payment', 9),
+(18, '2025_04_26_124910_create_payment', 10);
 
 -- --------------------------------------------------------
 
@@ -172,6 +189,36 @@ CREATE TABLE `password_resets` (
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment`
+--
+
+CREATE TABLE `payment` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `applicant_id` int(10) UNSIGNED NOT NULL,
+  `applicant_fname` varchar(255) NOT NULL,
+  `applicant_mname` varchar(255) DEFAULT NULL,
+  `applicant_lname` varchar(255) NOT NULL,
+  `applicant_email` varchar(255) NOT NULL,
+  `applicant_contact_number` varchar(255) NOT NULL,
+  `incoming_grlvl` varchar(255) NOT NULL,
+  `payment_method` varchar(255) NOT NULL,
+  `proof_of_payment` varchar(255) NOT NULL,
+  `payment_date` date NOT NULL,
+  `payment_time` time NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `payment`
+--
+
+INSERT INTO `payment` (`id`, `applicant_id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_email`, `applicant_contact_number`, `incoming_grlvl`, `payment_method`, `proof_of_payment`, `payment_date`, `payment_time`, `created_at`, `updated_at`) VALUES
+(1, 49, 'FORTESTING', 'FORTESTING.', 'FORTESTING', 'eiryk.sardalla30@gmail.com', '09999999', 'Grade 11', 'BDO', 'payment_proofs/JrCT7ujL8H7NZ5UttbJGB9gfY5pYzzJMzrc7YKmh.png', '2025-04-26', '20:51:09', '2025-04-26 04:51:09', '2025-04-26 04:51:09');
 
 -- --------------------------------------------------------
 
@@ -193,7 +240,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('La39yQqSjfqy1886POZezSQEWiAFcSpG7uMheZor', 38, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo2OntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjY6Il90b2tlbiI7czo0MDoiT3Zac1dEaGxNbXNnSHc0UmVGRU52cnEwR25JeHpvVWxSMjZhemVaViI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDU6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbmlzdHJhdG9yL2Rhc2hib2FyZCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjM4O3M6NDoibmFtZSI7czo5OiJNRUggLiBNRUgiO3M6NToiZW1haWwiO3M6MTM6Im1laEBnbWFpbC5jb20iO30=', 1745547139);
+('l7t1xadrBPrsZkm9O6sJ4uuvYN7bvL282K2tS5Li', 50, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo3OntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjY6Il90b2tlbiI7czo0MDoiRWdYQk5tVmlVZTlaWXdTOHViaTVLNFZXNDN0a0hjR1BPckxicDZ5UCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDI6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wYXltZW50LXZlcmlmaWNhdGlvbiI7fXM6MTI6ImFwcGxpY2FudF9pZCI7aTo0OTtzOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo1MDtzOjQ6Im5hbWUiO3M6MTU6IlRFU1QgVEVTVC4gVEVTVCI7czo1OiJlbWFpbCI7czoyNjoiZWlyeWsuc2FyZGFsbGEzMEBnbWFpbC5jb20iO30=', 1745671869);
 
 -- --------------------------------------------------------
 
@@ -248,6 +295,13 @@ ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
 
 --
+-- Indexes for table `payment`
+--
+ALTER TABLE `payment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `payment_applicant_id_foreign` (`applicant_id`);
+
+--
 -- Indexes for table `sessions`
 --
 ALTER TABLE `sessions`
@@ -269,31 +323,37 @@ ALTER TABLE `signup_otps`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `applicants`
 --
 ALTER TABLE `applicants`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `form_submissions`
 --
 ALTER TABLE `form_submissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT for table `payment`
+--
+ALTER TABLE `payment`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `signup_otps`
 --
 ALTER TABLE `signup_otps`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Constraints for dumped tables
@@ -310,6 +370,12 @@ ALTER TABLE `applicants`
 --
 ALTER TABLE `form_submissions`
   ADD CONSTRAINT `form_submissions_applicant_id_foreign` FOREIGN KEY (`applicant_id`) REFERENCES `applicants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `payment`
+--
+ALTER TABLE `payment`
+  ADD CONSTRAINT `payment_applicant_id_foreign` FOREIGN KEY (`applicant_id`) REFERENCES `applicants` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

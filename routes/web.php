@@ -7,6 +7,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\FillupFormsController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdminAccountController;
+use App\Http\Controllers\PaymentController;
 
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
 // Log in Routes
@@ -58,10 +59,15 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
         return view('applicant.index');
     })->name('applicantdashboard');
 
-    //payment page
-    Route::get('/applicant/payment/payment', function () {
-        return view('applicant.payment.payment');
-    })->name('applicant.payment.payment');
+        //payment page
+        Route::get('/applicant/steps/payment/payment', function () {
+            return view('applicant.steps.payment.payment');
+        })->name('applicant.steps.payment.payment');
+    
+        //payment verification page - side bar
+        Route::get('/payment-verification', function () {
+            return view('applicant.steps.payment.payment-verification');
+        })->name('payment.verification');
 
     //educational background to 'form has been submitted' page
     Route::get('/applicant/steps/forms/form-submitted', function () {
@@ -91,6 +97,9 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
     Route::get('/applicant/steps/forms/applicantforms', function () {
         return view('applicant.steps.forms.applicantforms');
     })->name('fillupforms');
+
+    //storing into payment
+    Route::post('/payment/store', [PaymentController::class, 'store'])->name('payment.store');
 
 });
 

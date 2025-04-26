@@ -12,7 +12,7 @@
         </div>
         <li class="nav-item">
             <span class="step-number">Step 2</span>
-            <a href="" class="nav-link">
+            <a href="{{ route('applicant.steps.payment.payment') }}" class="nav-link">
                 <i class="fa-solid fa-money-bill-wave"></i> Send Payment
             </a>
         </li>
@@ -22,7 +22,7 @@
         </div>
         <li class="nav-item">
             <span class="step-number">Step 3</span>
-            <a href="" class="nav-link">
+            <a href="{{ route('payment.verification') }}" class="nav-link">
                 <i class="fa-solid fa-check-to-slot"></i> Payment Verification
             </a>
         </li>

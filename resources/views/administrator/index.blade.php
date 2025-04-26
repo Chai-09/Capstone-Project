@@ -29,11 +29,13 @@
     <div class="mb-3">
         <label for="roleFilter" class="form-label">Filter by role:</label>
         <select id="roleFilter" class="form-select w-auto">
-            <option value="">All</option>
-            <option value="Administrator" {{ request('role') == 'Administrator' ? 'selected' : '' }}>Administrator</option>
-            <option value="Admission" {{ request('role') == 'Admission' ? 'selected' : '' }}>Admission</option>
-            <option value="Accounting" {{ request('role') == 'Accounting' ? 'selected' : '' }}>Accounting</option>
-        </select>
+    <option value="">All</option>
+    <option value="Administrator" {{ request('role') == 'Administrator' ? 'selected' : '' }}>Administrator</option>
+    <option value="Admission" {{ request('role') == 'Admission' ? 'selected' : '' }}>Admission</option>
+    <option value="Accounting" {{ request('role') == 'Accounting' ? 'selected' : '' }}>Accounting</option>
+    <option value="Applicant" {{ request('role') == 'Applicant' ? 'selected' : '' }}>Applicant</option>
+</select>
+
     </div>
     <table class="table table-bordered table-hover mt-3">
         <thead class="table-dark">
