@@ -30,7 +30,9 @@ class PaymentController extends Controller
         }
 
         // Step 3: Upload proof of payment
-        $path = $request->file('proof_of_payment')->store('payment_proofs', 'public');
+        $file = $request->file('proof_of_payment');
+        $filename = uniqid('proof_', true) . '.' . $file->getClientOriginalExtension();
+        $path = $file->storeAs('payment_proofs', $filename, 'public');
 
         $now = Carbon::now()->setTimezone('Asia/Manila');
 

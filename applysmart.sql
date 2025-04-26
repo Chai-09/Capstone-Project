@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 26, 2025 at 02:55 PM
+-- Generation Time: Apr 26, 2025 at 05:00 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -57,7 +57,8 @@ INSERT INTO `accounts` (`id`, `name`, `email`, `password`, `role`) VALUES
 (15, 'JEDI J. JEDI', 'jacob@gmail.com', '$2y$12$rREe5jPuU50y4D5/hv.NVe7uilRjjsRSberwPRTvuxcKbwAo6gHbK', 'applicant'),
 (27, 'ANDREW O. GUILLERMO', 'paulaeronguillermo2@gmail.com', '$2y$12$Tlg4teSmSyK0rzGRmrUqqu.D5Fu2ecamcDyPTanWu5ULvL2UbcyiS', 'applicant'),
 (38, 'MEH . MEH', 'meh@gmail.com', '$2y$12$T1K02sY482e3/M8x02PF9eH0lW90nT//LeSkpNztNgWlC4S9v.FLu', 'administrator'),
-(50, 'TEST TEST. TEST', 'eiryk.sardalla30@gmail.com', '$2y$12$rKvMSGkSmdO/KNMe.uFZNusaf8ELfphsDCI0901kYcfJfcJ2X1np.', 'applicant');
+(54, 'ACCOUNTANT . ACCOUNTANT', 'accountant@gmail.com', '$2y$12$gyjTmD66YVOl14d6RKoO0.I91hFE5trOw2ZIv6CzbU2u2s9Pn42TS', 'accounting'),
+(56, 'TEST TEST. TEST', 'eiryk.sardalla30@gmail.com', '$2y$12$PD285UOTmv0rK278KgEhc.yBrGciB75O8ms/JB1uSJCmomVrK9LXi', 'applicant');
 
 -- --------------------------------------------------------
 
@@ -99,7 +100,7 @@ INSERT INTO `applicants` (`id`, `account_id`, `guardian_fname`, `guardian_mname`
 (14, 14, 'SDSAD', 'DASSAD.', 'ASDAS', 'SDSAD', 'ASDA.', 'ASDAS', 'ADSA', 'GRADE 8'),
 (15, 15, 'JEDI', 'J.', 'JEDI', 'JACOB', 'J.', 'JEDI', 'PASIG GREEN PASTURES', 'GRADE 11'),
 (27, 27, 'ANDREW', 'O.', 'GUILLERMO', 'ANDREI', 'O.', 'GUILLERMO', 'VIRGEN DEL PILAR SCHOOL', 'GRADE 11'),
-(49, 50, 'TEST', 'TEST.', 'TEST', 'FORTESTING', 'FORTESTING.', 'FORTESTING', 'TESTING', 'GRADE 11');
+(54, 56, 'TEST', 'TEST.', 'TEST', 'FORTESTING', 'FORTESTING.', 'FORTESTING', 'TESTING', 'GRADE 11');
 
 -- --------------------------------------------------------
 
@@ -146,7 +147,7 @@ CREATE TABLE `form_submissions` (
 --
 
 INSERT INTO `form_submissions` (`id`, `applicant_id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_contact_number`, `applicant_email`, `region`, `province`, `city`, `barangay`, `numstreet`, `postal_code`, `age`, `gender`, `nationality`, `guardian_fname`, `guardian_mname`, `guardian_lname`, `guardian_contact_number`, `guardian_email`, `relation`, `current_school`, `current_school_city`, `school_type`, `educational_level`, `incoming_grlvl`, `applicant_bday`, `lrn_no`, `strand`, `source`) VALUES
-(16, 49, 'ForTesting', NULL, 'ForTesting', '09999999', 'eiryk.sardalla30@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Batasan Hills', 'wrwqr', '12321', 12, 'Male', 'filipino', 'First', NULL, 'Last', '0000000000', 'eiryk.sardalla30@gmail.com', 'Parents', 'Testing', 'Quezon City, Metro Manila', 'Public', 'Senior High School', 'Grade 11', NULL, '1234', 'STEM Information Technology', 'Friends/Family/Relatives');
+(21, 54, 'ForTesting', NULL, 'ForTesting', '09999999', 'eiryk.sardalla30@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Batasan Hills', 'wrwqr', '12321', 12, 'Male', 'filipino', 'First', NULL, 'Last', '0000000000', 'eiryk.sardalla30@gmail.com', 'Parents', 'Testing', 'Quezon City, Metro Manila', 'Public', 'Senior High School', 'Grade 11', NULL, '1234', 'STEM Information Technology', 'Friends/Family/Relatives');
 
 -- --------------------------------------------------------
 
@@ -176,7 +177,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (15, '2025_04_26_094725_create_payment', 7),
 (16, '2025_04_26_113802_create_payment', 8),
 (17, '2025_04_26_121702_create_payment', 9),
-(18, '2025_04_26_124910_create_payment', 10);
+(18, '2025_04_26_124910_create_payment', 10),
+(19, '2025_04_26_140637_add_payment_status_to_payment', 11);
 
 -- --------------------------------------------------------
 
@@ -207,6 +209,7 @@ CREATE TABLE `payment` (
   `incoming_grlvl` varchar(255) NOT NULL,
   `payment_method` varchar(255) NOT NULL,
   `proof_of_payment` varchar(255) NOT NULL,
+  `payment_status` varchar(255) NOT NULL DEFAULT 'pending',
   `payment_date` date NOT NULL,
   `payment_time` time NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -217,8 +220,8 @@ CREATE TABLE `payment` (
 -- Dumping data for table `payment`
 --
 
-INSERT INTO `payment` (`id`, `applicant_id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_email`, `applicant_contact_number`, `incoming_grlvl`, `payment_method`, `proof_of_payment`, `payment_date`, `payment_time`, `created_at`, `updated_at`) VALUES
-(1, 49, 'FORTESTING', 'FORTESTING.', 'FORTESTING', 'eiryk.sardalla30@gmail.com', '09999999', 'Grade 11', 'BDO', 'payment_proofs/JrCT7ujL8H7NZ5UttbJGB9gfY5pYzzJMzrc7YKmh.png', '2025-04-26', '20:51:09', '2025-04-26 04:51:09', '2025-04-26 04:51:09');
+INSERT INTO `payment` (`id`, `applicant_id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_email`, `applicant_contact_number`, `incoming_grlvl`, `payment_method`, `proof_of_payment`, `payment_status`, `payment_date`, `payment_time`, `created_at`, `updated_at`) VALUES
+(6, 54, 'FORTESTING', 'FORTESTING.', 'FORTESTING', 'eiryk.sardalla30@gmail.com', '09999999', 'Grade 11', 'BDO', 'payment_proofs/proof_680cf1800262e8.61908990.png', 'approved', '2025-04-26', '22:45:20', '2025-04-26 06:45:20', '2025-04-26 06:55:53');
 
 -- --------------------------------------------------------
 
@@ -240,7 +243,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('l7t1xadrBPrsZkm9O6sJ4uuvYN7bvL282K2tS5Li', 50, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo3OntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjY6Il90b2tlbiI7czo0MDoiRWdYQk5tVmlVZTlaWXdTOHViaTVLNFZXNDN0a0hjR1BPckxicDZ5UCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDI6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wYXltZW50LXZlcmlmaWNhdGlvbiI7fXM6MTI6ImFwcGxpY2FudF9pZCI7aTo0OTtzOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo1MDtzOjQ6Im5hbWUiO3M6MTU6IlRFU1QgVEVTVC4gVEVTVCI7czo1OiJlbWFpbCI7czoyNjoiZWlyeWsuc2FyZGFsbGEzMEBnbWFpbC5jb20iO30=', 1745671869);
+('sSqtR7fo3PttsZ5k5qHhzBD5trByfRuUG2acwS95', 56, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo2OntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjY6Il90b2tlbiI7czo0MDoiZXh6eUlsb09mTllTdGxVMzB5NVNyc1JHd1M0ZHFLMkFjaTNPQm5zeSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDI6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wYXltZW50LXZlcmlmaWNhdGlvbiI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjU2O3M6NDoibmFtZSI7czoxNToiVEVTVCBURVNULiBURVNUIjtzOjU6ImVtYWlsIjtzOjI2OiJlaXJ5ay5zYXJkYWxsYTMwQGdtYWlsLmNvbSI7fQ==', 1745679428);
 
 -- --------------------------------------------------------
 
@@ -323,37 +326,37 @@ ALTER TABLE `signup_otps`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `applicants`
 --
 ALTER TABLE `applicants`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `form_submissions`
 --
 ALTER TABLE `form_submissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `signup_otps`
 --
 ALTER TABLE `signup_otps`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Constraints for dumped tables

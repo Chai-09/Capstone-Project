@@ -8,6 +8,8 @@ use App\Http\Controllers\FillupFormsController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdminAccountController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ViewPaymentController;
+use App\Http\Controllers\AccountingPaymentController;
 
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
 // Log in Routes
@@ -101,6 +103,18 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
     //storing into payment
     Route::post('/payment/store', [PaymentController::class, 'store'])->name('payment.store');
 
+    //payment verification
+    Route::get('/payment-verification', [ViewPaymentController::class, 'index'])->name('payment.verification');
+
+    // Route for going back to payment form (when Denied)
+Route::get('/applicant/steps/payment/payment', function () {
+    return view('applicant.steps.payment.payment');
+})->name('applicant.steps.payment.payment');
+
+// Route for proceeding to exam date form (when Approved)
+Route::get('/applicant/steps/exam_date/exam-date', function () {
+    return view('applicant.steps.exam_date.exam-date');
+})->name('applicant.steps.exam_date.exam-date');
 });
 
     //ADMIN ROUTES
@@ -127,5 +141,9 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
 
     //ACCOUNTING ROUTES
     Route::middleware(['auth', 'role:accounting'])->group(function () {
-        
+        Route::get('/accounting/dashboard', [AccountingPaymentController::class, 'index'])->name('accountingdashboard');
+
+        Route::get('/accountant/payments', [AccountingPaymentController::class, 'index'])->name('accountant.payments');
+    Route::post('/accountant/payments/approve/{id}', [AccountingPaymentController::class, 'approve'])->name('accountant.payments.approve');
+    Route::post('/accountant/payments/deny/{id}', [AccountingPaymentController::class, 'deny'])->name('accountant.payments.deny');
  });
