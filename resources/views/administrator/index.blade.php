@@ -9,6 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Administrator | Dashboard</title>
+   @vite('resources/js/partials/sidebar.js')
+   @vite('resources/css/partials/sidebar.css')
 </head>
 <body>
 
@@ -18,14 +20,17 @@
                     @csrf
                     <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
                 </form>
+</nav>
+
+{{-- SIDEBAR --}}
+{{-- @include('partials.sidebar'); --}}
+<div class="container mt-4">
+    <h2>Accounts List</h2>
+    <!-- Filter Dropdown -->
+
     <form action="{{ route('admin.createaccounts') }}" method="GET" class="ms-auto">
         <button type="submit" class="btn btn-primary">Add User</button>
     </form>
-</nav>
-
-<div class="container mt-4">
-    <h2>Accounts List</h2>
-    <!-- ✅ Filter Dropdown -->
     <div class="mb-3">
         <label for="roleFilter" class="form-label">Filter by role:</label>
         <select id="roleFilter" class="form-select w-auto">
@@ -40,7 +45,7 @@
     <table class="table table-bordered table-hover mt-3">
         <thead class="table-dark">
             <tr>
-                <th>ID</th>
+                <th>ID</th> 
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
@@ -93,6 +98,10 @@
     });
 </script>
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+
+    
 
 </body>
 </html>

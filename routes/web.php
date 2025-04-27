@@ -61,15 +61,15 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
         return view('applicant.index');
     })->name('applicantdashboard');
 
-        //payment page
-        Route::get('/applicant/steps/payment/payment', function () {
-            return view('applicant.steps.payment.payment');
-        })->name('applicant.steps.payment.payment');
-    
-        //payment verification page - side bar
-        Route::get('/payment-verification', function () {
-            return view('applicant.steps.payment.payment-verification');
-        })->name('payment.verification');
+    //payment page
+    Route::get('/applicant/steps/payment/payment', function () {
+        return view('applicant.steps.payment.payment');
+    })->name('applicant.steps.payment.payment');
+
+    //payment verification page - side bar
+    Route::get('/payment-verification', function () {
+        return view('applicant.steps.payment.payment-verification');
+    })->name('payment.verification');
 
     //educational background to 'form has been submitted' page
     Route::get('/applicant/steps/forms/form-submitted', function () {
@@ -107,19 +107,19 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
     Route::get('/payment-verification', [ViewPaymentController::class, 'index'])->name('payment.verification');
 
     // Route for going back to payment form (when Denied)
-Route::get('/applicant/steps/payment/payment', function () {
-    return view('applicant.steps.payment.payment');
-})->name('applicant.steps.payment.payment');
+    Route::get('/applicant/steps/payment/payment', function () {
+        return view('applicant.steps.payment.payment');
+    })->name('applicant.steps.payment.payment');
 
-// Route for proceeding to exam date form (when Approved)
-Route::get('/applicant/steps/exam_date/exam-date', function () {
-    return view('applicant.steps.exam_date.exam-date');
-})->name('applicant.steps.exam_date.exam-date');
+    // Route for proceeding to exam date form (when Approved)
+    Route::get('/applicant/steps/exam_date/exam-date', function () {
+        return view('applicant.steps.exam_date.exam-date');
+    })->name('applicant.steps.exam_date.exam-date');
 });
 
-    //ADMIN ROUTES
-    Route::middleware(['auth', 'role:administrator'])->group(function () {
-        Route::get('/administrator/dashboard', [AdminAccountController::class, 'index'])->name('admindashboard');
+//ADMIN ROUTES
+Route::middleware(['auth', 'role:administrator'])->group(function () {
+    Route::get('/administrator/dashboard', [AdminAccountController::class, 'index'])->name('admindashboard');
 
     Route::get('/administrator/create-accounts', function () {
         return view('administrator.create-accounts');
@@ -130,20 +130,17 @@ Route::get('/applicant/steps/exam_date/exam-date', function () {
     Route::get('/administrator/account/{id}/edit', [AdminAccountController::class, 'edit'])->name('admin.editAccount');
     Route::put('/administrator/account/{id}', [AdminAccountController::class, 'update'])->name('admin.updateAccount');
     Route::delete('/administrator/account/{id}', [App\Http\Controllers\AdminAccountController::class, 'destroy'])->name('admin.deleteAccount');
-
 });
 
 
-    //ADMISSION ROUTES
-    Route::middleware(['auth', 'role:admission'])->group(function () {
-    
-});
+//ADMISSION ROUTES
+Route::middleware(['auth', 'role:admission'])->group(function () {});
 
-    //ACCOUNTING ROUTES
-    Route::middleware(['auth', 'role:accounting'])->group(function () {
-        Route::get('/accounting/dashboard', [AccountingPaymentController::class, 'index'])->name('accountingdashboard');
+//ACCOUNTING ROUTES
+Route::middleware(['auth', 'role:accounting'])->group(function () {
+    Route::get('/accounting/dashboard', [AccountingPaymentController::class, 'index'])->name('accountingdashboard');
 
-        Route::get('/accountant/payments', [AccountingPaymentController::class, 'index'])->name('accountant.payments');
+    Route::get('/accountant/payments', [AccountingPaymentController::class, 'index'])->name('accountant.payments');
     Route::post('/accountant/payments/approve/{id}', [AccountingPaymentController::class, 'approve'])->name('accountant.payments.approve');
     Route::post('/accountant/payments/deny/{id}', [AccountingPaymentController::class, 'deny'])->name('accountant.payments.deny');
- });
+});

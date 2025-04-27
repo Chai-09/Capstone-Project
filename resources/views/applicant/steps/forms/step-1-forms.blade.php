@@ -228,6 +228,7 @@
             <div class="form-row">
                 <div class="form-col" id="grade-level-container" style="display: none;">
                     <label>Incoming Grade Level<span class="text-danger">*</span></label>
+                    <span class="text-muted">For Kinder applicants, the student must be 5 years old by October {{ now()->year }}</span>
                     <select name="incoming_grlvl" id="incoming_grlvl" required></select>
                     <div class="form-col">
                         <div id="strand-container" style="display: none;">

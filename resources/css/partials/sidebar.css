@@ -1,0 +1,109 @@
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Sidebar overall */
+#sidebar {
+  min-height: 100vh;
+  width: 250px;
+  background: transparent; /* No background here */
+  transition: width 0.4s ease;
+}
+
+/* Logo wrapper */
+#logo-wrapper {
+  width: 100%;
+  height: 120px;
+  background-color: #a2a573; /* Full white */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* Logo image */
+#sidebar-logo {
+  max-height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Sidebar content area (Green Background) */
+#sidebar-content {
+  background-color: #00723e; /* Green background */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Navigation Links */
+#sidebar-content .nav-link {
+  color: white;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  gap: 15px;
+  white-space: nowrap;
+  transition: all 0.4s ease;
+}
+
+/* Nav icons */
+#sidebar-content .nav-link i {
+  font-size: 1.4rem;
+  min-width: 30px;
+}
+
+/* Nav text */
+#sidebar-content .nav-link span {
+  opacity: 1;
+  width: auto;
+  transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+/* Hover */
+#sidebar-content .nav-link:hover {
+  border-radius: 5px;
+  background: #F7BD19;
+}
+
+#sidebar.collapsed #sidebar-content .nav-link:hover {
+  background: #F7BD19; 
+  width: 75%; 
+  border-radius: 5px; 
+}
+
+/* Collapsed sidebar */
+#sidebar.collapsed {
+  width: 100px;
+}
+
+/* Collapse text when collapsed */
+#sidebar.collapsed #sidebar-content .nav-link span {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+/* Burger */
+#toggleSidebar {
+  background: none;
+  border: 1px solid white;
+  color: white;
+  font-size: 1.5rem;
+  padding: 8px;
+  cursor: pointer;
+}
+
+/* Logout */
+#sidebar-content .text-danger {
+  font-weight: bold;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
