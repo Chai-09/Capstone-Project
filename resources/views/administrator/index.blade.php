@@ -71,6 +71,10 @@
             @endforelse
         </tbody>
     </table>
+    <div class="d-flex justify-content-center mt-4">
+    {{ $accounts->links('pagination::bootstrap-5') }}
+</div>
+
 </div>
 
 @if (session('success'))

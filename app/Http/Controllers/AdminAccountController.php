@@ -16,7 +16,7 @@ class AdminAccountController extends Controller
         $query->where('role', strtolower($request->role));
     }
 
-    $accounts = $query->get();
+    $accounts = $query->paginate(15);
     return view('administrator.index', compact('accounts'));
 }
 

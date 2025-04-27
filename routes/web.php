@@ -111,6 +111,9 @@ Route::get('/applicant/steps/payment/payment', function () {
     return view('applicant.steps.payment.payment');
 })->name('applicant.steps.payment.payment');
 
+Route::delete('/payment/delete/{id}', [ViewPaymentController::class, 'delete'])->name('payment.delete');
+
+
 // Route for proceeding to exam date form (when Approved)
 Route::get('/applicant/steps/exam_date/exam-date', function () {
     return view('applicant.steps.exam_date.exam-date');
