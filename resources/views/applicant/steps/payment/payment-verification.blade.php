@@ -53,8 +53,25 @@
                 </a>
             </p>
 
+            @if ($payment->payment_status === 'pending')
+                <div class="text-center mt-4">
+                    <button class="btn btn-secondary" disabled>Proceed</button>
+                </div>
+            @elseif ($payment->payment_status === 'approved')
+                <div class="text-center mt-4">
+                    <a href="{{ url('/applicant/steps/exam_date/exam-date') }}" class="btn btn-success">Proceed</a>
+                </div>
+            @elseif ($payment->payment_status === 'denied')
+            <div class="text-center mt-4">
+                <form method="POST" action="{{ route('payment.delete', ['id' => $payment->id]) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Back</button>
+                </form>
+            </div>
+        @endif
         </div>
-    @empty
+        @empty
         <div class="alert alert-info text-center">
             No payment records found.
         </div>
