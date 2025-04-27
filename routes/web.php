@@ -76,29 +76,9 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
         return view('applicant.steps.forms.form-submitted');
     })->name('applicant.steps.forms.form-submitted');
 
-    //routing from index to applicant
-    Route::get('/applicant/steps/forms/applicantforms', function () {
-        return view('applicant.steps.forms.applicantforms');
-    });
-
-    //routing from applicant to guardian
-    Route::get('/applicant/steps/forms/guardianforms', function () {
-        return view('applicant.steps.forms.guardianforms');
-    });
-
-    //routing from guardian to schoolinfo
-    Route::get('/applicant/steps/forms/schoolinfoforms', function () {
-        return view('applicant.steps.forms.schoolinfoforms');
-    });
-
     // Submitting of Forms (Step 1)
     Route::get('/form/step3', [FillupFormsController::class, 'createStep3'])->name('form.step3');
     Route::post('/form/step3', [FillupFormsController::class, 'postStep3']);
-
-    //routes for sidebar
-    Route::get('/applicant/steps/forms/applicantforms', function () {
-        return view('applicant.steps.forms.applicantforms');
-    })->name('fillupforms');
 
     //storing into payment
     Route::post('/payment/store', [PaymentController::class, 'store'])->name('payment.store');
@@ -112,7 +92,6 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
     })->name('applicant.steps.payment.payment');
 
     Route::delete('/payment/delete/{id}', [ViewPaymentController::class, 'delete'])->name('payment.delete');
-
 
     // Route for proceeding to exam date form (when Approved)
     Route::get('/applicant/steps/exam_date/exam-date', function () {
