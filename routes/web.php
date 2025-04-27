@@ -126,3 +126,6 @@ Route::middleware(['auth', 'role:accounting'])->group(function () {
     Route::post('/accountant/payments/approve/{id}', [AccountingPaymentController::class, 'approve'])->name('accountant.payments.approve');
     Route::post('/accountant/payments/deny/{id}', [AccountingPaymentController::class, 'deny'])->name('accountant.payments.deny');
 });
+
+//Sidebar
+Route::view('/sidebar', 'partials.sidebar')->name('sidebar');

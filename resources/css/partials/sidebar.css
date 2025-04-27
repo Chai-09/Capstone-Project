@@ -18,7 +18,7 @@ body {
 #logo-wrapper {
   width: 100%;
   height: 120px;
-  background-color: #a2a573; /* Full white */
+  background-color: #a2a573; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,7 +34,7 @@ body {
 
 /* Sidebar content area (Green Background) */
 #sidebar-content {
-  background-color: #00723e; /* Green background */
+  background-color: #00723e; 
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -66,20 +66,42 @@ body {
 }
 
 /* Hover */
-#sidebar-content .nav-link:hover {
+#sidebar.expanded #sidebar-content .nav-link:hover {
   border-radius: 5px;
   background: #F7BD19;
 }
 
-#sidebar.collapsed #sidebar-content .nav-link:hover {
-  background: #F7BD19; 
-  width: 75%; 
-  border-radius: 5px; 
+/* Collapsed Sidebar */
+#sidebar.collapsed #sidebar-content .nav-link {
+  width: 100%; 
+  padding: 12px 20px;
 }
+
+#sidebar-content .logout-link:hover {
+  background: #f8d7da;
+  border-radius: 5px;
+  width: 100%;
+}
+
+
+/* Collapsed Sidebar Hover */
+#sidebar.collapsed #sidebar-content .nav-link:hover {
+  background: #F7BD19;
+  border-radius: 5%;
+}
+
+
+/* Icon wrapper */
+#sidebar-content .nav-link .icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
 /* Collapsed sidebar */
 #sidebar.collapsed {
-  width: 100px;
+  width: 95px;
 }
 
 /* Collapse text when collapsed */
