@@ -15,7 +15,10 @@ class Applicant extends Model
         'applicant_mname',
         'applicant_lname',
         'current_school',
-        'incoming_grlvl'
+        'incoming_grlvl',
+        'current_step',
+        //applicant id
+        'applicant_id',
     ];
     public $timestamps = false;
 

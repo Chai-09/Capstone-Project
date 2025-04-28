@@ -15,7 +15,6 @@
     @vite('resources/css/applicants/step-1.css')
 </head>
 <body>
-
     {{-- Navbar always visible --}}
     @include('applicant.navbar.navbar')
 
@@ -27,12 +26,16 @@
                 @include('applicant.sidebar.sidebar')
             </div>
 
-            {{-- Main content --}}
+            {{-- Main content --}} {{-- Added logic to make form read only if applicant has submitted step 1 --}}
             <div class="forms col-lg-9 px-4 py-3">
                 <form action="{{ route('form.step3') }}" method="POST">
                     @csrf
-                    @include('applicant.steps.forms.step-1-forms')
-                </form>
+                    @php
+                        $readOnly = isset($applicant) && $applicant->current_step > 1;
+                    @endphp
+                    @include('applicant.steps.forms.step-1-forms', ['readOnly' => $readOnly, 'formSubmission' => $formSubmission])
+                </form> 
+                 
 
                     
             </div>

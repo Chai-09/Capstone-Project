@@ -81,6 +81,7 @@ class Kernel implements KernelContract
      /* Declaring middleware for routes and roles */
     protected $middlewareAliases = [
         'role' => \App\Http\Middleware\RoleMiddleware::class,
+        'form.submitted' => \App\Http\Middleware\EnsureFormSubmissionCompleted::class,
     
     ];
 

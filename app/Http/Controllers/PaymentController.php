@@ -11,6 +11,20 @@ use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
+
+    public function showPaymentForm()
+{
+    // Check if nakasubmit na si applicant ng step 1 forms if di pa 403 type shi
+    //might have to change this to applicant_id since its more secure
+    $formSubmission = FillupForms::where('applicant_email', Auth::user()->email)->first();
+
+    if (!$formSubmission) {
+        return redirect()->route('applicantdashboard');
+    }
+
+    return view('applicant.steps.payment.payment');
+}
+
     public function store(Request $request)
     {
         $request->validate([

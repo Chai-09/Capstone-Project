@@ -45,7 +45,7 @@ class AuthController extends Controller
 
 
             return match ($account->role) {
-                'applicant' => redirect()->route('applicantdashboard'),
+                'applicant' => $this->redirectApplicantBasedOnStep(), //redirect based sa step nila
                 'admission' => redirect()->route('admissiondashboard'),
                 'accounting' => redirect()->route('accountingdashboard'),
                 'administrator' => redirect()->route('admindashboard'),
@@ -55,6 +55,24 @@ class AuthController extends Controller
 
         return back()->withErrors(['Invalid email or password']);
     }
+
+    //New function to control where applicant will go depending on stored step in fillupforms
+    private function redirectApplicantBasedOnStep()
+{
+    $applicant = \App\Models\Applicant::where('account_id', Auth::user()->id)->first();
+    
+    if ($applicant) {
+        if ($applicant->current_step == 1) {
+            return redirect()->route('form.step3');
+        } elseif ($applicant->current_step == 2) {
+            return redirect()->route('applicant.steps.payment.payment');
+        }
+    }
+
+    // if wala pa form submission step 1 
+    return redirect()->route('form.step3');
+}
+
 
     public function logout()
     {

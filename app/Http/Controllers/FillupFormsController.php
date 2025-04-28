@@ -5,13 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\FillupForms;
 use Illuminate\Validation\Rule;
+use App\Models\Applicant;
 
 class FillupFormsController extends Controller
 {
-    public function createStep3() // this now shows the full merged form
-    {
-        return view('applicant.index'); // or your layout file that includes @include('applicant.steps.step-1-forms')
+    public function createStep3() 
+{
+    $applicant = Applicant::where('account_id', auth()->user()->id)->first();
+    $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
+
+    if (!$formSubmission) {
+        $formSubmission = null;
     }
+    
+    return view('applicant.index', compact('applicant', 'formSubmission'));
+}
 
     public function postStep3(Request $request)
     {
@@ -99,13 +107,27 @@ class FillupFormsController extends Controller
 
         $allData = array_merge($validated, $optionalDefaults);
 
-        // Add applicant_id from session if you're tracking logged-in user
-        if (session()->has('applicant_id')) {
-            $allData['applicant_id'] = session('applicant_id');
-        }
-
-        FillupForms::create($allData);
-
-        return redirect()->route('applicant.steps.forms.form-submitted');
+    // Set applicant_id if available
+    if (session()->has('applicant_id')) {
+        $allData['applicant_id'] = session('applicant_id');
     }
+
+    // Check if the applicant already has a submission
+$formSubmission = FillupForms::where('applicant_email', auth()->user()->email)->first();
+
+if ($formSubmission) {
+    $formSubmission->update($allData);
+} else {
+    FillupForms::create($allData);
+}
+
+//Update the Applicant current_step separately
+$applicant = Applicant::where('account_id', auth()->user()->id)->first();
+if ($applicant) {
+    $applicant->current_step = 2;
+    $applicant->save();
+}
+
+return redirect()->route('applicant.steps.payment.payment');
+}
 }

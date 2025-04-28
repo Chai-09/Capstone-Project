@@ -1,20 +1,11 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const levelSelect = document.getElementById("educational_level");
-    const gradeSelect = document.getElementById("incoming_grlvl");
-    const birthday = document.getElementById("birthday-container");
-    const birthdayField = document.getElementById("applicant_bday");
-    const lrn = document.getElementById("lrn-container");
-    const lrnField = document.getElementById("lrn_no");
-    const strand = document.getElementById("strand-container");
-    const strandField = document.getElementById("strand");
-
-    const gradeLevelContainer = document.getElementById("grade-level-container");
-    gradeLevelContainer.style.display = "none";
-
-    const sourceContainer = document.getElementById("source-container");
-    sourceContainer.style.display = "none";
-
-
+document.addEventListener('DOMContentLoaded', function () {
+    const educationalLevelSelect = document.getElementById('educational_level');
+    const incomingGradeLevelSelect = document.getElementById('incoming_grlvl');
+    const strandContainer = document.getElementById('strand-container');
+    const birthdayContainer = document.getElementById('birthday-container');
+    const lrnContainer = document.getElementById('lrn-container');
+    const sourceContainer = document.getElementById('source-container');
+    const gradeLevelContainer = document.getElementById('grade-level-container');
 
     const gradeOptions = {
         "Grade School": ['Kinder','Grade 1','Grade 2','Grade 3', 'Grade 4', 'Grade 5', 'Grade 6'],
@@ -22,80 +13,66 @@ document.addEventListener("DOMContentLoaded", function () {
         "Senior High School": ['Grade 11','Grade 12']
     };
 
+    
+    const incomingGradeSaved = incomingGradeLevelSelect.getAttribute('data-selected') || incomingGradeLevelSelect.value;
+
     function populateGrades(level) {
-        gradeSelect.innerHTML = '<option value="">Select Grade Level</option>';
+        incomingGradeLevelSelect.innerHTML = '<option value="">Select Grade Level</option>';
         
         if (gradeOptions[level]) {
             gradeOptions[level].forEach(grade => {
                 const option = document.createElement("option");
                 option.value = grade;
                 option.textContent = grade;
-                gradeSelect.appendChild(option);
-            });         
-        } 
+                if (incomingGradeSaved && incomingGradeSaved === grade) {
+                    option.selected = true;
+                }
+                incomingGradeLevelSelect.appendChild(option);
+            });
+        }
     }
-    
-    levelSelect.addEventListener("change", function () {
-        const level = this.value;
 
-        populateGrades(level);
+    function updateVisibility() {
+        const level = educationalLevelSelect.value;
+        const grade = incomingGradeLevelSelect.value;
 
-        if (gradeOptions[level]) {
-            gradeLevelContainer.style.display = "block";
-            sourceContainer.style.display = "block";
-        } else {
-            gradeLevelContainer.style.display = "none";
-            sourceContainer.style.display = "none";
-        }
         
-        // Hide + clear all conditional fields
-        birthday.style.display = "none";
-        birthdayField.required = false;
-        birthdayField.disabled = true;
-        birthdayField.value = "";
+        gradeLevelContainer.style.display = 'block';
+        sourceContainer.style.display = 'block';
 
-        lrn.style.display = "none";
-        lrnField.required = false;
-        lrnField.disabled = true;
-        lrnField.value = "";
+       
+        strandContainer.style.display = 'none';
+        birthdayContainer.style.display = 'none';
+        lrnContainer.style.display = 'none';
 
-        strand.style.display = "none";
-        strandField.required = false;
-        strandField.disabled = true;
-        strandField.value = "";
-
-        // Show relevant fields
-        if (level === "Grade School" || level === "Junior High School") {
-            lrn.style.display = "block";
-            lrnField.disabled = false;
-            lrnField.required = true;
+        if (level === "Grade School") {
+            lrnContainer.style.display = 'block';
+            if (grade === "Kinder" || grade === "Grade 1") {
+                birthdayContainer.style.display = 'block';
+            }
         }
-
-        if (level === "Senior High School") {
-            lrn.style.display = "block";
-            lrnField.disabled = false;
-            lrnField.required = true;
-            strand.style.display = "block";
-            strandField.disabled = false;
-            strandField.required = true;
+        else if (level === "Junior High School") {
+            lrnContainer.style.display = 'block';
         }
+        else if (level === "Senior High School") {
+            lrnContainer.style.display = 'block';
+            strandContainer.style.display = 'block';
+        }
+    }
+
+    educationalLevelSelect.addEventListener('change', function () {
+        const level = this.value;
+        populateGrades(level);  
+        updateVisibility();
     });
 
-    gradeSelect.addEventListener("change", function () {
-        const selected = this.value;
-        const level = levelSelect.value;
-
-        if (level === "Grade School" && (selected === "Kinder" || selected === "Grade 1")) {
-            birthday.style.display = "block";
-            birthdayField.disabled = false;
-            birthdayField.required = true;
-        } else {
-            birthday.style.display = "none";
-            birthdayField.disabled = true;
-            birthdayField.required = false;
-            birthdayField.value = "";
-        }
+    incomingGradeLevelSelect.addEventListener('change', function () {
+        updateVisibility();
     });
+
+    
+    updateVisibility();
+   
 });
 
 
