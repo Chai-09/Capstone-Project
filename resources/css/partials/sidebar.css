@@ -83,6 +83,9 @@ body {
   width: 100%;
 }
 
+#sidebar.collapsed .user-info {
+  display: none;
+}
 
 /* Collapsed Sidebar Hover */
 #sidebar.collapsed #sidebar-content .nav-link:hover {

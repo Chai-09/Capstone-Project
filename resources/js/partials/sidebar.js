@@ -1,4 +1,3 @@
-
-      $('#toggleSidebar').on('click', function () {
-        $('#sidebar').toggleClass('collapsed expanded');
-      });
+$('#toggleSidebar').on('click', function () {
+  $('#sidebar').toggleClass('collapsed expanded');
+});

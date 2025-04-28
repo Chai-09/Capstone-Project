@@ -16,7 +16,7 @@ export default defineConfig({
                 'resources/css/applicants/step-1.css',
 
                 // 3 Sidebar
-                'resources/css/partials/sidebar,css',
+                'resources/css/partials/sidebar.css',
 
                 'resources/js/app.js',
                 'resources/js/fillupforms/fillupforms.js',

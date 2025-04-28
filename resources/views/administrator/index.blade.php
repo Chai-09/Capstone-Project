@@ -14,73 +14,70 @@
 </head>
 <body>
 
-<nav class="navbar bg-dark p-3">
-    <p style="color: white" class="m-0"> {{ auth()->user()->name }}</p>
-    <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
-                </form>
-</nav>
-
-{{-- SIDEBAR --}}
-{{-- @include('partials.sidebar'); --}}
-<div class="container mt-4">
-    <h2>Accounts List</h2>
-    <!-- Filter Dropdown -->
-
-    <form action="{{ route('admin.createaccounts') }}" method="GET" class="ms-auto">
-        <button type="submit" class="btn btn-primary">Add User</button>
-    </form>
-    <div class="mb-3">
-        <label for="roleFilter" class="form-label">Filter by role:</label>
-        <select id="roleFilter" class="form-select w-auto">
-    <option value="">All</option>
-    <option value="Administrator" {{ request('role') == 'Administrator' ? 'selected' : '' }}>Administrator</option>
-    <option value="Admission" {{ request('role') == 'Admission' ? 'selected' : '' }}>Admission</option>
-    <option value="Accounting" {{ request('role') == 'Accounting' ? 'selected' : '' }}>Accounting</option>
-    <option value="Applicant" {{ request('role') == 'Applicant' ? 'selected' : '' }}>Applicant</option>
-</select>
-
+<div class ="d-flex">
+    {{-- SIDEBAR --}}
+    @include('partials.sidebar')
+<div id="content" class="flex-grow-1 p-4">
+    <div class="container mt-4">
+        <h2>Accounts List</h2>
+        <!-- Filter Dropdown -->
+    
+        <form action="{{ route('admin.createaccounts') }}" method="GET" class="ms-auto">
+            <button type="submit" class="btn btn-primary">Add User</button>
+        </form>
+        <div class="mb-3">
+            <label for="roleFilter" class="form-label">Filter by role:</label>
+            <select id="roleFilter" class="form-select w-auto">
+        <option value="">All</option>
+        <option value="Administrator" {{ request('role') == 'Administrator' ? 'selected' : '' }}>Administrator</option>
+        <option value="Admission" {{ request('role') == 'Admission' ? 'selected' : '' }}>Admission</option>
+        <option value="Accounting" {{ request('role') == 'Accounting' ? 'selected' : '' }}>Accounting</option>
+        <option value="Applicant" {{ request('role') == 'Applicant' ? 'selected' : '' }}>Applicant</option>
+    </select>
+    
+        </div>
+        <table class="table table-bordered table-hover mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th> 
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+    
+                </tr>
+            </thead>
+            <tbody id="accounts-table">
+                @forelse ($accounts as $account)
+                    <tr>
+                        <td>{{ $account->id }}</td>
+                        <td>{{ $account->name }}</td>
+                        <td>{{ $account->email }}</td>
+                        <td>{{ ucfirst($account->role) }}</td>
+                        <td>
+        <a href="{{ route('admin.editAccount', $account->id) }}" class="btn btn-sm btn-warning">Edit</a>
+        <form action="{{ route('admin.deleteAccount', $account->id) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+        </form>
+    </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center">No accounts found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center mt-4">
+        {{ $accounts->links('pagination::bootstrap-5') }}
     </div>
-    <table class="table table-bordered table-hover mt-3">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th> 
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Actions</th>
-
-            </tr>
-        </thead>
-        <tbody id="accounts-table">
-            @forelse ($accounts as $account)
-                <tr>
-                    <td>{{ $account->id }}</td>
-                    <td>{{ $account->name }}</td>
-                    <td>{{ $account->email }}</td>
-                    <td>{{ ucfirst($account->role) }}</td>
-                    <td>
-    <a href="{{ route('admin.editAccount', $account->id) }}" class="btn btn-sm btn-warning">Edit</a>
-    <form action="{{ route('admin.deleteAccount', $account->id) }}" method="POST" style="display:inline;">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-    </form>
-</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4" class="text-center">No accounts found.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-    <div class="d-flex justify-content-center mt-4">
-    {{ $accounts->links('pagination::bootstrap-5') }}
+    </div>
 </div>
 
-</div>
+
+
 
 @if (session('success'))
 <script>
