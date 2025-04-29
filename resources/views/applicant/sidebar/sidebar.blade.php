@@ -2,7 +2,7 @@
     <ul class="sidebar-nav nav-pills flex-column">
         <li class="nav-item">
             <span class="step-number">Step 1</span>
-            <a href="{{ route('form.step3') }}" class="nav-link load-view">
+            <a href="{{ route('applicantdashboard') }}" class="nav-link load-view">
                 <i class="fa-brands fa-wpforms"></i> Fill-Up Forms
             </a>
         </li>

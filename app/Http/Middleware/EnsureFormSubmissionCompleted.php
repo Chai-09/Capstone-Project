@@ -12,7 +12,7 @@ class EnsureFormSubmissionCompleted
     public function handle(Request $request, Closure $next)
     {
         $applicant = Auth::user();
-        
+
         if ($applicant) {
             // Check if nakasubmit na si user ng form
             $hasFormSubmission = FillupForms::where('applicant_email', $applicant->email)->exists();

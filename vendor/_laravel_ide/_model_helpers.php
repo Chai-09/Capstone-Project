@@ -316,6 +316,7 @@ namespace App\Models {
     /**
      * App\Models\Applicant
      *
+     * @property mixed $current_step
      * @property string $incoming_grlvl
      * @property string $current_school
      * @property string $applicant_lname
@@ -337,6 +338,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereApplicantLname($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereCurrentSchool($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereIncomingGrlvl($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereCurrentStep($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant query()

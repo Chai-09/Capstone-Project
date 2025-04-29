@@ -9,17 +9,17 @@ use App\Models\Applicant;
 
 class FillupFormsController extends Controller
 {
-    public function createStep3() 
-{
-    $applicant = Applicant::where('account_id', auth()->user()->id)->first();
-    $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
+    public function createStep3()
+    {
+        $applicant = Applicant::where('account_id', auth()->user()->id)->first();
+        $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
 
-    if (!$formSubmission) {
-        $formSubmission = null;
+        if (!$formSubmission) {
+            $formSubmission = null;
+        }
+
+        return view('applicant.steps.forms.step-1-forms', compact('applicant', 'formSubmission'));
     }
-    
-    return view('applicant.index', compact('applicant', 'formSubmission'));
-}
 
     public function postStep3(Request $request)
     {
@@ -107,27 +107,27 @@ class FillupFormsController extends Controller
 
         $allData = array_merge($validated, $optionalDefaults);
 
-    // Set applicant_id if available
-    if (session()->has('applicant_id')) {
-        $allData['applicant_id'] = session('applicant_id');
+        // Set applicant_id if available
+        if (session()->has('applicant_id')) {
+            $allData['applicant_id'] = session('applicant_id');
+        }
+
+        // Check if the applicant already has a submission
+        $formSubmission = FillupForms::where('applicant_email', auth()->user()->email)->first();
+
+        if ($formSubmission) {
+            $formSubmission->update($allData);
+        } else {
+            FillupForms::create($allData);
+        }
+
+        //Update the Applicant current_step separately
+        $applicant = Applicant::where('account_id', auth()->user()->id)->first();
+        if ($applicant) {
+            $applicant->current_step = 2;
+            $applicant->save();
+        }
+
+        return redirect()->route('applicant.steps.payment.payment');
     }
-
-    // Check if the applicant already has a submission
-$formSubmission = FillupForms::where('applicant_email', auth()->user()->email)->first();
-
-if ($formSubmission) {
-    $formSubmission->update($allData);
-} else {
-    FillupForms::create($allData);
-}
-
-//Update the Applicant current_step separately
-$applicant = Applicant::where('account_id', auth()->user()->id)->first();
-if ($applicant) {
-    $applicant->current_step = 2;
-    $applicant->save();
-}
-
-return redirect()->route('applicant.steps.payment.payment');
-}
 }

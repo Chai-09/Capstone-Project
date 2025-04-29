@@ -58,20 +58,20 @@ class AuthController extends Controller
 
     //New function to control where applicant will go depending on stored step in fillupforms
     private function redirectApplicantBasedOnStep()
-{
-    $applicant = \App\Models\Applicant::where('account_id', Auth::user()->id)->first();
-    
-    if ($applicant) {
-        if ($applicant->current_step == 1) {
-            return redirect()->route('form.step3');
-        } elseif ($applicant->current_step == 2) {
-            return redirect()->route('applicant.steps.payment.payment');
-        }
-    }
+    {
+        $applicant = \App\Models\Applicant::where('account_id', Auth::user()->id)->first();
 
-    // if wala pa form submission step 1 
-    return redirect()->route('form.step3');
-}
+        if ($applicant) {
+            if ($applicant->current_step == 1) {
+                return redirect()->route('applicantdashboard');
+            } elseif ($applicant->current_step == 2) {
+                return redirect()->route('applicant.steps.payment.payment');
+            }
+        }
+
+        // if wala pa form submission step 1 
+        return redirect()->route('applicantdashboard');
+    }
 
 
     public function logout()
@@ -79,6 +79,4 @@ class AuthController extends Controller
         session()->flush();
         return redirect()->route('login')->with('success', 'Logged out successfully.'); //kingina ginawa na pala to
     }
-
-    
 }

@@ -1,19 +1,7 @@
 <!-- Payment Form Blade -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-<title>Send Payment</title>
-</head>
-<body>
+@extends('applicant.index')
 
-@include('applicant.navbar.navbar')
-@include('applicant.sidebar.sidebar')
-
+@section('content')
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
@@ -52,6 +40,4 @@
         </div>
     </div>
 </div>
-
-</body>
-</html>
+@endsection

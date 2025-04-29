@@ -28,16 +28,7 @@
 
             {{-- Main content --}} {{-- Added logic to make form read only if applicant has submitted step 1 --}}
             <div class="forms col-lg-9 px-4 py-3">
-                <form action="{{ route('form.step3') }}" method="POST">
-                    @csrf
-                    @php
-                        $readOnly = isset($applicant) && $applicant->current_step > 1;
-                    @endphp
-                    @include('applicant.steps.forms.step-1-forms', ['readOnly' => $readOnly, 'formSubmission' => $formSubmission])
-                </form> 
-                 
-
-                    
+                @yield('content')
             </div>
         </div>
     </div>
