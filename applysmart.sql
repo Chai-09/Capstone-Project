@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 29, 2025 at 02:33 PM
+-- Generation Time: Apr 29, 2025 at 03:23 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -59,7 +59,8 @@ INSERT INTO `accounts` (`id`, `name`, `email`, `password`, `role`) VALUES
 (38, 'MEH . MEH', 'meh@gmail.com', '$2y$12$T1K02sY482e3/M8x02PF9eH0lW90nT//LeSkpNztNgWlC4S9v.FLu', 'administrator'),
 (54, 'ACCOUNTANT . ACCOUNTANT', 'accountant@gmail.com', '$2y$12$gyjTmD66YVOl14d6RKoO0.I91hFE5trOw2ZIv6CzbU2u2s9Pn42TS', 'accounting'),
 (61, 'AERO  AERO', 'aero@gmail.com', '$2y$12$cT4wNzWqdd82/AO88DEylO39n36rkm/AsaZmVnyJrA11jbGUo/uL6', 'admission'),
-(67, 'TEST TEST. TEST', 'eiryk.sardalla30@gmail.com', '$2y$12$Atj.ccf/4S5nm/pccAn.Xulk9FDlESnvJgDY1kNZvguaCPMGLVI2m', 'applicant');
+(67, 'TEST TEST. TEST', 'eiryk.sardalla30@gmail.com', '$2y$12$Atj.ccf/4S5nm/pccAn.Xulk9FDlESnvJgDY1kNZvguaCPMGLVI2m', 'applicant'),
+(68, 'ERNESTO M. BARCENAS', 'gabebarcenas08@gmail.com', '$2y$12$C6lRIvReqIe7gA3JGLdOOu1z.iZpGbunGRzOgxneziSn3NI1n43Sa', 'applicant');
 
 -- --------------------------------------------------------
 
@@ -77,31 +78,33 @@ CREATE TABLE `applicants` (
   `applicant_mname` varchar(64) DEFAULT NULL,
   `applicant_lname` varchar(64) NOT NULL,
   `current_school` varchar(255) NOT NULL,
-  `incoming_grlvl` varchar(32) NOT NULL
+  `incoming_grlvl` varchar(32) NOT NULL,
+  `current_step` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `applicants`
 --
 
-INSERT INTO `applicants` (`id`, `account_id`, `guardian_fname`, `guardian_mname`, `guardian_lname`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `current_school`, `incoming_grlvl`) VALUES
-(1, 1, 'PAUL AERON', 'A.', 'GUILLERMO', 'PAUL AERON', 'O.', 'GUILLERMO', 'Virgen Del Pilar School', 'Grade 9'),
-(2, 2, 'APPLICANT', 'APPLICANT', 'APPLICANT', 'APPLICANT', 'APPLICANT', 'APPLICANT', 'APPLICANT', 'Grade 10'),
-(3, 3, 'Ernesto', 'M.', 'Barcenas', 'Kyrie', 'S.', 'Sardalla', 'FEU', 'Grade 8'),
-(4, 4, 'TEST', 'T.', 'TEST', 'TEST', 'T.', 'TEST', 'TEST', 'GRADE 12'),
-(5, 5, 'REST', 'REST.', 'TEST', 'SEWST', 'ESTSE.', 'SETSE', 'TSE', 'GRADE 11'),
-(6, 6, 'GABE', 'M.', 'BARCENAS', 'MARCUS', 'M.', 'BARCENAS', 'FEU', 'GRADE 10'),
-(7, 7, 'SADSAAD', 'ASDASDA.', 'DAS', 'FDSFSD', 'SFSD.', 'SDFSD', 'FD', 'GRADE 10'),
-(8, 8, 'JHGJGGHJGHJ', 'JHJGHJGH.', 'JGHJGH', 'NMBNMBN', 'BMBN.', 'BMBN', 'BNMBN', 'GRADE 9'),
-(9, 9, 'PEDRO', 'P.', 'PEDRO', 'RED', 'R.', 'RED', 'FEU', 'GRADE 10'),
-(10, 10, 'HDI', 'ADS.', 'ADS', 'AWDAS', 'ADAS.', 'ADS', 'ASDAA', 'GRADE 10'),
-(11, 11, 'JEDI', 'J.', 'JEDI', 'BARA', 'J.', 'BARA', 'SDA', 'GRADE 10'),
-(12, 12, 'FGH', 'FGH.', 'FGH', 'FGH', 'FGH.', 'FGH', 'FGH', 'GRADE 11'),
-(13, 13, 'DASDAS', 'ADAS.', 'DAS', 'JFGHFG', 'FHFGH.', 'FGHFG', 'FGHGF', 'GRADE 12'),
-(14, 14, 'SDSAD', 'DASSAD.', 'ASDAS', 'SDSAD', 'ASDA.', 'ASDAS', 'ADSA', 'GRADE 8'),
-(15, 15, 'JEDI', 'J.', 'JEDI', 'JACOB', 'J.', 'JEDI', 'PASIG GREEN PASTURES', 'GRADE 11'),
-(27, 27, 'ANDREW', 'O.', 'GUILLERMO', 'ANDREI', 'O.', 'GUILLERMO', 'VIRGEN DEL PILAR SCHOOL', 'GRADE 11'),
-(64, 67, 'TEST', 'TEST.', 'TEST', 'FORTESTING', 'FORTESTING.', 'FORTESTING', 'TESTING', 'KINDER');
+INSERT INTO `applicants` (`id`, `account_id`, `guardian_fname`, `guardian_mname`, `guardian_lname`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `current_school`, `incoming_grlvl`, `current_step`) VALUES
+(1, 1, 'PAUL AERON', 'A.', 'GUILLERMO', 'PAUL AERON', 'O.', 'GUILLERMO', 'Virgen Del Pilar School', 'Grade 9', 1),
+(2, 2, 'APPLICANT', 'APPLICANT', 'APPLICANT', 'APPLICANT', 'APPLICANT', 'APPLICANT', 'APPLICANT', 'Grade 10', 1),
+(3, 3, 'Ernesto', 'M.', 'Barcenas', 'Kyrie', 'S.', 'Sardalla', 'FEU', 'Grade 8', 1),
+(4, 4, 'TEST', 'T.', 'TEST', 'TEST', 'T.', 'TEST', 'TEST', 'GRADE 12', 1),
+(5, 5, 'REST', 'REST.', 'TEST', 'SEWST', 'ESTSE.', 'SETSE', 'TSE', 'GRADE 11', 1),
+(6, 6, 'GABE', 'M.', 'BARCENAS', 'MARCUS', 'M.', 'BARCENAS', 'FEU', 'GRADE 10', 1),
+(7, 7, 'SADSAAD', 'ASDASDA.', 'DAS', 'FDSFSD', 'SFSD.', 'SDFSD', 'FD', 'GRADE 10', 1),
+(8, 8, 'JHGJGGHJGHJ', 'JHJGHJGH.', 'JGHJGH', 'NMBNMBN', 'BMBN.', 'BMBN', 'BNMBN', 'GRADE 9', 1),
+(9, 9, 'PEDRO', 'P.', 'PEDRO', 'RED', 'R.', 'RED', 'FEU', 'GRADE 10', 1),
+(10, 10, 'HDI', 'ADS.', 'ADS', 'AWDAS', 'ADAS.', 'ADS', 'ASDAA', 'GRADE 10', 1),
+(11, 11, 'JEDI', 'J.', 'JEDI', 'BARA', 'J.', 'BARA', 'SDA', 'GRADE 10', 1),
+(12, 12, 'FGH', 'FGH.', 'FGH', 'FGH', 'FGH.', 'FGH', 'FGH', 'GRADE 11', 1),
+(13, 13, 'DASDAS', 'ADAS.', 'DAS', 'JFGHFG', 'FHFGH.', 'FGHFG', 'FGHGF', 'GRADE 12', 1),
+(14, 14, 'SDSAD', 'DASSAD.', 'ASDAS', 'SDSAD', 'ASDA.', 'ASDAS', 'ADSA', 'GRADE 8', 1),
+(15, 15, 'JEDI', 'J.', 'JEDI', 'JACOB', 'J.', 'JEDI', 'PASIG GREEN PASTURES', 'GRADE 11', 1),
+(27, 27, 'ANDREW', 'O.', 'GUILLERMO', 'ANDREI', 'O.', 'GUILLERMO', 'VIRGEN DEL PILAR SCHOOL', 'GRADE 11', 1),
+(64, 67, 'TEST', 'TEST.', 'TEST', 'FORTESTING', 'FORTESTING.', 'FORTESTING', 'TESTING', 'KINDER', 1),
+(65, 68, 'ERNESTO', 'M.', 'BARCENAS', 'GABE', 'M.', 'BARCENAS', 'FEU GRADESCHOOL', 'GRADE 12', 2);
 
 -- --------------------------------------------------------
 
@@ -202,7 +205,8 @@ CREATE TABLE `form_submissions` (
 --
 
 INSERT INTO `form_submissions` (`id`, `applicant_id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_contact_number`, `applicant_email`, `region`, `province`, `city`, `barangay`, `numstreet`, `postal_code`, `age`, `gender`, `nationality`, `guardian_fname`, `guardian_mname`, `guardian_lname`, `guardian_contact_number`, `guardian_email`, `relation`, `current_school`, `current_school_city`, `school_type`, `educational_level`, `incoming_grlvl`, `applicant_bday`, `lrn_no`, `strand`, `source`) VALUES
-(31, 64, 'ForTesting', NULL, 'ForTesting', '09999999999', 'eiryk.sardalla30@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Batasan Hills', 'wrwqr', '12321', 12, 'Male', 'filipino', 'ForTesting', NULL, 'ForTesting', '09999999999', 'eiryk.sardalla30@gmail.com', 'Parents', 'Testing', 'Quezon City, Metro Manila', 'Public', 'Grade School', 'Kinder', '2020-07-29', '1234', NULL, 'Friends/Family/Relatives');
+(31, 64, 'ForTesting', NULL, 'ForTesting', '09999999999', 'eiryk.sardalla30@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Batasan Hills', 'wrwqr', '12321', 12, 'Male', 'filipino', 'ForTesting', NULL, 'ForTesting', '09999999999', 'eiryk.sardalla30@gmail.com', 'Parents', 'Testing', 'Quezon City, Metro Manila', 'Public', 'Grade School', 'Kinder', '2020-07-29', '1234', NULL, 'Friends/Family/Relatives'),
+(32, 65, 'GABE', 'M.', 'BARCENAS', '09111111111', 'gabebarcenas09@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Pasay City', 'Barangay 18', '12 C', '123', 123, 'Male', 'Filipino', 'ERNESTO', 'M.', 'BARCENAS', '09888888888', 'gabebarcenas09@gmail.com', 'Parents', 'FEU GRADESCHOOL', 'Quezon City, Metro Manila', 'Private Sectarian', 'Senior High School', 'Grade 12', NULL, '12345', 'STEM Engineering', 'Website');
 
 -- --------------------------------------------------------
 
@@ -236,7 +240,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (19, '2025_04_26_140637_add_payment_status_to_payment', 11),
 (20, '2025_04_28_064645_create_exam_schedules', 12),
 (21, '2025_04_29_030150_create_applicant_schedules_table', 13),
-(22, '2025_04_29_053724_create_applicant_schedules', 14);
+(22, '2025_04_29_053724_create_applicant_schedules', 14),
+(23, '2025_04_27_175754_add_current_step_to_applicants_table', 15);
 
 -- --------------------------------------------------------
 
@@ -279,7 +284,8 @@ CREATE TABLE `payment` (
 --
 
 INSERT INTO `payment` (`id`, `applicant_id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_email`, `applicant_contact_number`, `incoming_grlvl`, `payment_method`, `proof_of_payment`, `payment_status`, `payment_date`, `payment_time`, `created_at`, `updated_at`) VALUES
-(24, 64, 'FORTESTING', 'FORTESTING.', 'FORTESTING', 'eiryk.sardalla30@gmail.com', '09999999999', 'Kinder', 'BDO', 'payment_proofs/proof_68108b6ee6f117.49982469.png', 'approved', '2025-04-29', '16:18:54', '2025-04-29 00:18:54', '2025-04-29 00:19:00');
+(24, 64, 'FORTESTING', 'FORTESTING.', 'FORTESTING', 'eiryk.sardalla30@gmail.com', '09999999999', 'Kinder', 'BDO', 'payment_proofs/proof_68108b6ee6f117.49982469.png', 'approved', '2025-04-29', '16:18:54', '2025-04-29 00:18:54', '2025-04-29 00:19:00'),
+(25, 65, 'GABE', 'M.', 'BARCENAS', 'gabebarcenas09@gmail.com', '09111111111', 'Grade 12', 'BDO', 'payment_proofs/proof_6810d19a6af951.72336141.png', 'pending', '2025-04-29', '21:18:19', '2025-04-29 05:18:19', '2025-04-29 05:18:19');
 
 -- --------------------------------------------------------
 
@@ -302,6 +308,7 @@ CREATE TABLE `sessions` (
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
 ('7XZKJ3sWEeWqIsx0TuKMZZ7aUMCpaL70wqJBQP1G', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiVEJiQ1I4azljSXh4ZzRrRE9aV1VPc1BPVEl1S1dpTjB2ODJxQW1abyI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czozNToiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2V4YW0tc2NoZWR1bGUiO31zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2xvZ2luIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1745929337),
+('C71OCKPCUJfwYDV0EOfQKQt2VJ1pZcCwsMMjpMHV', 68, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo3OntzOjY6Il90b2tlbiI7czo0MDoiQzhQSHVzNjdTYVQ2cUNoVThuZWFHdDlsUXZnVzNTOUdNMGJWS09qRyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDI6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wYXltZW50LXZlcmlmaWNhdGlvbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6MTI6ImFwcGxpY2FudF9pZCI7aTo2NTtzOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo2ODtzOjQ6Im5hbWUiO3M6MTk6IkVSTkVTVE8gTS4gQkFSQ0VOQVMiO3M6NToiZW1haWwiO3M6MjQ6ImdhYmViYXJjZW5hczA4QGdtYWlsLmNvbSI7fQ==', 1745932925),
 ('H6dfy1U7wLZ0k2d4hvDe8FW9909ZC7VfmKFBGouJ', 67, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiYWRHSzAxTjBJYlV1aGVtQ1JRZVB6NnU3R1dSVzZ0RnJJOWlFQ3VWeSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hcHBsaWNhbnQvc3RlcHMvZXhhbV9kYXRlL2V4YW0tZGF0ZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjY3O3M6NDoibmFtZSI7czoxNToiVEVTVCBURVNULiBURVNUIjtzOjU6ImVtYWlsIjtzOjI2OiJlaXJ5ay5zYXJkYWxsYTMwQGdtYWlsLmNvbSI7fQ==', 1745929977);
 
 -- --------------------------------------------------------
@@ -398,13 +405,13 @@ ALTER TABLE `signup_otps`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `applicants`
 --
 ALTER TABLE `applicants`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `applicant_schedules`
@@ -422,25 +429,25 @@ ALTER TABLE `exam_schedules`
 -- AUTO_INCREMENT for table `form_submissions`
 --
 ALTER TABLE `form_submissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `signup_otps`
 --
 ALTER TABLE `signup_otps`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- Constraints for dumped tables

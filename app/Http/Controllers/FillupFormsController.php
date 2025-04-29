@@ -14,15 +14,53 @@ class FillupFormsController extends Controller
         $applicant = Applicant::where('account_id', auth()->user()->id)->first();
         $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
 
-        if (!$formSubmission) {
-            $formSubmission = null;
-        }
+            if (!$formSubmission) {
+                $formSubmission = new \stdClass();
+        
+                 // Prefill mga nasa signup na fields
+                 $formSubmission->applicant_fname = $applicant->applicant_fname ?? '';
+                 $formSubmission->applicant_mname = $applicant->applicant_mname ?? '';
+                 $formSubmission->applicant_lname = $applicant->applicant_lname ?? '';
+                 $formSubmission->applicant_contact_number = ''; 
+                 $formSubmission->applicant_email = auth()->user()->email ?? '';
+                 
+                 $formSubmission->guardian_fname = $applicant->guardian_fname ?? '';
+                 $formSubmission->guardian_mname = $applicant->guardian_mname ?? '';
+                 $formSubmission->guardian_lname = $applicant->guardian_lname ?? '';
+                 $formSubmission->guardian_contact_number = ''; 
+                 $formSubmission->guardian_email = auth()->user()->email ?? ''; 
+         
+                 $formSubmission->current_school = $applicant->current_school ?? '';
+                 $formSubmission->incoming_grlvl = '';
+         
+                 // Manual Input
+                 $formSubmission->region = '';
+                 $formSubmission->province = '';
+                 $formSubmission->city = '';
+                 $formSubmission->barangay = '';
+                 $formSubmission->numstreet = '';
+                 $formSubmission->postal_code = '';
+                 $formSubmission->age = '';
+                 $formSubmission->gender = '';
+                 $formSubmission->nationality = '';
+                 $formSubmission->relation = '';
+                 $formSubmission->current_school_city = '';
+                 $formSubmission->school_type = '';
+                 $formSubmission->educational_level = '';
+                 $formSubmission->applicant_bday = '';
+                 $formSubmission->lrn_no = '';
+                 $formSubmission->strand = '';
+                 $formSubmission->source = '';
+             }
 
         return view('applicant.steps.forms.step-1-forms', compact('applicant', 'formSubmission'));
     }
 
     public function postStep3(Request $request)
     {
+
+        $applicant = Applicant::where('account_id', auth()->user()->id)->first();
+
         $rules = [
             // Applicant
             'applicant_fname' => 'required|max:255',
@@ -108,12 +146,12 @@ class FillupFormsController extends Controller
         $allData = array_merge($validated, $optionalDefaults);
 
         // Set applicant_id if available
-        if (session()->has('applicant_id')) {
-            $allData['applicant_id'] = session('applicant_id');
+        if ($applicant) {
+            $allData['applicant_id'] = $applicant->id;
         }
 
         // Check if the applicant already has a submission
-        $formSubmission = FillupForms::where('applicant_email', auth()->user()->email)->first();
+        $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
 
         if ($formSubmission) {
             $formSubmission->update($allData);

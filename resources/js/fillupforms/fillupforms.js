@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const grade = incomingGradeLevelSelect.value;
 
         
-        gradeLevelContainer.style.display = 'block';
-        sourceContainer.style.display = 'block';
+        gradeLevelContainer.style.display = 'none';
+        sourceContainer.style.display = 'none';
 
        
         strandContainer.style.display = 'none';
@@ -47,16 +47,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (level === "Grade School") {
             lrnContainer.style.display = 'block';
+            gradeLevelContainer.style.display = 'block';
+                sourceContainer.style.display = 'block';
+                
             if (grade === "Kinder" || grade === "Grade 1") {
                 birthdayContainer.style.display = 'block';
+                gradeLevelContainer.style.display = 'block';
+                sourceContainer.style.display = 'block';
             }
         }
         else if (level === "Junior High School") {
             lrnContainer.style.display = 'block';
+            gradeLevelContainer.style.display = 'block';
+            sourceContainer.style.display = 'block';
         }
         else if (level === "Senior High School") {
             lrnContainer.style.display = 'block';
             strandContainer.style.display = 'block';
+            gradeLevelContainer.style.display = 'block';
+            sourceContainer.style.display = 'block';
         }
     }
 

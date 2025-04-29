@@ -6,18 +6,20 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\FillupForms;
+use App\Models\Applicant;
 
 class EnsureFormSubmissionCompleted
 {
     public function handle(Request $request, Closure $next)
     {
-        $applicant = Auth::user();
-
-        if ($applicant) {
+        $account = Auth::user();
+        
+        if ($account) {
             // Check if nakasubmit na si user ng form
-            $hasFormSubmission = FillupForms::where('applicant_email', $applicant->email)->exists();
+            $applicant = Applicant::where('account_id', $account->id)->first();
+            
 
-            if (!$hasFormSubmission) {
+            if (!$applicant || !FillupForms::where('applicant_id', $applicant->id)->exists()) {
                 return redirect()->route('applicantdashboard')->with('error', 'You must complete the application form first.');
             }
         }

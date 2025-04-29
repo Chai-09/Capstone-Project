@@ -3,6 +3,7 @@
 @section('content')
 <form action="{{ route('applicantdashboard') }}" method="POST">
     @csrf
+    @include('login.alert-errors')
     @php
         $readOnly = isset($applicant) && $applicant->current_step > 1;
     @endphp
