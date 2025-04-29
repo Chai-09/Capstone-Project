@@ -88,7 +88,7 @@
     <form method="GET" action="{{ route('examschedule') }}" class="row g-3 mb-4">
         <div class="col-md-4">
             <label for="exam_date" class="form-label">Exam Date</label>
-            <input type="date" id="exam_date" name="exam_date" class="form-control" value="{{ request('exam_date') }}">
+            <input type="date" id="exam_date" name="exam_date" class="form-control" value="{{ request('exam_date') }}" min="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
         </div>
         <div class="col-md-4">
             <label for="educational_level" class="form-label">Educational Level</label>
@@ -256,6 +256,25 @@ document.addEventListener('DOMContentLoaded', function() {
             @endforeach
         ],
         dateClick: function(info) {
+            const clickedDate = new Date(info.dateStr);
+            const today = new Date();
+
+            //reset
+            today.setHours(0, 0, 0, 0);
+
+            if (clickedDate < today) {
+                //warning alert
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Past Date',
+                    text: 'You cannot select a past date.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                return; 
+            }
+
+            // Navigate to the attendance page
             window.location.href = '/admission/exam-attendance?date=' + info.dateStr;
         },
         eventDidMount: function(info) {

@@ -44,7 +44,7 @@
 
   <div class="mb-4">
     <label class="form-label fw-bold">Select Date <span class="text-danger">*</span></label>
-    <input type="date" id="datePicker" class="form-control" required>
+    <input type="date" id="datePicker" class="form-control" required min="{{ \Carbon\Carbon::today()->toDateString() }}">
   </div>
 
   <div id="schedule-container">
@@ -65,7 +65,7 @@
         $showInitially = $carbonDate->between($today, $twoWeeksLater);
       @endphp
 
-      <div class="schedule-group {{ $showInitially ? '' : 'hidden' }}" data-date="{{ $date }}">
+      <div class="schedule-group hidden" data-date="{{ $date }}">
         <div class="date-header">{{ \Carbon\Carbon::parse($date)->format('F d, Y') }}</div>
         <div class="d-flex flex-wrap justify-content-center">
           @foreach ($schedules as $schedule)
@@ -85,27 +85,41 @@
   const scheduleContainer = document.getElementById('schedule-container');
 
   datePicker.addEventListener('change', function () {
-    const selectedDate = this.value;
-    let found = false;
+  const selectedDate = this.value;
+  const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
-    scheduleGroups.forEach(group => {
-      if (group.getAttribute('data-date') === selectedDate) {
-        group.classList.remove('hidden');
-        found = true;
-      } else {
-        group.classList.add('hidden');
-      }
+  if (selectedDate < today) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Unavailable Date',
+      text: 'You cannot select a date that has already passed.',
+      confirmButtonColor: '#007f3e'
     });
+    this.value = ''; // Clear the invalid input
+    return;
+  }
 
-    if (!found) {
-      Swal.fire({
-        icon: 'info',
-        title: 'No available schedules',
-        text: 'There are no exam times available for the selected date.',
-        confirmButtonColor: '#007f3e'
-      });
+  let found = false;
+  scheduleGroups.forEach(group => {
+    if (group.getAttribute('data-date') === selectedDate) {
+      group.classList.remove('hidden');
+      found = true;
+    } else {
+      group.classList.add('hidden');
     }
   });
+
+  if (!found) {
+    Swal.fire({
+      icon: 'info',
+      title: 'No available schedules',
+      text: 'There are no exam times available for the selected date.',
+      confirmButtonColor: '#007f3e'
+    });
+  }
+});
+
+
 
   scheduleContainer.addEventListener('click', function(e) {
     if (e.target.classList.contains('time-slot')) {

@@ -102,6 +102,7 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
 
         Route::post('/save-exam-schedule', [ApplicantScheduleController::class, 'store'])->name('applicant.saveExamSchedule');
 
+        Route::get('/applicant/steps/exam_date/exam-date', [ExamScheduleController::class, 'showExamDatesForApplicants'])->name('applicant.examdates');
     });
 });
 
