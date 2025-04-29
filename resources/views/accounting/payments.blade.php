@@ -10,11 +10,8 @@
 <nav class="navbar bg-dark p-3">
     <p style="color: white" class="m-0"> {{ auth()->user()->name }}</p>
     <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
-                </form>
-    <form action="{{ route('admin.createaccounts') }}" method="GET" class="ms-auto">
-        <button type="submit" class="btn btn-primary">Add User</button>
+        @csrf
+        <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
     </form>
 </nav>
 <div class="container mt-5">

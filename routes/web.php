@@ -12,6 +12,12 @@ use App\Http\Controllers\ViewPaymentController;
 use App\Http\Controllers\AccountingPaymentController;
 use App\Models\FillupForms;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ExamDateController;
+use App\Http\Controllers\AdmissionDateController;
+use App\Http\Controllers\ExamScheduleController;
+use App\Http\Controllers\ApplicantScheduleController;
+use App\Models\ApplicantSchedule;
+use App\Http\Controllers\ExamAttendanceController;
 
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
 // Log in Routes
@@ -85,9 +91,17 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
         Route::get('/payment-verification', [ViewPaymentController::class, 'index'])->name('payment.verification');
 
         // Route for proceeding to exam date form (when Approved)
-        Route::get('/applicant/steps/exam_date/exam-date', function () {
-            return view('applicant.steps.exam_date.exam-date');
-        })->name('applicant.steps.exam_date.exam-date');
+
+        Route::get('/applicant/steps/exam_date/exam-date', [ExamScheduleController::class, 'showExamDates'])->name('exam-date');
+
+
+        Route::get('/applicant/steps/reminders/reminders', function () {
+            $schedule = ApplicantSchedule::where('user_id', auth()->id())->latest()->first();
+            return view('applicant.steps.reminders.reminders', compact('schedule'));
+        })->name('reminders.view');
+
+        Route::post('/save-exam-schedule', [ApplicantScheduleController::class, 'store'])->name('applicant.saveExamSchedule');
+
     });
 });
 
@@ -110,7 +124,30 @@ Route::middleware(['auth', 'role:administrator'])->group(function () {
 
 
 //ADMISSION ROUTES
-Route::middleware(['auth', 'role:admission'])->group(function () {});
+Route::middleware(['auth', 'role:admission'])->group(function () {
+    //Route::get('/applicant/steps/exam_date/exam-date', [ExamScheduleController::class, 'showExamDates'])->name('exam.dates');
+    Route::get('/admissiondashboard', function () {
+        return view('admission.admission-home');
+    })->name('admissiondashboard');
+
+    Route::get('/exam-schedule', function () {
+        return view('admission.exam-schedule');
+    })->name('examschedule');
+
+    Route::get('/add-exam-date', [ExamDateController::class, 'create'])->name('examdate.create');
+    Route::post('/store-exam-date', [ExamDateController::class, 'store'])->name('examdate.store');
+    Route::get('/exam-schedule', [AdmissionDateController::class, 'index'])->name('examschedule');
+
+    Route::delete('/examdate/{id}', [ExamScheduleController::class, 'destroy'])->name('examdate.destroy');
+
+    Route::post('/examdate/delete-date', [ExamScheduleController::class, 'deleteDate'])->name('examdate.deleteDate');
+
+    // Show all applicants on that day
+    Route::get('/admission/exam-attendance', [ExamAttendanceController::class, 'show'])->name('exam.attendance');
+
+    // Mark attendance (Done / No Show) for an applicant
+    Route::post('/admission/exam-attendance/mark', [ExamAttendanceController::class, 'markAttendance'])->name('exam.attendance.mark');
+});
 
 //ACCOUNTING ROUTES
 Route::middleware(['auth', 'role:accounting'])->group(function () {

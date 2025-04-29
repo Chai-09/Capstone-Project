@@ -4,22 +4,22 @@
     "src": "public/images/login/login-bg.png"
   },
   "resources/css/app.css": {
-    "file": "assets/app-YyDNC3Nc.css",
+    "file": "assets/app-Cw-Zr517.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/css/applicants/layout.css": {
-    "file": "assets/layout-CF-OYDLe.css",
+    "file": "assets/layout-BDQqRwJb.css",
     "src": "resources/css/applicants/layout.css",
     "isEntry": true
   },
   "resources/css/applicants/navbar.css": {
-    "file": "assets/navbar-UJkX-aqB.css",
+    "file": "assets/navbar-BOcHHWG_.css",
     "src": "resources/css/applicants/navbar.css",
     "isEntry": true
   },
   "resources/css/applicants/sidebar.css": {
-    "file": "assets/sidebar-BuozXMLe.css",
+    "file": "assets/sidebar-D2PjGzKc.css",
     "src": "resources/css/applicants/sidebar.css",
     "isEntry": true
   },
@@ -29,17 +29,22 @@
     "isEntry": true
   },
   "resources/css/fillupforms/fillupforms.css": {
-    "file": "assets/fillupforms-BPGHVyaa.css",
+    "file": "assets/fillupforms-DExnjXKi.css",
     "src": "resources/css/fillupforms/fillupforms.css",
     "isEntry": true
   },
   "resources/css/login/login.css": {
-    "file": "assets/login-B8XZp_DQ.css",
+    "file": "assets/login-D3pDlp60.css",
     "src": "resources/css/login/login.css",
     "isEntry": true
   },
+  "resources/css/partials/sidebar.css": {
+    "file": "assets/sidebar-DcLZ1ubf.css",
+    "src": "resources/css/partials/sidebar.css",
+    "isEntry": true
+  },
   "resources/js/address/address.js": {
-    "file": "assets/address-CYna0vna.js",
+    "file": "assets/address-WkK05DkD.js",
     "name": "address",
     "src": "resources/js/address/address.js",
     "isEntry": true
@@ -51,9 +56,15 @@
     "isEntry": true
   },
   "resources/js/fillupforms/fillupforms.js": {
-    "file": "assets/fillupforms-BInLNWN-.js",
+    "file": "assets/fillupforms-DigxeD34.js",
     "name": "fillupforms",
     "src": "resources/js/fillupforms/fillupforms.js",
+    "isEntry": true
+  },
+  "resources/js/partials/sidebar.js": {
+    "file": "assets/sidebar-DU46f2n3.js",
+    "name": "sidebar",
+    "src": "resources/js/partials/sidebar.js",
     "isEntry": true
   }
 }
