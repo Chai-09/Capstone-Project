@@ -2,19 +2,23 @@
 
 @section('content')
 <form action="{{ route('applicantdashboard') }}" method="POST">
-    @csrf
-    @include('login.alert-errors')
+    @csrf   
     @php
         $readOnly = isset($applicant) && $applicant->current_step > 1;
     @endphp
+
+    {{-- Front End Error --}}
     <div id="alert-wrapper">
-        <div id="alert-container"></div>
+        <div id="alert-container">
+        </div>
     </div>
 
     {{-- Applicant Information --}}
     <div id="step1">
         <div class="step-form">
             <div class="form-section">
+                {{-- Server Side Error --}}
+                @include('login.alert-errors')
                 <label class="fw-semibold">Applicant's Name<span class="text-danger">*</span></label>
                 <p class="text-muted">Example: James E. Joseph</p>
 
@@ -155,14 +159,14 @@
 
                 <div class="form-row">
                     <div class="form-col">
-                        <label>Email<span class="text-danger">*</span></label>
+                        <label>Guardian's Email<span class="text-danger">*</span></label>
                         <input type="email" name="guardian_email" placeholder="Enter email address" required value="{{ $formSubmission->guardian_email ?? '' }}" {{ $readOnly ? 'readonly' : '' }}>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-col">
-                        <label>Contact Number<span class="text-danger">*</span></label>
+                        <label>Guardian's Contact Number<span class="text-danger">*</span></label>
                         <input type="tel" name="guardian_contact_number" placeholder="09XXXXXXXXX" required value="{{ $formSubmission->guardian_contact_number ?? '' }}" {{ $readOnly ? 'readonly' : '' }}>
                     </div>
                 </div>
@@ -247,7 +251,7 @@
                 <div class="form-row">
                     <div class="form-col" id="grade-level-container" style="display: none;">
                         <label>Incoming Grade Level<span class="text-danger">*</span></label>
-                        <span class="text-muted">For Kinder applicants, the student must be 5 years old by October {{ now()->year }}</span>
+                        <span class="text-muted">For Kinder to Grade 1 applicants, the student must be 5 years old by October {{ now()->year }}</span>
                         <select name="incoming_grlvl" id="incoming_grlvl" required {{ $readOnly ? 'disabled' : '' }}>
                             @if(isset($formSubmission))
                                 <option value="{{ $formSubmission->incoming_grlvl }}" selected>{{ $formSubmission->incoming_grlvl }}</option>
@@ -257,7 +261,7 @@
                         </select>
                         <div class="form-col">
                             <div id="strand-container" style="display: none;">
-                                <label>Strand</label>
+                                <label>Strand<span class="text-danger">*</span></label>
                                 <select name="strand" id="strand" {{ $readOnly ? 'disabled' : '' }}>
                                     <option value="">Select</option>
                                     <option value="STEM Health Allied" {{ (isset($formSubmission) && $formSubmission->strand == 'STEM Health Allied') ? 'selected' : '' }}>STEM Health Allied</option>
@@ -274,6 +278,7 @@
                     </div>
                     <div class="form-col">
                         <div id="birthday-container" style="display: none;">
+                            <span> </span>
                             <label>Birthday<span class="text-danger">*</span></label>
                             <input type="date" name="applicant_bday" id="applicant_bday" value="{{ $formSubmission->applicant_bday ?? '' }}" {{ $readOnly ? 'readonly' : '' }}>
                         </div>

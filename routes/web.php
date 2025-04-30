@@ -74,7 +74,7 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
     Route::middleware(['form.submitted'])->group(function () {
 
         //payment page
-        Route::get('/applicant/steps/payment/payment', [
+        Route::get('/step-2', [
             PaymentController::class,
             'showPaymentForm'
         ])->name('applicant.steps.payment.payment');

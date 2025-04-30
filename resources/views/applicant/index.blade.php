@@ -7,12 +7,14 @@
     <title>ApplySmart</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/2c99ab7d67.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- CSS --}}
     @vite('resources/css/fillupforms/fillupforms.css')
     @vite('resources/css/applicants/layout.css')
     @vite('resources/css/applicants/navbar.css')
     @vite('resources/css/applicants/sidebar.css')
     @vite('resources/css/applicants/step-1.css')
+    @vite('resources/css/applicants/step-2.css')
 </head>
 <body>
     {{-- Navbar always visible --}}

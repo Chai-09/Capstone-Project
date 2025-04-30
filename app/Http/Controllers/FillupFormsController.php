@@ -113,7 +113,21 @@ class FillupFormsController extends Controller
         if ($level === 'Grade School') {
             $rules['lrn_no'] = 'required|max:255';
             if (in_array($grade, ['Kinder', 'Grade 1'])) {
-                $rules['applicant_bday'] = 'required|date';
+                $rules['applicant_bday'] = 'required|date|before_or_equal:' . now()->year . '-10-01';
+            
+                $bday = $request->applicant_bday;
+                if ($bday) {
+                    $cutoff = \Carbon\Carbon::create(now()->year, 10, 1);
+                    $birthday = \Carbon\Carbon::parse($bday);
+                    $age = $birthday->age;
+            
+                    // Must be at least 5 years old on or before October 1
+                    if ($birthday->diffInYears($cutoff, false) < 5) {
+                        return back()->withErrors([
+                            'applicant_bday' => 'Kinder and Grade 1 applicants must be at least 5 years old on or before October ' . now()->year . '.'
+                        ])->withInput();
+                    }
+                }
             }
         }
 
