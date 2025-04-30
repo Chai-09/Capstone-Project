@@ -25,15 +25,15 @@
                 <div class="form-row">
                     <div class="form-col">
                         <label>First Name</label>
-                        <input type="text" name="applicant_fname" value="{{ old ('applicant_fname', $formSubmission->applicant_fname ?? '') }}" placeholder="Enter first name" required {{ $readOnly ? 'readonly' : '' }}>
+                        <input type="text" name="applicant_fname" value="{{ old ('applicant_fname', $formSubmission->applicant_fname ?? '') }}" placeholder="Enter first name" required  {{ ($readOnly ?? false) || in_array('applicant_fname', $readOnlyFields ?? []) ? 'readonly' : '' }}>
                     </div>
                     <div class="form-col">
                         <label>Middle Initial</label>
-                        <input type="text" name="applicant_mname" value="{{ old('applicant_mname', $formSubmission->applicant_mname ?? '') }}" placeholder="Enter middle initial" {{ $readOnly ? 'readonly' : '' }}>
+                        <input type="text" name="applicant_mname" value="{{ old('applicant_mname', $formSubmission->applicant_mname ?? '') }}" placeholder="Enter middle initial"   {{ ($readOnly ?? false) || in_array('applicant_mname', $readOnlyFields ?? []) ? 'readonly' : '' }}>
                     </div>
                     <div class="form-col">
                         <label>Last Name</label>
-                        <input type="text" name="applicant_lname" value="{{ old('applicant_lname', $formSubmission->applicant_lname ?? '') }}" placeholder="Enter last name" required {{ $readOnly ? 'readonly' : '' }}>
+                        <input type="text" name="applicant_lname" value="{{ old('applicant_lname', $formSubmission->applicant_lname ?? '') }}" placeholder="Enter last name" required {{ ($readOnly ?? false) || in_array('applicant_lname', $readOnlyFields ?? []) ? 'readonly' : '' }}>
                     </div>
                 </div>
 
@@ -145,22 +145,22 @@
                 <div class="form-row">
                     <div class="form-col">
                         <label>First Name</label>
-                        <input type="text" name="guardian_fname" placeholder="Enter first name" required value="{{ $formSubmission->guardian_fname ?? '' }}" {{ $readOnly ? 'readonly' : '' }}>
+                        <input type="text" name="guardian_fname" placeholder="Enter first name" required value="{{ $formSubmission->guardian_fname ?? '' }}" {{ ($readOnly ?? false) || in_array('guardian_fname', $readOnlyFields ?? []) ? 'readonly' : '' }}>
                     </div>
                     <div class="form-col">
                         <label>Middle Initial</label>
-                        <input type="text" name="guardian_mname" placeholder="Enter middle name" value="{{ $formSubmission->guardian_mname ?? '' }}" {{ $readOnly ? 'readonly' : '' }}>
+                        <input type="text" name="guardian_mname" placeholder="Enter middle name" value="{{ $formSubmission->guardian_mname ?? '' }}" {{ ($readOnly ?? false) || in_array('guardian_mname', $readOnlyFields ?? []) ? 'readonly' : '' }}>
                     </div>
                     <div class="form-col">
                         <label>Last Name</label>
-                        <input type="text" name="guardian_lname" placeholder="Enter last name" required value="{{ $formSubmission->guardian_lname ?? '' }}" {{ $readOnly ? 'readonly' : '' }}>
+                        <input type="text" name="guardian_lname" placeholder="Enter last name" required value="{{ $formSubmission->guardian_lname ?? '' }}"  {{ ($readOnly ?? false) || in_array('guardian_lname', $readOnlyFields ?? []) ? 'readonly' : '' }}>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-col">
                         <label>Guardian's Email<span class="text-danger">*</span></label>
-                        <input type="email" name="guardian_email" placeholder="Enter email address" required value="{{ $formSubmission->guardian_email ?? '' }}" {{ $readOnly ? 'readonly' : '' }}>
+                        <input type="email" name="guardian_email" placeholder="Enter email address" required value="{{ $formSubmission->guardian_email ?? '' }}" {{ ($readOnly ?? false) || in_array('guardian_email', $readOnlyFields ?? []) ? 'readonly' : '' }}>
                     </div>
                 </div>
 
@@ -211,7 +211,7 @@
                 <div class="form-row">
                     <div class="form-col">
                         <label>Current School<span class="text-danger">*</span></label>
-                        <input type="text" name="current_school" value="{{ $formSubmission->current_school ?? '' }}" placeholder="Enter current school" required {{ $readOnly ? 'readonly' : '' }}>
+                        <input type="text" name="current_school" value="{{ $formSubmission->current_school ?? '' }}" placeholder="Enter current school" required {{ ($readOnly ?? false) || in_array('current_school', $readOnlyFields ?? []) ? 'readonly' : '' }}>
                     </div>
                 </div>
                 <div class="form-row">

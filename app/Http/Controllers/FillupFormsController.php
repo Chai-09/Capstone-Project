@@ -22,7 +22,7 @@ class FillupFormsController extends Controller
                  $formSubmission->applicant_mname = $applicant->applicant_mname ?? '';
                  $formSubmission->applicant_lname = $applicant->applicant_lname ?? '';
                  $formSubmission->applicant_contact_number = ''; 
-                 $formSubmission->applicant_email = auth()->user()->email ?? '';
+                 $formSubmission->applicant_email =  '';
                  
                  $formSubmission->guardian_fname = $applicant->guardian_fname ?? '';
                  $formSubmission->guardian_mname = $applicant->guardian_mname ?? '';
@@ -52,8 +52,20 @@ class FillupFormsController extends Controller
                  $formSubmission->strand = '';
                  $formSubmission->source = '';
              }
+                //readonlyfields during fillup lang
+             $readOnlyFields = [
+                'applicant_fname',
+                'applicant_mname',
+                'applicant_lname',
+                'guardian_fname',
+                'guardian_mname',
+                'guardian_lname',
+                'guardian_email',
+                'current_school',
+            ];
+        
 
-        return view('applicant.steps.forms.step-1-forms', compact('applicant', 'formSubmission'));
+        return view('applicant.steps.forms.step-1-forms', compact('applicant', 'formSubmission', 'readOnlyFields'));
     }
 
     public function postStep3(Request $request)

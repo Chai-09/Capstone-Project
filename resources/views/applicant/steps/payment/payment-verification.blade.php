@@ -43,10 +43,17 @@
                 <div class="text-center mt-4">
                     <button class="btn btn-secondary" disabled>Proceed</button>
                 </div>
-            @elseif ($payment->payment_status === 'approved')
+            @elseif ($payment->payment_status === 'approved' && $applicant->current_step == 3 ) {{-- Changed href link to button, to handle current_step increment update in database --}}
                 <div class="text-center mt-4">
-                    <a href="{{ url('/applicant/steps/exam_date/exam-date') }}" class="btn btn-success">Proceed</a>
+                    <form method="POST" action="{{ route('proceed.to.exam') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-success">Proceed</button>
+                    </form>
                 </div>
+            @elseif ($payment->payment_status === 'approved' && $applicant->current_step > 3) {{-- Disable proceed button if current step is greater than 3 to ensure they cant press it again afterwards--}}
+           <div class="text-center mt-4">
+                      <button class="btn btn-success" disabled>Already Proceeded</button>
+                 </div>
             @elseif ($payment->payment_status === 'denied')
             <div class="text-center mt-4">
                 <form method="POST" action="{{ route('payment.delete', ['id' => $payment->id]) }}">

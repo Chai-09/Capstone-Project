@@ -82,6 +82,10 @@ class Kernel implements KernelContract
     protected $middlewareAliases = [
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         'form.submitted' => \App\Http\Middleware\EnsureFormSubmissionCompleted::class,
+        'payment.submitted' => \App\Http\Middleware\EnsurePaymentSubmitted::class,
+        'payment.verified' => \App\Http\Middleware\EnsurePaymentApprovedForExam::class,
+
+
     
     ];
 

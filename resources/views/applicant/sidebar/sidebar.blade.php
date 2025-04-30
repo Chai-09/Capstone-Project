@@ -32,7 +32,7 @@
         </div>
         <li class="nav-item">
             <span class="step-number">Step 4</span>
-            <a href="" class="nav-link">
+            <a href="{{ route ('applicant.examdates') }}" class="nav-link">
                 <i class="fa-solid fa-calendar-days"></i> Schedule entrance exam
             </a>
         </li>
