@@ -18,6 +18,7 @@ use App\Http\Controllers\ExamScheduleController;
 use App\Http\Controllers\ApplicantScheduleController;
 use App\Models\ApplicantSchedule;
 use App\Http\Controllers\ExamAttendanceController;
+use App\Http\Controllers\AdmissionsAppListController;
 
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
 // Log in Routes
@@ -160,6 +161,17 @@ Route::middleware(['auth', 'role:admission'])->group(function () {
 
     // Mark attendance (Done / No Show) for an applicant
     Route::post('/admission/exam-attendance/mark', [ExamAttendanceController::class, 'markAttendance'])->name('exam.attendance.mark');
+
+    Route::get('/exam-results', function () {
+        return view('admission.exam-results');
+    })->name('examresults');
+
+
+    Route::get('/admission-home', function () {
+        return view('admission.admission-home');
+    })->name('admissionhome');
+
+    Route::get('/admission/applicants-list', [AdmissionsAppListController::class, 'index'])->name('applicantlist');
 });
 
 //ACCOUNTING ROUTES
@@ -169,6 +181,8 @@ Route::middleware(['auth', 'role:accounting'])->group(function () {
     Route::get('/accountant/payments', [AccountingPaymentController::class, 'index'])->name('accountant.payments');
     Route::post('/accountant/payments/approve/{id}', [AccountingPaymentController::class, 'approve'])->name('accountant.payments.approve');
     Route::post('/accountant/payments/deny/{id}', [AccountingPaymentController::class, 'deny'])->name('accountant.payments.deny');
+
+    Route::put('/accountant/payments/{id}', [PaymentController::class, 'updateRemarks'])->name('accountant.payments.update');
 });
 
 //Sidebar

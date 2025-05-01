@@ -4,22 +4,22 @@
     "src": "public/images/login/login-bg.png"
   },
   "resources/css/app.css": {
-    "file": "assets/app-Cw-Zr517.css",
+    "file": "assets/app-COVdOOZ7.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/css/applicants/layout.css": {
-    "file": "assets/layout-BDQqRwJb.css",
+    "file": "assets/layout-CBxz6L7k.css",
     "src": "resources/css/applicants/layout.css",
     "isEntry": true
   },
   "resources/css/applicants/navbar.css": {
-    "file": "assets/navbar-BOcHHWG_.css",
+    "file": "assets/navbar-CS2rXt6N.css",
     "src": "resources/css/applicants/navbar.css",
     "isEntry": true
   },
   "resources/css/applicants/sidebar.css": {
-    "file": "assets/sidebar-D2PjGzKc.css",
+    "file": "assets/sidebar-CmJfGbM_.css",
     "src": "resources/css/applicants/sidebar.css",
     "isEntry": true
   },
@@ -28,13 +28,18 @@
     "src": "resources/css/applicants/step-1.css",
     "isEntry": true
   },
+  "resources/css/applicants/step-2.css": {
+    "file": "assets/step-2-CjsAVD2_.css",
+    "src": "resources/css/applicants/step-2.css",
+    "isEntry": true
+  },
   "resources/css/fillupforms/fillupforms.css": {
-    "file": "assets/fillupforms-DExnjXKi.css",
+    "file": "assets/fillupforms-CjkzZ-X5.css",
     "src": "resources/css/fillupforms/fillupforms.css",
     "isEntry": true
   },
   "resources/css/login/login.css": {
-    "file": "assets/login-D3pDlp60.css",
+    "file": "assets/login-DD3k8RRl.css",
     "src": "resources/css/login/login.css",
     "isEntry": true
   },

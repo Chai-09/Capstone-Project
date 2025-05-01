@@ -38,6 +38,7 @@
                     {{ basename($payment->proof_of_payment) }}
                 </a>
             </p>
+            <p><strong>Remarks:</strong> {{ $payment->remarks ?? 'No remarks' }}</p> <!-- dinagdag ko to for applicants to view their remarks by accounting -->
 
             @if ($payment->payment_status === 'pending')
                 <div class="text-center mt-4">

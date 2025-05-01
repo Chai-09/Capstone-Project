@@ -14,20 +14,15 @@
 
 <nav class="navbar bg-dark p-3">
     <p style="color: white" class="m-0"> {{ auth()->user()->name }}</p>
+    <a href="{{ route('admissionhome') }}" class="btn btn-primary">
+    Back
+</a>
     <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
                 </form>
 </nav>
-<a href="{{ route('applicantlist') }}" class="btn btn-primary">
-    Applicants
-</a>
-<a href="{{ route('examschedule') }}" class="btn btn-primary">
-    Exam Schedule
-</a>
-<a href="{{ route('examresults') }}" class="btn btn-primary">
-    Exam Results
-</a>
+<p>POGI MO DAN!!</p>
 
 
 </body>

@@ -104,4 +104,14 @@ class PaymentController extends Controller
 
         return redirect()->route('payment.verification')->with('success', 'Payment submitted successfully!');
     }
+
+    public function updateRemarks(Request $request, $id) // itong buong function para lang magpakita yung remarks sa applicant side
+    {
+        $payment = Payment::findOrFail($id);
+        $payment->payment_status = $request->payment_status;
+        $payment->remarks = $request->remarks;
+        $payment->save();
+    
+        return redirect()->back()->with('success', 'Payment updated successfully.');
+    }
 }

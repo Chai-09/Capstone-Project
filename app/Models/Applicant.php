@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\FillupForms;
 
 class Applicant extends Model
 {
@@ -26,4 +27,11 @@ class Applicant extends Model
     {
         return $this->belongsTo(Accounts::class);
     }
+
+    public function formSubmission()
+    {
+        return $this->hasOne(FillupForms::class, 'applicant_id', 'id'); //basically para lang maglink yung id ni applicant and sa form_submissions id.
+    }
+
+
 }

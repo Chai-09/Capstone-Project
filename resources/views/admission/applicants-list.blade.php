@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <link rel="website icon" type="png" href="{{ asset('applysmart_logo.png') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Admissions | Dashboard</title>
+</head>
+<body>
+<!-- this new file shows yung list ng applicants -->
+<nav class="navbar bg-dark p-3">
+    <p style="color: white" class="m-0"> {{ auth()->user()->name }}</p>
+    <a href="{{ route('admissionhome') }}" class="btn btn-primary">
+    Back
+</a>
+    <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+                </form>
+</nav>
+<div class="container mt-5">
+    <h3 class="mb-4">List of Applicants</h3>
+
+    @if(count($applicants) > 0)
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Email Address</th>
+                    <th>Contact Number</th>
+                    <th>Current School</th>
+                    <th>Grade Level</th>
+                    <th>Current Stage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($applicants as $applicant): ?>
+                    <tr>
+                        <td>
+                            {{ $applicant->applicant_fname }}
+                            {{ $applicant->applicant_mname ? $applicant->applicant_mname . '.' : '' }}
+                            {{ $applicant->applicant_lname }}
+                        </td>
+                        <td>{{ $applicant->formSubmission->applicant_email ?? 'N/A' }}</td>
+                        <td>{{ $applicant->formSubmission->applicant_contact_number ?? 'N/A' }}</td>
+                        <td>{{ $applicant->current_school ?? 'N/A' }}</td>
+                        <td>{{ $applicant->incoming_grlvl ?? 'N/A' }}</td>
+                        <td>{{ $applicant->current_step }}</td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <div class="row mt-4">
+            <div class="col-12 d-flex justify-content-center">
+                {!! $applicants->links('pagination::bootstrap-5') !!}
+            </div>
+        </div>
+    @else
+        <p class="text-center">No applicants found.</p>
+    @endif
+</div>
+
+
+
+</body>
+</html>

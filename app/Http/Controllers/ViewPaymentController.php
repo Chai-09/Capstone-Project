@@ -29,7 +29,8 @@ class ViewPaymentController extends Controller
             'applicant_contact_number',
             'payment_method',
             'proof_of_payment',
-            'payment_status'
+            'payment_status',
+            'remarks' //dinagdagan ko lang to para sa applicants.
         )
         ->where('applicant_id', $applicant->id)
         ->get();
