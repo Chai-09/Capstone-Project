@@ -13,28 +13,57 @@ class PaymentController extends Controller
 {
 
     public function showPaymentForm()
-{
-    // Check if nakasubmit na si applicant ng step 1 forms if di pa 403 type shi
-    //might have to change this to applicant_id since its more secure'
-    $applicant = Applicant::where('account_id', Auth::user()->id)->first();
-    $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
+    {
+        // Check if nakasubmit na si applicant ng step 1 forms if di pa 403 type shi
+        //might have to change this to applicant_id since its more secure'
+        $applicant = Applicant::where('account_id', Auth::user()->id)->first();
+        $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
 
-    if (!$formSubmission) {
-        return redirect()->route('applicantdashboard');
+        if (!$formSubmission) {
+            return redirect()->route('applicantdashboard');
+        }
+
+        //Assign Current Step Variable for the Sidebar
+        $currentStep = $applicant->current_step ?? 1;
+
+        $deniedPayment = Payment::where('applicant_id', $applicant->id)
+            ->where('payment_status', 'denied')
+            ->latest()
+            ->first();
+
+        //similar code to the one in ViewPaymentController this is here to ensure that if the user clicks the sidebar button instead of the back button the image still gets deleted either way
+        if ($deniedPayment) {
+            if ($deniedPayment->proof_of_payment && \Storage::disk('public')->exists($deniedPayment->proof_of_payment)) {
+                \Storage::disk('public')->delete($deniedPayment->proof_of_payment);
+            }
+
+            $deniedPayment->delete();
+
+            // Make sure step is reset to 2 if di na click back button
+            $applicant->current_step = 2;
+            $applicant->save();
+        }
+
+
+        // Check if may payment if and if dendied si applicant
+        $existingPayment = Payment::where('applicant_id', $applicant->id)
+            ->whereIn('payment_status', ['pending', 'approved'])
+            ->latest()
+            ->first();
+
+        return view('applicant.steps.payment.payment', [
+            'formSubmission' => $formSubmission,
+            'existingPayment' => $existingPayment,
+            'currentStep' => $currentStep,
+        ]);
     }
-
-    //Assign Current Step Variable for the Sidebar
-    $currentStep = $applicant->current_step ?? 1;
-
-    return view('applicant.steps.payment.payment', compact('currentStep', 'formSubmission'));
-}
 
     public function store(Request $request)
     {
-        
+
         $request->validate([
             'payment_mode' => 'required|string|max:255',
-            'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',  
+            'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         // Step 1: Get current authenticated applicant
@@ -85,7 +114,7 @@ class PaymentController extends Controller
         $payment->payment_status = $request->payment_status;
         $payment->remarks = $request->remarks;
         $payment->save();
-    
+
         return redirect()->back()->with('success', 'Payment updated successfully.');
     }
 }

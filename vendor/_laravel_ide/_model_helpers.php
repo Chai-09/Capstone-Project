@@ -638,26 +638,6 @@ namespace App\Models {
     /**
      * App\Models\ApplicantSchedule
      *
-     * @property \Illuminate\Support\Carbon|null $updated_at
-     * @property \Illuminate\Support\Carbon|null $created_at
-     * @property string $end_time
-     * @property string $start_time
-     * @property string $exam_date
-     * @property string $incoming_grade_level
-     * @property string $applicant_contact_number
-     * @property string $applicant_name
-     * @property mixed $user_id
-     * @property int $id
-     * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereId($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereUserId($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereApplicantName($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereApplicantContactNumber($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereIncomingGradeLevel($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereExamDate($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereStartTime($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereEndTime($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereCreatedAt($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule query()
@@ -956,22 +936,6 @@ namespace App\Models {
     /**
      * App\Models\ExamSchedule
      *
-     * @property \Illuminate\Support\Carbon|null $updated_at
-     * @property \Illuminate\Support\Carbon|null $created_at
-     * @property string $educational_level
-     * @property mixed $max_participants
-     * @property string $end_time
-     * @property string $start_time
-     * @property string $exam_date
-     * @property int $id
-     * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereId($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereExamDate($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereStartTime($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereEndTime($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereMaxParticipants($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereEducationalLevel($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereCreatedAt($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule query()
