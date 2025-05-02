@@ -328,6 +328,7 @@ namespace App\Models {
      * @property mixed $account_id
      * @property int $id
      * @property-read \App\Models\Accounts $account
+     * @property-read \App\Models\FillupForms $formSubmission
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereAccountId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereGuardianFname($value)
