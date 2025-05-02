@@ -7,6 +7,7 @@ use App\Models\Payment;
 use App\Models\FillupForms;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Applicant;
+
 class ViewPaymentController extends Controller
 {
     public function index()
@@ -32,10 +33,12 @@ class ViewPaymentController extends Controller
             'payment_status',
             'remarks' //dinagdagan ko lang to para sa applicants.
         )
-        ->where('applicant_id', $applicant->id)
-        ->get();
+            ->where('applicant_id', $applicant->id)
+            ->get();
 
-        return view('applicant.steps.payment.payment-verification', compact('payments', 'applicant'));
+        $currentStep = $applicant->current_step ?? 1;
+
+        return view('applicant.steps.payment.payment-verification', compact('currentStep', 'payments', 'applicant'));
     }
 
     public function delete($id)
@@ -47,31 +50,29 @@ class ViewPaymentController extends Controller
             if ($payment->proof_of_payment && \Storage::disk('public')->exists($payment->proof_of_payment)) {
                 \Storage::disk('public')->delete($payment->proof_of_payment);
             }
-        
+
             $payment->delete();
-        
-    // Reset step to 2
-    $applicant = Applicant::where('account_id', Auth::id())->first();
-    if ($applicant) {
-        $applicant->current_step = 2;
-        $applicant->save();
+
+            // Reset step to 2
+            $applicant = Applicant::where('account_id', Auth::id())->first();
+            if ($applicant) {
+                $applicant->current_step = 2;
+                $applicant->save();
+            }
+        }
+
+        return redirect()->route('applicant.steps.payment.payment')->with('success', 'Old denied payment removed. You can now submit a new payment.');
     }
-}
+    //logic for incrementing current_step to 4 
+    public function proceedToExam()
+    {
+        $applicant = Applicant::where('account_id', Auth::id())->first();
 
-return redirect()->route('applicant.steps.payment.payment')->with('success', 'Old denied payment removed. You can now submit a new payment.');
-    
-}
-//logic for incrementing current_step to 4 
-public function proceedToExam()
-{
-    $applicant = Applicant::where('account_id', Auth::id())->first();
+        if ($applicant && $applicant->current_step < 4) {
+            $applicant->current_step = 4;
+            $applicant->save();
+        }
 
-    if ($applicant && $applicant->current_step < 4) {
-        $applicant->current_step = 4;
-        $applicant->save();
+        return redirect()->route('applicant.examdates');
     }
-
-    return redirect()->route('applicant.examdates');
-}
-
 }

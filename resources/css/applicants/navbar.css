@@ -84,15 +84,24 @@
 .d-lg-none .sidebar-nav .nav-item:hover .nav-link,
 .d-lg-none .sidebar-nav .nav-item:hover .nav-link i,
 .d-lg-none .sidebar-nav .nav-item:hover .step-number {
-    color: #fff;
+    opacity: 0.8;
 }
 
+/* Active */
 .d-lg-none .sidebar-nav .nav-link.active,
 .d-lg-none .sidebar-nav .nav-item.active .step-number,
 .d-lg-none .sidebar-nav .nav-item.active i {
     background-color: #00753F;
     color: white !important;
 }
+
+/* Highlight */
+.d-lg-none .sidebar-nav .nav-item.completed .nav-link,
+.d-lg-none .sidebar-nav .nav-item.completed .step-number,
+.d-lg-none .sidebar-nav .nav-item.completed i {
+    color: #f6edbf !important;
+}
+
 
 
 .navbar-toggler {
@@ -109,3 +118,4 @@
     outline: none;                 
     box-shadow: none;             
 }
+

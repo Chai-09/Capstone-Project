@@ -50,7 +50,7 @@
 .sidebar-nav .nav-item:hover .nav-link,
 .sidebar-nav .nav-item:hover .nav-link i,
 .sidebar-nav .nav-item:hover .step-number {
-    color: #444;
+    opacity: 0.8;
 }
 
 
@@ -93,25 +93,25 @@
     }
 }
 
+
+/* Sidebar Active */
 .sidebar-nav .nav-link.active,
 .sidebar-nav .nav-item.active .step-number {
     background-color: white;
-    color: #00753F !important;
+    color: #28a745  !important;
 }
 
-/* Completed step (not currently active) */
-.sidebar-nav .nav-link.completed {
-    color: #1f7e35 !important; /* Bootstrap success green */
-    font-weight: 500;
+/* Sidebar Complete */
+.sidebar-nav .nav-item.completed .nav-link {
+    color: #00753F !important; 
+    font-weight: 600;
 }
 
 .sidebar-nav .nav-item.completed .step-number {
-    color: #1f7e35 ;
+    color: #00753F !important;
 }
 
 .sidebar-nav .nav-item.completed i {
-    color: #28a745;
+    color: #00753F !important;
 }
-
-
 

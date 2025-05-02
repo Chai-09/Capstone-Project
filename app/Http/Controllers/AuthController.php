@@ -68,15 +68,12 @@ class AuthController extends Controller
                 return redirect()->route('applicant.steps.payment.payment');
             } elseif ($applicant->current_step == 3) {
                 return redirect()->route('payment.verification');
-            }elseif ($applicant->current_step == 4) {
+            } elseif ($applicant->current_step == 4) {
                 return redirect()->route('applicant.examdates');
             }
-            
         }
 
-        // Variable for applicant's current step (used for sidebar)
-        $currentStep = $applicant->current_step;
-        return view('applicant.index', compact('formSubmission', 'readOnly', 'currentStep'));
+        return view('applicant.index', compact('formSubmission', 'readOnly'));
 
         // if wala pa form submission step 1 
         return redirect()->route('applicantdashboard');

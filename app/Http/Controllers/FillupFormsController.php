@@ -14,58 +14,58 @@ class FillupFormsController extends Controller
         $applicant = Applicant::where('account_id', auth()->user()->id)->first();
         $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
 
-            if (!$formSubmission) {
-                $formSubmission = new \stdClass();
-        
-                 // Prefill mga nasa signup na fields
-                 $formSubmission->applicant_fname = $applicant->applicant_fname ?? '';
-                 $formSubmission->applicant_mname = $applicant->applicant_mname ?? '';
-                 $formSubmission->applicant_lname = $applicant->applicant_lname ?? '';
-                 $formSubmission->applicant_contact_number = ''; 
-                 $formSubmission->applicant_email =  '';
-                 
-                 $formSubmission->guardian_fname = $applicant->guardian_fname ?? '';
-                 $formSubmission->guardian_mname = $applicant->guardian_mname ?? '';
-                 $formSubmission->guardian_lname = $applicant->guardian_lname ?? '';
-                 $formSubmission->guardian_contact_number = ''; 
-                 $formSubmission->guardian_email = auth()->user()->email ?? ''; 
-         
-                 $formSubmission->current_school = $applicant->current_school ?? '';
-                 $formSubmission->incoming_grlvl = '';
-         
-                 // Manual Input
-                 $formSubmission->region = '';
-                 $formSubmission->province = '';
-                 $formSubmission->city = '';
-                 $formSubmission->barangay = '';
-                 $formSubmission->numstreet = '';
-                 $formSubmission->postal_code = '';
-                 $formSubmission->age = '';
-                 $formSubmission->gender = '';
-                 $formSubmission->nationality = '';
-                 $formSubmission->relation = '';
-                 $formSubmission->current_school_city = '';
-                 $formSubmission->school_type = '';
-                 $formSubmission->educational_level = '';
-                 $formSubmission->applicant_bday = '';
-                 $formSubmission->lrn_no = '';
-                 $formSubmission->strand = '';
-                 $formSubmission->source = '';
-             }
-                //readonlyfields during fillup lang
-             $readOnlyFields = [
-                'applicant_fname',
-                'applicant_mname',
-                'applicant_lname',
-                'guardian_fname',
-                'guardian_mname',
-                'guardian_lname',
-                'guardian_email',
-                'current_school',
-            ];
-        
+        if (!$formSubmission) {
+            $formSubmission = new \stdClass();
 
-        return view('applicant.steps.forms.step-1-forms', compact('applicant', 'formSubmission', 'readOnlyFields'));
+            // Prefill mga nasa signup na fields
+            $formSubmission->applicant_fname = $applicant->applicant_fname ?? '';
+            $formSubmission->applicant_mname = $applicant->applicant_mname ?? '';
+            $formSubmission->applicant_lname = $applicant->applicant_lname ?? '';
+            $formSubmission->applicant_contact_number = '';
+            $formSubmission->applicant_email =  '';
+
+            $formSubmission->guardian_fname = $applicant->guardian_fname ?? '';
+            $formSubmission->guardian_mname = $applicant->guardian_mname ?? '';
+            $formSubmission->guardian_lname = $applicant->guardian_lname ?? '';
+            $formSubmission->guardian_contact_number = '';
+            $formSubmission->guardian_email = auth()->user()->email ?? '';
+
+            $formSubmission->current_school = $applicant->current_school ?? '';
+            $formSubmission->incoming_grlvl = '';
+
+            // Manual Input
+            $formSubmission->region = '';
+            $formSubmission->province = '';
+            $formSubmission->city = '';
+            $formSubmission->barangay = '';
+            $formSubmission->numstreet = '';
+            $formSubmission->postal_code = '';
+            $formSubmission->age = '';
+            $formSubmission->gender = '';
+            $formSubmission->nationality = '';
+            $formSubmission->relation = '';
+            $formSubmission->current_school_city = '';
+            $formSubmission->school_type = '';
+            $formSubmission->educational_level = '';
+            $formSubmission->applicant_bday = '';
+            $formSubmission->lrn_no = '';
+            $formSubmission->strand = '';
+            $formSubmission->source = '';
+        }
+        //readonlyfields during fillup lang
+        $readOnlyFields = [
+            'applicant_fname',
+            'applicant_mname',
+            'applicant_lname',
+            'guardian_fname',
+            'guardian_mname',
+            'guardian_lname',
+            'guardian_email',
+            'current_school',
+        ];
+
+
+        return view('applicant.steps.forms.step-1-forms', compact('applicant', 'formSubmission', 'readOnlyFields'))->with('currentStep', $applicant->current_step);
     }
 
     public function postStep3(Request $request)
@@ -126,13 +126,13 @@ class FillupFormsController extends Controller
             $rules['lrn_no'] = 'required|max:255';
             if (in_array($grade, ['Kinder', 'Grade 1'])) {
                 $rules['applicant_bday'] = 'required|date|before_or_equal:' . now()->year . '-10-01';
-            
+
                 $bday = $request->applicant_bday;
                 if ($bday) {
                     $cutoff = \Carbon\Carbon::create(now()->year, 10, 1);
                     $birthday = \Carbon\Carbon::parse($bday);
                     $age = $birthday->age;
-            
+
                     // Must be at least 5 years old on or before October 1
                     if ($birthday->diffInYears($cutoff, false) < 5) {
                         return back()->withErrors([
