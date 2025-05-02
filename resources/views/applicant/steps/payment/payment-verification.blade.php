@@ -2,44 +2,73 @@
 
 @section('content')
 
-<div class="container mt-5">
+<div class="container">
 
-    <h2 class="mb-4 text-center">Payment Verification</h2>
-
-    @if (session('success'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire({
-                title: 'Success!',
-                text: @json(session('success')),
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            });
-        });
-    </script>
-    @endif
-
-    @forelse ($payments as $payment)
-        <div class="border rounded p-4 mb-5 shadow-sm">
-
-            <p><strong>Applicant’s Name:</strong> {{ $payment->applicant_fname }} {{ $payment->applicant_mname }} {{ $payment->applicant_lname }}</p>
-
-            <p><strong>Incoming Grade Level:</strong> {{ $payment->incoming_grlvl }}</p>
-
-            <p><strong>Email:</strong> {{ $payment->applicant_email }}</p>
-
-            <p><strong>Contact Number:</strong> {{ $payment->applicant_contact_number }}</p>
-
-            <p><strong>Payment Method:</strong> {{ $payment->payment_method }}</p>
-
-            <p><strong>Proof of Payment:</strong> 
-                <a href="javascript:void(0);" onclick="viewProof('{{ asset('storage/' . $payment->proof_of_payment) }}')">
-                    {{ basename($payment->proof_of_payment) }}
-                </a>
-            </p>
-            <p><strong>Remarks:</strong> {{ $payment->remarks ?? 'No remarks' }}</p> <!-- dinagdag ko to for applicants to view their remarks by accounting -->
-
+    <div class="step-form">
+        <div class="form-section">
+            <div class="form-row">
+                <h2>You're almost there — just a few more steps to becoming a <span class="tamaraw-text">Tamaraw!</span></h2>
+            </div>
+            <div class="form-row">
+                <p>Please wait for an email or sms confirming your payment verification; this process may take <span class="tamaraw-text">1-4 days</span>. If you have any issues, kindly please email us on <span class="tamaraw-text">LoremIpsum@gmail.com</span></p>
+            </div>
+        </div>
+        <div class="form-section">
+            @forelse ($payments as $payment)
+            <div class="form-row">
+                <p><strong>Applicant’s Name:</strong> {{ $payment->applicant_fname }} {{ $payment->applicant_mname }} {{ $payment->applicant_lname }}</p>
+            </div>
+            <div class="form-row">
+                <p><strong>Incoming Grade Level:</strong> {{ $payment->incoming_grlvl }}</p>
+            </div>   
+            <div class="form-row">
+                <p><strong>Email:</strong> {{ $payment->applicant_email }}</p>
+            </div>  
+            <div class="form-row">
+                <p><strong>Contact Number:</strong> {{ $payment->applicant_contact_number }}</p>
+            </div>  
+            <div class="form-row">
+                <p><strong>Payment Method:</strong> {{ $payment->payment_method }}</p>
+            </div>  
+            <div class="form-row">
+                <p><strong>Proof of Payment:</strong> 
+                    <a href="javascript:void(0);" onclick="viewProof('{{ asset('storage/' . $payment->proof_of_payment) }}')">
+                        {{ basename($payment->proof_of_payment) }}
+                    </a>
+                </p>
+            </div>
+        </div>  
+        <div class="form-section"> {{-- Status Dot --}}
+            <div class="d-flex justify-content-center align-items-center gap-2">
+                @if ($payment->payment_status === 'denied')
+                    <div class="status-dot bg-danger"></div>
+                    <span class="fw-semibold text-danger">Denied</span>
+                @elseif ($payment->payment_status === 'approved')
+                    <div class="status-dot bg-success"></div>
+                    <span class="fw-semibold text-success">Approved</span>
+                @elseif ($payment->payment_status === 'pending')
+                    <div class="status-dot bg-secondary"></div>
+                    <span class="fw-semibold text-secondary">Pending</span>
+                @endif
+            </div>
+        </div>
+        <div class="form-section"> {{-- Status --}}
+            <div class="form-row"> 
+                @if ($payment->payment_status === 'denied')
+                        <div class="payment-status-box denied">
+                            <h5>Your payment has been denied.</h5>
+                            <p>{{ $payment->remarks ?? 'No remarks provided.' }}</p>
+                        </div>
+                    @elseif ($payment->payment_status === 'approved')
+                        <div class="payment-status-box approved">
+                            <h5>Your payment has been approved.</h5>
+                            <p>{{ $payment->remarks ?? 'No remarks provided.' }}</p>
+                        </div>
+                    @endif       
+            </div>
+        </div>
+        <div class="form-section">
+            {{-- Button --}}
             @if ($payment->payment_status === 'pending')
                 <div class="text-center mt-4">
                     <button class="btn btn-secondary" disabled>Proceed</button>
@@ -52,37 +81,26 @@
                     </form>
                 </div>
             @elseif ($payment->payment_status === 'approved' && $applicant->current_step > 3) {{-- Disable proceed button if current step is greater than 3 to ensure they cant press it again afterwards--}}
-           <div class="text-center mt-4">
-                      <button class="btn btn-success" disabled>Already Proceeded</button>
-                 </div>
+                <div class="text-center mt-4">
+                    <button class="btn btn-success" disabled>Already Proceeded</button>
+                </div>
+
             @elseif ($payment->payment_status === 'denied')
-            <div class="text-center mt-4">
-                <form method="POST" action="{{ route('payment.delete', ['id' => $payment->id]) }}">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Back</button>
-                </form>
-            </div>
-        @endif
+                <div class="text-center mt-4">
+                    <form method="POST" action="{{ route('payment.delete', ['id' => $payment->id]) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Back</button>
+                    </form>
+                </div>
+            @endif
         </div>
         @empty
-        <div class="alert alert-info text-center">
-            No payment records found.
-        </div>
-    @endforelse
-
+            <div class="alert alert-info text-center">
+                No payment records found.
+            </div>
+        @endforelse
+    </div>
 </div>
 
-<script>
-function viewProof(fileUrl) {
-    Swal.fire({
-        title: 'Proof of Payment',
-        imageUrl: fileUrl,
-        imageAlt: 'Proof of Payment',
-        width: 600,
-        confirmButtonText: 'Close'
-    });
-}
-</script>
-
-@endsection()
+@endsection

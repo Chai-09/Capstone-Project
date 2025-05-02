@@ -15,6 +15,7 @@
     @vite('resources/css/applicants/sidebar.css')
     @vite('resources/css/applicants/step-1.css')
     @vite('resources/css/applicants/step-2.css')
+    @vite('resources/css/applicants/step-3.css')
 </head>
 <body>
     {{-- Navbar always visible --}}
@@ -39,5 +40,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
     @vite('resources/js/fillupforms/fillupforms.js')
     @vite('resources/js/address/address.js')
+    @vite('resources/js/applicant/payment-verification.js')
 </body>
 </html>

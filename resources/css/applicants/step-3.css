@@ -1,0 +1,56 @@
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.payment-status-box {
+    width: 800px;
+    margin: 1.5rem auto;
+    padding: 1.5rem 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    background-color: #fefefe;
+    text-align: center;
+}
+
+.payment-status-box h5 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.payment-status-box p {
+    font-size: 0.95rem;
+    color: #555;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Denied styling */
+.payment-status-box.denied {
+    border-left: 6px solid #dc3545;
+    background-color: #fdf0f0;
+    color: #dc3545;
+}
+
+.payment-status-box.denied h5 {
+    color: #dc3545;
+}
+
+/* Approved styling */
+.payment-status-box.approved {
+    border-left: 6px solid #00753F;
+    background-color: #eaf8f0;
+    color: #00753F;
+}
+
+.payment-status-box.approved h5 {
+    color: #00753F;
+}
+
+.tamaraw-text {
+    color: #00753F;
+    font-weight: 600;
+}
