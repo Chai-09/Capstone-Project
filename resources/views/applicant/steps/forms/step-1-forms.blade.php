@@ -18,7 +18,7 @@
         <div class="step-form">
             <div class="form-section">
                 {{-- Server Side Error --}}
-                @include('login.alert-errors')
+                @include('applicant.error.alert-error')
                 <label class="fw-semibold">Applicant's Name<span class="text-danger">*</span></label>
                 <p class="text-muted">Example: James E. Joseph</p>
 

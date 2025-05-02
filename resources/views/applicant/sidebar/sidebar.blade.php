@@ -1,8 +1,16 @@
+@php
+    $currentStep = $currentStep ?? 1;
+@endphp
+
+
 <div class="sidebar-nav-wrapper">
     <ul class="sidebar-nav nav-pills flex-column">
-        <li class="nav-item">
-            <span class="step-number">Step 1</span>
-            <a href="{{ route('applicantdashboard') }}" class="nav-link load-view">
+        <li class="nav-item {{ $currentStep == 1 ? 'active' : '' }}">
+            <span class="step-number">
+                Step 1
+            </span>
+            <a href="{{ route('applicantdashboard') }}"
+               class="nav-link load-view {{ $currentStep == 1 ? 'active' : '' }}">
                 <i class="fa-brands fa-wpforms"></i> Fill-Up Forms
             </a>
         </li>
@@ -10,9 +18,10 @@
             <div class="line"></div>
             <div class="line"></div>
         </div>
-        <li class="nav-item">
+        <li class="nav-item {{ $currentStep == 2 ? 'active' : '' }}">
             <span class="step-number">Step 2</span>
-            <a href="{{ route('applicant.steps.payment.payment') }}" class="nav-link">
+            <a href="{{ route('applicant.steps.payment.payment') }}
+        " class="nav-link {{ $currentStep == 2 ? 'active' : '' }}">
                 <i class="fa-solid fa-money-bill-wave"></i> Send Payment
             </a>
         </li>

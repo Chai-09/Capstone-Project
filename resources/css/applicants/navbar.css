@@ -87,6 +87,14 @@
     color: #fff;
 }
 
+.d-lg-none .sidebar-nav .nav-link.active,
+.d-lg-none .sidebar-nav .nav-item.active .step-number,
+.d-lg-none .sidebar-nav .nav-item.active i {
+    background-color: #00753F;
+    color: white !important;
+}
+
+
 .navbar-toggler {
     border: 1.5px solid #fff;       
     background-color: #00753F;     

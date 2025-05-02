@@ -16,21 +16,24 @@ class PaymentController extends Controller
 {
     // Check if nakasubmit na si applicant ng step 1 forms if di pa 403 type shi
     //might have to change this to applicant_id since its more secure'
-      $applicant = Applicant::where('account_id', Auth::user()->id)->first();
-     $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
+    $applicant = Applicant::where('account_id', Auth::user()->id)->first();
+    $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
 
     if (!$formSubmission) {
         return redirect()->route('applicantdashboard');
     }
 
-    return view('applicant.steps.payment.payment');
+    //Assign Current Step Variable for the Sidebar
+    $currentStep = $applicant->current_step ?? 1;
+
+    return view('applicant.steps.payment.payment', compact('currentStep', 'formSubmission'));
 }
 
     public function store(Request $request)
     {
         $request->validate([
             'payment_mode' => 'required|string|max:255',
-            'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',  
         ]);
 
         // Step 1: Get current authenticated applicant

@@ -69,6 +69,10 @@ class AuthController extends Controller
             }
         }
 
+        // Variable for applicant's current step (used for sidebar)
+        $currentStep = $applicant->current_step;
+        return view('applicant.index', compact('formSubmission', 'readOnly', 'currentStep'));
+
         // if wala pa form submission step 1 
         return redirect()->route('applicantdashboard');
     }

@@ -25,10 +25,10 @@
 
             {{-- Sidebar visible only on desktop --}}
             <div class="col-lg-3 d-none d-lg-block p-0">
-                @include('applicant.sidebar.sidebar')
+                @include('applicant.sidebar.sidebar', ['currentStep' => $currentStep ?? 1])
             </div>
 
-            {{-- Main content --}} {{-- Added logic to make form read only if applicant has submitted step 1 --}}
+            {{-- Main content --}}
             <div class="forms col-lg-9 px-4 py-3">
                 @yield('content')
             </div>

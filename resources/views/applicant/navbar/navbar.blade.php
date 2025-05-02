@@ -11,7 +11,7 @@
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="d-lg-none w-100">
-                @include('applicant.sidebar.sidebar')
+                @include('applicant.sidebar.sidebar', ['currentStep' => $currentStep ?? 1])
             </div>
 
             <div class="ms-auto d-flex align-items-center gap-3">
