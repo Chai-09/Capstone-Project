@@ -39,6 +39,8 @@
   </style>
 </head>
 <body>
+@include('applicant.navbar.navbar')
+@include('applicant.sidebar.sidebar')
 <div class="container mt-5">
   <h2 class="mb-4 text-center">Entrance Exam Schedule</h2>
 

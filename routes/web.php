@@ -18,6 +18,7 @@ use App\Http\Controllers\ExamScheduleController;
 use App\Http\Controllers\ApplicantScheduleController;
 use App\Models\ApplicantSchedule;
 use App\Http\Controllers\ExamAttendanceController;
+use App\Http\Controllers\AdmissionsAppListController;
 
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
 // Log in Routes
@@ -57,20 +58,22 @@ Route::get('/signup/request-otp', function () {
     abort(code: 404);
 });
 
-//-------------------------------------------------------------------------------------------------------//
+//-----------------------------------------------------------------------------------------------------------------------------//
 
 //THIS IS FOR THE IMPORTANT ROUTES, THOSE THAT ARE NOT PUBLIC PUT IT IN THESE MIDDLEWARE BLOCKS (NOT ACCESBILE VIA URL)
 
 //APPLICANT ROUTES
+
 //Fillupforms middleware (parent middleware)
 Route::middleware(['auth', 'role:applicant'])->group(function () {
 
-    // Submitting of Forms (Step 1)
+    // Submitting of Forms (Step 1 default)
     Route::get('/step-1', [FillupFormsController::class, 'createStep3'])->name('applicantdashboard');
     Route::post('/step-1', [FillupFormsController::class, 'postStep3']);
 
+//-----------------------------------------------------------------------------------------------------------------------------//
 
-    //if form has submitted they can go to payment so they cant skip step 1 (middleware nest)
+    //if form has submitted they can go to payment so they cant skip to step 2 (middleware nest 1)
     Route::middleware(['form.submitted'])->group(function () {
 
         //payment page
@@ -79,30 +82,40 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
             'showPaymentForm'
         ])->name('applicant.steps.payment.payment');
 
-        //payment verification page - side bar
-        Route::get('/payment-verification', function () {
-            return view('applicant.steps.payment.payment-verification');
-        })->name('payment.verification');
-
         //storing into payment
         Route::post('/payment/store', [PaymentController::class, 'store'])->name('payment.store');
+        
+        Route::delete('/payment/delete/{id}', [ViewPaymentController::class, 'delete'])->name('payment.delete');
+        
+        //-----------------------------------------------------------------------------------------------------------------------------//
+
+        //if payment has submitted they can go to payment verification so they cant skip to step 3 (middleware nest 2)
+        Route::middleware(['payment.submitted'])->group(function () {
 
         //payment verification
         Route::get('/payment-verification', [ViewPaymentController::class, 'index'])->name('payment.verification');
 
+        //Proceed Button route, for incrementing current_step and routing to step 4
+        Route::post('/proceed-to-exam', [ViewPaymentController::class, 'proceedToExam'])->name('proceed.to.exam');
+
+
+        //-----------------------------------------------------------------------------------------------------------------------------//
+
+            //if payment has submitted they can go to payment verification so they cant skip step to step 4 (middleware nest 3)
+            Route::middleware(['payment.verified'])->group(function () {
+
         // Route for proceeding to exam date form (when Approved)
-
-        Route::get('/applicant/steps/exam_date/exam-date', [ExamScheduleController::class, 'showExamDates'])->name('exam-date');
-
-
+        Route::get('/applicant/steps/exam_date/exam-date', [ExamScheduleController::class, 'showExamDatesForApplicants'])->name('applicant.examdates');
+       
         Route::get('/applicant/steps/reminders/reminders', function () {
             $schedule = ApplicantSchedule::where('user_id', auth()->id())->latest()->first();
             return view('applicant.steps.reminders.reminders', compact('schedule'));
         })->name('reminders.view');
 
         Route::post('/save-exam-schedule', [ApplicantScheduleController::class, 'store'])->name('applicant.saveExamSchedule');
-
-        Route::get('/applicant/steps/exam_date/exam-date', [ExamScheduleController::class, 'showExamDatesForApplicants'])->name('applicant.examdates');
+           
+            });
+        });
     });
 });
 
@@ -148,6 +161,17 @@ Route::middleware(['auth', 'role:admission'])->group(function () {
 
     // Mark attendance (Done / No Show) for an applicant
     Route::post('/admission/exam-attendance/mark', [ExamAttendanceController::class, 'markAttendance'])->name('exam.attendance.mark');
+
+    Route::get('/exam-results', function () {
+        return view('admission.exam-results');
+    })->name('examresults');
+
+
+    Route::get('/admission-home', function () {
+        return view('admission.admission-home');
+    })->name('admissionhome');
+
+    Route::get('/admission/applicants-list', [AdmissionsAppListController::class, 'index'])->name('applicantlist');
 });
 
 //ACCOUNTING ROUTES
@@ -157,6 +181,8 @@ Route::middleware(['auth', 'role:accounting'])->group(function () {
     Route::get('/accountant/payments', [AccountingPaymentController::class, 'index'])->name('accountant.payments');
     Route::post('/accountant/payments/approve/{id}', [AccountingPaymentController::class, 'approve'])->name('accountant.payments.approve');
     Route::post('/accountant/payments/deny/{id}', [AccountingPaymentController::class, 'deny'])->name('accountant.payments.deny');
+
+    Route::put('/accountant/payments/{id}', [PaymentController::class, 'updateRemarks'])->name('accountant.payments.update');
 });
 
 //Sidebar

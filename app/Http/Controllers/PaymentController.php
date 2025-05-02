@@ -31,6 +31,7 @@ class PaymentController extends Controller
 
     public function store(Request $request)
     {
+        
         $request->validate([
             'payment_mode' => 'required|string|max:255',
             'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',  
@@ -71,6 +72,20 @@ class PaymentController extends Controller
             'updated_at' => $now,
         ]);
 
+        $applicant->current_step = 3;
+        $applicant->save();
+
+
         return redirect()->route('payment.verification')->with('success', 'Payment submitted successfully!');
+    }
+
+    public function updateRemarks(Request $request, $id) // itong buong function para lang magpakita yung remarks sa applicant side
+    {
+        $payment = Payment::findOrFail($id);
+        $payment->payment_status = $request->payment_status;
+        $payment->remarks = $request->remarks;
+        $payment->save();
+    
+        return redirect()->back()->with('success', 'Payment updated successfully.');
     }
 }

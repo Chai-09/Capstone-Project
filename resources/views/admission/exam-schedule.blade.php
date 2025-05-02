@@ -66,6 +66,9 @@
 
 <nav class="navbar bg-dark p-3 d-flex justify-content-between">
     <p style="color: white" class="m-0">{{ auth()->user()->name }}</p>
+    <a href="{{ route('admissionhome') }}" class="btn btn-primary">
+    Back
+</a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
@@ -131,7 +134,7 @@
         <th>Start Time</th>
         <th>End Time</th>
         <th>Max Participants</th>
-        <th>Remaining Slots</th> <!-- ✨ ADD THIS -->
+        <th>Remaining Slots</th> 
         <th>Educational Level</th>
         <th>Action</th>
     </tr>
