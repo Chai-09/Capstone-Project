@@ -23,6 +23,43 @@
       {{ session('success') }}
   </div>
   @endif
+  <form method="GET" action="{{ route('accountingdashboard') }}" class="row g-2 mb-4">
+  <div class="col-md-3">
+    <select name="educational_level" class="form-select">
+      <option value="">All Grade Levels</option>
+      <option value="Kinder">Kinder</option>
+      <option value="Grade 1">Grade 1</option>
+      <option value="Grade 2">Grade 2</option>
+      <option value="Grade 3">Grade 3</option>
+      <option value="Grade 4">Grade 4</option>
+      <option value="Grade 5">Grade 5</option>
+      <option value="Grade 6">Grade 6</option>
+      <option value="Grade 7">Grade 7</option>
+      <option value="Grade 8">Grade 8</option>
+      <option value="Grade 9">Grade 9</option>
+      <option value="Grade 10">Grade 10</option>
+      <option value="Grade 11">Grade 11</option>
+      <option value="Grade 12">Grade 12</option>
+    </select>
+  </div>
+
+  <div class="col-md-3">
+    <select name="payment_status" class="form-select">
+      <option value="">All Statuses</option>
+      <option value="pending">Pending</option>
+      <option value="approved">Approved</option>
+      <option value="denied">Denied</option>
+    </select>
+  </div>
+
+  <div class="col-md-4">
+    <input type="text" name="search" class="form-control" placeholder="Search Applicant Name">
+  </div>
+
+  <div class="col-md-2">
+    <button type="submit" class="btn btn-primary w-100">Filter</button>
+  </div>
+</form>
 
   <table class="table table-bordered text-center align-middle">
     <thead class="table-dark">
@@ -115,6 +152,11 @@
                 <label for="remarks" class="form-label"><strong>Remarks:</strong></label>
                 <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
               </div>
+              <div class="mb-3">
+    <label for="ocr_number" class="form-label"><strong>OCR Number:</strong></label>
+    <input type="text" class="form-control" id="ocr_number" name="ocr_number" placeholder="Enter OCR Number">
+</div>
+
             </div>
 
             <!-- nilagay ko sa right yung image per figma -->
@@ -158,6 +200,7 @@ function viewInfo(data) {
     document.getElementById('acceptStatus').checked = data.payment_status === 'approved';
     document.getElementById('denyStatus').checked = data.payment_status === 'denied';
     document.getElementById('remarks').value = data.remarks || '';
+    document.getElementById('ocr_number').value = data.ocr_number || '';
 
     document.getElementById('paymentId').value = data.id;
     document.getElementById('updateForm').action = `/accountant/payments/${data.id}`;

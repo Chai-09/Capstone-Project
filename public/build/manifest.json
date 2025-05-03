@@ -14,12 +14,12 @@
     "isEntry": true
   },
   "resources/css/applicants/navbar.css": {
-    "file": "assets/navbar-CS2rXt6N.css",
+    "file": "assets/navbar-CWnbV5tz.css",
     "src": "resources/css/applicants/navbar.css",
     "isEntry": true
   },
   "resources/css/applicants/sidebar.css": {
-    "file": "assets/sidebar-CmJfGbM_.css",
+    "file": "assets/sidebar-BY_9K4s4.css",
     "src": "resources/css/applicants/sidebar.css",
     "isEntry": true
   },
@@ -31,6 +31,11 @@
   "resources/css/applicants/step-2.css": {
     "file": "assets/step-2-CjsAVD2_.css",
     "src": "resources/css/applicants/step-2.css",
+    "isEntry": true
+  },
+  "resources/css/applicants/step-3.css": {
+    "file": "assets/step-3-DKWamNGN.css",
+    "src": "resources/css/applicants/step-3.css",
     "isEntry": true
   },
   "resources/css/fillupforms/fillupforms.css": {
@@ -58,6 +63,12 @@
     "file": "assets/app-D9aPql33.js",
     "name": "app",
     "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/applicant/payment-verification.js": {
+    "file": "assets/payment-verification-DLtTKYGQ.js",
+    "name": "payment-verification",
+    "src": "resources/js/applicant/payment-verification.js",
     "isEntry": true
   },
   "resources/js/fillupforms/fillupforms.js": {

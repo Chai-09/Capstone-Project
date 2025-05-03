@@ -31,6 +31,9 @@
                 <p><strong>Payment Method:</strong> {{ $payment->payment_method }}</p>
             </div>  
             <div class="form-row">
+                <p><strong>OCR Number:</strong> {{ $payment->ocr_number ?? 'N/A' }}</p>
+            </div>
+            <div class="form-row">
                 <p><strong>Proof of Payment:</strong> 
                     <a href="javascript:void(0);" onclick="viewProof('{{ asset('storage/' . $payment->proof_of_payment) }}')">
                         {{ basename($payment->proof_of_payment) }}

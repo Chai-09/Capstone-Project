@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2025 at 06:42 AM
+-- Generation Time: May 03, 2025 at 09:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -134,7 +134,10 @@ CREATE TABLE `applicant_schedules` (
 INSERT INTO `applicant_schedules` (`id`, `user_id`, `applicant_name`, `applicant_contact_number`, `incoming_grade_level`, `exam_date`, `start_time`, `end_time`, `created_at`, `updated_at`) VALUES
 (4, 69, 'HEHE HEHE. HEHE', '09999999999', 'Grade 7', '2025-05-03', '08:00:00', '09:00:00', '2025-04-29 17:43:28', '2025-04-29 17:43:28'),
 (5, 70, 'TEST TEST. TEST', '09999999999', 'Kinder', '2025-05-03', '08:00:00', '09:00:00', '2025-05-01 00:43:34', '2025-05-01 00:43:34'),
-(6, 70, 'TEST TEST. TEST', '09999999999', 'Kinder', '2025-05-03', '08:00:00', '09:00:00', '2025-05-01 00:56:27', '2025-05-01 00:56:27');
+(6, 70, 'TEST TEST. TEST', '09999999999', 'Kinder', '2025-05-03', '08:00:00', '09:00:00', '2025-05-01 00:56:27', '2025-05-01 00:56:27'),
+(7, 70, 'TEST TEST. TEST', '09999999999', 'Kinder', '2025-05-03', '08:00:00', '09:00:00', '2025-05-01 20:46:34', '2025-05-01 20:46:34'),
+(8, 70, 'TEST TEST. TEST', '09999999999', 'Kinder', '2025-05-03', '08:00:00', '09:00:00', '2025-05-02 22:29:37', '2025-05-02 22:29:37'),
+(9, 70, 'TEST TEST. TEST', '09999999999', 'Kinder', '2025-05-03', '09:00:00', '10:00:00', '2025-05-02 22:32:04', '2025-05-02 22:32:04');
 
 -- --------------------------------------------------------
 
@@ -247,7 +250,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (21, '2025_04_29_030150_create_applicant_schedules_table', 13),
 (22, '2025_04_29_053724_create_applicant_schedules', 14),
 (23, '2025_04_27_175754_add_current_step_to_applicants_table', 15),
-(24, '2025_04_30_154729_add_remarks_to_payment_table', 16);
+(24, '2025_04_30_154729_add_remarks_to_payment_table', 16),
+(26, '2025_05_03_055832_add_ocr_number_to_payment', 17);
 
 -- --------------------------------------------------------
 
@@ -280,6 +284,7 @@ CREATE TABLE `payment` (
   `proof_of_payment` varchar(255) NOT NULL,
   `payment_status` varchar(255) NOT NULL DEFAULT 'pending',
   `remarks` text DEFAULT NULL,
+  `ocr_number` varchar(255) DEFAULT NULL,
   `payment_date` date NOT NULL,
   `payment_time` time NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -290,10 +295,10 @@ CREATE TABLE `payment` (
 -- Dumping data for table `payment`
 --
 
-INSERT INTO `payment` (`id`, `applicant_id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_email`, `applicant_contact_number`, `incoming_grlvl`, `payment_method`, `proof_of_payment`, `payment_status`, `remarks`, `payment_date`, `payment_time`, `created_at`, `updated_at`) VALUES
-(25, 65, 'GABE', 'M.', 'BARCENAS', 'gabebarcenas09@gmail.com', '09111111111', 'Grade 12', 'BDO', 'payment_proofs/proof_6810d19a6af951.72336141.png', 'approved', NULL, '2025-04-29', '21:18:19', '2025-04-29 05:18:19', '2025-04-29 17:42:37'),
-(26, 66, 'HEHE', 'HEHE.', 'HEHE', 'eiryksardalla696@gmail.com', '09999999999', 'Grade 7', 'Robinsons_Bank', 'payment_proofs/proof_68117faac15e32.75810717.png', 'approved', NULL, '2025-04-30', '09:40:59', '2025-04-29 17:40:59', '2025-04-29 17:43:05'),
-(27, 67, 'TEST', 'TEST.', 'TEST', 'eiryk.sardalla30@gmail.com', '09999999999', 'Kinder', 'BDO', 'payment_proofs/proof_68133287e25305.24279939.png', 'approved', 'goods na perds', '2025-05-01', '16:36:25', '2025-05-01 00:36:25', '2025-05-01 02:18:13');
+INSERT INTO `payment` (`id`, `applicant_id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_email`, `applicant_contact_number`, `incoming_grlvl`, `payment_method`, `proof_of_payment`, `payment_status`, `remarks`, `ocr_number`, `payment_date`, `payment_time`, `created_at`, `updated_at`) VALUES
+(25, 65, 'GABE', 'M.', 'BARCENAS', 'gabebarcenas09@gmail.com', '09111111111', 'Grade 12', 'BDO', 'payment_proofs/proof_6810d19a6af951.72336141.png', 'approved', NULL, NULL, '2025-04-29', '21:18:19', '2025-04-29 05:18:19', '2025-04-29 17:42:37'),
+(26, 66, 'HEHE', 'HEHE.', 'HEHE', 'eiryksardalla696@gmail.com', '09999999999', 'Grade 7', 'Robinsons_Bank', 'payment_proofs/proof_68117faac15e32.75810717.png', 'approved', NULL, NULL, '2025-04-30', '09:40:59', '2025-04-29 17:40:59', '2025-04-29 17:43:05'),
+(27, 67, 'TEST', 'TEST.', 'TEST', 'eiryk.sardalla30@gmail.com', '09999999999', 'Kinder', 'BDO', 'payment_proofs/proof_68133287e25305.24279939.png', 'approved', 'goods na perds', '123', '2025-05-01', '16:36:25', '2025-05-01 00:36:25', '2025-05-02 22:28:59');
 
 -- --------------------------------------------------------
 
@@ -315,10 +320,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('482RKZkWmvPhQYm3TAggQ3LkETyGJjx69HEpDtzq', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiRmVFUjhFMDFVajV0ZUliNlFOeGpvV29OamVtcVhWYWQyT1JzbXdycyI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czo1NDoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2FkbWlzc2lvbi9hcHBsaWNhbnRzLWxpc3Q/cGFnZT0xIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTQ6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pc3Npb24vYXBwbGljYW50cy1saXN0P3BhZ2U9MSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1746145966),
-('4Yxuuth7ZA4yWFDhgpYfqqdsffhvhwypboHAJChV', 61, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjY6Il90b2tlbiI7czo0MDoiY2lxSmFjZVRGcEdNUXFFSTdZNXpJZ0lpZzJ0R1VqZ29oMUhxS214TiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTQ6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pc3Npb24vYXBwbGljYW50cy1saXN0P3BhZ2U9MSI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjYxO3M6NDoibmFtZSI7czoxMDoiQUVSTyAgQUVSTyI7czo1OiJlbWFpbCI7czoxNDoiYWVyb0BnbWFpbC5jb20iO30=', 1746105680),
-('bcPkS7dHNRJeEAnRgaXNtFEKmnMxQtszADKMBJjv', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjY6Il90b2tlbiI7czo0MDoiR05tbTF2TlpBazB0YmIyZ2twTmpvRUpXM1BraDFNSkFDN0xPNkxXTSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fX0=', 1746098936),
-('VTFXsMM6rvJKln7J7oxqJvc6CtLpNk40LrfTUvyd', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiejZ1a3Jad1g1WHF3cUh1MGRTZGI0YzJrMVZFdFN4U2NrbnFkcXFxRCI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czo1NDoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2FkbWlzc2lvbi9hcHBsaWNhbnRzLWxpc3Q/cGFnZT0xIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1746145970);
+('imOwzKdV89sTUsxov3G3R1CIyqoZmO3SqdssBlf6', 61, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjY6Il90b2tlbiI7czo0MDoibEpQRVZhQUtPOUJIT0hPaGNWVVBaaUJtZnhPeTZJcElTN05kOE44UyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjM6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pc3Npb24vZXhhbS1hdHRlbmRhbmNlP2RhdGU9MjAyNS0wNS0wMyI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjYxO3M6NDoibmFtZSI7czoxMDoiQUVSTyAgQUVSTyI7czo1OiJlbWFpbCI7czoxNDoiYWVyb0BnbWFpbC5jb20iO30=', 1746255095),
+('oIcdmJXyCZdDgD8wujCcSlNoKakDCTLKtKIz3THH', 70, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0', 'YTo3OntzOjY6Il90b2tlbiI7czo0MDoiM3VBMTA1cGEwSzc2THEzTkFhZ3lKTU90bUk1YnJJeTF4eEl4TnBkZCI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czo1NzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2FwcGxpY2FudC9zdGVwcy9yZW1pbmRlcnMvcmVtaW5kZXJzIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjg6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9zdGVwLTMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo3MDtzOjQ6Im5hbWUiO3M6MTE6IkZJUlNUICBMQVNUIjtzOjU6ImVtYWlsIjtzOjI2OiJlaXJ5ay5zYXJkYWxsYTMwQGdtYWlsLmNvbSI7fQ==', 1746254092);
 
 -- --------------------------------------------------------
 
@@ -426,7 +429,7 @@ ALTER TABLE `applicants`
 -- AUTO_INCREMENT for table `applicant_schedules`
 --
 ALTER TABLE `applicant_schedules`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `exam_schedules`
@@ -444,7 +447,7 @@ ALTER TABLE `form_submissions`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `payment`

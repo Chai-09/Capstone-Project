@@ -23,6 +23,33 @@
                 </form>
 </nav>
 <div class="container mt-5">
+<form method="GET" class="row mb-4">
+    <div class="col-md-3 mb-2">
+        <input type="text" name="search" class="form-control" placeholder="Search by name or email" value="{{ request('search') }}">
+    </div>
+    <div class="col-md-3 mb-2">
+        <select name="grade_level" class="form-control">
+            <option value="">All Grade Levels</option>
+            <option value="Kinder" {{ request('grade_level') == 'Kinder' ? 'selected' : '' }}>Kinder</option>
+            @for ($i = 1; $i <= 12; $i++)
+                <option value="Grade {{ $i }}" {{ request('grade_level') == "Grade $i" ? 'selected' : '' }}>Grade {{ $i }}</option>
+            @endfor
+        </select>
+    </div>
+    <div class="col-md-3 mb-2">
+        <select name="stage" class="form-control">
+            <option value="">All Stages</option>
+            @for ($s = 1; $s <= 6; $s++)
+                <option value="{{ $s }}" {{ request('stage') == $s ? 'selected' : '' }}>{{ $s }}</option>
+            @endfor
+        </select>
+    </div>
+    <div class="col-md-3 mb-2">
+        <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+    </div>
+</form>
+
+
     <h3 class="mb-4">List of Applicants</h3>
 
     @if(count($applicants) > 0)

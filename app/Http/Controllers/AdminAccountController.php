@@ -12,13 +12,23 @@ class AdminAccountController extends Controller
 {
     $query = Accounts::query();
 
-    if ($request->has('role') && $request->role !== '') {
+    if ($request->filled('role')) {
         $query->where('role', strtolower($request->role));
     }
 
-    $accounts = $query->paginate(15);
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('name', 'like', '%' . $search . '%')
+              ->orWhere('email', 'like', '%' . $search . '%');
+        });
+    }
+
+    $accounts = $query->paginate(15)->appends($request->all());
+
     return view('administrator.index', compact('accounts'));
 }
+
 
     public function edit($id)
     {

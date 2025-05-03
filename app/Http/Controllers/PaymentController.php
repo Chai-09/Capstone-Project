@@ -113,8 +113,10 @@ class PaymentController extends Controller
         $payment = Payment::findOrFail($id);
         $payment->payment_status = $request->payment_status;
         $payment->remarks = $request->remarks;
+        $payment->ocr_number = $request->ocr_number;
         $payment->save();
 
         return redirect()->back()->with('success', 'Payment updated successfully.');
     }
+    
 }

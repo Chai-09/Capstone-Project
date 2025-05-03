@@ -26,16 +26,29 @@
             <button type="submit" class="btn btn-primary">Add User</button>
         </form>
         <div class="mb-3">
+    <form method="GET" action="{{ route('admindashboard') }}" class="row g-2">
+        <div class="col-md-3">
             <label for="roleFilter" class="form-label">Filter by role:</label>
-            <select id="roleFilter" class="form-select w-auto">
-        <option value="">All</option>
-        <option value="Administrator" {{ request('role') == 'Administrator' ? 'selected' : '' }}>Administrator</option>
-        <option value="Admission" {{ request('role') == 'Admission' ? 'selected' : '' }}>Admission</option>
-        <option value="Accounting" {{ request('role') == 'Accounting' ? 'selected' : '' }}>Accounting</option>
-        <option value="Applicant" {{ request('role') == 'Applicant' ? 'selected' : '' }}>Applicant</option>
-    </select>
-    
+            <select name="role" id="roleFilter" class="form-select">
+                <option value="">All</option>
+                <option value="Administrator" {{ request('role') == 'Administrator' ? 'selected' : '' }}>Administrator</option>
+                <option value="Admission" {{ request('role') == 'Admission' ? 'selected' : '' }}>Admission</option>
+                <option value="Accounting" {{ request('role') == 'Accounting' ? 'selected' : '' }}>Accounting</option>
+                <option value="Applicant" {{ request('role') == 'Applicant' ? 'selected' : '' }}>Applicant</option>
+            </select>
         </div>
+
+        <div class="col-md-4">
+            <label for="search" class="form-label">Search by name or email:</label>
+            <input type="text" name="search" id="search" class="form-control" value="{{ request('search') }}" placeholder="Enter keyword...">
+        </div>
+
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-secondary w-100">Apply</button>
+        </div>
+    </form>
+</div>
+
         <table class="table table-bordered table-hover mt-3">
             <thead class="table-dark">
                 <tr>
@@ -47,28 +60,35 @@
     
                 </tr>
             </thead>
-            <tbody id="accounts-table">
-                @forelse ($accounts as $account)
-                    <tr>
-                        <td>{{ $account->id }}</td>
-                        <td>{{ $account->name }}</td>
-                        <td>{{ $account->email }}</td>
-                        <td>{{ ucfirst($account->role) }}</td>
-                        <td>
-        <a href="{{ route('admin.editAccount', $account->id) }}" class="btn btn-sm btn-warning">Edit</a>
-        <form action="{{ route('admin.deleteAccount', $account->id) }}" method="POST" style="display:inline;">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-        </form>
-    </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="4" class="text-center">No accounts found.</td>
-                    </tr>
-                @endforelse
-            </tbody>
+            <tbody>
+    @forelse($applicants as $level => $group)
+        <tr class="table-primary">
+            <td colspan="5" class="fw-bold text-center">{{ strtoupper($level) }}</td>
+        </tr>
+
+        @foreach($group as $applicant)
+        <tr>
+            <td>{{ $applicant->applicant_name }}</td>
+            <td>{{ $applicant->applicant_contact_number }}</td>
+            <td>{{ $applicant->incoming_grade_level }}</td>
+            <td>{{ \Carbon\Carbon::parse($applicant->start_time)->format('h:i A') }} - {{ \Carbon\Carbon::parse($applicant->end_time)->format('h:i A') }}</td>
+            <td class="text-center">
+                <form method="POST" action="{{ route('exam.attendance.mark') }}">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $applicant->id }}">
+                    <button type="submit" name="status" value="done" class="btn btn-success btn-sm">Done</button>
+                    <button type="submit" name="status" value="no_show" class="btn btn-danger btn-sm">No Show</button>
+                </form>
+            </td>
+        </tr>
+        @endforeach
+    @empty
+        <tr>
+            <td colspan="5" class="text-center text-muted">No applicants scheduled for this day.</td>
+        </tr>
+    @endforelse
+</tbody>
+
         </table>
         <div class="d-flex justify-content-center mt-4">
         {{ $accounts->links('pagination::bootstrap-5') }}
