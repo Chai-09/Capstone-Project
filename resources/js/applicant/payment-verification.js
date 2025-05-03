@@ -13,11 +13,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function viewProof(fileUrl) {
     Swal.fire({
-        title: 'Proof of Payment',
         imageUrl: fileUrl,
         imageAlt: 'Proof of Payment',
-        width: 250,
-        confirmButtonText: 'Close'
+        width: 500,
+        imageHeight: 'auto',
+        padding: '1em',
+        confirmButtonText: 'Close',
+        customClass: {
+            confirmButton: 'btn-submit'
+        }
     });
 }
 

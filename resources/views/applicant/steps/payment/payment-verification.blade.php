@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="container">
+<div class="container payment-verify">
 
     <div class="step-form">
         <div class="form-section">
@@ -10,7 +10,7 @@
                 <h2>You're almost there — just a few more steps to becoming a <span class="tamaraw-text">Tamaraw!</span></h2>
             </div>
             <div class="form-row">
-                <p>Please wait for an email or sms confirming your payment verification; this process may take <span class="tamaraw-text">1-4 days</span>. If you have any issues, kindly please email us on <span class="tamaraw-text">LoremIpsum@gmail.com</span></p>
+                <p class="second-line">Please wait for an email or sms confirming your payment verification; this process may take <span class="tamaraw-text">1-4 days</span>. If you have any issues, kindly please email us on <span class="tamaraw-text">admissions@feudiliman.edu.ph</span></p>
             </div>
         </div>
         <div class="form-section">
@@ -71,18 +71,18 @@
             {{-- Button --}}
             @if ($payment->payment_status === 'pending')
                 <div class="text-center mt-4">
-                    <button class="btn btn-secondary" disabled>Proceed</button>
+                    <button class="btn btn-submit" disabled>Proceed</button>
                 </div>
             @elseif ($payment->payment_status === 'approved' && $applicant->current_step == 3 ) {{-- Changed href link to button, to handle current_step increment update in database --}}
                 <div class="text-center mt-4">
                     <form method="POST" action="{{ route('proceed.to.exam') }}">
                         @csrf
-                        <button type="submit" class="btn btn-success">Proceed</button>
+                        <button type="submit" class="btn btn-submit">Proceed</button>
                     </form>
                 </div>
             @elseif ($payment->payment_status === 'approved' && $applicant->current_step > 3) {{-- Disable proceed button if current step is greater than 3 to ensure they cant press it again afterwards--}}
                 <div class="text-center mt-4">
-                    <button class="btn btn-success" disabled>Already Proceeded</button>
+                    <button class="btn btn-submit" disabled>Proceed</button>
                 </div>
 
             @elseif ($payment->payment_status === 'denied')
@@ -90,7 +90,7 @@
                     <form method="POST" action="{{ route('payment.delete', ['id' => $payment->id]) }}">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Back</button>
+                        <button type="submit" class="btn btn-submit">Back</button>
                     </form>
                 </div>
             @endif

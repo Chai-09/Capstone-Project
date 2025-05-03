@@ -54,3 +54,21 @@
     color: #00753F;
     font-weight: 600;
 }
+
+.payment-verify .btn-submit {
+    background-color: #00753F;
+    color: white;
+    border: none;
+}
+
+.payment-verify .form-row h2{
+    font-size: 2.7rem;
+}
+
+.payment-verify .form-row .second-line {
+    font-size: 1.2rem;
+}
+
+.payment-verify .form-row p {
+    font-size: 1rem;
+}
