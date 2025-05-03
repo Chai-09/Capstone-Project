@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ApplicantSchedule; // Your table where applicants schedules are stored
+use App\Models\ApplicantSchedule; 
 use Carbon\Carbon;
 
 class ExamAttendanceController extends Controller
