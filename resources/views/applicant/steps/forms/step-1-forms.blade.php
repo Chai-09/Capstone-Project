@@ -25,29 +25,44 @@
                 <div class="form-row">
                     <div class="form-col">
                         <label>First Name</label>
-                        <input type="text" name="applicant_fname" value="{{ old ('applicant_fname', $formSubmission->applicant_fname ?? '') }}" placeholder="Enter first name" required  {{ ($readOnly ?? false) || in_array('applicant_fname', $readOnlyFields ?? []) ? 'readonly' : '' }}>
+                        @if ($readOnly)
+                            <input type="text" value="{{ old('applicant_fname', $formSubmission->applicant_fname ?? '') }}" disabled>
+                            <input type="hidden" name="applicant_fname" value="{{ old('applicant_fname', $formSubmission->applicant_fname ?? '') }}">
+                        @elseif (in_array('applicant_fname', $readOnlyFields ?? []))
+                            <input type="text" name="applicant_fname" value="{{ old('applicant_fname', $formSubmission->applicant_fname ?? '') }}" readonly>
+                        @endif
                     </div>
                     <div class="form-col">
                         <label>Middle Initial</label>
-                        <input type="text" name="applicant_mname" value="{{ old('applicant_mname', $formSubmission->applicant_mname ?? '') }}" placeholder="Enter middle initial"   {{ ($readOnly ?? false) || in_array('applicant_mname', $readOnlyFields ?? []) ? 'readonly' : '' }}>
+                        @if ($readOnly)
+                            <input type="text" value="{{ old('applicant_mname', $formSubmission->applicant_mname ?? '') }}" disabled>
+                            <input type="hidden" name="applicant_mname" value="{{ old('applicant_mname', $formSubmission->applicant_mname ?? '') }}">
+                        @elseif (in_array('applicant_mname', $readOnlyFields ?? []))
+                            <input type="text" name="applicant_mname" value="{{ old('applicant_mname', $formSubmission->applicant_mname ?? '') }}" readonly>
+                        @endif
                     </div>
                     <div class="form-col">
                         <label>Last Name</label>
-                        <input type="text" name="applicant_lname" value="{{ old('applicant_lname', $formSubmission->applicant_lname ?? '') }}" placeholder="Enter last name" required {{ ($readOnly ?? false) || in_array('applicant_lname', $readOnlyFields ?? []) ? 'readonly' : '' }}>
+                        @if ($readOnly)
+                            <input type="text" value="{{ old('applicant_lname', $formSubmission->applicant_lname ?? '') }}" disabled>
+                            <input type="hidden" name="applicant_lname" value="{{ old('applicant_lname', $formSubmission->applicant_lname ?? '') }}">
+                        @elseif (in_array('applicant_lname', $readOnlyFields ?? []))
+                            <input type="text" name="applicant_lname" value="{{ old('applicant_lname', $formSubmission->applicant_lname ?? '') }}" readonly>
+                        @endif
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-col">
                         <label>Applicant's Contact Number<span class="text-danger">*</span></label>
-                        <input type="tel" name="applicant_contact_number" value="{{ old('applicant_contact_number', $formSubmission->applicant_contact_number ?? '') }}" placeholder="09XXXXXXXXX" required {{ $readOnly ? 'readonly' : '' }}>
+                        <input type="tel" name="applicant_contact_number" value="{{ old('applicant_contact_number', $formSubmission->applicant_contact_number ?? '') }}" placeholder="09XXXXXXXXX" required {{ $readOnly ? 'disabled' : '' }}>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-col">
                         <label>Applicant's Email Address<span class="text-danger">*</span></label>
-                        <input type="email" name="applicant_email" value="{{ old('applicant_email', $formSubmission->applicant_email ?? '') }}" placeholder="Enter email address" required {{ $readOnly ? 'readonly' : '' }}>
+                        <input type="email" name="applicant_email" value="{{ old('applicant_email', $formSubmission->applicant_email ?? '') }}" placeholder="Enter email address" required {{ $readOnly ? 'disabled' : '' }}>
                     </div>
                 </div>
             </div>
@@ -60,7 +75,7 @@
                         <label class="text-muted">Building Number, Street Name</label>
                         <input type="text" name="numstreet" 
                         value="{{ old('numstreet', $formSubmission->numstreet ?? '') }}"
-                        placeholder="Enter bldg number, street name" required {{ $readOnly ? 'readonly' : '' }}>
+                        placeholder="Enter bldg number, street name" required {{ $readOnly ? 'disabled' : '' }}>
                     </div>
                     <div class="form-col">
                         <label class="text-muted">Region</label>
@@ -124,7 +139,7 @@
                     <label>Nationality<span class="text-danger">*</span></label>
                     <input type="text" name="nationality" 
                     value="{{ old('nationality', $formSubmission->nationality?? '')}}"
-                    placeholder="Enter nationality" required {{ $readOnly ? 'readonly' : '' }}>
+                    placeholder="Enter nationality" required {{ $readOnly ? 'disabled' : '' }}>
                 </div>
             </div>
 
@@ -145,29 +160,49 @@
                 <div class="form-row">
                     <div class="form-col">
                         <label>First Name</label>
-                        <input type="text" name="guardian_fname" placeholder="Enter first name" required value="{{ $formSubmission->guardian_fname ?? '' }}" {{ ($readOnly ?? false) || in_array('guardian_fname', $readOnlyFields ?? []) ? 'readonly' : '' }}>
+                        @if ($readOnly)
+                            <input type="text" value="{{ old('guardian_fname', $formSubmission->guardian_fname ?? '') }}" disabled>
+                            <input type="hidden" name="guardian_fname" value="{{ old('guardian_fname', $formSubmission->guardian_fname ?? '') }}">
+                        @elseif (in_array('guardian_fname', $readOnlyFields ?? []))
+                            <input type="text" name="guardian_fname" value="{{ old('guardian_fname', $formSubmission->guardian_fname ?? '') }}" readonly>
+                        @endif
                     </div>
                     <div class="form-col">
                         <label>Middle Initial</label>
-                        <input type="text" name="guardian_mname" placeholder="Enter middle name" value="{{ $formSubmission->guardian_mname ?? '' }}" {{ ($readOnly ?? false) || in_array('guardian_mname', $readOnlyFields ?? []) ? 'readonly' : '' }}>
+                        @if ($readOnly)
+                            <input type="text" value="{{ old('guardian_mname', $formSubmission->guardian_mname ?? '') }}" disabled>
+                            <input type="hidden" name="guardian_mname" value="{{ old('guardian_mname', $formSubmission->guardian_mname ?? '') }}">
+                        @elseif (in_array('guardian_mname', $readOnlyFields ?? []))
+                            <input type="text" name="guardian_mname" value="{{ old('guardian_mname', $formSubmission->guardian_mname ?? '') }}" readonly>
+                        @endif
                     </div>
                     <div class="form-col">
                         <label>Last Name</label>
-                        <input type="text" name="guardian_lname" placeholder="Enter last name" required value="{{ $formSubmission->guardian_lname ?? '' }}"  {{ ($readOnly ?? false) || in_array('guardian_lname', $readOnlyFields ?? []) ? 'readonly' : '' }}>
+                        @if ($readOnly)
+                            <input type="text" value="{{ old('guardian_lname', $formSubmission->guardian_lname ?? '') }}" disabled>
+                            <input type="hidden" name="guardian_lname" value="{{ old('guardian_lname', $formSubmission->guardian_lname ?? '') }}">
+                        @elseif (in_array('guardian_lname', $readOnlyFields ?? []))
+                            <input type="text" name="guardian_lname" value="{{ old('guardian_lname', $formSubmission->guardian_lname ?? '') }}" readonly>
+                        @endif
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-col">
                         <label>Guardian's Email<span class="text-danger">*</span></label>
-                        <input type="email" name="guardian_email" placeholder="Enter email address" required value="{{ $formSubmission->guardian_email ?? '' }}" {{ ($readOnly ?? false) || in_array('guardian_email', $readOnlyFields ?? []) ? 'readonly' : '' }}>
+                        @if ($readOnly)
+                            <input type="email" value="{{ old('guardian_email', $formSubmission->guardian_email ?? '') }}" disabled>
+                            <input type="hidden" name="guardian_email" value="{{ old('guardian_email', $formSubmission->guardian_email ?? '') }}">
+                        @elseif (in_array('guardian_email', $readOnlyFields ?? []))
+                            <input type="email" name="guardian_email" value="{{ old('guardian_email', $formSubmission->guardian_email ?? '') }}" readonly>
+                        @endif
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-col">
                         <label>Guardian's Contact Number<span class="text-danger">*</span></label>
-                        <input type="tel" name="guardian_contact_number" placeholder="09XXXXXXXXX" required value="{{ $formSubmission->guardian_contact_number ?? '' }}" {{ $readOnly ? 'readonly' : '' }}>
+                        <input type="tel" name="guardian_contact_number" placeholder="09XXXXXXXXX" required value="{{ $formSubmission->guardian_contact_number ?? '' }}" {{ $readOnly ? 'disabled' : '' }}>
                     </div>
                 </div>
 
@@ -211,17 +246,22 @@
                 <div class="form-row">
                     <div class="form-col">
                         <label>Current School<span class="text-danger">*</span></label>
-                        <input type="text" name="current_school" value="{{ $formSubmission->current_school ?? '' }}" placeholder="Enter current school" required {{ ($readOnly ?? false) || in_array('current_school', $readOnlyFields ?? []) ? 'readonly' : '' }}>
+                        @if ($readOnly)
+                            <input type="text" value="{{ old('current_school', $formSubmission->current_school ?? '') }}" disabled>
+                            <input type="hidden" name="current_school" value="{{ old('current_school', $formSubmission->current_school ?? '') }}">
+                        @elseif (in_array('current_school', $readOnlyFields ?? []))
+                            <input type="text" name="current_school" value="{{ old('current_school', $formSubmission->current_school ?? '') }}" readonly>
+                        @endif
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-col">
-                        <label class="form-label">Current School City</label>
+                        <label class="form-label">Current School City<span class="text-danger">*</span></label>
                         <div class="autocomplete-wrapper">
                             <input type="text" name="current_school_city" id="current_school_city"
                                 value="{{ $formSubmission->current_school_city ?? '' }}"
                                 class="form-control custom-input"
-                                placeholder="Enter current school city" autocomplete="off" required {{ $readOnly ? 'readonly' : '' }}>
+                                placeholder="Enter current school city" autocomplete="off" required {{ $readOnly ? 'disabled' : '' }}>
                             <ul id="citySuggestions" class="custom-suggestions"></ul>
                         </div>
                     </div>
@@ -239,40 +279,47 @@
                 </div>
                 <div class="form-row">
                     <div class="form-col">
-                        <label>Educational Level</label>            
-                         <input type="text" class="form-control" value="{{ $formSubmission->educational_level }}" readonly>
-                        <input type="hidden" name="educational_level" value="{{ $formSubmission->educational_level }}">              
+                        <label>Educational Level<span class="text-danger">*</span></label>            
+                        @if ($readOnly)
+                        <input type="text" value="{{ old('educational_level', $formSubmission->educational_level ?? '') }}" disabled>
+                        <input type="hidden" name="educational_level" value="{{ old('educational_level', $formSubmission->educational_level ?? '') }}">
+                        @else
+                            <input type="text" name="educational_level" value="{{ old('educational_level', $formSubmission->educational_level ?? '') }}" readonly>
+                        @endif 
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-col" id="grade-level-container" style="display: none;">
-                        <label>Incoming Grade Level</label>
-                        <span class="text-muted">For Kinder to Grade 1 applicants, the student must be 5 years old by October {{ now()->year }}</span>
-                        <input type="text" class="form-control" value="{{ $formSubmission->incoming_grlvl }}" readonly>
-                        <input type="hidden" name="incoming_grlvl" value="{{ $formSubmission->incoming_grlvl }}">
-                        <div class="form-col">
-                            <div id="strand-container" style="display: none;">
-                                <label>Strand<span class="text-danger">*</span></label>
-                                <select name="strand" id="strand" {{ $readOnly ? 'disabled' : '' }}>
-                                    <option value="">Select</option>
-                                    <option value="STEM Health Allied" {{ (isset($formSubmission) && $formSubmission->strand == 'STEM Health Allied') ? 'selected' : '' }}>STEM Health Allied</option>
-                                    <option value="STEM Engineering" {{ (isset($formSubmission) && $formSubmission->strand == 'STEM Engineering') ? 'selected' : '' }}>STEM Engineering</option>
-                                    <option value="STEM Information Technology" {{ (isset($formSubmission) && $formSubmission->strand == 'STEM Information Technology') ? 'selected' : '' }}>STEM Information Technology</option>
-                                    <option value="ABM Accountancy" {{ (isset($formSubmission) && $formSubmission->strand == 'ABM Accountancy') ? 'selected' : '' }}>ABM Accountancy</option>
-                                    <option value="ABM Business Management" {{ (isset($formSubmission) && $formSubmission->strand == 'ABM Business Management') ? 'selected' : '' }}>ABM Business Management</option>
-                                    <option value="HUMSS" {{ (isset($formSubmission) && $formSubmission->strand == 'HUMSS') ? 'selected' : '' }}>HUMSS</option>
-                                    <option value="GAS" {{ (isset($formSubmission) && $formSubmission->strand == 'GAS') ? 'selected' : '' }}>GAS</option>
-                                    <option value="SPORTS" {{ (isset($formSubmission) && $formSubmission->strand == 'SPORTS') ? 'selected' : '' }}>SPORTS</option>
-                                </select>
-                            </div>
-                        </div>
+                        <label>Incoming Grade Level<span class="text-danger">*</span></label>
+                        @if ($readOnly)
+                            <input type="text" value="{{ old('incoming_grlvl', $formSubmission->incoming_grlvl ?? '') }}" disabled>
+                            <input type="hidden" name="incoming_grlvl" value="{{ old('incoming_grlvl', $formSubmission->incoming_grlvl ?? '') }}">
+                        @else
+                            <input type="text" name="incoming_grlvl" value="{{ old('incoming_grlvl', $formSubmission->incoming_grlvl ?? '') }}" readonly>
+                        @endif
                     </div>
+                </div>
+                <div class="form-row" id="strand-container" style="display: none;">
                     <div class="form-col">
-                        <div id="birthday-container" style="display: none;">
-                            <span> </span>
-                            <label>Birthday<span class="text-danger">*</span></label>
-                            <input type="date" name="applicant_bday" id="applicant_bday" value="{{ $formSubmission->applicant_bday ?? '' }}" {{ $readOnly ? 'readonly' : '' }}>
-                        </div>
+                        <label>Strand<span class="text-danger">*</span></label>
+                        <select name="strand" id="strand" {{ $readOnly ? 'disabled' : '' }}>
+                            <option value="">Select</option>
+                            <option value="STEM Health Allied" {{ (isset($formSubmission) && $formSubmission->strand == 'STEM Health Allied') ? 'selected' : '' }}>STEM Health Allied</option>
+                            <option value="STEM Engineering" {{ (isset($formSubmission) && $formSubmission->strand == 'STEM Engineering') ? 'selected' : '' }}>STEM Engineering</option>
+                            <option value="STEM Information Technology" {{ (isset($formSubmission) && $formSubmission->strand == 'STEM Information Technology') ? 'selected' : '' }}>STEM Information Technology</option>
+                            <option value="ABM Accountancy" {{ (isset($formSubmission) && $formSubmission->strand == 'ABM Accountancy') ? 'selected' : '' }}>ABM Accountancy</option>
+                            <option value="ABM Business Management" {{ (isset($formSubmission) && $formSubmission->strand == 'ABM Business Management') ? 'selected' : '' }}>ABM Business Management</option>
+                            <option value="HUMSS" {{ (isset($formSubmission) && $formSubmission->strand == 'HUMSS') ? 'selected' : '' }}>HUMSS</option>
+                            <option value="GAS" {{ (isset($formSubmission) && $formSubmission->strand == 'GAS') ? 'selected' : '' }}>GAS</option>
+                            <option value="SPORTS" {{ (isset($formSubmission) && $formSubmission->strand == 'SPORTS') ? 'selected' : '' }}>SPORTS</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row" id="birthday-container" style="display: none; margin-bottom: 2.1em;">
+                    <div class="form-col">
+                        <label>Birthday<span class="text-danger">*</span></label>
+                        <span class="text-muted">For Kinder to Grade 1 applicants, the student must be 5 years old by October {{ now()->year }}</span>
+                        <input type="date" name="applicant_bday" id="applicant_bday"  palceholder ="Select a Date" value="{{ $formSubmission->applicant_bday ?? '' }}" {{ $readOnly ? 'disabled' : '' }}>
                     </div>
                 </div>
                 <div class="form-row">
@@ -280,12 +327,12 @@
                         <div id="lrn-container" style="display: none;">
                             <label>LRN Number</label>
                             <span class="text-muted">LRN is the Learner Reference Number that can be found on your Report Card, or School ID.</span>
-                            <input type="text" name="lrn_no" id="lrn_no" value="{{ $formSubmission->lrn_no ?? '' }}" placeholder="Enter LRN number" {{ $readOnly ? 'readonly' : '' }}>
+                            <input type="text" name="lrn_no" id="lrn_no" value="{{ $formSubmission->lrn_no ?? '' }}" placeholder="Enter LRN number" {{ $readOnly ? 'disabled' : '' }}>
                         </div>
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-row" id="source-container" style="display: none;">
+                    <div class="form-col" id="source-container" style="display: none;">
                         <label>How did you hear about us?<span class="text-danger">*</span></label>
                         <select name="source" required {{ $readOnly ? 'disabled' : '' }}>
                             <option value="">Select</option>

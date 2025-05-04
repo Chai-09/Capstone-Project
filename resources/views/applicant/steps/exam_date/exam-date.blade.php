@@ -5,7 +5,7 @@
   <div class="step-form">
     <div class="form-section">
       <h2 class="mb-4 text-center">Entrance Exam Schedule</h2>
-      <label class="form-label fw-bold">Select Date <span class="text-danger">*</span></label>
+      <label class="form-label fw-bold">Select Date<span class="text-danger">*</span></label>
       <input type="text" id="datePicker" class="form-control" placeholder="Select a date" readonly>
       <input type="hidden" id="saveExamScheduleRoute" value="{{ route('applicant.saveExamSchedule') }}">
     </div>
@@ -26,6 +26,7 @@
             $carbonDate = Carbon::parse($date);
           @endphp
           <div class="schedule-group hidden" data-date="{{ $date }}">
+            <br><label class="form-label fw-bold">Available Time<span class="text-danger">*</span></label>
             <div class="date-header">{{ \Carbon\Carbon::parse($date)->format('F d, Y') }}</div>
             <div class="d-flex flex-wrap justify-content-center">
               @foreach ($schedules as $schedule)

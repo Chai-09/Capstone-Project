@@ -1,3 +1,7 @@
+import flatpickr from "flatpickr";
+import "flatpickr/dist/themes/material_green.css";
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const educationalLevelInput = document.querySelector('input[name="educational_level"]'); // readonly input
     const incomingGradeInput = document.querySelector('input[name="incoming_grlvl"]'); // readonly input
@@ -9,6 +13,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const gradeLevelContainer = document.getElementById('grade-level-container');
 
     function updateVisibility() {
+
+        const bdayInput = document.getElementById('applicant_bday');
+        if (bdayInput) {
+            flatpickr(bdayInput, {
+                dateFormat: "Y-m-d",              
+                altInput: true,                   
+                altFormat: "F j, Y",              
+                maxDate: "today",                 
+                allowInput: true,
+                disableMobile: true               
+            });
+        }
+
         const level = (educationalLevelInput?.value || "").trim();
         const grade = (incomingGradeInput?.value || "").trim();
 

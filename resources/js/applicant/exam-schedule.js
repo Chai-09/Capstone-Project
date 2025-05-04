@@ -6,7 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const availableDates = (window.availableExamDates || []).map(d => d.trim());
 
     flatpickr("#datePicker", {
-        dateFormat: "Y-m-d",
+        dateFormat: "Y-m-d",                 
+        altInput: true,                      
+        altFormat: "F j, Y",                 
         minDate: "today",
         enable: availableDates,
         disableMobile: true,
@@ -15,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
             instance.input.dispatchEvent(event);
         }
     });
+    
 
     const datePicker = document.getElementById('datePicker');
     const route = document.getElementById('saveExamScheduleRoute').value;
@@ -68,10 +71,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 html: `<b>Date:</b> ${dateText}<br><b>Time:</b> ${timeText}`,
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#007f3e',
-                cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes!',
-                cancelButtonText: 'Cancel'
+                cancelButtonText: 'Cancel',
+                cancelButtonColor: 'red',
+                customClass: {
+                    confirmButton: 'btn-yes',
+                    cancelButton: 'btn-cancel'
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     const [startTimeRaw, endTimeRaw] = timeText.split(' to ');
@@ -92,14 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Schedule Selected!',
-                                text: 'Please wait for further instructions.',
-                                confirmButtonColor: '#007f3e'
-                            }).then(() => {
-                                window.location.href = "/applicant/steps/reminders/reminders";
-                            });
+                            window.location.href = "/applicant/steps/reminders/reminders";
                         } else {
                             Swal.fire({
                                 icon: 'error',

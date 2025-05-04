@@ -28,23 +28,33 @@
     display: none;
 }
 
-input[type="date"] {
-    border: 1px solid #007f3e;
-    padding: 10px;
-    border-radius: 8px;
-    font-family: 'Poppins', sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(35%) sepia(60%) saturate(400%) hue-rotate(85deg); /* Green calendar icon */
-    cursor: pointer;
-}
-
 #datePicker {
     border-radius: 8px;
     padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #007f3e;
+    border: 1px solid #047338b8;
+}
+
+#datePicker:focus {
+    box-shadow: 0 0 0 3px rgba(0, 127, 62, 0.2);  
+}
+
+
+.btn-cancel {
+    background-color: #898886;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 6px;
+    border: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn-yes {
+    background-color: #007f3e;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 6px;
+    border: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
 }
