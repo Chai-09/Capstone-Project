@@ -2,7 +2,7 @@
 @extends('applicant.index')
 
 @section('content')
-<div class="container mt-4">
+<div class="container mt-4 payment">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-lg-6">
             <div class="p-4 bg-none">
@@ -14,8 +14,7 @@
                     <!-- Extra message if payment exists paiba nalang paul ng design salamuch -->
                      @if ($existingPayment)
                         <div class="alert alert-info">
-                            You have already submitted a payment (Status: <strong>{{ ucfirst($existingPayment->payment_status) }}</strong>).<br>
-                            You cannot resubmit unless your payment is denied.
+                            You have already submitted a payment (Status: <strong>{{ ucfirst($existingPayment->payment_status) }}</strong>). You cannot resubmit unless your payment is denied.
                         </div>
                     @endif
 

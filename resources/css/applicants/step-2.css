@@ -12,3 +12,9 @@
     padding-right: 2em;
 }
 
+.payment .alert-info {
+    background-color: #eaf8f0;
+    color: #00753F;
+    border: 1px solid #00753e75;
+}
+

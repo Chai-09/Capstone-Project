@@ -16,6 +16,7 @@ export default defineConfig({
                 'resources/css/applicants/step-1.css',
                 'resources/css/applicants/step-2.css',
                 'resources/css/applicants/step-3.css',
+                'resources/css/applicants/step-4.css',
 
                 // 3 Sidebar
                 'resources/css/partials/sidebar.css',
@@ -24,6 +25,7 @@ export default defineConfig({
                 'resources/js/fillupforms/fillupforms.js',
                 'resources/js/address/address.js',
                 'resources/js/applicant/payment-verification.js',
+                'resources/js/applicant/exam-schedule.js',
                 'resources/js/partials/sidebar.js'
             ],
             refresh: true,

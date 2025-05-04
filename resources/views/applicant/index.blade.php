@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="website icon" type="png" href="{{ asset('applysmart_logo.png') }}">
     <title>ApplySmart</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -16,6 +17,7 @@
     @vite('resources/css/applicants/step-1.css')
     @vite('resources/css/applicants/step-2.css')
     @vite('resources/css/applicants/step-3.css')
+    @vite('resources/css/applicants/step-4.css')
 </head>
 <body>
     {{-- Navbar always visible --}}
@@ -41,5 +43,6 @@
     @vite('resources/js/fillupforms/fillupforms.js')
     @vite('resources/js/address/address.js')
     @vite('resources/js/applicant/payment-verification.js')
+    @vite('resources/js/applicant/exam-schedule.js')
 </body>
 </html>
