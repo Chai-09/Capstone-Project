@@ -1,76 +1,46 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const educationalLevelSelect = document.getElementById('educational_level');
-    const incomingGradeLevelSelect = document.getElementById('incoming_grlvl');
+    const educationalLevelInput = document.querySelector('input[name="educational_level"]'); // readonly input
+    const incomingGradeInput = document.querySelector('input[name="incoming_grlvl"]'); // readonly input
+
     const strandContainer = document.getElementById('strand-container');
     const birthdayContainer = document.getElementById('birthday-container');
     const lrnContainer = document.getElementById('lrn-container');
     const sourceContainer = document.getElementById('source-container');
     const gradeLevelContainer = document.getElementById('grade-level-container');
 
-    const gradeOptions = {
-        "Grade School": ['Kinder','Grade 1','Grade 2','Grade 3', 'Grade 4', 'Grade 5', 'Grade 6'],
-        "Junior High School": ['Grade 7','Grade 8','Grade 9', 'Grade 10'],
-        "Senior High School": ['Grade 11','Grade 12']
-    };
-
-    
-    const incomingGradeSaved = incomingGradeLevelSelect.getAttribute('data-selected') || incomingGradeLevelSelect.value;
-
-    function populateGrades(level) {
-        incomingGradeLevelSelect.innerHTML = '<option value="">Select Grade Level</option>';
-        
-        if (gradeOptions[level]) {
-            gradeOptions[level].forEach(grade => {
-                const option = document.createElement("option");
-                option.value = grade;
-                option.textContent = grade;
-                if (incomingGradeSaved && incomingGradeSaved === grade) {
-                    option.selected = true;
-                }
-                incomingGradeLevelSelect.appendChild(option);
-            });
-        }
-    }
-
     function updateVisibility() {
-        const level = educationalLevelSelect.value;
-        const grade = incomingGradeLevelSelect.value;
+        const level = (educationalLevelInput?.value || "").trim();
+        const grade = (incomingGradeInput?.value || "").trim();
 
         
         gradeLevelContainer.style.display = 'none';
         sourceContainer.style.display = 'none';
-
-       
         strandContainer.style.display = 'none';
         birthdayContainer.style.display = 'none';
         lrnContainer.style.display = 'none';
 
+        if (!level) return;
+
+        gradeLevelContainer.style.display = 'block';
+        sourceContainer.style.display = 'block';
+
         if (level === "Grade School") {
             lrnContainer.style.display = 'block';
-            gradeLevelContainer.style.display = 'block';
-                sourceContainer.style.display = 'block';
-                
-            if (grade === "Kinder" || grade === "Grade 1") {
+            if (grade === "KINDER" || grade === "GRADE 1") {
                 birthdayContainer.style.display = 'block';
-                gradeLevelContainer.style.display = 'block';
-                sourceContainer.style.display = 'block';
             }
-        }
-        else if (level === "Junior High School") {
+        } else if (level === "Junior High School") {
             lrnContainer.style.display = 'block';
-            gradeLevelContainer.style.display = 'block';
-            sourceContainer.style.display = 'block';
-        }
-        else if (level === "Senior High School") {
+        } else if (level === "Senior High School") {
             lrnContainer.style.display = 'block';
             strandContainer.style.display = 'block';
-            gradeLevelContainer.style.display = 'block';
-            sourceContainer.style.display = 'block';
         }
     }
 
+    updateVisibility(); 
+
     educationalLevelSelect.addEventListener('change', function () {
-        const level = this.value;
+        const level = (educationalLevelSelect?.value || educationalLevelInput?.value || "").trim();
         populateGrades(level);  
         updateVisibility();
     });
@@ -79,9 +49,12 @@ document.addEventListener('DOMContentLoaded', function () {
         updateVisibility();
     });
 
-    
+    const levelInit = (educationalLevelSelect?.value || educationalLevelInput?.value || "").trim();
+    if (incomingGradeLevelSelect?.tagName === 'SELECT') {
+        populateGrades(levelInit);
+    }
     updateVisibility();
-   
+    
 });
 
 

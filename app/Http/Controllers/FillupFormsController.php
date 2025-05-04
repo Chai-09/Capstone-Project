@@ -52,6 +52,16 @@ class FillupFormsController extends Controller
             $formSubmission->strand = '';
             $formSubmission->source = '';
         }
+        //logic para alam ano educ level from signup
+        $formSubmission->incoming_grlvl = $applicant->incoming_grlvl ?? '';
+        $grlvl = $formSubmission->incoming_grlvl;
+        $formSubmission->educational_level = match (true) {
+        in_array($grlvl, ['KINDER', 'GRADE 1', 'GRADE 2', 'GRADE 3', 'GRADE 4', 'GRADE 5', 'GRADE 6']) => 'Grade School',
+        in_array($grlvl, ['GRADE 7', 'GRADE 8', 'GRADE 9', 'GRADE 10']) => 'Junior High School',
+        in_array($grlvl, ['GRADE 11', 'GRADE 12']) => 'Senior High School',
+        default => '',
+    };
+
         //readonlyfields during fillup lang
         $readOnlyFields = [
             'applicant_fname',
@@ -124,7 +134,7 @@ class FillupFormsController extends Controller
 
         if ($level === 'Grade School') {
             $rules['lrn_no'] = 'required|max:255';
-            if (in_array($grade, ['Kinder', 'Grade 1'])) {
+            if (in_array($grade, ['KINDER', 'GRADE 1'])) {
                 $rules['applicant_bday'] = 'required|date|before_or_equal:' . now()->year . '-10-01';
 
                 $bday = $request->applicant_bday;
@@ -132,6 +142,13 @@ class FillupFormsController extends Controller
                     $cutoff = \Carbon\Carbon::create(now()->year, 10, 1);
                     $birthday = \Carbon\Carbon::parse($bday);
                     $age = $birthday->age;
+
+                    // future bday validation
+                    if ($birthday->isFuture()) {
+                        return back()->withErrors([
+                            'applicant_bday' => 'Applicant Birthday Invalid.'
+                        ])->withInput();
+                    }
 
                     // Must be at least 5 years old on or before October 1
                     if ($birthday->diffInYears($cutoff, false) < 5) {

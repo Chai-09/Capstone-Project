@@ -239,26 +239,17 @@
                 </div>
                 <div class="form-row">
                     <div class="form-col">
-                        <label>Educational Level<span class="text-danger">*</span></label>
-                        <select name="educational_level" id="educational_level" required {{ $readOnly ? 'disabled' : '' }}>
-                            <option value="">Select</option>
-                            <option value="Grade School" {{ (isset($formSubmission) && $formSubmission->educational_level == 'Grade School') ? 'selected' : '' }}>Grade School</option>
-                            <option value="Junior High School" {{ (isset($formSubmission) && $formSubmission->educational_level == 'Junior High School') ? 'selected' : '' }}>Junior High School</option>
-                            <option value="Senior High School" {{ (isset($formSubmission) && $formSubmission->educational_level == 'Senior High School') ? 'selected' : '' }}>Senior High School</option>
-                        </select>
+                        <label>Educational Level</label>            
+                         <input type="text" class="form-control" value="{{ $formSubmission->educational_level }}" readonly>
+                        <input type="hidden" name="educational_level" value="{{ $formSubmission->educational_level }}">              
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-col" id="grade-level-container" style="display: none;">
-                        <label>Incoming Grade Level<span class="text-danger">*</span></label>
+                        <label>Incoming Grade Level</label>
                         <span class="text-muted">For Kinder to Grade 1 applicants, the student must be 5 years old by October {{ now()->year }}</span>
-                        <select name="incoming_grlvl" id="incoming_grlvl" required {{ $readOnly ? 'disabled' : '' }}>
-                            @if(isset($formSubmission))
-                                <option value="{{ $formSubmission->incoming_grlvl }}" selected>{{ $formSubmission->incoming_grlvl }}</option>
-                            @else
-                                <option value="">Select Grade Level</option>
-                            @endif
-                        </select>
+                        <input type="text" class="form-control" value="{{ $formSubmission->incoming_grlvl }}" readonly>
+                        <input type="hidden" name="incoming_grlvl" value="{{ $formSubmission->incoming_grlvl }}">
                         <div class="form-col">
                             <div id="strand-container" style="display: none;">
                                 <label>Strand<span class="text-danger">*</span></label>
