@@ -25,7 +25,7 @@
 <a href="{{ route('examschedule') }}" class="btn btn-primary">
     Exam Schedule
 </a>
-<a href="{{ route('examresults') }}" class="btn btn-primary">
+<a href="{{ route('exam.results') }}" class="btn btn-primary">
     Exam Results
 </a>
 

@@ -29,13 +29,18 @@
     "isEntry": true
   },
   "resources/css/applicants/step-2.css": {
-    "file": "assets/step-2-CjsAVD2_.css",
+    "file": "assets/step-2-Aq-_16s5.css",
     "src": "resources/css/applicants/step-2.css",
     "isEntry": true
   },
   "resources/css/applicants/step-3.css": {
     "file": "assets/step-3-DKWamNGN.css",
     "src": "resources/css/applicants/step-3.css",
+    "isEntry": true
+  },
+  "resources/css/applicants/step-4.css": {
+    "file": "assets/step-4-DZVW9jn3.css",
+    "src": "resources/css/applicants/step-4.css",
     "isEntry": true
   },
   "resources/css/fillupforms/fillupforms.css": {
@@ -64,6 +69,15 @@
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
+  },
+  "resources/js/applicant/exam-schedule.js": {
+    "file": "assets/exam-schedule-Cc5WRALu.js",
+    "name": "exam-schedule",
+    "src": "resources/js/applicant/exam-schedule.js",
+    "isEntry": true,
+    "css": [
+      "assets/exam-schedule-DYNgsEg6.css"
+    ]
   },
   "resources/js/applicant/payment-verification.js": {
     "file": "assets/payment-verification-DLtTKYGQ.js",

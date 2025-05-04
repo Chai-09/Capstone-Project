@@ -155,13 +155,11 @@
             <td>{{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }}</td>
             <td>{{ $schedule->max_participants }}</td>
             <td>
-    {{ $schedule->max_participants - \App\Models\ApplicantSchedule::where('exam_date', $schedule->exam_date)
-        ->where('start_time', $schedule->start_time)
-        ->where('end_time', $schedule->end_time)
-        ->count() }}
-</td>
-
-
+                {{ $schedule->max_participants - \App\Models\ApplicantSchedule::where('exam_date', $schedule->exam_date)
+                    ->where('start_time', $schedule->start_time)
+                    ->where('end_time', $schedule->end_time)
+                    ->count() }}
+            </td>
             <td>{{ $schedule->educational_level }}</td>
             <td class="text-center">
                 <form method="POST" action="{{ route('examdate.destroy', $schedule->id) }}" class="delete-form d-inline">

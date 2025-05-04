@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2025 at 09:04 AM
+-- Generation Time: May 04, 2025 at 12:33 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -137,7 +137,34 @@ INSERT INTO `applicant_schedules` (`id`, `user_id`, `applicant_name`, `applicant
 (6, 70, 'TEST TEST. TEST', '09999999999', 'Kinder', '2025-05-03', '08:00:00', '09:00:00', '2025-05-01 00:56:27', '2025-05-01 00:56:27'),
 (7, 70, 'TEST TEST. TEST', '09999999999', 'Kinder', '2025-05-03', '08:00:00', '09:00:00', '2025-05-01 20:46:34', '2025-05-01 20:46:34'),
 (8, 70, 'TEST TEST. TEST', '09999999999', 'Kinder', '2025-05-03', '08:00:00', '09:00:00', '2025-05-02 22:29:37', '2025-05-02 22:29:37'),
-(9, 70, 'TEST TEST. TEST', '09999999999', 'Kinder', '2025-05-03', '09:00:00', '10:00:00', '2025-05-02 22:32:04', '2025-05-02 22:32:04');
+(9, 70, 'TEST TEST. TEST', '09999999999', 'Kinder', '2025-05-03', '09:00:00', '10:00:00', '2025-05-02 22:32:04', '2025-05-02 22:32:04'),
+(10, 70, 'TEST TEST. TEST', '09999999999', 'Kinder', '2025-05-10', '08:00:00', '09:00:00', '2025-05-04 00:18:31', '2025-05-04 00:18:31');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `exam_results`
+--
+
+CREATE TABLE `exam_results` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `applicant_id` int(10) UNSIGNED NOT NULL,
+  `applicant_name` varchar(255) NOT NULL,
+  `incoming_grade_level` varchar(255) NOT NULL,
+  `exam_date` date NOT NULL,
+  `exam_status` enum('done','no_show') NOT NULL,
+  `exam_result` enum('pending','passed','failed','scholarship','interview') NOT NULL DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `exam_results`
+--
+
+INSERT INTO `exam_results` (`id`, `applicant_id`, `applicant_name`, `incoming_grade_level`, `exam_date`, `exam_status`, `exam_result`, `created_at`, `updated_at`) VALUES
+(1, 4, 'TEST TEST', 'GRADE 12', '2025-05-04', 'done', 'scholarship', '2025-05-04 01:05:00', '2025-05-04 01:23:49'),
+(2, 10, 'AWDAS ADS', 'GRADE 10', '2025-05-04', 'done', 'passed', '2025-05-04 01:44:42', '2025-05-04 01:45:01');
 
 -- --------------------------------------------------------
 
@@ -251,7 +278,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (22, '2025_04_29_053724_create_applicant_schedules', 14),
 (23, '2025_04_27_175754_add_current_step_to_applicants_table', 15),
 (24, '2025_04_30_154729_add_remarks_to_payment_table', 16),
-(26, '2025_05_03_055832_add_ocr_number_to_payment', 17);
+(26, '2025_05_03_055832_add_ocr_number_to_payment', 17),
+(27, '2025_05_04_080706_create_exam_results', 18),
+(28, '2025_05_04_090025_create_exam_results', 19);
 
 -- --------------------------------------------------------
 
@@ -320,8 +349,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('imOwzKdV89sTUsxov3G3R1CIyqoZmO3SqdssBlf6', 61, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjY6Il90b2tlbiI7czo0MDoibEpQRVZhQUtPOUJIT0hPaGNWVVBaaUJtZnhPeTZJcElTN05kOE44UyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjM6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pc3Npb24vZXhhbS1hdHRlbmRhbmNlP2RhdGU9MjAyNS0wNS0wMyI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjYxO3M6NDoibmFtZSI7czoxMDoiQUVSTyAgQUVSTyI7czo1OiJlbWFpbCI7czoxNDoiYWVyb0BnbWFpbC5jb20iO30=', 1746255095),
-('oIcdmJXyCZdDgD8wujCcSlNoKakDCTLKtKIz3THH', 70, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0', 'YTo3OntzOjY6Il90b2tlbiI7czo0MDoiM3VBMTA1cGEwSzc2THEzTkFhZ3lKTU90bUk1YnJJeTF4eEl4TnBkZCI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czo1NzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2FwcGxpY2FudC9zdGVwcy9yZW1pbmRlcnMvcmVtaW5kZXJzIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjg6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9zdGVwLTMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo3MDtzOjQ6Im5hbWUiO3M6MTE6IkZJUlNUICBMQVNUIjtzOjU6ImVtYWlsIjtzOjI2OiJlaXJ5ay5zYXJkYWxsYTMwQGdtYWlsLmNvbSI7fQ==', 1746254092);
+('T5R9Cfe6ZnJwlwsK6rut8laYNi2PfzPJEVncURyT', 61, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo3OntzOjY6Il90b2tlbiI7czo0MDoiRUhUd1RpaHlHQnlwZDZSUTlrZGJsbE5lWUFpbkNQa0VIa1pHSlJTRSI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czo0NToiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2FkbWluaXN0cmF0b3IvZGFzaGJvYXJkIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pc3Npb24taG9tZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjYxO3M6NDoibmFtZSI7czoxMDoiQUVSTyAgQUVSTyI7czo1OiJlbWFpbCI7czoxNDoiYWVyb0BnbWFpbC5jb20iO30=', 1746352553),
+('zWGSMH1OALaBe7iDJxtDeHNkZ4eFf9bQPGmO3ZPF', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjY6Il90b2tlbiI7czo0MDoiRFpDcEZvNmJvanp0dXhlaW94TUNVOXQ4ZjkxZnhPM0pvYkFNME1OSyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fX0=', 1746352537);
 
 -- --------------------------------------------------------
 
@@ -362,6 +391,13 @@ ALTER TABLE `applicants`
 ALTER TABLE `applicant_schedules`
   ADD PRIMARY KEY (`id`),
   ADD KEY `applicant_schedules_user_id_foreign` (`user_id`);
+
+--
+-- Indexes for table `exam_results`
+--
+ALTER TABLE `exam_results`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `exam_results_applicant_id_foreign` (`applicant_id`);
 
 --
 -- Indexes for table `exam_schedules`
@@ -429,7 +465,13 @@ ALTER TABLE `applicants`
 -- AUTO_INCREMENT for table `applicant_schedules`
 --
 ALTER TABLE `applicant_schedules`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `exam_results`
+--
+ALTER TABLE `exam_results`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `exam_schedules`
@@ -447,7 +489,7 @@ ALTER TABLE `form_submissions`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `payment`
@@ -476,6 +518,12 @@ ALTER TABLE `applicants`
 --
 ALTER TABLE `applicant_schedules`
   ADD CONSTRAINT `applicant_schedules_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `exam_results`
+--
+ALTER TABLE `exam_results`
+  ADD CONSTRAINT `exam_results_applicant_id_foreign` FOREIGN KEY (`applicant_id`) REFERENCES `applicants` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `form_submissions`
