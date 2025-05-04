@@ -1,4 +1,21 @@
+import flatpickr from "flatpickr";
+import "flatpickr/dist/themes/material_green.css";
+
+
 document.addEventListener('DOMContentLoaded', function () {
+    const availableDates = (window.availableExamDates || []).map(d => d.trim());
+
+    flatpickr("#datePicker", {
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        enable: availableDates,
+        disableMobile: true,
+        onChange: function (selectedDates, dateStr, instance) {
+            const event = new Event('change');
+            instance.input.dispatchEvent(event);
+        }
+    });
+
     const datePicker = document.getElementById('datePicker');
     const route = document.getElementById('saveExamScheduleRoute').value;
     const csrf = document.querySelector('meta[name="csrf-token"]').content;
