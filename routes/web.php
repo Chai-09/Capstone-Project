@@ -19,6 +19,7 @@ use App\Http\Controllers\ApplicantScheduleController;
 use App\Models\ApplicantSchedule;
 use App\Http\Controllers\ExamAttendanceController;
 use App\Http\Controllers\AdmissionsAppListController;
+use App\Http\Controllers\ExamResultController;
 
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
 // Log in Routes
@@ -114,6 +115,7 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
 
                 Route::post('/save-exam-schedule', [ApplicantScheduleController::class, 'store'])->name('applicant.saveExamSchedule');
             });
+            Route::get('/applicant/exam-result', [ExamResultController::class, 'showForApplicant'])->name('applicant.exam.result'); //nilagay ko siya sa may form.submitted pero di ko sure kung san to
         });
     });
 });
@@ -171,6 +173,12 @@ Route::middleware(['auth', 'role:admission'])->group(function () {
     })->name('admissionhome');
 
     Route::get('/admission/applicants-list', [AdmissionsAppListController::class, 'index'])->name('applicantlist');
+
+    // Exam Attendance
+    Route::post('/exam/mark-attendance', [ExamResultController::class, 'markAttendance'])->name('exam.attendance.mark');
+    Route::get('/admission/exam/exam-result', [ExamResultController::class, 'index'])->name('exam.results');
+
+    Route::post('/exam-result/update/{id}', [ExamResultController::class, 'update'])->name('exam-result.update');
 });
 
 //ACCOUNTING ROUTES
