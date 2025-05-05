@@ -41,6 +41,7 @@ class AuthController extends Controller
             session([
                 'name' => $account->name,
                 'email' => $account->email,
+                'role' => $account->role,
             ]);
 
 
