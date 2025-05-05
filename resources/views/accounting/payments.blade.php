@@ -149,11 +149,11 @@
                   <label class="form-check-label" for="denyStatus">Deny</label>
                 </div>
               </div>
-
               <div class="mb-3">
                 <label for="remarks" class="form-label"><strong>Remarks:</strong></label>
                 <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
               </div>
+              <div id="approvedFields">
               <div class="mb-3">
                 <p><strong>NOTE: Add OCR and Receipt only if payment is approved</p></strong>
                 <label for="ocr_number" class="form-label"><strong>OCR Number:</strong></label>
@@ -166,11 +166,12 @@
               <input type="hidden" name="receipt" id="receipt">
             </div>  
          </div>
+        </div> 
         
         
             <!-- nilagay ko sa right yung image per figma -->
             <div class="col-md-5 text-center">
-              <img id="proofImage" src="" alt="Proof of Payment" class="img-fluid rounded shadow" style="max-height: 400px;">
+              <div id="proofContainer" class="text-center"></div>
             </div>
           </div>
         </div>
@@ -184,19 +185,30 @@
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+
+  let myDropzone = null;
+  let uploadedFile = null;
+
 function viewProof(fileUrl) {
-    Swal.fire({
-        title: 'Proof of Payment',
-        imageUrl: fileUrl,
-        imageAlt: 'Proof of Payment',
-        width: 600,
-        confirmButtonText: 'Close'
-    });
+    const isPDF = fileUrl.toLowerCase().endsWith('.pdf');
+
+    if (isPDF) {
+        window.open(fileUrl, '_blank');
+    } else {
+        Swal.fire({
+            title: 'Proof of Payment',
+            imageUrl: fileUrl,
+            imageAlt: 'Proof of Payment',
+            width: 600,
+            confirmButtonText: 'Close'
+        });
+    }
 }
+
 
 function viewInfo(data) {
 
-  // Remove any existing event listeners to prevent stacking
+  // Remove event listeners
   const oldForm = document.getElementById('updateForm');
     const newForm = oldForm.cloneNode(true);
     oldForm.replaceWith(newForm);
@@ -210,58 +222,98 @@ function viewInfo(data) {
     document.getElementById('paymentTime').innerText = new Date(data.created_at).toLocaleString();
     document.getElementById('paymentMethod').innerText = data.payment_method;
 
-    document.getElementById('proofImage').src = `/storage/${data.proof_of_payment}`;
+    const proofContainer = document.getElementById('proofContainer');
+    const fileUrl = `/storage/${data.proof_of_payment}`;
+    const isPDF = fileUrl.toLowerCase().endsWith('.pdf');
+
+    if (isPDF) {
+        proofContainer.innerHTML = `<iframe src="${fileUrl}" width="100%" height="400px" style="border: none;"></iframe>`;
+    } else {
+        proofContainer.innerHTML = `<img src="${fileUrl}" alt="Proof of Payment" class="img-fluid rounded shadow" style="max-height: 400px;">`;
+    }
+
 
     document.getElementById('acceptStatus').checked = data.payment_status === 'approved';
     document.getElementById('denyStatus').checked = data.payment_status === 'denied';
     document.getElementById('remarks').value = data.remarks || '';
     document.getElementById('ocr_number').value = data.ocr_number || '';
 
+    document.getElementById('acceptStatus').addEventListener('change', toggleApprovedFields);
+    document.getElementById('denyStatus').addEventListener('change', toggleApprovedFields);
+
+    
+    toggleApprovedFields();
+
+
     document.getElementById('paymentId').value = data.id;
     newForm.action = `/accountant/payment-decision/${data.id}`;
 
-    let uploadedFile = null;
+//Para ma toggle ocr saka receipt if naka accept
+function toggleApprovedFields() {
+    const isApproved = document.getElementById('acceptStatus')?.checked;
+    const approvedFields = document.getElementById('approvedFields');
 
-const myDropzone = new Dropzone("#receiptDropzone", {
-    url: "{{ route('upload.receipt') }}",
-    autoProcessQueue: false,
-    maxFiles: 1,
-    acceptedFiles: "image/*",
-    addRemoveLinks: true,
-    dictRemoveFile: 'Remove',
-    headers: {
-        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-    },
-    success: function(file, response) {
-        uploadedFile = response.file_path;
-        document.getElementById('receipt').value = uploadedFile;
-        
-        document.getElementById('updateForm').submit();
-    },
-    removedfile: function(file) {
-        if (uploadedFile) {
-            fetch("{{ route('delete.receipt') }}", {
-                method: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ file_path: uploadedFile })
-            });
-            uploadedFile = null;
-            document.getElementById('receipt').value = '';
+    if (!approvedFields) return;
+
+    approvedFields.style.display = isApproved ? 'block' : 'none';
+
+    if (!isApproved) {
+        // Clear OCR saka receipt
+        document.getElementById('ocr_number').value = '';
+        document.getElementById('receipt').value = '';
+
+        if (myDropzone) {
+            try {
+                myDropzone.removeAllFiles(true);
+                myDropzone.destroy();
+                myDropzone = null;
+                document.getElementById('receiptDropzone').innerHTML = '';
+            } catch (err) {
+                console.warn('Dropzone destroy failed:', err);
+            }
         }
-        // Remove preview from UI
-        file.previewElement.remove();
+    } else {
+        if (!myDropzone) {
+            myDropzone = new Dropzone("#receiptDropzone", {
+                url: "{{ route('upload.receipt') }}",
+                autoProcessQueue: false,
+                maxFiles: 1,
+                acceptedFiles: "image/*,.pdf",
+                addRemoveLinks: true,
+                dictRemoveFile: 'Remove',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                success: function(file, response) {
+                    uploadedFile = response.file_path;
+                    document.getElementById('receipt').value = uploadedFile;
+                    document.getElementById('updateForm').submit();
+                },
+                removedfile: function(file) {
+                    if (uploadedFile) {
+                        fetch("{{ route('delete.receipt') }}", {
+                            method: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ file_path: uploadedFile })
+                        });
+                        uploadedFile = null;
+                        document.getElementById('receipt').value = '';
+                    }
+
+                    file.previewElement.remove();
+                }
+            });
+        }
     }
-});
-
-
+}
 
 newForm.addEventListener('submit', function (e) {
     if (myDropzone.getQueuedFiles().length > 0) {
-        e.preventDefault(); // Prevent form from submitting
-        myDropzone.processQueue(); // Start uploading
+        e.preventDefault(); 
+        myDropzone.processQueue(); 
     }
 });
 

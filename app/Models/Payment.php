@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\FillupForms;
+
 
 class Payment extends Model
 {
@@ -24,4 +26,10 @@ class Payment extends Model
         'payment_date',
         'payment_time',
     ];
+
+    public function formSubmission()
+{
+    return $this->hasOne(FillupForms::class, 'applicant_id', 'applicant_id');
+}
+
 }

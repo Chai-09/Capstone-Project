@@ -78,14 +78,17 @@ public function update(Request $request, $id)
         'receipt' => 'nullable|string',
     ]);
 
-    $payment = Payment::findOrFail($id);
+    $payment = Payment::with('formSubmission')->findOrFail($id);
     $payment->payment_status = $request->payment_status;
     $payment->remarks = $request->remarks;
     $payment->ocr_number = $request->ocr_number;
     $payment->receipt = $request->receipt;
     $payment->save();
 
-    \Mail::to($payment->applicant_email)->send(new \App\Mail\PaymentStatusMail($payment));
+    if ($payment->formSubmission && $payment->formSubmission->guardian_email) {
+        \Mail::to($payment->formSubmission->guardian_email)->send(new \App\Mail\PaymentStatusMail($payment));
+    }
+    
 
     return redirect()->back()->with('success', 'Payment updated and email sent.');
 }

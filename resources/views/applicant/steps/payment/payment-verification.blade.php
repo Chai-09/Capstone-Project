@@ -40,6 +40,15 @@
                     </a>
                 </p>
             </div>
+            @if ($payment->payment_status === 'approved')
+            <div class="form-row">
+                <p><strong>Payment Receipt:</strong> 
+                    <a href="javascript:void(0);" onclick="viewProof('{{ asset('storage/' . $payment->receipt) }}')">
+                        {{ basename($payment->receipt) }}
+                    </a>
+                </p>
+            </div>
+            @endif
         </div>  
         <div class="form-section"> {{-- Status Dot --}}
             <div class="d-flex justify-content-center align-items-center gap-2">

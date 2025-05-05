@@ -12,6 +12,20 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function viewProof(fileUrl) {
+
+    const isPDF = fileUrl.toLowerCase().endsWith('.pdf');
+
+    if (isPDF) {
+        Swal.fire({
+            title: 'Proof of Payment (PDF)',
+            html: `<iframe src="${fileUrl}" width="100%" height="500px" style="border:none;"></iframe>`,
+            width: 700,
+            confirmButtonText: 'Close',
+            customClass: {
+                confirmButton: 'btn-submit'
+            }
+        });
+    } else {      
     Swal.fire({
         imageUrl: fileUrl,
         imageAlt: 'Proof of Payment',
@@ -23,6 +37,7 @@ function viewProof(fileUrl) {
             confirmButton: 'btn-submit'
         }
     });
+}
 }
 
 window.viewProof = viewProof; // expose to global scope
