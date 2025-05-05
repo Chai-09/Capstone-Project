@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Manage Payments</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
@@ -93,7 +95,7 @@
               <span class="badge bg-danger">Denied</span>
             @endif
           </td>
-          <td>{{ $payment->remarks ?? '-' }}</td?>
+          <td>{{ $payment->remarks ?? '-' }}</td>
           <td>
             {{-- Optional action space --}}
           </td>
@@ -118,7 +120,7 @@
       <form id="updateForm" method="POST" action="">
         @csrf
         @method('PUT')
-        <div class="modal-body">
+        <div class="modal-body overflow-auto" style="max-height: 80vh; padding-bottom: 50px;">
           <div class="row">
             <!-- nasa left mga info per figma -->
             <div class="col-md-7">
@@ -153,19 +155,26 @@
                 <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
               </div>
               <div class="mb-3">
-    <label for="ocr_number" class="form-label"><strong>OCR Number:</strong></label>
-    <input type="text" class="form-control" id="ocr_number" name="ocr_number" placeholder="Enter OCR Number">
-</div>
-
+                <p><strong>NOTE: Add OCR and Receipt only if payment is approved</p></strong>
+                <label for="ocr_number" class="form-label"><strong>OCR Number:</strong></label>
+                <input type="text" class="form-control" id="ocr_number" name="ocr_number" placeholder="Enter OCR Number">
             </div>
-
+            <div class="mb-3">
+              <label class="form-label"><strong>Upload Receipt:</strong></label>
+              <p>Upload limit is 2MB. Accepted file types: png, jpg, jpeg, pdf.</p>
+              <div id="receiptDropzone" class="dropzone border border-secondary rounded" style="padding: 20px;"></div>
+              <input type="hidden" name="receipt" id="receipt">
+            </div>  
+         </div>
+        
+        
             <!-- nilagay ko sa right yung image per figma -->
             <div class="col-md-5 text-center">
               <img id="proofImage" src="" alt="Proof of Payment" class="img-fluid rounded shadow" style="max-height: 400px;">
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer bg-white sticky-bottom">
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </form>
@@ -186,6 +195,12 @@ function viewProof(fileUrl) {
 }
 
 function viewInfo(data) {
+
+  // Remove any existing event listeners to prevent stacking
+  const oldForm = document.getElementById('updateForm');
+    const newForm = oldForm.cloneNode(true);
+    oldForm.replaceWith(newForm);
+
     document.getElementById('idNumber').innerText = data.id || 'N/A';
     document.getElementById('applicantName').innerText = `${data.applicant_fname} ${data.applicant_mname} ${data.applicant_lname}`;
     document.getElementById('gradeLevel').innerText = `${data.incoming_grlvl} ${data.incoming_strand || ''}`.trim();
@@ -203,10 +218,61 @@ function viewInfo(data) {
     document.getElementById('ocr_number').value = data.ocr_number || '';
 
     document.getElementById('paymentId').value = data.id;
-    document.getElementById('updateForm').action = `/accountant/payments/${data.id}`;
-    
-    new bootstrap.Modal(document.getElementById('infoModal')).show();
+    newForm.action = `/accountant/payment-decision/${data.id}`;
+
+    let uploadedFile = null;
+
+const myDropzone = new Dropzone("#receiptDropzone", {
+    url: "{{ route('upload.receipt') }}",
+    autoProcessQueue: false,
+    maxFiles: 1,
+    acceptedFiles: "image/*",
+    addRemoveLinks: true,
+    dictRemoveFile: 'Remove',
+    headers: {
+        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    },
+    success: function(file, response) {
+        uploadedFile = response.file_path;
+        document.getElementById('receipt').value = uploadedFile;
+        
+        document.getElementById('updateForm').submit();
+    },
+    removedfile: function(file) {
+        if (uploadedFile) {
+            fetch("{{ route('delete.receipt') }}", {
+                method: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ file_path: uploadedFile })
+            });
+            uploadedFile = null;
+            document.getElementById('receipt').value = '';
+        }
+        // Remove preview from UI
+        file.previewElement.remove();
+    }
+});
+
+
+
+newForm.addEventListener('submit', function (e) {
+    if (myDropzone.getQueuedFiles().length > 0) {
+        e.preventDefault(); // Prevent form from submitting
+        myDropzone.processQueue(); // Start uploading
+    }
+});
+
+new bootstrap.Modal(document.getElementById('infoModal')).show();
+
+
+
 }
+
+
 </script>
+
 </body>
 </html>

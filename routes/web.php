@@ -190,6 +190,16 @@ Route::middleware(['auth', 'role:accounting'])->group(function () {
     Route::post('/accountant/payments/deny/{id}', [AccountingPaymentController::class, 'deny'])->name('accountant.payments.deny');
 
     Route::put('/accountant/payments/{id}', [PaymentController::class, 'updateRemarks'])->name('accountant.payments.update');
+
+    //for uploading of receipt 
+    Route::post('/upload-receipt', [AccountingPaymentController::class, 'uploadReceipt'])->name('upload.receipt');
+
+    //for uploading everything as well as to email
+    Route::put('/accountant/payment-decision/{id}', [AccountingPaymentController::class, 'update'])->name('accountant.payment.decision');
+
+    Route::post('/delete-receipt', [AccountingPaymentController::class, 'deleteReceipt'])->name('delete.receipt');
+
+
 });
 
 //Sidebar

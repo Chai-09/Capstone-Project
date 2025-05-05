@@ -39,6 +39,7 @@
                     <div class="form-row">
                         <div class="form-col payment-label">
                             <label for="proof_of_payment" class="form-label">Attach Proof of Payment: <span class="text-danger">*</span></label>
+                            <p>Upload limit is 2MB. Accepted file types: png, jpg, jpeg, pdf.</p>
                             <input class="form-control" type="file" id="proof_of_payment" name="proof_of_payment" accept="image/*,.pdf" required {{ $existingPayment ? 'disabled' : '' }}>
 
                         </div>
