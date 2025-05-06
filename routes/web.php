@@ -198,8 +198,6 @@ Route::middleware(['auth', 'role:accounting'])->group(function () {
     Route::put('/accountant/payment-decision/{id}', [AccountingPaymentController::class, 'update'])->name('accountant.payment.decision');
 
     Route::post('/delete-receipt', [AccountingPaymentController::class, 'deleteReceipt'])->name('delete.receipt');
-
-
 });
 
 //Sidebar

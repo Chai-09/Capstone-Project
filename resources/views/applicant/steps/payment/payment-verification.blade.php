@@ -31,26 +31,14 @@
                 <p><strong>Payment Method:</strong> {{ $payment->payment_method }}</p>
             </div>  
             <div class="form-row">
-                <p><strong>OCR Number:</strong> {{ $payment->ocr_number ?? 'N/A' }}</p>
-            </div>
-            <div class="form-row">
                 <p><strong>Proof of Payment:</strong> 
                     <a href="javascript:void(0);" onclick="viewProof('{{ asset('storage/' . $payment->proof_of_payment) }}')">
-                        {{ basename($payment->proof_of_payment) }}
+                        View your proof of payment
                     </a>
                 </p>
             </div>
-            @if ($payment->payment_status === 'approved')
-            <div class="form-row">
-                <p><strong>Payment Receipt:</strong> 
-                    <a href="javascript:void(0);" onclick="viewProof('{{ asset('storage/' . $payment->receipt) }}')">
-                        {{ basename($payment->receipt) }}
-                    </a>
-                </p>
-            </div>
-            @endif
         </div>  
-        <div class="form-section"> {{-- Status Dot --}}
+        <div class="form-section pb-4"> {{-- Status Dot --}}
             <div class="d-flex justify-content-center align-items-center gap-2">
                 @if ($payment->payment_status === 'denied')
                     <div class="status-dot bg-danger"></div>
@@ -67,16 +55,21 @@
         <div class="form-section"> {{-- Status --}}
             <div class="form-row"> 
                 @if ($payment->payment_status === 'denied')
-                        <div class="payment-status-box denied">
-                            <h5>Your payment has been denied.</h5>
-                            <p>{{ $payment->remarks ?? 'No remarks provided.' }}</p>
+                        <div class="alert alert-info denied">
+                            <p><strong>Remarks: </strong>{{ $payment->remarks ?? 'No remarks provided.' }}</p>
                         </div>
-                    @elseif ($payment->payment_status === 'approved')
-                        <div class="payment-status-box approved">
-                            <h5>Your payment has been approved.</h5>
-                            <p>{{ $payment->remarks ?? 'No remarks provided.' }}</p>
-                        </div>
-                    @endif       
+                @elseif ($payment->payment_status === 'approved')
+                    <div class="alert alert-info approved">
+                        <p><strong>OCR Number:</strong> {{ $payment->ocr_number ?? 'N/A' }}</p>
+
+                        <p><strong>Payment Receipt:</strong>
+                            <a href="javascript:void(0);" onclick="viewProof('{{ asset('storage/' . $payment->receipt) }}')">
+                                View your receipt
+                            </a>
+                        </p>
+                        <p><strong>Remarks: </strong>{{ $payment->remarks ?? 'No remarks provided.' }}</p>
+                    </div>
+                @endif       
             </div>
         </div>
         <div class="form-section">
