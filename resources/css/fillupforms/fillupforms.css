@@ -128,3 +128,27 @@
     background-color: #999;
 }
 
+/* Focus */
+#step1 input:focus,
+#step1 textarea:focus,
+#step1 select:focus {
+    border-color: #00753F;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 117, 63, 0.2);
+}
+
+#step2 input:focus,
+#step2 textarea:focus,
+#step2 select:focus {
+    border-color: #00753F;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 117, 63, 0.2);
+}
+
+#step3 input:focus,
+#step3 textarea:focus,
+#step3 select:focus {
+    border-color: #00753F;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 117, 63, 0.2);
+}
