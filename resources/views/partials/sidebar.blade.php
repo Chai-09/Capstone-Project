@@ -62,7 +62,7 @@
         </a>
 
       @elseif(auth()->check() && auth()->user()->role == 'accounting')
-        <a href="#" class="nav-link" title="Dashboard">
+        <a href="{{ route('accountingdashboard') }}" class="nav-link" title="Dashboard">
           <div class="icon-wrapper"><i class="fa-solid fa-table-columns"></i></div>
           <span>Dashboard</span>
         </a>

@@ -26,7 +26,12 @@ export default defineConfig({
                 'resources/js/address/address.js',
                 'resources/js/applicant/payment-verification.js',
                 'resources/js/applicant/exam-schedule.js',
-                'resources/js/partials/sidebar.js'
+
+                //3 Sidebar
+                'resources/js/partials/sidebar.js',
+
+                // Accountant 
+                'resources/js/accounting/payment.js',
             ],
             refresh: true,
         }),

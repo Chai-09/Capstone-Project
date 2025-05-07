@@ -202,3 +202,6 @@ Route::middleware(['auth', 'role:accounting'])->group(function () {
 
 //Sidebar
 Route::view('/sidebar', 'partials.sidebar')->name('sidebar');
+
+//Accountant Dashboard
+Route::view('/accountant-dashboard', 'accounting.index')->name('accounting');
