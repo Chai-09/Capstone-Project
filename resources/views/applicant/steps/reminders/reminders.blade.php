@@ -20,7 +20,7 @@
         <p><strong>Date of Exam:</strong> {{ \Carbon\Carbon::parse($schedule->exam_date)->format('F d, Y') }}</p>
         <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($schedule->start_time)->format('g:i A') }} to {{ \Carbon\Carbon::parse($schedule->end_time)->format('g:i A') }}</p>
     @else
-        <p class="text-danger">No schedule found. Please select a schedule first.</p>
+        <p class="text-danger">Please wait for further announcements.</p>
     @endif
 </div>
 

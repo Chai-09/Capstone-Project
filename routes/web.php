@@ -112,10 +112,10 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
                     $schedule = ApplicantSchedule::where('applicant_id', auth()->id())->latest()->first();
                     return view('applicant.steps.reminders.reminders', compact('schedule'));
                 })->name('reminders.view');
-
+                Route::get('/applicant/exam-result', [ExamResultController::class, 'showForApplicant'])->name('applicant.exam.result'); //nilagay ko siya sa may form.submitted pero di ko sure kung san to
                 
             });
-            Route::get('/applicant/exam-result', [ExamResultController::class, 'showForApplicant'])->name('applicant.exam.result'); //nilagay ko siya sa may form.submitted pero di ko sure kung san to
+            
         });
     });
 });

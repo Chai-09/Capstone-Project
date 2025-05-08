@@ -56,6 +56,7 @@
                                     <option value="failed" {{ $result->exam_result === 'failed' ? 'selected' : '' }}>Failed</option>
                                     <option value="scholarship" {{ $result->exam_result === 'scholarship' ? 'selected' : '' }}>Scholarship</option>
                                     <option value="interview" {{ $result->exam_result === 'interview' ? 'selected' : '' }}>Interview</option>
+                                    <option value="no_show" {{ $result->exam_result === 'no_show' ? 'selected' : '' }}>No Show</option>
                                 </select>
                                 <button type="button" class="btn btn-success confirm-btn">Confirm</button>
                             </div>

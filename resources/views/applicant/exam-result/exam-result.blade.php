@@ -28,14 +28,14 @@
             @if($examResult->exam_result === 'pending')
                 Your result is currently under review. Please check back later.
             @elseif($examResult->exam_result === 'passed')
-                🎉 Congratulations! You passed the exam.
+                Congratulations! You passed the exam.
             @elseif($examResult->exam_result === 'failed')
                 Thank you for your effort. Unfortunately, you did not pass.
             @elseif($examResult->exam_result === 'scholarship')
                 You qualified for a scholarship! Our team will contact you soon.
             @elseif($examResult->exam_result === 'interview')
                 You have been selected for an interview. Details will be sent to your email.
-            @elseif($examResult->exam_status === 'no_show')
+            @elseif($examResult->exam_result === 'no_show')
                 You were marked as a no-show for the exam. Please contact Admissions for rescheduling.
             @endif
         </div>
@@ -66,7 +66,7 @@
         </div>
     @else
         <div class="alert alert-warning text-center">
-            No exam result found for your account.
+            Please wait for announcements.
         </div>
     @endif
 </div>

@@ -64,7 +64,7 @@
         </div>
         <li class="nav-item {{-- {{ $currentStep > 6 ? 'completed' : '' }}  {{ $currentStep > 6 ? 'completed' : '' }} --}}">
             <span class="step-number">Step 6</span>
-            <a href="" 
+            <a href="{{ route ('applicant.exam.result') }}" 
             class="nav-link {{-- {{ $currentStep > 6 ? 'completed' : '' }}  {{ $currentStep > 6 ? 'completed' : '' }} --}}">
                 <i class="fa-solid fa-square-poll-vertical"></i> Results
             </a>
