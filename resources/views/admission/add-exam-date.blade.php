@@ -73,7 +73,7 @@
         <div class="text-center d-flex justify-content-center gap-3">
     <button type="button" id="addTimeframe" class="btn btn-success">Add</button>
     <button type="submit" class="btn btn-primary">Save</button>
-    <a href="{{ route('examschedule') }}" class="btn btn-secondary">Back to Exam Schedule</a>
+    <a href="{{ route('admission.exam.schedule') }}" class="btn btn-secondary">Back to Exam Schedule</a>
 </div>
 
 

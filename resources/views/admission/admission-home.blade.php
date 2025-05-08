@@ -22,12 +22,13 @@
 <a href="{{ route('applicantlist') }}" class="btn btn-primary">
     Applicants
 </a>
-<a href="{{ route('examschedule') }}" class="btn btn-primary">
+<a href="{{ route('admission.exam.schedule') }}" class="btn btn-primary">
     Exam Schedule
 </a>
-<a href="{{ route('exam.results') }}" class="btn btn-primary">
+<a href="{{ route('admission.exam.result') }}" class="btn btn-primary">
     Exam Results
 </a>
+
 
 
 </body>

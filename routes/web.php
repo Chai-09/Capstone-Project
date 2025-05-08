@@ -107,13 +107,13 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
 
                 // Route for proceeding to exam date form (when Approved)
                 Route::get('/step-4', [ExamScheduleController::class, 'showExamDatesForApplicants'])->name('applicant.examdates');
-
+                Route::post('/save-exam-schedule', [ApplicantScheduleController::class, 'store'])->name('applicant.saveExamSchedule');
                 Route::get('/applicant/steps/reminders/reminders', function () {
-                    $schedule = ApplicantSchedule::where('user_id', auth()->id())->latest()->first();
+                    $schedule = ApplicantSchedule::where('applicant_id', auth()->id())->latest()->first();
                     return view('applicant.steps.reminders.reminders', compact('schedule'));
                 })->name('reminders.view');
 
-                Route::post('/save-exam-schedule', [ApplicantScheduleController::class, 'store'])->name('applicant.saveExamSchedule');
+                
             });
             Route::get('/applicant/exam-result', [ExamResultController::class, 'showForApplicant'])->name('applicant.exam.result'); //nilagay ko siya sa may form.submitted pero di ko sure kung san to
         });
@@ -143,42 +143,46 @@ Route::middleware(['auth', 'role:admission'])->group(function () {
     //Route::get('/applicant/steps/exam_date/exam-date', [ExamScheduleController::class, 'showExamDates'])->name('exam.dates');
     Route::get('/admissiondashboard', function () {
         return view('admission.admission-home');
-    })->name('admissiondashboard');
-
-    Route::get('/exam-schedule', function () {
-        return view('admission.exam-schedule');
-    })->name('examschedule');
+    })->name('admissiondashboard'); //tanggalin ko to
 
     Route::get('/add-exam-date', [ExamDateController::class, 'create'])->name('examdate.create');
     Route::post('/store-exam-date', [ExamDateController::class, 'store'])->name('examdate.store');
     Route::get('/exam-schedule', [AdmissionDateController::class, 'index'])->name('examschedule');
 
-    Route::delete('/examdate/{id}', [ExamScheduleController::class, 'destroy'])->name('examdate.destroy');
-
-    Route::post('/examdate/delete-date', [ExamScheduleController::class, 'deleteDate'])->name('examdate.deleteDate');
-
-    // Show all applicants on that day
-    Route::get('/admission/exam-attendance', [ExamAttendanceController::class, 'show'])->name('exam.attendance');
-
-    // Mark attendance (Done / No Show) for an applicant
-    Route::post('/admission/exam-attendance/mark', [ExamAttendanceController::class, 'markAttendance'])->name('exam.attendance.mark');
-
-    Route::get('/exam-results', function () {
-        return view('admission.exam-results');
-    })->name('examresults');
-
 
     Route::get('/admission-home', function () {
-        return view('admission.admission-home');
+        return view('admission.admission-home'); //use for aero home
     })->name('admissionhome');
 
     Route::get('/admission/applicants-list', [AdmissionsAppListController::class, 'index'])->name('applicantlist');
 
-    // Exam Attendance
-    Route::post('/exam/mark-attendance', [ExamResultController::class, 'markAttendance'])->name('exam.attendance.mark');
-    Route::get('/admission/exam/exam-result', [ExamResultController::class, 'index'])->name('exam.results');
+    //displays exam schedule
+    Route::get('/admission/exam/exam-schedule', [ExamScheduleController::class, 'index'])
+    ->name('admission.exam.schedule');
 
-    Route::post('/exam-result/update/{id}', [ExamResultController::class, 'update'])->name('exam-result.update');
+    Route::delete('/admission/exam/exam-schedule/{id}', [ExamScheduleController::class, 'destroy'])
+    ->name('exam-schedule.destroy'); //delete schedule 
+
+    Route::post('/admission/exam/exam-schedule/delete-date', [ExamScheduleController::class, 'deleteDate'])
+    ->name('exam-schedule.deleteDate'); //delete exam date
+
+    Route::get('/admission/exam/exam-schedule/applicants', [ExamScheduleController::class, 'fetchApplicants'])
+    ->name('exam-schedule.fetchApplicants'); //fetch applicants per grade level
+
+    Route::get('/admission/exam/exam-schedule/applicants/by-date', [ExamScheduleController::class, 'fetchByDate']); 
+
+    Route::get('/admission/exam/exam-schedule/applicants/by-time', [ExamScheduleController::class, 'fetchByTimeSlot']);
+
+    Route::get('/admission/exam/exam-attendance', [ExamAttendanceController::class, 'show'])->name('exam.attendance');
+
+    Route::post('/admission/exam-results/mark', [ExamResultController::class, 'markAttendance'])->name('exam-results.mark');
+
+
+    Route::post('/exam/mark-attendance', [App\Http\Controllers\ExamResultController::class, 'markAttendance'])->name('exam.markAttendance');
+
+    Route::get('/admission/exam/exam-result', [ExamResultController::class, 'index'])->name('admission.exam.exam-results');
+    Route::post('/exam-results/update', [ExamResultController::class, 'update'])->name('exam.results.update');
+    Route::get('/admission/exam/exam-result', [ExamResultController::class, 'index'])->name('admission.exam.result');
 });
 
 //ACCOUNTING ROUTES

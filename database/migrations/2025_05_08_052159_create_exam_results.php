@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('applicant_name');
             $table->string('incoming_grade_level');
             $table->date('exam_date');
-            $table->enum('exam_status', ['done', 'no_show']);
-            $table->enum('exam_result', ['pending', 'passed', 'failed', 'scholarship', 'interview'])->default('pending');
+            $table->enum('exam_status', ['done', 'no show']);
+            $table->string('exam_result')->nullable(); // will be filled later
             $table->timestamps();
 
             $table->foreign('applicant_id')->references('id')->on('applicants')->onDelete('cascade');

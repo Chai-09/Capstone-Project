@@ -9,7 +9,7 @@ class ApplicantSchedule extends Model
     protected $table = 'applicant_schedules';
 
     protected $fillable = [
-        'user_id',
+        'applicant_id',
         'applicant_name',
         'applicant_contact_number',
         'incoming_grade_level',
@@ -17,4 +17,11 @@ class ApplicantSchedule extends Model
         'start_time',
         'end_time',
     ];
+
+    public function applicant()
+{
+    return $this->belongsTo(Applicant::class, 'applicant_id');
+}
+
+
 }

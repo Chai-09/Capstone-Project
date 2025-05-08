@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ApplicantSchedule;
 use App\Models\FillupForms;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Applicant;
 
 
 class ApplicantScheduleController extends Controller
@@ -13,6 +14,13 @@ class ApplicantScheduleController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
+
+        $applicant = Applicant::where('account_id', Auth::id())->first();
+
+        if (!$applicant) {
+            return response()->json(['success' => false, 'message' => 'Applicant not found.']);
+        }
+
 
         // Find applicant info from form_submissions
         $form = FillupForms::where('applicant_email', $user->email)->first();
@@ -23,7 +31,7 @@ class ApplicantScheduleController extends Controller
 
         // Save schedule
         ApplicantSchedule::create([
-            'user_id' => $user->id,
+            'applicant_id' => $applicant->id,
             'applicant_name' => strtoupper($form->applicant_fname . ' ' . $form->applicant_mname . ' ' . $form->applicant_lname),
             'applicant_contact_number' => $form->applicant_contact_number,
             'incoming_grade_level' => $form->incoming_grlvl,

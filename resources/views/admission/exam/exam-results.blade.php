@@ -45,7 +45,9 @@
                     <td>{{ ucfirst($result->exam_status) }}</td>
                     <td>{{ ucfirst($result->exam_result) }}</td>
                     <td>
-                        <form method="POST" action="{{ route('exam-result.update', $result->id) }}" class="result-form">
+                    <form method="POST" action="{{ route('exam.results.update') }}" class="result-form">
+    <input type="hidden" name="applicant_id" value="{{ $result->applicant_id }}">
+
                             @csrf
                             <div class="input-group input-group-sm">
                                 <select name="exam_result" class="form-select">

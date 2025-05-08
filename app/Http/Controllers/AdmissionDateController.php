@@ -21,7 +21,7 @@ class AdmissionDateController extends Controller
 
     $examSchedules = $query->orderBy('exam_date')->paginate(5); // << make sure it is paginate(5) here
 
-    return view('admission.exam-schedule', compact('examSchedules'));
+    return view('admission.exam.exam-schedule', compact('examSchedules'));
 }
 
 }

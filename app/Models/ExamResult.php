@@ -14,4 +14,9 @@ class ExamResult extends Model
         'exam_status',
         'exam_result',
     ];
+
+    public function applicant()
+    {
+        return $this->belongsTo(\App\Models\Applicant::class);
+    }
 }
