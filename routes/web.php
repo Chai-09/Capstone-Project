@@ -109,9 +109,26 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
                 Route::get('/step-4', [ExamScheduleController::class, 'showExamDatesForApplicants'])->name('applicant.examdates');
                 Route::post('/save-exam-schedule', [ApplicantScheduleController::class, 'store'])->name('applicant.saveExamSchedule');
                 Route::get('/applicant/steps/reminders/reminders', function () {
-                    $schedule = ApplicantSchedule::where('applicant_id', auth()->id())->latest()->first();
+                    $user = auth()->user();
+                    $applicant = \App\Models\Applicant::where('account_id', $user->id)->first();
+                
+                    if (!$applicant) {
+                        abort(404);
+                    }
+                
+                    $examResult = \App\Models\ExamResult::where('applicant_id', $applicant->id)->first();
+                
+                    if ($examResult) {
+                        // Redirect to exam result view if result exists
+                        return redirect()->route('applicant.exam.result');
+                    }
+                
+                    // Otherwise, show the normal reminders view
+                    $schedule = \App\Models\ApplicantSchedule::where('applicant_id', $applicant->id)->latest()->first();
                     return view('applicant.steps.reminders.reminders', compact('schedule'));
                 })->name('reminders.view');
+                
+                
                 Route::get('/applicant/exam-result', [ExamResultController::class, 'showForApplicant'])->name('applicant.exam.result'); //nilagay ko siya sa may form.submitted pero di ko sure kung san to
                 
             });

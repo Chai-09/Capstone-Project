@@ -16,6 +16,8 @@
     <p class="text-center">Your exam schedule has been successfully selected! Please be reminded of your upcoming examination.</p>
 
     @if ($schedule)
+        <p><strong>Admission Number:</strong> {{ $schedule->admission_number }}</p>
+
         <p><strong>Applicant's Name:</strong> {{ $schedule->applicant_name }}</p>
         <p><strong>Date of Exam:</strong> {{ \Carbon\Carbon::parse($schedule->exam_date)->format('F d, Y') }}</p>
         <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($schedule->start_time)->format('g:i A') }} to {{ \Carbon\Carbon::parse($schedule->end_time)->format('g:i A') }}</p>

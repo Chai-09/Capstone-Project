@@ -12,34 +12,40 @@ use App\Models\Applicant;
 class ApplicantScheduleController extends Controller
 {
     public function store(Request $request)
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        $applicant = Applicant::where('account_id', Auth::id())->first();
+    $applicant = Applicant::where('account_id', Auth::id())->first();
 
-        if (!$applicant) {
-            return response()->json(['success' => false, 'message' => 'Applicant not found.']);
-        }
-
-
-        // Find applicant info from form_submissions
-        $form = FillupForms::where('applicant_email', $user->email)->first();
-
-        if (!$form) {
-            return response()->json(['success' => false, 'message' => 'Applicant info not found.']);
-        }
-
-        // Save schedule
-        ApplicantSchedule::create([
-            'applicant_id' => $applicant->id,
-            'applicant_name' => strtoupper($form->applicant_fname . ' ' . $form->applicant_mname . ' ' . $form->applicant_lname),
-            'applicant_contact_number' => $form->applicant_contact_number,
-            'incoming_grade_level' => $form->incoming_grlvl,
-            'exam_date' => $request->exam_date,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-        ]);
-
-        return response()->json(['success' => true]);
+    if (!$applicant) {
+        return response()->json(['success' => false, 'message' => 'Applicant not found.']);
     }
+
+    // Find applicant info from form_submissions
+    $form = FillupForms::where('applicant_email', $user->email)->first();
+
+    if (!$form) {
+        return response()->json(['success' => false, 'message' => 'Applicant info not found.']);
+    }
+
+    // Generate Admission Number
+    $year = now()->year;
+    $count = ApplicantSchedule::whereYear('created_at', $year)->count() + 1;
+    $admissionNumber = $year . '-' . str_pad($count, 5, '0', STR_PAD_LEFT);
+
+    // Save schedule
+    $schedule = ApplicantSchedule::create([
+        'applicant_id' => $applicant->id,
+        'admission_number' => $admissionNumber,
+        'applicant_name' => strtoupper($form->applicant_fname . ' ' . $form->applicant_mname . ' ' . $form->applicant_lname),
+        'applicant_contact_number' => $form->applicant_contact_number,
+        'incoming_grade_level' => $form->incoming_grlvl,
+        'exam_date' => $request->exam_date,
+        'start_time' => $request->start_time,
+        'end_time' => $request->end_time,
+    ]);
+
+    return response()->json(['success' => true]);
+}
+
 }

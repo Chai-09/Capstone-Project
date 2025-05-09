@@ -10,6 +10,7 @@ class ApplicantSchedule extends Model
 
     protected $fillable = [
         'applicant_id',
+        'admission_number',
         'applicant_name',
         'applicant_contact_number',
         'incoming_grade_level',
