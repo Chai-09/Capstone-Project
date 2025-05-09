@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @vite('resources/js/accounting/payment.js')
+    @vite('resources/css/accounting/tables.css')
 </head>
 <body>
 
@@ -19,7 +20,7 @@
         @include('partials.sidebar')
 
         {{-- Main Content --}}
-        <div id="content" class="flex-grow-1 p-4">
+        <div id="content" class="flex-grow-1 p-2">
             @yield('content')
         </div>
     </div>

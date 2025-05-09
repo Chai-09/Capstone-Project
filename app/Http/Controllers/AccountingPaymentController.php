@@ -23,6 +23,10 @@ class AccountingPaymentController extends Controller
         $query->where('payment_status', $request->input('payment_status'));
     }
 
+    if ($request->filled('payment_method')) {
+        $query->where('payment_method', $request->input('payment_method'));
+    }
+
     if ($request->filled('search')) {
         $search = $request->input('search');
         $query->where(function($q) use ($search) {
@@ -32,7 +36,7 @@ class AccountingPaymentController extends Controller
         });
     }
 
-    $payments = $query->get();
+    $payments = $query->latest()->paginate(10);
 
     return view('accounting.payments', compact('payments'));
 }
