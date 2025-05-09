@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @vite('resources/js/accounting/payment.js')
-    @vite('resources/css/accounting/tables.css')
+    @vite('resources/css/accounting/table.css')
 </head>
 <body>
 
