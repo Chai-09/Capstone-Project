@@ -13,6 +13,7 @@ class ExamResult extends Model
         'exam_date',
         'exam_status',
         'exam_result',
+        'admission_number',
     ];
 
     public function applicant()

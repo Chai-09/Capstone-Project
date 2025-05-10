@@ -31,12 +31,13 @@ class ExamResultController extends Controller
 
         // Always update both status and result
         $existing = ExamResult::where('applicant_id', $applicant->id)->first();
-
+        $admissionNumber = $schedule->admission_number;
         if ($existing) {
             $existing->applicant_name = $applicant->applicant_fname . ' ' . $applicant->applicant_lname;
             $existing->incoming_grade_level = $applicant->incoming_grlvl;
             $existing->exam_date = $schedule->exam_date;
             $existing->exam_status = $status;
+            $existing->admission_number = $admissionNumber;
 
             // only overwrite result if status is no_show
             if ($status === 'no_show') {
@@ -52,6 +53,7 @@ class ExamResultController extends Controller
                 'exam_date' => $schedule->exam_date,
                 'exam_status' => $status,
                 'exam_result' => $examResultValue,
+                'admission_number' => $admissionNumber,
             ]);
         }
 

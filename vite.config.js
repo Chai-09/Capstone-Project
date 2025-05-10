@@ -29,7 +29,7 @@ export default defineConfig({
 
                 //3 Sidebar
                 'resources/js/partials/sidebar.js',
-                'resources/css/accounting/tables.css',
+                'resources/css/accounting/table.css',
 
                 // Accountant 
                 'resources/js/accounting/payment.js',
