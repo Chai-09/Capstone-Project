@@ -52,7 +52,7 @@
 </div>
 
 {{-- Nilagay ko lang dito para may reminder, paiba nalang ty! --}}
-@if (isset($currentStep) && $currentStep == 5)
+@if (isset($currentStep) && $currentStep > 4)
 <div class="alert alert-info">
 <p> YOU HAVE ALREADY SCHEDULED A DATE! (PAIBA NETO PLEASE - gabe) </p>
 <div>
