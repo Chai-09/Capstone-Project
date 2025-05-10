@@ -53,7 +53,7 @@
         </div>
         <li class="nav-item {{-- {{ $currentStep > 5 ? 'completed' : '' }}  {{ $currentStep > 5 ? 'completed' : '' }} --}}">
             <span class="step-number">Step 5</span>
-            <a href="" 
+            <a href="{{ route ('reminders.view') }}" 
             class="nav-link {{-- {{ $currentStep > 5 ? 'completed' : '' }}  {{ $currentStep > 5 ? 'completed' : '' }} --}}">
                 <i class="fa-solid fa-file-pen"></i> Take the exam
             </a>

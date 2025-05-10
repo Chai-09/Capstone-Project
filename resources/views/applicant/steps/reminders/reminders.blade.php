@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-    <link rel="website icon" type="png" href="{{ asset('applysmart_logo.png') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Reminders</title>
-</head>
-<body>
+@extends('applicant.index')
+
+@section('content')
+
 <div class="container mt-5">
     <h2 class="text-center">Reminders</h2>
     <p class="text-center">Your exam schedule has been successfully selected! Please be reminded of your upcoming examination.</p>
@@ -26,6 +17,16 @@
     @endif
 </div>
 
+{{-- Proceed button magpapakita lang if may exam_result and step == 5 --}}
+@if ($showProceedButton)
+    <div class="text-center mt-4">
+        <a href="{{ route('applicant.exam.result') }}" class="btn btn-success">
+            Proceed to Exam Result
+        </a>
+    </div>
+@endif
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         Swal.fire({
@@ -36,5 +37,5 @@
         });
     });
 </script>
-</body>
-</html>
+
+@endsection

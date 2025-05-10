@@ -71,8 +71,12 @@ class AuthController extends Controller
                 return redirect()->route('payment.verification');
             } elseif ($applicant->current_step == 4) {
                 return redirect()->route('applicant.examdates');
-            }
+            } elseif ($applicant->current_step == 5) {
+                return redirect()->route('reminders.view');
+            } elseif ($applicant->current_step == 6) {
+                return redirect()->route('applicant.exam.result');
         }
+    }
 
         return view('applicant.index', compact('formSubmission', 'readOnly'));
 

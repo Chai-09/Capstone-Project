@@ -266,6 +266,8 @@ class ExamScheduleController extends Controller
             ->where('account_id', $accountId)
             ->first();
 
+            $currentStep = $applicant->current_step; //added to pass current_step to a variable
+
         if (!$applicant || !$applicant->formSubmission) {
             abort(404, 'Applicant or form submission not found.');
         }
@@ -290,6 +292,6 @@ class ExamScheduleController extends Controller
             $examSchedules = collect(); // empty collection
         }
 
-        return view('applicant.steps.exam_date.exam-date', compact('examSchedules'));
+        return view('applicant.steps.exam_date.exam-date', compact('examSchedules', 'currentStep'));
     }
 }

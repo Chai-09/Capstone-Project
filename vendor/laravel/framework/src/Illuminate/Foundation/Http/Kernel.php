@@ -84,6 +84,10 @@ class Kernel implements KernelContract
         'form.submitted' => \App\Http\Middleware\EnsureFormSubmissionCompleted::class,
         'payment.submitted' => \App\Http\Middleware\EnsurePaymentSubmitted::class,
         'payment.verified' => \App\Http\Middleware\EnsurePaymentApprovedForExam::class,
+        'exam.schedule.selected' => \App\Http\Middleware\ExamScheduleSelected::class,
+        'exam.result.exists' => \App\Http\Middleware\EnsureExamResultExists::class,
+
+
 
 
     
