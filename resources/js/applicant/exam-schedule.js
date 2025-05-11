@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            window.location.href = "/applicant/steps/reminders/reminders";
+                            window.location.href = "/step-5";
                         } else {
                             Swal.fire({
                                 icon: 'error',

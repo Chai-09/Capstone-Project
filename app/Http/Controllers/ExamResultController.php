@@ -95,6 +95,6 @@ class ExamResultController extends Controller
             $examResult->save();
         }
 
-        return view('applicant.exam-result.exam-result', compact('examResult'));
+        return view('applicant.exam-result.exam-result', compact('examResult'))->with('currentStep', $applicant->current_step);
     }
 }

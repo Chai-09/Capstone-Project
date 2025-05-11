@@ -646,11 +646,13 @@ namespace App\Models {
      * @property string $incoming_grade_level
      * @property string $applicant_contact_number
      * @property string $applicant_name
+     * @property string|null $admission_number
      * @property mixed $applicant_id
      * @property int $id
      * @property-read \App\Models\Applicant $applicant
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereApplicantId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereAdmissionNumber($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereApplicantName($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereApplicantContactNumber($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereIncomingGradeLevel($value)
@@ -964,11 +966,13 @@ namespace App\Models {
      * @property string $exam_date
      * @property string $incoming_grade_level
      * @property string $applicant_name
+     * @property string|null $admission_number
      * @property mixed $applicant_id
      * @property int $id
      * @property-read \App\Models\Applicant $applicant
      * @method static \Illuminate\Database\Eloquent\Builder<ExamResult>|ExamResult whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ExamResult>|ExamResult whereApplicantId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<ExamResult>|ExamResult whereAdmissionNumber($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ExamResult>|ExamResult whereApplicantName($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ExamResult>|ExamResult whereIncomingGradeLevel($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ExamResult>|ExamResult whereExamDate($value)

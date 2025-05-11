@@ -3,7 +3,6 @@
 @section('content')
 
 <div class="container payment-verify">
-
     <div class="step-form">
         <div class="form-section">
             <div class="form-row">

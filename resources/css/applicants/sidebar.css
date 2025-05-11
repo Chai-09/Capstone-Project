@@ -115,3 +115,7 @@
     color: #00753F !important;
 }
 
+.sidebar-nav .nav-item.completed a {
+    color:#00753F !important;
+}
+

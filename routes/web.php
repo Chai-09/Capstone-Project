@@ -109,20 +109,20 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
                 Route::get('/step-4', [ExamScheduleController::class, 'showExamDatesForApplicants'])->name('applicant.examdates');
                 Route::post('/save-exam-schedule', [ApplicantScheduleController::class, 'store'])->name('applicant.saveExamSchedule');
 
-            //-----------------------------------------------------------------------------------------------------------------------------//    
+                //-----------------------------------------------------------------------------------------------------------------------------//    
 
-            //if schedule has been selected they can go to step 5 (middleware nest 4)
+                //if schedule has been selected they can go to step 5 (middleware nest 4)
                 Route::middleware(['exam.schedule.selected'])->group(function () {
 
-                Route::get('/applicant/steps/reminders/reminders', [ApplicantScheduleController::class, 'showReminders'])->name('reminders.view');
+                    Route::get('/step-5', [ApplicantScheduleController::class, 'showReminders'])->name('reminders.view');
                 });
 
-            //-----------------------------------------------------------------------------------------------------------------------------//  
-            //if exam result exists in database been selected they can go to step 6 (middleware nest 5 FINAL)
-                Route::middleware(['exam.result.exists'])->group(function(){
-                    
-                Route::get('/applicant/exam-result', [ExamResultController::class, 'showForApplicant'])->name('applicant.exam.result'); //nilagay ko siya sa may form.submitted pero di ko sure kung san to
-                
+                //-----------------------------------------------------------------------------------------------------------------------------//  
+                //if exam result exists in database been selected they can go to step 6 (middleware nest 5 FINAL)
+                Route::middleware(['exam.result.exists'])->group(function () {
+
+                    Route::get('/step-6', [ExamResultController::class, 'showForApplicant'])->name('applicant.exam.result'); //nilagay ko siya sa may form.submitted pero di ko sure kung san to
+
                 });
             });
         });
@@ -167,18 +167,18 @@ Route::middleware(['auth', 'role:admission'])->group(function () {
 
     //displays exam schedule
     Route::get('/admission/exam/exam-schedule', [ExamScheduleController::class, 'index'])
-    ->name('admission.exam.schedule');
+        ->name('admission.exam.schedule');
 
     Route::delete('/admission/exam/exam-schedule/{id}', [ExamScheduleController::class, 'destroy'])
-    ->name('exam-schedule.destroy'); //delete schedule 
+        ->name('exam-schedule.destroy'); //delete schedule 
 
     Route::post('/admission/exam/exam-schedule/delete-date', [ExamScheduleController::class, 'deleteDate'])
-    ->name('exam-schedule.deleteDate'); //delete exam date
+        ->name('exam-schedule.deleteDate'); //delete exam date
 
     Route::get('/admission/exam/exam-schedule/applicants', [ExamScheduleController::class, 'fetchApplicants'])
-    ->name('exam-schedule.fetchApplicants'); //fetch applicants per grade level
+        ->name('exam-schedule.fetchApplicants'); //fetch applicants per grade level
 
-    Route::get('/admission/exam/exam-schedule/applicants/by-date', [ExamScheduleController::class, 'fetchByDate']); 
+    Route::get('/admission/exam/exam-schedule/applicants/by-date', [ExamScheduleController::class, 'fetchByDate']);
 
     Route::get('/admission/exam/exam-schedule/applicants/by-time', [ExamScheduleController::class, 'fetchByTimeSlot']);
 
