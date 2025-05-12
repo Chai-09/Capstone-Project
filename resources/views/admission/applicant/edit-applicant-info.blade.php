@@ -36,6 +36,62 @@
         </div>
     </div>
 
+   {{-- Progress Tracker, paiba design if gusto niyo (walang controller toh, since display lang) --}}
+    @php
+    $steps = [
+        1 => 'Fill-Up Forms',
+        2 => 'Send Payment',
+        3 => 'Payment Verification',
+        4 => 'Schedule Entrance Exam',
+        5 => 'Take the Exam',
+        6 => 'Results',
+        7 => 'Complete',
+    ];
+@endphp
+
+<div class="mb-4">
+    <h6 class="fw-bold">Progress Tracker</h6>
+    <p>Current Stage: <span class="fw-semibold">{{ $steps[$applicant->current_step] ?? 'Unknown' }}</span></p>
+    <div class="d-flex gap-2 align-items-center flex-wrap">
+
+        @foreach ($steps as $stepNum => $label)
+            <div class="d-flex align-items-center">
+                <div class="border rounded d-flex justify-content-center align-items-center
+                    @if ($stepNum < $applicant->current_step || $stepNum == 7 && $applicant->current_step == 7) bg-success text-white border-success
+                    @elseif ($stepNum == $applicant->current_step) border-success text-success fw-bold
+                    @else border-secondary text-secondary
+                    @endif"
+                    style="width: 40px; height: 40px;">
+                    @if ($stepNum == 7)
+                        &#10003; <!-- ginawa ko nalang checkmark, dito ko kinuha https://www.w3schools.com/charsets/ref_utf_dingbats.asp -->
+                    @else
+                        {{ $stepNum }}
+                    @endif
+                </div>
+                @if ($stepNum < count($steps))
+                    <div class="mx-1"
+                         style="width: 25px; height: 3px;
+                         background-color: {{ $stepNum < $applicant->current_step ? '#198754' : '#ccc' }};">
+                    </div>
+                @endif
+            </div>
+        @endforeach
+    </div>
+    {{-- Di ko lang sure if ilalagay ko pa toh, pa uncomment nalang if gusto niyo makita
+        <div class="d-flex gap-4 align-items-center flex-wrap mt-1">
+        @foreach ($steps as $stepNum => $label)
+            <div class="text-center" style="width: 55px;">
+                <small style="font-size: 0.75rem;" class="{{ $stepNum == $applicant->current_step ? 'fw-bold text-success' : 'text-muted' }}">
+                    {{ $label }}
+                </small>
+            </div>
+        @endforeach
+    </div> 
+--}}
+
+</div>
+
+
     @if ($formData)
     <form method="POST" action="{{ route('applicant.update', $formData->id) }}">
         @csrf

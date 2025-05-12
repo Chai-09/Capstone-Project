@@ -75,6 +75,16 @@ class ExamResultController extends Controller
             $result->save();
         }
 
+        // new statement, makes sure na if nag change na yung exam_result from pending to any status it increments current_step to 7 (COMPLETE)
+        if ($request->exam_result !== 'pending') {
+            $applicant = Applicant::find($result->applicant_id);
+
+            if ($applicant && $applicant->current_step < 7) {
+                $applicant->update(['current_step' => 7]);
+            }
+        }
+    
+
         return redirect()->back()->with('success', 'Exam result updated successfully.');
     }
 
