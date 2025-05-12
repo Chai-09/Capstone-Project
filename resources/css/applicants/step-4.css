@@ -58,3 +58,14 @@
     font-weight: 500;
     transition: background-color 0.2s;
 }
+
+
+.exam-date .alert.alert-info {
+    width: 100vw;
+    padding: 1.5rem 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    background-color: #eaf8f0;
+    border-color:#00753F;
+    color: #00753F;
+} 

@@ -48,16 +48,15 @@
         @endforeach
       </div>
     </div>
+    <div class="form-row">
+      @if (isset($currentStep) && $currentStep > 4)
+        <div class="alert alert-info">
+          Your entrance exam has already been scheduled. Kindly proceed to the next step.
+        <div>
+      @endif
+    <div>
   </div>
 </div>
-
-{{-- Nilagay ko lang dito para may reminder, paiba nalang ty! --}}
-@if (isset($currentStep) && $currentStep > 4)
-<div class="alert alert-info">
-<p> YOU HAVE ALREADY SCHEDULED A DATE! (PAIBA NETO PLEASE - gabe) </p>
-<div>
-@endif
-
 @endsection
 
 {{--  Pass available dates to JS --}}

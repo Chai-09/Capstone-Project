@@ -19,6 +19,7 @@
     @vite('resources/css/applicants/step-3.css')
     @vite('resources/css/applicants/step-4.css')
     @vite('resources/css/applicants/step-5.css')
+    @vite('resources/css/applicants/step-6.css')
 </head>
 <body>
     {{-- Navbar always visible --}}
