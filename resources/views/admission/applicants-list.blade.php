@@ -7,6 +7,7 @@
     <link rel="website icon" type="png" href="{{ asset('applysmart_logo.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Admissions | Dashboard</title>
 </head>
@@ -62,6 +63,7 @@
                     <th>Current School</th>
                     <th>Grade Level</th>
                     <th>Current Stage</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -77,6 +79,22 @@
                         <td>{{ $applicant->current_school ?? 'N/A' }}</td>
                         <td>{{ $applicant->incoming_grlvl ?? 'N/A' }}</td>
                         <td>{{ $applicant->current_step }}</td>
+                        <td>
+                            <!-- Edit button -->
+                            <a href="{{ route('admission.editApplicant', ['id' => $applicant->id]) }}" class="btn btn-sm btn-primary me-2" title="Edit">
+    <i class="bi bi-pencil-square"></i>
+</a>
+
+
+                            <!-- Delete button -->
+                            <form action="#" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">
+                                <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

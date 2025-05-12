@@ -20,6 +20,7 @@ use App\Models\ApplicantSchedule;
 use App\Http\Controllers\ExamAttendanceController;
 use App\Http\Controllers\AdmissionsAppListController;
 use App\Http\Controllers\ExamResultController;
+use App\Http\Controllers\EditApplicantController;
 
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
 // Log in Routes
@@ -192,6 +193,11 @@ Route::middleware(['auth', 'role:admission'])->group(function () {
     Route::get('/admission/exam/exam-result', [ExamResultController::class, 'index'])->name('admission.exam.exam-results');
     Route::post('/exam-results/update', [ExamResultController::class, 'update'])->name('exam.results.update');
     Route::get('/admission/exam/exam-result', [ExamResultController::class, 'index'])->name('admission.exam.result');
+
+    Route::get('/admission/edit-applicant/{id}', [EditApplicantController::class, 'show'])->name('admission.editApplicant');
+    Route::put('/applicants/{id}', [EditApplicantController::class, 'update'])->name('applicant.update');
+Route::delete('/applicants/{id}', [EditApplicantController::class, 'destroy'])->name('applicant.delete');
+
 });
 
 //ACCOUNTING ROUTES
