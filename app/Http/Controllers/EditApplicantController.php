@@ -123,6 +123,10 @@ class EditApplicantController extends Controller
             DB::table('form_change_logs')->insert($changes);
         }
 
-        return redirect()->back()->with('success', 'Applicant information updated successfully.');
+        return redirect()->back()->with([
+            'success' => 'Applicant information updated successfully.',
+            'changes' => $changes, // this will be passed to SweetAlert
+        ]);
+        
     }
 }

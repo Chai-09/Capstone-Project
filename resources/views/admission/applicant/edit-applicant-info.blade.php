@@ -151,12 +151,25 @@
             <hr>
             <h5 class="text-primary mt-4">Address</h5>
             <div class="row">
-                <div class="col-md-4"><label>Region</label><input type="text" class="form-control" name="region" value="{{ $formData->region }}" readonly></div>
-                <div class="col-md-4"><label>Province</label><input type="text" class="form-control" name="province" value="{{ $formData->province }}" readonly></div>
-                <div class="col-md-4"><label>City</label><input type="text" class="form-control" name="city" value="{{ $formData->city }}" readonly></div>
+            <div class="col-md-4">
+                <label>Region</label>
+                <select id="region" name="region" class="form-control" data-selected="{{ $formData->region }}" disabled></select>
             </div>
-            <div class="row mt-3">
-                <div class="col-md-6"><label>Barangay</label><input type="text" class="form-control" name="barangay" value="{{ $formData->barangay }}" readonly></div>
+            <div class="col-md-4">
+                <label>Province</label>
+                <select id="province" name="province" class="form-control" data-selected="{{ $formData->province }}" disabled></select>
+            </div>
+
+            <div class="col-md-4">
+                <label>City</label>
+                <select id="city" name="city" class="form-control" data-selected="{{ $formData->city }}" disabled></select>
+            </div>
+                        </div>
+                        <div class="row mt-3">
+                        <div class="col-md-6">
+                <label>Barangay</label>
+                <select id="barangay" name="barangay" class="form-control" data-selected="{{ $formData->barangay }}" disabled></select>
+            </div>
                 <div class="col-md-3"><label>Street/No.</label><input type="text" class="form-control" name="numstreet" value="{{ $formData->numstreet }}" readonly></div>
                 <div class="col-md-3"><label>Postal Code</label><input type="text" class="form-control" name="postal_code" value="{{ $formData->postal_code }}" readonly></div>
             </div>
@@ -300,7 +313,163 @@
         saveBtn.classList.add('d-none');
         cancelBtn.classList.add('d-none');
     });
+
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        const regionSelect = document.getElementById('region');
+        const provinceSelect = document.getElementById('province');
+        const citySelect = document.getElementById('city');
+        const barangaySelect = document.getElementById('barangay');
+
+        const selectedRegion = regionSelect.getAttribute('data-selected');
+        const selectedProvince = provinceSelect.getAttribute('data-selected');
+        const selectedCity = citySelect.getAttribute('data-selected');
+        const selectedBarangay = barangaySelect.getAttribute('data-selected');
+
+        function resetSelect(select, label = null) {
+            const placeholder = label || "Choose " + capitalize(select.name);
+            select.innerHTML = `<option value="" disabled selected hidden>${placeholder}</option>`;
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function fetchData(url, select, valueKey = 'name', selectedValue = null) {
+            return fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    resetSelect(select);
+                    data.forEach(item => {
+                        const value = item[valueKey];
+                        const isSelected = selectedValue && value === selectedValue ? 'selected' : '';
+                        select.innerHTML += `<option value="${value}" ${isSelected}>${value}</option>`;
+                    });
+                });
+        }
+
+        // Load initial regions
+        fetchData('https://psgc.gitlab.io/api/regions/', regionSelect, 'name', selectedRegion)
+        .then(() => {
+            if (selectedRegion) {
+                regionSelect.value = selectedRegion;
+                regionSelect.dispatchEvent(new Event('change'));
+            }
+        });
+
+        regionSelect.addEventListener('change', function () {
+            const regionName = this.value;
+            resetSelect(provinceSelect);
+            resetSelect(citySelect);
+            resetSelect(barangaySelect);
+
+            fetch('https://psgc.gitlab.io/api/regions/')
+            .then(res => res.json())
+            .then(regions => {
+                const selected = regions.find(r => r.name === regionName);
+                if (!selected) return;
+
+                const regionCode = selected.code;
+
+                if (regionCode === '130000000') {
+                    provinceSelect.innerHTML = `<option value="Metro Manila (NCR)" selected>Metro Manila (NCR)</option>`;
+                    fetchData(`https://psgc.gitlab.io/api/regions/${regionCode}/cities-municipalities/`, citySelect, 'name', selectedCity)
+                    .then(() => {
+                        if (selectedCity) {
+                            citySelect.value = selectedCity;
+                            citySelect.dispatchEvent(new Event('change'));
+                        }
+                    });
+                } else {
+                    fetchData(`https://psgc.gitlab.io/api/regions/${regionCode}/provinces/`, provinceSelect, 'name', selectedProvince)
+                    .then(() => {
+                        if (selectedProvince) {
+                            provinceSelect.value = selectedProvince;
+                            provinceSelect.dispatchEvent(new Event('change'));
+                        }
+                    });
+                }
+            });
+        });
+
+        provinceSelect.addEventListener('change', function () {
+            const provinceName = this.value;
+            resetSelect(citySelect);
+            resetSelect(barangaySelect);
+
+            if (provinceName === 'Metro Manila (NCR)') return;
+
+            fetch('https://psgc.gitlab.io/api/provinces/')
+            .then(res => res.json())
+            .then(provinces => {
+                const selected = provinces.find(p => p.name === provinceName);
+                if (!selected) return;
+
+                fetchData(`https://psgc.gitlab.io/api/provinces/${selected.code}/cities-municipalities/`, citySelect, 'name', selectedCity)
+                .then(() => {
+                    if (selectedCity) {
+                        citySelect.value = selectedCity;
+                        citySelect.dispatchEvent(new Event('change'));
+                    }
+                });
+            });
+        });
+
+        citySelect.addEventListener('change', function () {
+            const cityName = this.value;
+            resetSelect(barangaySelect);
+
+            fetch('https://psgc.gitlab.io/api/cities-municipalities/')
+            .then(res => res.json())
+            .then(cities => {
+                const selected = cities.find(c => c.name === cityName);
+                if (!selected) return;
+
+                fetchData(`https://psgc.gitlab.io/api/cities-municipalities/${selected.code}/barangays/`, barangaySelect, 'name', selectedBarangay)
+                .then(() => {
+                    if (selectedBarangay) {
+                        barangaySelect.value = selectedBarangay;
+                    }
+                });
+            });
+        });
+    });
 </script>
 
+<!--Displaying changes-->
+@php
+    $changeHtml = collect(session('changes'))->map(function($change) {
+        $field = ucwords(str_replace('_', ' ', $change['field_name']));
+        $old = e($change['old_value']);
+        $new = e($change['new_value']);
+        return "<p><strong>{$field}</strong><br><span style='color:red;'>Old:</span> {$old}<br><span style='color:green;'>New:</span> {$new}</p>";
+    })->implode('');
+@endphp
+
+@if(session('changes'))
+<script>
+Swal.fire({
+    position: 'top-end',
+    icon: 'success',
+    html: '<span class="custom-toast-click">Edit saved. <u>See changes</u></span>',
+    showConfirmButton: false,
+    toast: true,
+    timer: 5000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+        toast.addEventListener('click', () => {
+            Swal.fire({
+                title: 'Changes Made',
+                html: @json($changeHtml),
+                confirmButtonText: 'Close',
+                customClass: {
+                    popup: 'text-start'
+                }
+            });
+        });
+    }
+});
+</script>
+@endif
 </body>
 </html>
