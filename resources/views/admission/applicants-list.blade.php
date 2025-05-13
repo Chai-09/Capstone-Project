@@ -87,13 +87,15 @@
 
 
                             <!-- Delete button -->
-                            <form action="#" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">
-                                <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
+                            <form action="{{ route('admission.applicants.destroy', $applicant->id) }}" method="POST" style="display:inline;">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-sm btn-danger" title="Delete"
+        onclick="return confirm('Are you sure you want to delete this applicant?');">
+        <i class="bi bi-trash"></i>
+    </button>
+</form>
+
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -109,6 +111,18 @@
     @endif
 </div>
 
+@if (session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: '{{ session('success') }}',
+        confirmButtonText: 'OK',
+        customClass: {
+            popup: 'swal2-border-radius'
+        }
+    });
+</script>
+@endif
 
 
 </body>

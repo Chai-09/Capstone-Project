@@ -13,7 +13,7 @@ class Accounts extends Authenticatable
 
     protected $table ='accounts'; 
     protected $fillable = ['name', 'email', 'password', 'role'];
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function applicant()
     {

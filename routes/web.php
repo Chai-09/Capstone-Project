@@ -165,6 +165,7 @@ Route::middleware(['auth', 'role:admission'])->group(function () {
     })->name('admissionhome');
 
     Route::get('/admission/applicants-list', [AdmissionsAppListController::class, 'index'])->name('applicantlist');
+    Route::delete('/admission/applicants-list/{id}', [AdmissionsAppListController::class, 'destroy'])->name('admission.applicants.destroy');
 
     //displays exam schedule
     Route::get('/admission/exam/exam-schedule', [ExamScheduleController::class, 'index'])

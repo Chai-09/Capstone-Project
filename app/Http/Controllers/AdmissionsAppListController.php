@@ -38,6 +38,13 @@ class AdmissionsAppListController extends Controller
 
     return view('admission.applicants-list', compact('applicants'));
 }
+public function destroy($id)
+    {
+        $applicant = Applicant::findOrFail($id);
+        $applicant->delete(); // Also deletes related data if cascading is setup
 
+        return redirect()->route('applicantlist')->with('success', 'Applicant deleted successfully.');
+
+    }
     
 }

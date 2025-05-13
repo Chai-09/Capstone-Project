@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('applicantName').innerText = `${data.applicant_fname} ${data.applicant_mname} ${data.applicant_lname}`;
         document.getElementById('gradeLevel').innerText = `${data.incoming_grlvl} ${data.incoming_strand || ''}`.trim();
         document.getElementById('contactNumber').innerText = data.applicant_contact_number;
-        document.getElementById('guardianName').innerText = data.guardian_name || 'N/A';
+        document.getElementById('guardianName').innerText =`${data.guardian_fname} ${data.guardian_mname ? data.guardian_mname + '.' : ''} ${data.guardian_lname}`.trim();
+
 
         document.getElementById('paymentTime').innerText = new Date(data.created_at).toLocaleString();
         document.getElementById('paymentMethod').innerText = data.payment_method;
