@@ -5,6 +5,8 @@ namespace App\Models {
     /**
      * App\Models\Accounts
      *
+     * @property \Illuminate\Support\Carbon|null $updated_at
+     * @property \Illuminate\Support\Carbon|null $created_at
      * @property mixed $role
      * @property string $password
      * @property string $email
@@ -18,6 +20,8 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Accounts>|Accounts whereEmail($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Accounts>|Accounts wherePassword($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Accounts>|Accounts whereRole($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Accounts>|Accounts whereCreatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Accounts>|Accounts whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Accounts>|Accounts newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Accounts>|Accounts newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Accounts>|Accounts query()
@@ -1964,6 +1968,9 @@ namespace App\Models {
      * @property string $proof_of_payment
      * @property string $payment_method
      * @property string $incoming_grlvl
+     * @property string|null $guardian_lname
+     * @property string|null $guardian_mname
+     * @property string|null $guardian_fname
      * @property string $applicant_contact_number
      * @property string $applicant_email
      * @property string $applicant_lname
@@ -1979,6 +1986,9 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereApplicantLname($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereApplicantEmail($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereApplicantContactNumber($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereGuardianFname($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereGuardianMname($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereGuardianLname($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereIncomingGrlvl($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment wherePaymentMethod($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereProofOfPayment($value)

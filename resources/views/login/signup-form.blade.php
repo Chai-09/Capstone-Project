@@ -23,7 +23,7 @@
                         <input type="text" name="guardian_fname" placeholder="First Name" required>
                     </div>
                     <div class="name-field">
-                        <input type="text" name="guardian_mname" placeholder="Middle Name" value="{{ old('guardian_mname') }}">
+                        <input type="text" name="guardian_mname" placeholder="Middle Initial" value="{{ old('guardian_mname') }}">
                     </div>
                     <div class="name-field">
                         <input type="text" name="guardian_lname" placeholder="Last Name" required>
@@ -57,7 +57,7 @@
                         <input type="text" name="applicant_fname" placeholder="First Name" required>
                     </div>
                     <div class="name-field">
-                        <input type="text" name="applicant_mname" placeholder="Middle Name">
+                        <input type="text" name="applicant_mname" placeholder="Middle Initial">
                     </div>
                     <div class="name-field">
                         <input type="text" name="applicant_lname" placeholder="Last Name" required>
@@ -136,6 +136,8 @@
         requiredFields.forEach(field => {
             const value = field.value.trim();
 
+            
+            
             if (!value) {
                 allValid = false;
                 field.classList.add('border-danger');
@@ -146,7 +148,19 @@
             if (field.name === 'guardian_email' && value && !value.includes('@')) {
                 invalidEmail = true;
                 field.classList.add('border-danger');
+            }   
+
+            if((field.name === 'guardian_mname' || field.name === 'applicant_mname') && value !=="")  {
+                const miPattern = /^([A-Z]{1,2}|[A-Z]\.[A-Z]\.?|[A-Z]\.)$/i
+                 if (!miPattern.test(value)) {
+                    allValid = false;
+                    field.classList.add('border-danger');
+                } else {
+                    field.classList.remove('border-danger');
+                }
             }
+
+            
         });
 
         const password = document.getElementById('signup-password').value.trim();
@@ -172,6 +186,34 @@
         if (password !== repassword) {
             showSignupError('Passwords do not match.');
             document.getElementById('signup-repassword').classList.add('border-danger');
+            return;
+        }
+
+        // Middle Initial Validation (In case nag input si applicant)
+        function isValidMiddleInitial(input) {
+            const pattern = /^([A-Z]{1,2}|[A-Z]\.[A-Z]\.?|[A-Z]\.)$/i
+            return input === "" || pattern.test(input.trim());
+        }
+
+        const guardianMi = form.querySelector('[name="guardian_mname"]').value.trim();
+        const applicantMi = form.querySelector('[name="applicant_mname"]').value.trim();
+
+        if (!isValidMiddleInitial(applicantMi) && !isValidMiddleInitial(guardianMi)) {
+            showSignupError("Middle name must be initials only (e.g., A. or A.L.)");
+            form.querySelector('[name="applicant_mname"]').classList.add('border-danger');
+            form.querySelector('[name="guardian_mname"]').classList.add('border-danger');
+            return;
+        }
+
+        if (!isValidMiddleInitial(guardianMi)) {
+            showSignupError("Middle name must be initials only (e.g., A. or A.L.)");
+            form.querySelector('[name="guardian_mname"]').classList.add('border-danger');
+            return;
+        }
+
+        if (!isValidMiddleInitial(applicantMi)) {
+            showSignupError("Middle name must be initials only (e.g., A. or A.L.)");
+            form.querySelector('[name="applicant_mname"]').classList.add('border-danger');
             return;
         }
 
