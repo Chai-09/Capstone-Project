@@ -22,7 +22,7 @@
 
         <div class="remember-forgot">
             <label class="remember-me">
-                <input type="checkbox" name="remember"> Keep me signed in
+                {{-- <input type="checkbox" name="remember"> Keep me signed in --}}
             </label>
             <a href="{{ route('password.request') }}" class="forgot">Forgot Password?</a>
         </div>
@@ -53,6 +53,12 @@
         });
     }
 
+    function isValidEmail(input) {
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return pattern.test(input.trim());
+    }
+
+
     document.getElementById('login-btn').addEventListener('click', function () {
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value.trim();
@@ -64,12 +70,12 @@
 
         let message = '';
 
-        // Validation
+        // Email Validation
         if (!email && !password) {
             message = 'Please fill in all required fields.';
-        } else if (email && !email.includes('@')) {
+        } else if (!isValidEmail(email)) {
             message = 'Invalid email address.';
-        } else if (email && email.includes('@') && !password) {
+        } else if (isValidEmail(email) && !password) {
             message = 'Invalid password.';
         }
 

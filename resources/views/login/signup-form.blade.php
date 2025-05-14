@@ -132,49 +132,60 @@
         const requiredFields = form.querySelectorAll('[required]');
         let allValid = true;
         let invalidEmail = false;
+        const password = document.getElementById('signup-password').value.trim();
+        const repassword = document.getElementById('signup-repassword').value.trim();
+        const guardianMi = form.querySelector('[name="guardian_mname"]').value.trim();
+        const applicantMi = form.querySelector('[name="applicant_mname"]').value.trim();
+
 
         requiredFields.forEach(field => {
             const value = field.value.trim();
-
             
-            
+            // Required fields with no input
             if (!value) {
                 allValid = false;
                 field.classList.add('border-danger');
             } else {
                 field.classList.remove('border-danger');
             }
-
-            if (field.name === 'guardian_email' && value && !value.includes('@')) {
-                invalidEmail = true;
-                field.classList.add('border-danger');
-            }   
-
-            if((field.name === 'guardian_mname' || field.name === 'applicant_mname') && value !=="")  {
-                const miPattern = /^([A-Z]{1,2}|[A-Z]\.[A-Z]\.?|[A-Z]\.)$/i
-                 if (!miPattern.test(value)) {
-                    allValid = false;
+            
+            // Email Validation
+            if (field.name === 'guardian_email' && value) {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(value)) {
+                    invalidEmail = true;
                     field.classList.add('border-danger');
                 } else {
                     field.classList.remove('border-danger');
                 }
-            }
-
+            }   
             
         });
 
-        const password = document.getElementById('signup-password').value.trim();
-        const repassword = document.getElementById('signup-repassword').value.trim();
-
+        // Shows error for required fields with no input
         if (!allValid) {
             showSignupError('Please fill in all required fields.');
             return;
         }
 
+        // Shows error for invalid email input
         if (invalidEmail) {
             showSignupError('Invalid email address.');
             return;
         }
+
+         // Password Validation (Paki comment-out to try)
+        // function isValidPassword(passwordInput) {
+        //     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+        //     return passwordInput === "" || passwordPattern.test(passwordInput.trim());
+        // }
+
+        // if (!isValidPassword(password)) {
+        //     showSignupError('Password must be at least 8 characters and include uppercase, lowercase, number, and special character.');
+        //     document.getElementById('signup-password').classList.add('border-danger');
+        //     return;
+        // }
+
 
         if (password.length < 6) {
             showSignupError('Password must be at least 6 characters.');
@@ -191,30 +202,33 @@
 
         // Middle Initial Validation (In case nag input si applicant)
         function isValidMiddleInitial(input) {
-            const pattern = /^([A-Z]{1,2}|[A-Z]\.[A-Z]\.?|[A-Z]\.)$/i
-            return input === "" || pattern.test(input.trim());
+            const miPattern = /^[A-Z]{1,2}\.?$/i;
+            return input === "" || miPattern.test(input.trim());
         }
-
-        const guardianMi = form.querySelector('[name="guardian_mname"]').value.trim();
-        const applicantMi = form.querySelector('[name="applicant_mname"]').value.trim();
-
-        if (!isValidMiddleInitial(applicantMi) && !isValidMiddleInitial(guardianMi)) {
-            showSignupError("Middle name must be initials only (e.g., A. or A.L.)");
-            form.querySelector('[name="applicant_mname"]').classList.add('border-danger');
+    
+        if(!isValidMiddleInitial(guardianMi) && !isValidMiddleInitial(applicantMi)) {
+            showSignupError("Middle name must be initials only (e.g., A. or AL.)");
             form.querySelector('[name="guardian_mname"]').classList.add('border-danger');
+            form.querySelector('[name="applicant_mname"]').classList.add('border-danger');
             return;
+        } else {
+            form.querySelector('[name="guardian_mname"]').classList.remove('border-danger');
         }
 
         if (!isValidMiddleInitial(guardianMi)) {
-            showSignupError("Middle name must be initials only (e.g., A. or A.L.)");
+            showSignupError("Middle name must be initials only (e.g., A. or AL.)");
             form.querySelector('[name="guardian_mname"]').classList.add('border-danger');
             return;
+        } else {
+            form.querySelector('[name="guardian_mname"]').classList.remove('border-danger');
         }
 
         if (!isValidMiddleInitial(applicantMi)) {
-            showSignupError("Middle name must be initials only (e.g., A. or A.L.)");
+            showSignupError("Middle name must be initials only (e.g., A. or AL.)");
             form.querySelector('[name="applicant_mname"]').classList.add('border-danger');
             return;
+        } else {
+            form.querySelector('[name="applicant_mname"]').classList.remove('border-danger');
         }
 
         grecaptcha.execute(signupWidgetId);
