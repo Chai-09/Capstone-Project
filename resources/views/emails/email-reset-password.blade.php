@@ -51,6 +51,8 @@
         <p style="margin-top: 20px; font-size: 12px; color: #999;">
           &copy; {{ now()->year }} | FEU DILIMAN-APPLYSMART
         </p>
+
+        <span style="display:none;">{{ uniqid() }}{{ now() }}</span>
       </td>
     </tr>
   </table>
