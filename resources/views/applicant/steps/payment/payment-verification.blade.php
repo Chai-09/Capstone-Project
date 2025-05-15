@@ -15,22 +15,22 @@
         <div class="form-section">
             @forelse ($payments as $payment)
             <div class="form-row">
-                <p><strong>Applicant’s Name:</strong> {{ $payment->applicant_fname }} {{ $payment->applicant_mname }} {{ $payment->applicant_lname }}</p>
+                <p><span class="fw-semibold">Applicant’s Name:</span> {{ $payment->applicant_fname }} {{ $payment->applicant_mname }} {{ $payment->applicant_lname }}</p>
             </div>
             <div class="form-row">
-                <p><strong>Incoming Grade Level:</strong> {{ $payment->incoming_grlvl }}</p>
+                <p><span class="fw-semibold">Incoming Grade Level: </span>{{ $payment->incoming_grlvl }}</p>
             </div>   
             <div class="form-row">
-                <p><strong>Email:</strong> {{ $payment->applicant_email }}</p>
+                <p><span class="fw-semibold">Email: </span>{{ $payment->applicant_email }}</p>
             </div>  
             <div class="form-row">
-                <p><strong>Contact Number:</strong> {{ $payment->applicant_contact_number }}</p>
+                <p><span class="fw-semibold">Contact Number: </span>{{ $payment->applicant_contact_number }}</p>
             </div>  
             <div class="form-row">
-                <p><strong>Payment Method:</strong> {{ $payment->payment_method }}</p>
+                <p><span class="fw-semibold">Payment Method: </span>{{ $payment->payment_method }}</p>
             </div>  
             <div class="form-row">
-                <p><strong>Proof of Payment:</strong> 
+                <p><span class="fw-semibold">Proof of Payment: </span>
                     <a href="javascript:void(0);" onclick="viewProof('{{ asset('storage/' . $payment->proof_of_payment) }}')">
                         View your proof of payment
                     </a>
@@ -55,18 +55,18 @@
             <div class="form-row"> 
                 @if ($payment->payment_status === 'denied')
                         <div class="alert alert-info denied">
-                            <p><strong>Remarks: </strong>{{ $payment->remarks ?? 'No remarks provided.' }}</p>
+                            <p><span class="fw-semibold">Remarks: </span>{{ $payment->remarks ?? 'No remarks provided.' }}</p>
                         </div>
                 @elseif ($payment->payment_status === 'approved')
                     <div class="alert alert-info approved">
-                        <p><strong>OCR Number:</strong> {{ $payment->ocr_number ?? 'N/A' }}</p>
+                        <p><span class="fw-semibold">OCR Number:</span> {{ $payment->ocr_number ?? 'N/A' }}</p>
 
-                        <p><strong>Payment Receipt:</strong>
+                        <p><span class="fw-semibold">Payment Receipt:</span>
                             <a href="javascript:void(0);" onclick="viewProof('{{ asset('storage/' . $payment->receipt) }}')">
                                 View your receipt
                             </a>
                         </p>
-                        <p><strong>Remarks: </strong>{{ $payment->remarks ?? 'No remarks provided.' }}</p>
+                        <p><span class="fw-semibold">Remarks: </span></strong>{{ $payment->remarks ?? 'No remarks provided.' }}</p>
                     </div>
                 @endif       
             </div>

@@ -8,7 +8,8 @@
     font-size: 15px;
     text-align: center;
     cursor: pointer;
-    width: 220px;
+    max-width: 220px;
+    width: 100%;
     transition: background-color 0.3s;
 }
 
@@ -17,6 +18,7 @@
 }
 
 .date-header {
+    display: none;
     font-weight: bold;
     font-size: 20px;
     margin-top: 40px;
@@ -69,3 +71,24 @@
     border-color:#00753F;
     color: #00753F;
 } 
+
+.exam-date input:focus,
+.exam-date select:focus {
+    border: 1px solid #00753F !important;
+    box-shadow: 0 0 0 2px rgba(0, 117, 63, 0.15);
+    outline: none;
+}
+
+.exam-date input {
+    cursor: pointer;
+}
+
+.exam-date .dates {
+    display: grid;
+    grid-auto-flow: column;              
+    grid-template-rows: repeat(3, auto);  /* 3 rows max (adjust as needed) */
+    grid-template-columns: repeat(2, 220px); /* 2 fixed-width columns */
+    gap: 12px;
+    justify-content: center;              /* Center the entire grid */
+}
+

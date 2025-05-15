@@ -1,5 +1,6 @@
 @import '../app.css';
 
 .forms {
+    min-height: 100vh;
     background-color: #FBFCF8 ;
 }

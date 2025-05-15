@@ -64,6 +64,8 @@ class PaymentController extends Controller
         $request->validate([
             'payment_mode' => 'required|string|max:255',
             'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        ], [
+            'proof_of_payment.max' => 'The file size must not exceed 2MB or 2048KB',
         ]);
 
         // Step 1: Get current authenticated applicant

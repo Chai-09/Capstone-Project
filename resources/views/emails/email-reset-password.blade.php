@@ -52,6 +52,7 @@
           &copy; {{ now()->year }} | FEU DILIMAN-APPLYSMART
         </p>
 
+        {{-- Gmail Trimming --}}
         <span style="display:none;">{{ uniqid() }}{{ now() }}</span>
       </td>
     </tr>
