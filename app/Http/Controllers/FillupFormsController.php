@@ -74,8 +74,20 @@ class FillupFormsController extends Controller
             'current_school',
         ];
 
+        //logic para ipakita lang ang modal if senior high
+        $showStrandModal = false;
 
-        return view('applicant.steps.forms.step-1-forms', compact('applicant', 'formSubmission', 'readOnlyFields'))->with('currentStep', $applicant->current_step);
+        if ($formSubmission->educational_level === 'Senior High School' && empty($formSubmission->strand)) {
+            $showStrandModal = true;
+}
+
+        //prefill recommended_strand (based lang sa session feel ko kasi di na need isave sa db ito taena recommended lang naman eh)
+        if (session('recommended_strand') && empty($formSubmission->strand)) {
+            $formSubmission->strand = session('recommended_strand');
+            session()->forget('recommended_strand');
+        }
+
+        return view('applicant.steps.forms.step-1-forms', compact('applicant', 'formSubmission', 'readOnlyFields', 'showStrandModal'))->with('currentStep', $applicant->current_step);
     }
 
     public function postStep3(Request $request)
@@ -211,4 +223,118 @@ class FillupFormsController extends Controller
 
         return redirect()->route('applicant.steps.payment.payment');
     }
+
+    //----------------------------------------------------------------------------------------------//
+
+    //returns view for recommender
+    public function showRecommender()
+{
+    
+    $topStrand = session('topStrand');
+    return view('applicant.strand-recommender', compact('topStrand'));
 }
+
+    //logic for recommender, points and sub strand questions
+    public function submitRecommender(Request $request)
+            {
+                $answers = $request->all();
+                $score = [
+                    'stem' => 0,
+                    'abm' => 0,
+                    'humss' => 0,
+                    'sports' => 0,
+                    'gas' => 0,
+                ];
+
+                // Loop through questions 1–20
+                for ($i = 1; $i <= 20; $i++) {
+                    $key = 'q' . $i;
+                    $value = $answers[$key] ?? null;
+
+                    
+                    if (!$value) continue;
+
+                    switch ($value) {
+                        case 'stem':
+                            $score['stem'] += 3;
+                            break;
+                        case 'abm':
+                            $score['abm'] += 3;
+                            break;
+                        case 'humss':
+                            $score['humss'] += 3;
+                            break;
+                        case 'sports':
+                            $score['sports'] += 3;
+                            break;
+                        case 'gas':
+                        case 'gas1':
+                        case 'gas2':
+                            $score['gas'] += 3;
+                            break;
+                        case 'stem_abm': 
+                            $score['stem'] += 3;
+                            $score['abm'] += 3;
+                            break;
+                        case 'other': 
+                            $score['stem'] += 1;
+                            $score['abm'] += 1;
+                            $score['humss'] += 1;
+                            $score['gas'] += 1;
+                            $score['sports'] += 1;
+                            break;
+                    }
+                }
+
+                // Find the highest scoring strand
+                arsort($score);
+                $top = array_keys($score, max($score));
+                $topStrand = strtoupper($top[0]);
+                $finalStrand = $topStrand;
+
+                // If STEM or ABM but subquestions not yet answered, balikan
+                if (in_array($topStrand, ['STEM', 'ABM']) && (!isset($answers['q21']) || !isset($answers['q22']))) {
+                return redirect()->route('strand.recommender')->with([
+                        'recommended_strand' => $topStrand,
+                        'topStrand' => $topStrand
+                    ]);
+}
+
+
+                // Finalize strand with subquestion answers
+                if ($topStrand === 'STEM') {
+                    if ($answers['q21'] === 'engineering' || $answers['q22'] === 'engineering') {
+                        $finalStrand = 'STEM Engineering';
+                    } elseif ($answers['q21'] === 'health' || $answers['q22'] === 'health') {
+                        $finalStrand = 'STEM Health Allied';
+                    } elseif ($answers['q21'] === 'it' || $answers['q22'] === 'it') {
+                        $finalStrand = 'STEM Information Technology';
+                    }
+                }
+
+                if ($topStrand === 'ABM') {
+                    if ($answers['q21'] === 'accounting' || $answers['q22'] === 'accounting') {
+                        $finalStrand = 'ABM Accountancy';
+                    } elseif ($answers['q21'] === 'management' || $answers['q22'] === 'management') {
+                        $finalStrand = 'ABM Business Management';
+                    }
+                }
+
+                // Store temporarily in session to prefill later
+                session(['recommended_strand' => $finalStrand]);
+
+                 // save sa db
+                $applicant = Applicant::where('account_id', auth()->user()->id)->first();
+                if ($applicant) {
+                    $applicant->recommended_strand = $finalStrand;
+                    $applicant->save();
+                
+                }
+
+                return redirect()->route('applicantdashboard')->with('strand_recommendation', $finalStrand);
+
+
+            }
+
+
+            }

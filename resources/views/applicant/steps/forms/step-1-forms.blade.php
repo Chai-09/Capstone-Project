@@ -7,6 +7,20 @@
         $readOnly = isset($applicant) && $applicant->current_step > 1;
     @endphp
 
+    @if (session('strand_recommendation'))
+    {{--swal for strand recommendation result --}}
+    <script>
+        Swal.fire({
+            icon: 'info',
+            title: 'Strand Suggested',
+            html: 'Your recommended strand is <b>{{ session('strand_recommendation') }}</b>. You can still choose another strand if you want.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#28a745'
+        });
+    </script>
+@endif
+
+
     {{-- Front End Error --}}
     <div id="alert-wrapper">
         <div id="alert-container">
@@ -303,16 +317,17 @@
                     <div class="form-col">
                         <label>Strand<span class="text-danger">*</span></label>
                         <select name="strand" id="strand" {{ $readOnly ? 'disabled' : '' }}>
-                            <option value="">Select</option>
-                            <option value="STEM Health Allied" {{ (isset($formSubmission) && $formSubmission->strand == 'STEM Health Allied') ? 'selected' : '' }}>STEM Health Allied</option>
-                            <option value="STEM Engineering" {{ (isset($formSubmission) && $formSubmission->strand == 'STEM Engineering') ? 'selected' : '' }}>STEM Engineering</option>
-                            <option value="STEM Information Technology" {{ (isset($formSubmission) && $formSubmission->strand == 'STEM Information Technology') ? 'selected' : '' }}>STEM Information Technology</option>
-                            <option value="ABM Accountancy" {{ (isset($formSubmission) && $formSubmission->strand == 'ABM Accountancy') ? 'selected' : '' }}>ABM Accountancy</option>
-                            <option value="ABM Business Management" {{ (isset($formSubmission) && $formSubmission->strand == 'ABM Business Management') ? 'selected' : '' }}>ABM Business Management</option>
-                            <option value="HUMSS" {{ (isset($formSubmission) && $formSubmission->strand == 'HUMSS') ? 'selected' : '' }}>HUMSS</option>
-                            <option value="GAS" {{ (isset($formSubmission) && $formSubmission->strand == 'GAS') ? 'selected' : '' }}>GAS</option>
-                            <option value="SPORTS" {{ (isset($formSubmission) && $formSubmission->strand == 'SPORTS') ? 'selected' : '' }}>SPORTS</option>
-                        </select>
+                        <option value="">Select</option>
+                        <option value="STEM Health Allied" {{ (session('recommended_strand') === 'STEM Health Allied' || (isset($formSubmission) && $formSubmission->strand == 'STEM Health Allied')) ? 'selected' : '' }}>STEM Health Allied</option>
+                        <option value="STEM Engineering" {{ (session('recommended_strand') === 'STEM Engineering' || (isset($formSubmission) && $formSubmission->strand == 'STEM Engineering')) ? 'selected' : '' }}>STEM Engineering</option>
+                        <option value="STEM Information Technology" {{ (session('recommended_strand') === 'STEM Information Technology' || (isset($formSubmission) && $formSubmission->strand == 'STEM Information Technology')) ? 'selected' : '' }}>STEM Information Technology</option>
+                        <option value="ABM Accountancy" {{ (session('recommended_strand') === 'ABM Accountancy' || (isset($formSubmission) && $formSubmission->strand == 'ABM Accountancy')) ? 'selected' : '' }}>ABM Accountancy</option>
+                        <option value="ABM Business Management" {{ (session('recommended_strand') === 'ABM Business Management' || (isset($formSubmission) && $formSubmission->strand == 'ABM Business Management')) ? 'selected' : '' }}>ABM Business Management</option>
+                        <option value="HUMSS" {{ (session('recommended_strand') === 'HUMSS' || (isset($formSubmission) && $formSubmission->strand == 'HUMSS')) ? 'selected' : '' }}>HUMSS</option>
+                        <option value="GAS" {{ (session('recommended_strand') === 'GAS' || (isset($formSubmission) && $formSubmission->strand == 'GAS')) ? 'selected' : '' }}>GAS</option>
+                        <option value="SPORTS" {{ (session('recommended_strand') === 'SPORTS' || (isset($formSubmission) && $formSubmission->strand == 'SPORTS')) ? 'selected' : '' }}>SPORTS</option>
+                    </select>
+
                     </div>
                 </div>
                 <div class="form-row" id="birthday-container" style="display: none; margin-bottom: 2.1em;">
@@ -364,4 +379,35 @@
     </div>
 </form>
 @endsection
+
+
+@if ($showStrandModal && !session('strand_modal_shown'))
+    @php
+        session(['strand_modal_shown' => true]); // ipakita lang once per session
+    @endphp
+    <script>
+        //script for modal auto load
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                title: 'Need help choosing your strand?',
+                text: 'If you are undecided on your strand, why not try a set of questions to see our recommendations?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, answer now',
+                cancelButtonText: 'No, maybe later',
+                confirmButtonColor: '#28a745'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('strand.recommender') }}";
+                }
+            });
+        });
+    </script>
+@endif
+
+
+
+
+
+
 

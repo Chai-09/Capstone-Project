@@ -74,5 +74,23 @@
             <div class="line"></div>
             <div class="line"></div>
         </div>
+
+        {{-- Eto yung button sa sidebar, for recommendation --}}
+        @php
+        $incomingGrLvl = $applicant->incoming_grlvl ?? '';
+        $currentStep = $applicant->current_step ?? 1;
+        $isSeniorHigh = in_array($incomingGrLvl, ['GRADE 11', 'GRADE 12']);
+    @endphp
+
+    @if ($isSeniorHigh && $currentStep == 1)
+        <li class="nav-item">
+            <a href="{{ route('strand.recommender') }}"  id="open-questionnaire" class="nav-link text-success fw-semibold" style="white-space: normal; line-height: 1.3;">
+                <i class="fa-solid fa-circle-question"></i>
+                Need help choosing your strand?
+            </a>
+        </li>
+    @endif
     </ul>
 </div>
+
+

@@ -72,6 +72,9 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
     // Submitting of Forms (Step 1 default)
     Route::get('/step-1', [FillupFormsController::class, 'createStep3'])->name('applicantdashboard');
     Route::post('/step-1', [FillupFormsController::class, 'postStep3']);
+    Route::get('/strand-recommender', [FillupFormsController::class, 'showRecommender'])->name('strand.recommender');
+    Route::post('/strand-recommender', [FillupFormsController::class, 'submitRecommender'])->name('strand.recommender.submit');
+
 
     //-----------------------------------------------------------------------------------------------------------------------------//
 

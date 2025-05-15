@@ -77,7 +77,7 @@
             </div>
         @endforeach
     </div>
-    {{-- Di ko lang sure if ilalagay ko pa toh, pa uncomment nalang if gusto niyo makita
+    
         <div class="d-flex gap-4 align-items-center flex-wrap mt-1">
         @foreach ($steps as $stepNum => $label)
             <div class="text-center" style="width: 55px;">
@@ -87,7 +87,7 @@
             </div>
         @endforeach
     </div> 
---}}
+
 
 </div>
 
