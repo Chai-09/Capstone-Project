@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Exports\\FormsExport' => $baseDir . '/app/Exports/FormsExport.php',
     'App\\Http\\Controllers\\AccountingPaymentController' => $baseDir . '/app/Http/Controllers/AccountingPaymentController.php',
     'App\\Http\\Controllers\\AdminAccountController' => $baseDir . '/app/Http/Controllers/AdminAccountController.php',
     'App\\Http\\Controllers\\AdminController' => $baseDir . '/app/Http/Controllers/AdminController.php',
@@ -19,6 +20,7 @@ return array(
     'App\\Http\\Controllers\\ExamDateController' => $baseDir . '/app/Http/Controllers/ExamDateController.php',
     'App\\Http\\Controllers\\ExamResultController' => $baseDir . '/app/Http/Controllers/ExamResultController.php',
     'App\\Http\\Controllers\\ExamScheduleController' => $baseDir . '/app/Http/Controllers/ExamScheduleController.php',
+    'App\\Http\\Controllers\\ExportController' => $baseDir . '/app/Http/Controllers/ExportController.php',
     'App\\Http\\Controllers\\FillupFormsController' => $baseDir . '/app/Http/Controllers/FillupFormsController.php',
     'App\\Http\\Controllers\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/ForgotPasswordController.php',
     'App\\Http\\Controllers\\PaymentController' => $baseDir . '/app/Http/Controllers/PaymentController.php',

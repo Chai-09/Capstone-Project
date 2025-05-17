@@ -44,15 +44,15 @@
           <div class="icon-wrapper"><i class="fa-solid fa-table-columns"></i></div>
           <span>Dashboard</span>
         </a>
-        <a href="#" class="nav-link" title="Applications">
+        <a href="{{ route('applicantlist') }}" class="nav-link" title="Applications">
           <div class="icon-wrapper"><i class="fa-regular fa-rectangle-list"></i></div>
           <span>Applications</span>
         </a>
-        <a href="#" class="nav-link" title="Exam Scheduling">
+        <a href="{{ route('admission.exam.schedule') }}" class="nav-link" title="Exam Scheduling">
           <div class="icon-wrapper"><i class="fa-solid fa-calendar-days"></i></div>
           <span>Exam Scheduling</span>
         </a>
-        <a href="#" class="nav-link" title="Exam Results">
+        <a href="{{ route('admission.exam.result') }}" class="nav-link" title="Exam Results">
           <div class="icon-wrapper"><i class="fa-solid fa-certificate"></i></div>
           <span>Exam Results</span>
         </a>

@@ -1,35 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admissions | Exam Schedule</title>
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-    <link rel="website icon" type="png" href="{{ asset('applysmart_logo.png') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+@extends('admission.admission-home')
+
+@section('content')
     <style>
         .offcanvas-end { width: 800px; }
     </style>
-</head>
-<body>
-<nav class="navbar bg-dark p-3">
-    <p style="color: white" class="m-0">{{ auth()->user()->name }}</p>
-    <a href="{{ route('admissionhome') }}" class="btn btn-primary">Back</a>
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
-    </form>
-    <a href="{{ route('examdate.create') }}" class="btn btn-primary">
-    Add Exam Date
-</a>
-</nav>
-
+    
 <div class="container mt-5">
     <h2 class="mb-4 text-center">Exam Schedule</h2>
+
+    <a href="{{ route('examdate.create') }}" class="btn btn-primary">
+        Add Exam Date
+    </a>
 
     @foreach($schedules as $date => $daySchedules)
         <div class="card mb-4">
@@ -198,5 +179,4 @@
     });
 </script>
 
-</body>
-</html>
+@endsection

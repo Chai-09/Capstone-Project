@@ -8,6 +8,7 @@ body {
 
 /* Sidebar overall */
 #sidebar {
+  position: fixed;
   min-height: 100vh;
   width: 250px;
   background: transparent; /* No background here */
