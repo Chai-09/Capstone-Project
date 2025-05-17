@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 15, 2025 at 03:43 PM
+-- Generation Time: May 17, 2025 at 07:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -244,19 +244,21 @@ CREATE TABLE `form_submissions` (
   `applicant_bday` varchar(255) DEFAULT NULL,
   `lrn_no` varchar(255) DEFAULT NULL,
   `strand` varchar(255) DEFAULT NULL,
-  `source` varchar(255) NOT NULL
+  `source` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `form_submissions`
 --
 
-INSERT INTO `form_submissions` (`id`, `applicant_id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_contact_number`, `applicant_email`, `region`, `province`, `city`, `barangay`, `numstreet`, `postal_code`, `age`, `gender`, `nationality`, `guardian_fname`, `guardian_mname`, `guardian_lname`, `guardian_contact_number`, `guardian_email`, `relation`, `current_school`, `current_school_city`, `school_type`, `educational_level`, `incoming_grlvl`, `applicant_bday`, `lrn_no`, `strand`, `source`) VALUES
-(35, 68, 'GABE', 'M.', 'BARCENAS', '09234567891', 'gaberanx@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Pasong Tamo', '12 C', '123', 6, 'Male', 'Filipino', 'ERNESTO', 'M.', 'BARCENAS', '09876543212', 'gaberanx@gmail.com', 'Parents', 'UST', 'Quezon City, Metro Manila', 'Private Sectarian', 'Grade School', 'GRADE 1', '2019-06-04', '202210123', NULL, 'Billboard'),
-(37, 71, 'J. ANTHONY', 'BAUTISTA.', 'SAN PASCUAL', '09672980038', 'jayanthonysp@gmail.com', 'CALABARZON', 'Rizal', 'Rodriguez', 'San Rafael', 'Blk 12 Lot 2 San Antonio St.', '0618', 22, 'Male', 'Doctor', 'ERNESTO', NULL, 'BARCENAS III', '09876543210', 'jayanthonysp@gmail.com', 'Grandparents', 'FEU DILIMAN', 'Quezon, Quezon', 'Public', 'Senior High School', 'GRADE 11', NULL, '097876548872', 'STEM Engineering', 'Social Media (Facebook, TikTok, Instagram, Youtube, etc)'),
-(57, 93, 'AFIRST', NULL, 'ALAST', '09999999999', 'eiryksardalla696@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Pasong Tamo', 'fds232', '1231', 13, 'Male', 'filipino', 'GFIRST', NULL, 'GLAST', '09999999999', 'eiryksardalla696@gmail.com', 'Parents', 'TESTING', 'Quezon City, Metro Manila', 'Public', 'Junior High School', 'GRADE 7', NULL, '1234', NULL, 'Social Media (Facebook, TikTok, Instagram, Youtube, etc)'),
-(60, 96, 'EIRYK', NULL, 'SARDALLA', '09999999999', 'eiryk.sardalla30@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Batasan Hills', 'fds232', '1231', 13, 'Male', 'filipino', 'SHYLLA', NULL, 'LOVELOVE', '09999999999', 'eiryk.sardalla30@gmail.com', 'Parents', 'FEU DILIMAN', 'Quezon City, Metro Manila', 'Public', 'Senior High School', 'GRADE 11', NULL, '21412123', 'STEM Information Technology', 'Friends/Family/Relatives'),
-(61, 97, 'MARK', 'M.', 'GRAYSON', '09111111111', 'gabebarcenas02@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Damayan', '16T', '1222', 14, 'Male', 'Viltrumite', 'ERNESTO', 'M.', 'BARCENAS', '09666666666', 'gabebarcenas08@gmail.com', 'Cousin', 'URATH HIGH', 'Quezon, Quezon', 'Private Non-Sectarian', 'Senior High School', 'GRADE 11', NULL, '209910123', 'STEM Information Technology', 'Friends/Family/Relatives');
+INSERT INTO `form_submissions` (`id`, `applicant_id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_contact_number`, `applicant_email`, `region`, `province`, `city`, `barangay`, `numstreet`, `postal_code`, `age`, `gender`, `nationality`, `guardian_fname`, `guardian_mname`, `guardian_lname`, `guardian_contact_number`, `guardian_email`, `relation`, `current_school`, `current_school_city`, `school_type`, `educational_level`, `incoming_grlvl`, `applicant_bday`, `lrn_no`, `strand`, `source`, `created_at`, `updated_at`) VALUES
+(35, 68, 'GABE', 'M.', 'BARCENAS', '09234567891', 'gaberanx@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Pasong Tamo', '12 C', '123', 6, 'Male', 'Filipino', 'ERNESTO', 'M.', 'BARCENAS', '09876543212', 'gaberanx@gmail.com', 'Parents', 'UST', 'Quezon City, Metro Manila', 'Private Sectarian', 'Grade School', 'GRADE 1', '2019-06-04', '202210123', NULL, 'Billboard', NULL, NULL),
+(37, 71, 'J. ANTHONY', 'BAUTISTA.', 'SAN PASCUAL', '09672980038', 'jayanthonysp@gmail.com', 'CALABARZON', 'Rizal', 'Rodriguez', 'San Rafael', 'Blk 12 Lot 2 San Antonio St.', '0618', 22, 'Male', 'Doctor', 'ERNESTO', NULL, 'BARCENAS III', '09876543210', 'jayanthonysp@gmail.com', 'Grandparents', 'FEU DILIMAN', 'Quezon, Quezon', 'Public', 'Senior High School', 'GRADE 11', NULL, '097876548872', 'STEM Engineering', 'Social Media (Facebook, TikTok, Instagram, Youtube, etc)', NULL, NULL),
+(57, 93, 'AFIRST', NULL, 'ALAST', '09999999999', 'eiryksardalla696@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Pasong Tamo', 'fds232', '1231', 13, 'Male', 'filipino', 'GFIRST', NULL, 'GLAST', '09999999999', 'eiryksardalla696@gmail.com', 'Parents', 'TESTING', 'Quezon City, Metro Manila', 'Public', 'Junior High School', 'GRADE 7', NULL, '1234', NULL, 'Social Media (Facebook, TikTok, Instagram, Youtube, etc)', NULL, NULL),
+(60, 96, 'EIRYK', NULL, 'SARDALLA', '09999999999', 'eiryk.sardalla30@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Batasan Hills', 'fds232', '1231', 13, 'Male', 'filipino', 'SHYLLA', NULL, 'LOVELOVE', '09999999999', 'eiryk.sardalla30@gmail.com', 'Parents', 'FEU DILIMAN', 'Quezon City, Metro Manila', 'Public', 'Senior High School', 'GRADE 11', NULL, '21412123', 'STEM Information Technology', 'Friends/Family/Relatives', NULL, NULL),
+(61, 97, 'MARK', 'M.', 'GRAYSON', '09111111111', 'gabebarcenas02@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Damayan', '16T', '1222', 14, 'Male', 'Viltrumite', 'ERNESTO', 'M.', 'BARCENAS', '09666666666', 'gabebarcenas08@gmail.com', 'Cousin', 'URATH HIGH', 'Quezon, Quezon', 'Private Non-Sectarian', 'Senior High School', 'GRADE 11', NULL, '209910123', 'STEM Information Technology', 'Friends/Family/Relatives', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -309,7 +311,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (42, '2025_05_12_073509_create_form_change_logs', 29),
 (43, '2025_05_13_094712_add_guardian_name_to_payment', 30),
 (44, '2025_05_13_105352_add_timestamps_to_accounts', 31),
-(45, '2025_05_15_071759_add_recommended_strand_to_applicants_table', 32);
+(45, '2025_05_15_071759_add_recommended_strand_to_applicants_table', 32),
+(46, '2025_05_17_031034_add_timestamps_to_form_submissions', 33),
+(47, '2025_05_17_035621_add_unique_to_admission_number_in_applicant_schedules', 33);
 
 -- --------------------------------------------------------
 
@@ -433,6 +437,7 @@ ALTER TABLE `applicants`
 --
 ALTER TABLE `applicant_schedules`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `applicant_schedules_admission_number_unique` (`admission_number`),
   ADD KEY `applicant_schedules_applicant_id_foreign` (`applicant_id`);
 
 --
@@ -545,7 +550,7 @@ ALTER TABLE `form_submissions`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `payment`

@@ -16,12 +16,15 @@
 <nav class="navbar bg-dark p-3">
     <p style="color: white" class="m-0"> {{ auth()->user()->name }}</p>
     <a href="{{ route('admissionhome') }}" class="btn btn-primary">
-    Back
-</a>
+        Back
+    </a>
     <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
-                </form>
+        @csrf
+        <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+    </form>
+    <a href="{{ route('export.forms') }}" class="btn btn-success">
+        Export to Excel
+    </a>
 </nav>
 <div class="container mt-5">
 <form method="GET" class="row mb-4">

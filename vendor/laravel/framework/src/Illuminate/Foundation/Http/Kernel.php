@@ -77,8 +77,6 @@ class Kernel implements KernelContract
      *
      * @var array<string, class-string|string>
      */
-
-     /* Declaring middleware for routes and roles */
     protected $middlewareAliases = [
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         'form.submitted' => \App\Http\Middleware\EnsureFormSubmissionCompleted::class,
@@ -86,11 +84,6 @@ class Kernel implements KernelContract
         'payment.verified' => \App\Http\Middleware\EnsurePaymentApprovedForExam::class,
         'exam.schedule.selected' => \App\Http\Middleware\ExamScheduleSelected::class,
         'exam.result.exists' => \App\Http\Middleware\EnsureExamResultExists::class,
-
-
-
-
-    
     ];
 
     /**

@@ -55,8 +55,19 @@ class ApplicantScheduleController extends Controller
 
         // Generate Admission Number
         $year = now()->year;
-        $count = ApplicantSchedule::whereYear('created_at', $year)->count() + 1;
-        $admissionNumber = $year . '-' . str_pad($count, 5, '0', STR_PAD_LEFT);
+        $lastAdmission = ApplicantSchedule::whereYear('created_at', $year)
+            ->orderByDesc('admission_number')
+            ->first();
+
+        if ($lastAdmission) {
+            // Extract the last number (after the dash)
+            $lastNumber = (int) substr($lastAdmission->admission_number, 5);
+            $nextNumber = $lastNumber + 1;
+        } else {
+            $nextNumber = 1;
+        }
+
+        $admissionNumber = $year . '-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
 
         // Save schedule
         $schedule = ApplicantSchedule::create([

@@ -21,6 +21,7 @@ use App\Http\Controllers\ExamAttendanceController;
 use App\Http\Controllers\AdmissionsAppListController;
 use App\Http\Controllers\ExamResultController;
 use App\Http\Controllers\EditApplicantController;
+use App\Http\Controllers\ExportController;
 
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
 // Log in Routes
@@ -202,6 +203,7 @@ Route::middleware(['auth', 'role:admission'])->group(function () {
     Route::put('/applicants/{id}', [EditApplicantController::class, 'update'])->name('applicant.update');
 Route::delete('/applicants/{id}', [EditApplicantController::class, 'destroy'])->name('applicant.delete');
 
+Route::get('/export/forms', [ExportController::class, 'exportForms'])->name('export.forms');
 });
 
 //ACCOUNTING ROUTES

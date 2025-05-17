@@ -60,12 +60,7 @@ class Authenticate implements AuthenticatesRequests
     {
         $this->authenticate($request, $guards);
 
-        //removes caching of pages wala nang back button
-        $response = $next($request);
-
-        return $response->header('Cache-Control', 'no-cache, no-store, must-revalidate')
-                    ->header('Pragma', 'no-cache')
-                    ->header('Expires', '0');
+        return $next($request);
     }
 
     /**
