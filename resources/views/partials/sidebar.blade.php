@@ -56,7 +56,7 @@
           <div class="icon-wrapper"><i class="fa-solid fa-certificate"></i></div>
           <span>Exam Results</span>
         </a>
-        <a href="#" class="nav-link" title="Reports">
+        <a href="{{ route('admission.reports') }}" class="nav-link" title="Reports">
           <div class="icon-wrapper"><i class="fa-solid fa-square-poll-vertical"></i></div>
           <span>Reports</span>
         </a>

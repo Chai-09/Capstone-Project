@@ -268,6 +268,43 @@
             </div>
         </div>
     </form>
+    @if(isset($historyLogs) && count($historyLogs))
+    <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="m-0">Change History Log</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Changed By</th>
+                            <th>Field</th>
+                            <th>Old Value</th>
+                            <th>New Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($historyLogs as $log)
+                            <tr>
+                            <td>{{ \Carbon\Carbon::parse($log->created_at)->timezone('Asia/Manila')->format('M d, Y') }}</td>
+<td>{{ \Carbon\Carbon::parse($log->created_at)->timezone('Asia/Manila')->format('h:i A') }}</td>
+
+                                <td>{{ $log->changed_by }}</td>
+                                <td>{{ ucwords(str_replace('_', ' ', $log->field_name)) }}</td>
+                                <td class="text-danger">{{ $log->old_value ?? 'N/A' }}</td>
+                                <td class="text-success">{{ $log->new_value ?? 'N/A' }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+@endif
+
     @else
         <p>No form data found for this applicant.</p>
     @endif

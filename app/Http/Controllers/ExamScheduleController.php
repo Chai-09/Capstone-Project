@@ -258,40 +258,54 @@ class ExamScheduleController extends Controller
     }
 
     public function showExamDatesForApplicants()
-    {
-        $accountId = Auth::id();
+{
+    $accountId = Auth::id();
 
-        // Get the applicant with their form submission
-        $applicant = \App\Models\Applicant::with('formSubmission')
-            ->where('account_id', $accountId)
-            ->first();
+    $applicant = \App\Models\Applicant::with('formSubmission')
+        ->where('account_id', $accountId)
+        ->first();
 
-            $currentStep = $applicant->current_step; //added to pass current_step to a variable
+    $currentStep = $applicant->current_step;
 
-        if (!$applicant || !$applicant->formSubmission) {
-            abort(404, 'Applicant or form submission not found.');
-        }
-
-        $educationalLevel = $applicant->formSubmission->educational_level;
-
-        // Map GS/JHS to 'Grade School and Junior High School' in schedules
-        if (in_array($educationalLevel, ['Grade School', 'Junior High School'])) {
-            $examSchedules = \App\Models\ExamSchedule::select('exam_date', 'start_time', 'end_time')
-                ->where('educational_level', 'Grade School and Junior High School')
-                ->orderBy('exam_date')
-                ->orderBy('start_time')
-                ->get();
-        } elseif ($educationalLevel === 'Senior High School') {
-            $examSchedules = \App\Models\ExamSchedule::select('exam_date', 'start_time', 'end_time')
-                ->where('educational_level', 'Senior High School')
-                ->orderBy('exam_date')
-                ->orderBy('start_time')
-                ->get();
-        } else {
-            // fallback if educational_level is unknown
-            $examSchedules = collect(); // empty collection
-        }
-
-        return view('applicant.steps.exam_date.exam-date', compact('examSchedules', 'currentStep'));
+    if (!$applicant || !$applicant->formSubmission) {
+        abort(404, 'Applicant or form submission not found.');
     }
+
+    $educationalLevel = $applicant->formSubmission->educational_level;
+
+    $query = \App\Models\ExamSchedule::query()
+        ->orderBy('exam_date')
+        ->orderBy('start_time');
+
+    if (in_array($educationalLevel, ['Grade School', 'Junior High School'])) {
+        $query->where('educational_level', 'Grade School and Junior High School');
+    } elseif ($educationalLevel === 'Senior High School') {
+        $query->where('educational_level', 'Senior High School');
+    }
+
+    $examSchedules = $query->get()->filter(function ($schedule) {
+        $usedSlots = \App\Models\ApplicantSchedule::with('applicant.formSubmission')
+            ->whereDate('exam_date', $schedule->exam_date)
+            ->whereTime('start_time', $schedule->start_time)
+            ->whereTime('end_time', $schedule->end_time)
+            ->get()
+            ->filter(function ($app) use ($schedule) {
+                $level = $app->applicant->formSubmission->educational_level ?? null;
+                return match ($schedule->educational_level) {
+                    'Grade School and Junior High School' => in_array($level, ['Grade School', 'Junior High School']),
+                    'Senior High School' => $level === 'Senior High School',
+                    default => false,
+                };
+            })
+            ->count();
+
+        $schedule->remaining_slots = $schedule->max_participants - $usedSlots;
+
+        // Only include if slots remain
+        return $schedule->remaining_slots > 0;
+    });
+
+    return view('applicant.steps.exam_date.exam-date', compact('examSchedules', 'currentStep'));
+}
+
 }

@@ -27,20 +27,24 @@ class ExamResultController extends Controller
         }
 
         $status = $request->status;
-        $examResultValue = ($status === 'no_show') ? 'no_show' : 'pending';
+        $examResultValue = ($status === 'no show') ? 'no_show' : 'pending';
+
 
         // Always update both status and result
         $existing = ExamResult::where('applicant_id', $applicant->id)->first();
         $admissionNumber = $schedule->admission_number;
+
         if ($existing) {
             $existing->applicant_name = $applicant->applicant_fname . ' ' . $applicant->applicant_lname;
             $existing->incoming_grade_level = $applicant->incoming_grlvl;
             $existing->exam_date = $schedule->exam_date;
             $existing->exam_status = $status;
+            $existing->exam_result = $examResultValue;
             $existing->admission_number = $admissionNumber;
 
             // only overwrite result if status is no_show
-            if ($status === 'no_show') {
+            if ($existing->exam_status === 'no show') {
+
                 $existing->exam_result = 'no_show';
             }
 
@@ -100,7 +104,7 @@ class ExamResultController extends Controller
         $examResult = ExamResult::where('applicant_id', $applicant->id)->first();
 
         // Enforce data integrity if record was corrupted or edited
-        if ($examResult && $examResult->exam_status === 'no_show' && $examResult->exam_result !== 'no_show') {
+        if ($examResult && $examResult->exam_status === 'no show' && $examResult->exam_result !== 'no_show') {
             $examResult->exam_result = 'no_show';
             $examResult->save();
         }
