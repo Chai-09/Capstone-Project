@@ -1,7 +1,7 @@
 @extends('accounting.index')
 
 @section('content')
-  <div class="container mt-5 payments">
+  <div class="container table-design">
 
     {{-- Alert --}}
     @if (session('success'))
@@ -12,7 +12,7 @@
 
     {{-- Filter Methods --}}
     <form method="GET" action="{{ route('accountingdashboard') }}">
-      <div class="d-flex align-items-center bg-light px-3 py-2 rounded shadow-sm" style="gap: 10px;">
+      <div class="filter-bar" style="gap: 10px;">
         
         {{-- Filter Button --}}
         <div class="dropdown">
@@ -58,8 +58,8 @@
         </div>
 
         {{-- Search Input --}}
-        <div class="flex-grow-1 position-relative">
-          <input type="text" name="search" class="form-control form-control-sm ps-5" placeholder="Search for an applicant by name or email" value="{{ request('search') }}">
+        <div class="search-wrapper">
+          <input type="text" name="search" class="search-input" placeholder="Search for an applicant by name or email" value="{{ request('search') }}">
           <i class="bi bi-search position-absolute" style="left: 12px; top: 50%; transform: translateY(-50%); color: #888;"></i>
         </div>
 
@@ -77,13 +77,11 @@
         <thead>
           <tr>
             <th style="width: 8%">#</th>
-            <th style="width: 25%">Applicant Name</th>
-            <th style="width: 12%">Grade Level</th>
+            <th style="width: 30%">Applicant Name</th>
+            <th style="width: 20%">Grade Level</th>
             <th style="width: 16%">Payment Method</th>
             <th style="width: 16%">Proof of Payment</th>
             <th>Status</th>
-            {{-- <th>Remarks</th> --}} {{-- Comment out ko muna si remarks --}}
-            <th>Action</th>
           </tr>
         </thead>
         
@@ -108,10 +106,6 @@
                 @elseif ($payment->payment_status == 'denied')
                   <span class="payment-status denied">Denied</span>
                 @endif
-              </td>
-              {{-- <td>{{ $payment->remarks ?? '-' }}</td> --}} {{-- Comment out si remarks --}}
-              <td>
-                {{-- Optional action space --}}
               </td>
             </tr>
             @empty
