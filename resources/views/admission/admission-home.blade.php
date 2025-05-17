@@ -22,7 +22,7 @@
         <div id="content" class="flex-grow-1 p-2">
           @yield('content')
 
-          {{-- Will delete pag naayos ko na placings --}}
+          {{-- Will delete pag naayos ko na placings
             <a href="{{ route('applicantlist') }}" class="btn btn-primary">
                 Applicants
             </a>
@@ -31,7 +31,7 @@
             </a>
             <a href="{{ route('admission.exam.result') }}" class="btn btn-primary">
                 Exam Results
-            </a>
+            </a> --}}
         </div>
     </div>
 

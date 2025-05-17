@@ -164,7 +164,7 @@ Route::middleware(['auth', 'role:admission'])->group(function () {
     Route::get('/exam-schedule', [AdmissionDateController::class, 'index'])->name('examschedule');
 
 
-    Route::get('/admission-home', function () {
+    Route::get('/admission-home ', function () {
         return view('admission.admission-home'); //use for aero home
     })->name('admissionhome');
 

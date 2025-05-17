@@ -21,7 +21,7 @@
 <body>
 
 <div class="d-flex">
-  <nav id="sidebar" class="expanded d-flex flex-column">
+  <nav id="sidebar" class="expanded collapsed d-flex flex-column">
  
    <!-- Logo and User Info -->
 <div id="logo-wrapper" class="text-center p-3 flex-column">
