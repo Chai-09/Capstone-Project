@@ -253,32 +253,33 @@
         <strong>Time stamp per Stage</strong>
     </div>
     <div class="card-body">
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-                <strong>Account Created:</strong>
-                {{ \Carbon\Carbon::parse($timestamps['account_created'])->timezone('Asia/Manila')->format('M d, Y - h:i A') ?? '—' }}
-            </li>
-            <li class="list-group-item">
-                <strong>Fill-up Forms:</strong>
-                {{ \Carbon\Carbon::parse($timestamps['form_submitted'])->timezone('Asia/Manila')->format('M d, Y - h:i A') ?? '—' }}
-            </li>
-            <li class="list-group-item">
-                <strong>Send Payment:</strong>
-                {{ \Carbon\Carbon::parse($timestamps['payment_sent'])->timezone('Asia/Manila')->format('M d, Y - h:i A') ?? '—' }}
-            </li>
-            <li class="list-group-item">
-                <strong>Payment Verified:</strong>
-                {{ \Carbon\Carbon::parse($timestamps['payment_verified'])->timezone('Asia/Manila')->format('M d, Y - h:i A') ?? '—' }}
-            </li>
-            <li class="list-group-item">
-                <strong>Exam Booking:</strong>
-                {{ \Carbon\Carbon::parse($timestamps['exam_booked'])->timezone('Asia/Manila')->format('M d, Y - h:i A') ?? '—' }}
-            </li>
-            <li class="list-group-item">
-                <strong>Exam Results:</strong>
-                {{ \Carbon\Carbon::parse($timestamps['exam_result'])->timezone('Asia/Manila')->format('M d, Y - h:i A') ?? '—' }}
-            </li>
-        </ul>
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+        <strong>Account Created:</strong>
+        {{ $timestamps['account_created'] !== '—' ? \Carbon\Carbon::parse($timestamps['account_created'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
+    </li>
+    <li class="list-group-item">
+        <strong>Fill-up Forms:</strong>
+        {{ $timestamps['form_submitted'] !== '—' ? \Carbon\Carbon::parse($timestamps['form_submitted'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
+    </li>
+    <li class="list-group-item">
+        <strong>Send Payment:</strong>
+        {{ $timestamps['payment_sent'] !== '—' ? \Carbon\Carbon::parse($timestamps['payment_sent'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
+    </li>
+    <li class="list-group-item">
+        <strong>Payment Verified:</strong>
+        {{ $timestamps['payment_verified'] !== '—' ? \Carbon\Carbon::parse($timestamps['payment_verified'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
+    </li>
+    <li class="list-group-item">
+        <strong>Exam Booking:</strong>
+        {{ $timestamps['exam_booked'] !== '—' ? \Carbon\Carbon::parse($timestamps['exam_booked'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
+    </li>
+    <li class="list-group-item">
+        <strong>Exam Results:</strong>
+        {{ $timestamps['exam_result'] !== '—' ? \Carbon\Carbon::parse($timestamps['exam_result'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
+    </li>
+</ul>
+
     </div>
 </div>
 

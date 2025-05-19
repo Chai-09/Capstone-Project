@@ -30,13 +30,13 @@ class EditApplicantController extends Controller
 
     // Match exact timestamps from tables
     $timestamps = [
-        'account_created'   => optional($account)->created_at,
-        'form_submitted'    => optional($formData)->created_at,
-        'payment_sent'      => optional($payment)->created_at,
-        'payment_verified'  => optional($payment)->updated_at,
-        'exam_booked'       => optional($schedule)->created_at,
-        'exam_result'       => optional($examResult)->created_at,
-    ];
+        'account_created'   => optional($account)->created_at ?? '—',
+        'form_submitted'    => optional($formData)->created_at ?? '—',
+        'payment_sent'      => optional($payment)->created_at ?? '—',
+        'payment_verified'  => optional($payment)->updated_at ?? '—',
+        'exam_booked'       => optional($schedule)->created_at ?? '—',
+        'exam_result'       => optional($examResult)->created_at ?? '—',
+    ];    
 
     // Get change history logs
     $historyLogs = \DB::table('form_change_logs')
