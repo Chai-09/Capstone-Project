@@ -39,6 +39,7 @@ export default defineConfig({
 
                 // Admission
                 'resources/js/admission/applicant-list.js',
+                'resources/css/admission/edit-applicant.css',
             ],
             refresh: true,
         }),

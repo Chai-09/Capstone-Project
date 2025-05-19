@@ -334,6 +334,9 @@ namespace App\Models {
      * @property int $id
      * @property-read \App\Models\Accounts $account
      * @property-read \App\Models\FillupForms $formSubmission
+     * @property-read \App\Models\Payment $payment
+     * @property-read \App\Models\ApplicantSchedule $schedule
+     * @property-read \App\Models\ExamResult $examResult
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereAccountId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereGuardianFname($value)

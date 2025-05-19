@@ -1,7 +1,6 @@
 @php
     $currentStep = $currentStep;
     $incomingGrLvl = $applicant->incoming_grlvl ?? '';
-    $currentStep = $applicant->current_step ?? 1;
     $isSeniorHigh = in_array($incomingGrLvl, ['GRADE 11', 'GRADE 12']);
 @endphp
 

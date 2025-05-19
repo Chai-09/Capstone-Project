@@ -14,6 +14,7 @@
     <title>ApplySmart | Admissions</title>
         @vite('resources/css/partials/layout.css')
         @vite('resources/css/partials/tables.css')
+        @vite('resources/css/admission/edit-applicant.css')
         @vite('resources/js/admission/applicant-list.js')
 </head>
 <body>
@@ -27,8 +28,6 @@
           @yield('content')
         </div>
     </div>
-
-<p>ahg ksrhgamvh reuihyeiueyeriucyhmnenv</p>
 
 
 </body>
