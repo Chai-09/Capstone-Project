@@ -84,6 +84,16 @@
             </a>
         </li>
     @endif
+
+    @if ($isSeniorHigh && $currentStep == 1 && !empty($applicant->strand_breakdown))
+    <li class="nav-item">
+        <a href="#scoreBreakdownModal" class="nav-link text-success fw-semibold" data-bs-toggle="modal">
+            <i class="fa-solid fa-chart-pie"></i>
+            View Score Breakdown
+        </a>
+    </li>
+@endif
     </ul>
 </div>
+
 

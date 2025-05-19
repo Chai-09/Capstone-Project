@@ -421,25 +421,86 @@ Swal.fire({
     @php
         $breakdown = json_decode($applicant->strand_breakdown, true);
     @endphp
-    <div class="modal fade" id="scoreBreakdownModal" tabindex="-1" aria-labelledby="scoreBreakdownModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content rounded">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold" id="scoreBreakdownModalLabel">Strand Breakdown</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <ul class="list-unstyled">
-                        @foreach ($breakdown as $strand => $percent)
-                            <li><strong>{{ strtoupper($strand) }}</strong> – {{ $percent }}%</li>
-                        @endforeach
-                    </ul>
-                    <p class="text-muted small mt-3">*Only main strands are included in this breakdown. Sub-strands are considered separately.</p>
-                </div>
+   <div class="modal fade" id="scoreBreakdownModal" tabindex="-1" aria-labelledby="scoreBreakdownModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow-sm border-0">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title fw-bold" id="scoreBreakdownModalLabel">Strand Score Breakdown</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+
+            <div class="modal-header border-bottom-0">
+            <h6>Your recommended strand is <b>{{ $applicant->recommended_strand }}</b>.</h6>
+            </div>
+
+            <div class="modal-body">
+    <div class="bg-light rounded-3 p-3">
+        <table class="table table-borderless mb-0">
+            <tbody>
+                @foreach ($breakdown as $strand => $percent)
+                    <tr class="border-bottom">
+                        <td class="fw-semibold text-uppercase">{{ $strand }}</td>
+                        <td class="text-end fw-semibold">{{ $percent }}%</td>
+                    </tr>
+                @endforeach
+                <tr>
+                    <td class="fw-bold text-uppercase">Total</td>
+                    <td class="text-end fw-bold">100%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="text-muted small mt-3 mb-0">
+        *Only main strands are included in this breakdown. Sub-strands are calculated separately.
+    </p>
+
+    <!-- For Chart.js display --> 
+    <canvas id="strandChart" width="100%" height="100" class="mt-4"></canvas>
+             </div>
         </div>
     </div>
+</div>
+
+<script>
+    //script logic for chart.js pie chart
+document.addEventListener('DOMContentLoaded', function () {
+    const breakdown = @json($breakdown);
+
+    const ctx = document.getElementById('strandChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(breakdown).map(s => s.toUpperCase()),
+            datasets: [{
+                data: Object.values(breakdown),
+                backgroundColor: [
+                    '#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return context.label + ': ' + context.formattedValue + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
 @endif
+
+
 
 
 
