@@ -128,6 +128,9 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
                 Route::middleware(['exam.result.exists'])->group(function () {
 
                     Route::get('/step-6', [ExamResultController::class, 'showForApplicant'])->name('applicant.exam.result'); //nilagay ko siya sa may form.submitted pero di ko sure kung san to
+                    
+                    //If No Show, Resched Automatic then current_step = 2
+                    Route::post('/trigger-resched', [PaymentController::class, 'triggerResched'])->name('payment.resched.trigger');
 
                 });
             });

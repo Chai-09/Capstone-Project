@@ -320,6 +320,7 @@ namespace App\Models {
     /**
      * App\Models\Applicant
      *
+     * @property string|null $strand_breakdown
      * @property mixed $current_step
      * @property string|null $recommended_strand
      * @property string $incoming_grlvl
@@ -349,6 +350,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereIncomingGrlvl($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereRecommendedStrand($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereCurrentStep($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereStrandBreakdown($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant query()
@@ -1966,6 +1968,7 @@ namespace App\Models {
     /**
      * App\Models\Payment
      *
+     * @property string $payment_for
      * @property string|null $receipt
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
@@ -2009,6 +2012,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereReceipt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment wherePaymentFor($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment query()

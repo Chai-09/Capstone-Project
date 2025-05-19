@@ -12,41 +12,23 @@ use Carbon\Carbon;
 class PaymentController extends Controller
 {
 
-    public function showPaymentForm()
+    public function showPaymentForm(Request $request)
     {
-        // Check if nakasubmit na si applicant ng step 1 forms if di pa 403 type shi
-        //might have to change this to applicant_id since its more secure'
-        $applicant = Applicant::where('account_id', Auth::user()->id)->first();
+        $applicant = Applicant::where('account_id', Auth::id())->firstOrFail();
         $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
 
         if (!$formSubmission) {
             return redirect()->route('applicantdashboard');
         }
 
-        //Assign Current Step Variable for the Sidebar
         $currentStep = $applicant->current_step ?? 1;
 
-        $deniedPayment = Payment::where('applicant_id', $applicant->id)
-            ->where('payment_status', 'denied')
-            ->latest()
-            ->first();
+        $hasExamSchedule = \App\Models\ApplicantSchedule::where('applicant_id', $applicant->id)->exists();
 
-        //similar code to the one in ViewPaymentController this is here to ensure that if the user clicks the sidebar button instead of the back button the image still gets deleted either way
-        if ($deniedPayment) {
-            if ($deniedPayment->proof_of_payment && \Storage::disk('public')->exists($deniedPayment->proof_of_payment)) {
-                \Storage::disk('public')->delete($deniedPayment->proof_of_payment);
-            }
+        $paymentType = $hasExamSchedule ? 'resched' : 'first-time';
 
-            $deniedPayment->delete();
-
-            // Make sure step is reset to 2 if di na click back button
-            $applicant->current_step = 2;
-            $applicant->save();
-        }
-
-
-        // Check if may payment if and if dendied si applicant
         $existingPayment = Payment::where('applicant_id', $applicant->id)
+            ->where('payment_for', $paymentType)
             ->whereIn('payment_status', ['pending', 'approved'])
             ->latest()
             ->first();
@@ -55,8 +37,10 @@ class PaymentController extends Controller
             'formSubmission' => $formSubmission,
             'existingPayment' => $existingPayment,
             'currentStep' => $currentStep,
+            'isReschedPayment' => $paymentType === 'resched',
         ]);
     }
+
 
     public function store(Request $request)
     {
@@ -67,6 +51,8 @@ class PaymentController extends Controller
         ], [
             'proof_of_payment.max' => 'The file size must not exceed 2MB or 2048KB',
         ]);
+
+        $paymentPurpose = $request->input('payment_for', 'first-time');
 
         // Step 1: Get current authenticated applicant
         $applicant = Applicant::where('account_id', Auth::user()->id)->first();
@@ -85,6 +71,7 @@ class PaymentController extends Controller
         $path = $file->storeAs('payment_proofs', $filename, 'public');
 
         $now = Carbon::now()->setTimezone('Asia/Manila');
+        
 
         // Step 4: Save to database
         Payment::create([
@@ -104,6 +91,7 @@ class PaymentController extends Controller
             'payment_time' => $now->toTimeString(),
             'created_at' => $now,
             'updated_at' => $now,
+            'payment_for' => $paymentPurpose,
         ]);
 
         $applicant->current_step = 3;
@@ -123,5 +111,18 @@ class PaymentController extends Controller
 
         return redirect()->back()->with('success', 'Payment updated successfully.');
     }
+
+    // Reschedule Button in Step 6
+    public function triggerResched()
+        {
+            $applicant = \App\Models\Applicant::where('account_id', Auth::id())->firstOrFail();
+
+            if ($applicant->current_step > 2) {
+                $applicant->current_step = 2;
+                $applicant->save();
+            }
+
+            return redirect()->route('applicant.steps.payment.payment');
+        }
     
 }

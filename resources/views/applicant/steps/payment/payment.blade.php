@@ -25,6 +25,7 @@
                     @csrf
                     <div class ="form-row">
                         <div class="form-col payment-label">
+                            <input type="hidden" name="payment_for" value="{{ $isReschedPayment ? 'resched' : 'first-time' }}">
                             <label for="payment_mode" class="form-label">Mode of Payment: <span class="text-danger">*</span></label>
                             <select class="form-select" id="payment_mode" name="payment_mode" required {{ $existingPayment ? 'disabled' : '' }}>
                                 <option value="" disabled {{ !$existingPayment ? 'selected' : '' }}>Select one of these options</option>
@@ -45,13 +46,23 @@
                         </div>
                     </div>
 
-                    @if (!$existingPayment)
+                    {{-- @if (!$existingPayment)
                         <div class="form-row text-center">
                             <div class="form-col">
                                 <button type="submit" class="btn btn-submit">Submit</button>
                             </div>
                         </div>
+                    @endif --}}
+
+                    @if (!$existingPayment)
+                    <div class="form-row text-center">
+                        <div class="form-col">
+                            <button type="submit" class="btn btn-submit">Submit</button>
+                        </div>
+                    </div>
                     @endif
+
+
                 </form>
         </div>
     </div>

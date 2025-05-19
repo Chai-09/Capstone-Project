@@ -28,6 +28,7 @@ class Payment extends Model
         'proof_of_payment',
         'payment_date',
         'payment_time',
+        'payment_for',
     ];
 
     public function formSubmission()

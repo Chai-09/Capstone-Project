@@ -21,6 +21,12 @@
                             You have been selected for an interview. Details will be sent to your email.
                         @elseif($examResult->exam_result === 'no_show')
                             You were marked as a no-show for the exam. Please contact Admissions for rescheduling.
+                           <form method="POST" action="{{ route('payment.resched.trigger') }}">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-primary">
+                                    Reschedule (Submit New Payment)
+                                </button>
+                            </form>
                         @endif
                     </div>
                 </div>
