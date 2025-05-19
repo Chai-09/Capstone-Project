@@ -215,7 +215,8 @@ Route::get('/admission/reports/admission-reports', [AdmissionChartController::cl
 //forfiltering:
     Route::get('/chart-data', [AdmissionChartController::class, 'getChartData'])->name('chart.data');
 
-
+    Route::get('/admission/dashboard', [App\Http\Controllers\AdmissionChartController::class, 'showAdmissionDashboard'])
+    ->name('admission.dashboard');
 });
 
 //ACCOUNTING ROUTES

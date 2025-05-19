@@ -79,6 +79,7 @@ class ApplicantScheduleController extends Controller
             'exam_date' => $request->exam_date,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
+            'venue'=>'MPR Annex',
         ]);
 
         //Update Current step to 5 (gawin mong == na din lahat ng update para no issues)

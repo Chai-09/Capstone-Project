@@ -14,7 +14,8 @@ class FormsExport implements FromCollection, WithMapping, WithHeadings
     */
     public function collection()
     {
-        return FillupForms::all();
+        //return FillupForms::all();
+        return FillupForms::with(['payment', 'schedule'])->get();
     }
 
     public function map($form): array
@@ -49,8 +50,19 @@ class FormsExport implements FromCollection, WithMapping, WithHeadings
 
             // Source
             $form->source,
+
+            // Payment
+            $form->payment->ocr_number ?? '—',
+
+            // Schedule
+            $form->schedule->admission_number ?? '—',
+            $form->schedule->exam_date ?? '—',
+            $form->schedule->start_time ?? '—',
+            $form->schedule->end_time ?? '—',
+            $form->schedule->venue ?? '-',
         ];
     }
+
 
     public function headings(): array
     {
@@ -75,6 +87,13 @@ class FormsExport implements FromCollection, WithMapping, WithHeadings
             'Incoming Grade Level',
             'Strand',
             'Source of Application',
+            'OCR Number',
+            'Admission Number',
+            'Exam Date',
+            'Start Time',
+            'End Time',
+            'Venue',
         ];
     }
+
 }

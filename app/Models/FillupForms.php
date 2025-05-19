@@ -52,4 +52,15 @@ class FillupForms extends Model
     {
         return $this->belongsTo(Applicant::class, 'applicant_id');
     }
+
+    public function payment()
+{
+    return $this->hasOne(\App\Models\Payment::class, 'applicant_id', 'applicant_id');
+}
+
+public function schedule()
+{
+    return $this->hasOne(\App\Models\ApplicantSchedule::class, 'applicant_id', 'applicant_id');
+}
+
 }

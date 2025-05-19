@@ -18,10 +18,9 @@ class Applicant extends Model
         'current_school',
         'incoming_grlvl',
         'current_step',
-        //applicant id
         'applicant_id',
     ];
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function account()
     {

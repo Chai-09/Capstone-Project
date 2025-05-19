@@ -99,4 +99,35 @@ class AdmissionChartController extends Controller
     return response()->json($data);
 }
 
+public function showAdmissionDashboard()
+{
+    $newApplicants = \App\Models\Applicant::whereDate('created_at', today())->count();
+    $examinees = \App\Models\ApplicantSchedule::distinct('applicant_id')->count('applicant_id');
+    $verifiedPayments = \App\Models\Payment::where('payment_status', 'approved')->count();
+    $doneApplicants = \App\Models\Applicant::where('current_step', 7)->count();
+
+    $stepCounts = [
+        'Fill-up Forms' => \App\Models\Applicant::where('current_step', 1)->count(),
+        'Send Payment' => \App\Models\Applicant::where('current_step', 2)->count(),
+        'Payment Verification' => \App\Models\Applicant::where('current_step', 3)->count(),
+        'Schedule Entrance Exam' => \App\Models\Applicant::where('current_step', 4)->count(),
+        'Examination' => \App\Models\Applicant::where('current_step', 5)->count(),
+        'Results' => \App\Models\Applicant::where('current_step', 7)->count(),
+    ];
+
+    return view('admission.reports.dashboard-cards', compact(
+        'newApplicants',
+        'examinees',
+        'verifiedPayments',
+        'doneApplicants',
+        'stepCounts'
+    ));
+}
+
+
+
+
+
+
+
 }

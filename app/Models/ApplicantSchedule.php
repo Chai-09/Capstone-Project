@@ -17,6 +17,7 @@ class ApplicantSchedule extends Model
         'exam_date',
         'start_time',
         'end_time',
+        'venue',
     ];
 
     public function applicant()

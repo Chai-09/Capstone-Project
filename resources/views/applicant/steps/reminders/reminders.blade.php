@@ -27,7 +27,7 @@
                      <p><strong>Campus: </strong> FEU Diliman </p>
                 </div>
                 <div class="form-row">
-                     <p><strong>Venue: </strong> Guidance Office - New Building </p>
+                     <p><strong>Venue: </strong> {{ $schedule->venue ?? '—' }}</p>
                 </div>
             @else
                 <div class="form-row">
