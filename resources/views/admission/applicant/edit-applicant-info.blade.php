@@ -248,6 +248,40 @@
             </div>
         </div>
     </form>
+    <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <strong>Time stamp per Stage</strong>
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <strong>Account Created:</strong>
+                {{ \Carbon\Carbon::parse($timestamps['account_created'])->timezone('Asia/Manila')->format('M d, Y - h:i A') ?? '—' }}
+            </li>
+            <li class="list-group-item">
+                <strong>Fill-up Forms:</strong>
+                {{ \Carbon\Carbon::parse($timestamps['form_submitted'])->timezone('Asia/Manila')->format('M d, Y - h:i A') ?? '—' }}
+            </li>
+            <li class="list-group-item">
+                <strong>Send Payment:</strong>
+                {{ \Carbon\Carbon::parse($timestamps['payment_sent'])->timezone('Asia/Manila')->format('M d, Y - h:i A') ?? '—' }}
+            </li>
+            <li class="list-group-item">
+                <strong>Payment Verified:</strong>
+                {{ \Carbon\Carbon::parse($timestamps['payment_verified'])->timezone('Asia/Manila')->format('M d, Y - h:i A') ?? '—' }}
+            </li>
+            <li class="list-group-item">
+                <strong>Exam Booking:</strong>
+                {{ \Carbon\Carbon::parse($timestamps['exam_booked'])->timezone('Asia/Manila')->format('M d, Y - h:i A') ?? '—' }}
+            </li>
+            <li class="list-group-item">
+                <strong>Exam Results:</strong>
+                {{ \Carbon\Carbon::parse($timestamps['exam_result'])->timezone('Asia/Manila')->format('M d, Y - h:i A') ?? '—' }}
+            </li>
+        </ul>
+    </div>
+</div>
+
     @if(isset($historyLogs) && count($historyLogs))
     <div class="card mt-4">
         <div class="card-header bg-primary text-white">
@@ -255,31 +289,63 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-striped align-middle">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Changed By</th>
-                            <th>Field</th>
-                            <th>Old Value</th>
-                            <th>New Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($historyLogs as $log)
-                            <tr>
-                            <td>{{ \Carbon\Carbon::parse($log->created_at)->timezone('Asia/Manila')->format('M d, Y') }}</td>
-<td>{{ \Carbon\Carbon::parse($log->created_at)->timezone('Asia/Manila')->format('h:i A') }}</td>
+                
+                    @if($historyLogs->count())
+<div class="card mt-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped align-middle" id="historyTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Changed By</th>
+                        <th>Field</th>
+                        <th>Old Value</th>
+                        <th>New Value</th>
+                    </tr>
+                </thead>
 
-                                <td>{{ $log->changed_by }}</td>
-                                <td>{{ ucwords(str_replace('_', ' ', $log->field_name)) }}</td>
-                                <td class="text-danger">{{ $log->old_value ?? 'N/A' }}</td>
-                                <td class="text-success">{{ $log->new_value ?? 'N/A' }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                {{-- Only latest 5 logs --}}
+                <tbody id="limitedLogs">
+                    @foreach ($limitedLogs as $log)
+                    <tr>
+                        <td>{{ \Carbon\Carbon::parse($log->created_at)->timezone('Asia/Manila')->format('M d, Y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($log->created_at)->timezone('Asia/Manila')->format('h:i A') }}</td>
+                        <td>{{ $log->changed_by }}</td>
+                        <td>{{ ucwords(str_replace('_', ' ', $log->field_name)) }}</td>
+                        <td class="text-danger">{{ $log->old_value ?? 'N/A' }}</td>
+                        <td class="text-success">{{ $log->new_value ?? 'N/A' }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+
+                {{-- All logs --}}
+                <tbody id="allLogs" class="d-none">
+                    @foreach ($historyLogs as $log)
+                    <tr>
+                        <td>{{ \Carbon\Carbon::parse($log->created_at)->timezone('Asia/Manila')->format('M d, Y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($log->created_at)->timezone('Asia/Manila')->format('h:i A') }}</td>
+                        <td>{{ $log->changed_by }}</td>
+                        <td>{{ ucwords(str_replace('_', ' ', $log->field_name)) }}</td>
+                        <td class="text-danger">{{ $log->old_value ?? 'N/A' }}</td>
+                        <td class="text-success">{{ $log->new_value ?? 'N/A' }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        @if ($historyLogs->count() > 5)
+        <div class="text-end mt-2">
+            <button class="btn btn-sm btn-outline-primary" id="toggleHistoryBtn">Show All</button>
+        </div>
+        @endif
+    </div>
+</div>
+@endif
+
+
             </div>
         </div>
     </div>
@@ -488,5 +554,30 @@ Swal.fire({
 });
 </script>
 @endif
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const toggleBtn = document.getElementById('toggleHistoryBtn');
+    const limitedLogs = document.getElementById('limitedLogs');
+    const allLogs = document.getElementById('allLogs');
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function () {
+            const isExpanded = !allLogs.classList.contains('d-none');
+
+            if (isExpanded) {
+                allLogs.classList.add('d-none');
+                limitedLogs.classList.remove('d-none');
+                toggleBtn.textContent = 'Show All';
+            } else {
+                limitedLogs.classList.add('d-none');
+                allLogs.classList.remove('d-none');
+                toggleBtn.textContent = 'Show Less';
+            }
+        });
+    }
+});
+</script>
+
 
 @endsection

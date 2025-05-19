@@ -25,7 +25,7 @@ class Applicant extends Model
 
     public function account()
     {
-        return $this->belongsTo(Accounts::class);
+        return $this->belongsTo(Accounts::class, 'account_id');
     }
 
     public function formSubmission()
@@ -33,5 +33,15 @@ class Applicant extends Model
         return $this->hasOne(FillupForms::class, 'applicant_id', 'id'); //basically para lang maglink yung id ni applicant and sa form_submissions id.
     }
 
-
+    public function payment() {
+        return $this->hasOne(Payment::class);
+    }
+    
+    public function schedule() {
+        return $this->hasOne(ApplicantSchedule::class);
+    }
+    
+    public function examResult() {
+        return $this->hasOne(ExamResult::class);
+    }
 }

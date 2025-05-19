@@ -8,20 +8,55 @@ use App\Models\FillupForms;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use App\Models\Accounts;
 
 class EditApplicantController extends Controller
 {
     public function show($id)
-    {
-        $applicant = Applicant::findOrFail($id);
-        $formData = FillupForms::where('applicant_id', $applicant->id)->first();
+{
+    $applicant = \App\Models\Applicant::findOrFail($id);
+    $formData = \App\Models\FillupForms::where('applicant_id', $applicant->id)->first();
 
-        if (!$formData) {
-            return back()->with('error', 'Form submission not found for this applicant.');
-        }
-
-        return view('admission.applicant.edit-applicant-info', compact('applicant', 'formData'));
+    if (!$formData) {
+        return back()->with('error', 'Form submission not found.');
     }
+
+    // Fetch related records
+    $account = $applicant->account;
+    // or ->where('id', $applicant->user_id)->first()
+    $payment = \App\Models\Payment::where('applicant_id', $applicant->id)->first();
+    $schedule = \App\Models\ApplicantSchedule::where('applicant_id', $applicant->id)->first();
+    $examResult = \App\Models\ExamResult::where('applicant_id', $applicant->id)->first();
+
+    // Match exact timestamps from tables
+    $timestamps = [
+        'account_created'   => optional($account)->created_at,
+        'form_submitted'    => optional($formData)->created_at,
+        'payment_sent'      => optional($payment)->created_at,
+        'payment_verified'  => optional($payment)->updated_at,
+        'exam_booked'       => optional($schedule)->created_at,
+        'exam_result'       => optional($examResult)->created_at,
+    ];
+
+    // Get change history logs
+    $historyLogs = \DB::table('form_change_logs')
+        ->where('form_submission_id', $formData->id)
+        ->orderByDesc('created_at')
+        ->get();
+
+    $limitedLogs = $historyLogs->take(5);
+
+    return view('admission.applicant.edit-applicant-info', compact(
+        'applicant',
+        'formData',
+        'historyLogs',
+        'limitedLogs',
+        'timestamps'
+    ));
+}
+
+    
+
 
     public function update(Request $request, $id)
     {

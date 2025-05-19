@@ -22,7 +22,6 @@ use App\Http\Controllers\AdmissionsAppListController;
 use App\Http\Controllers\ExamResultController;
 use App\Http\Controllers\EditApplicantController;
 use App\Http\Controllers\ExportController;
-use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\AdmissionChartController;
 
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
@@ -206,7 +205,8 @@ Route::middleware(['auth', 'role:admission'])->group(function () {
 Route::delete('/applicants/{id}', [EditApplicantController::class, 'destroy'])->name('applicant.delete');
 
 Route::get('/export/forms', [ExportController::class, 'exportForms'])->name('export.forms');
-Route::get('/admission/applicant/{id}/edit', [App\Http\Controllers\HistoryController::class, 'show'])->name('applicant.edit');
+    //Route::get('/admission/edit-applicant/{id}', [EditApplicantController::class, 'show'])->name('admission.editApplicant');
+
 Route::get('/admission/reports/admission-reports', [AdmissionChartController::class, 'index'])->name('admission.reports');
 
 //forfiltering:
