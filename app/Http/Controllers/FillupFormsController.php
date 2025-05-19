@@ -74,17 +74,19 @@ class FillupFormsController extends Controller
             'current_school',
         ];
 
-        //logic para ipakita lang ang modal if senior high
+        //logic para ipakita lang ang strand modal if senior high
         $showStrandModal = false;
 
         if ($formSubmission->educational_level === 'Senior High School' && empty($formSubmission->strand)) {
             $showStrandModal = true;
 }
 
-        //prefill recommended_strand (based lang sa session feel ko kasi di na need isave sa db ito taena recommended lang naman eh)
+        //prefill recommended_strand 
         if (session('recommended_strand') && empty($formSubmission->strand)) {
             $formSubmission->strand = session('recommended_strand');
             session()->forget('recommended_strand');
+            session()->forget('topStrand');
+
         }
 
         return view('applicant.steps.forms.step-1-forms', compact('applicant', 'formSubmission', 'readOnlyFields', 'showStrandModal'))->with('currentStep', $applicant->current_step);
@@ -224,7 +226,7 @@ class FillupFormsController extends Controller
         return redirect()->route('applicant.steps.payment.payment');
     }
 
-    //----------------------------------------------------------------------------------------------//
+    //---------------------------------STRAND RECOMMENDER LOGIC -------------------------------------------------------------//
 
     //returns view for recommender
     public function showRecommender()
@@ -238,6 +240,12 @@ class FillupFormsController extends Controller
     public function submitRecommender(Request $request)
             {
                 $answers = $request->all();
+                // Merge previous answers if this is a subquestion-only request
+                    if (session()->has('strand_main_answers')) {
+                        $answers = array_merge(session('strand_main_answers'), $answers);
+                        session()->forget('strand_main_answers'); 
+                    }
+
                 $score = [
                     'stem' => 0,
                     'abm' => 0,
@@ -292,13 +300,23 @@ class FillupFormsController extends Controller
                 $topStrand = strtoupper($top[0]);
                 $finalStrand = $topStrand;
 
+                  // If STEM or ABM and no subquestions yet
+                if (in_array($topStrand, ['STEM', 'ABM']) && (!isset($answers['q21']) || !isset($answers['q22']))) {
+                    session([
+                        'topStrand' => $topStrand,
+                        'recommended_strand' => $topStrand,
+                        'strand_main_answers' => $answers // dito isave 20 answers
+                    ]);
+                    return redirect()->route('strand.recommender');
+                }
+
                 // If STEM or ABM but subquestions not yet answered, balikan
                 if (in_array($topStrand, ['STEM', 'ABM']) && (!isset($answers['q21']) || !isset($answers['q22']))) {
                 return redirect()->route('strand.recommender')->with([
                         'recommended_strand' => $topStrand,
                         'topStrand' => $topStrand
                     ]);
-}
+                }
 
 
                 // Finalize strand with subquestion answers
@@ -320,6 +338,24 @@ class FillupFormsController extends Controller
                     }
                 }
 
+                if (in_array($topStrand, ['STEM', 'ABM']) && (!isset($answers['q21']) || !isset($answers['q22']))) {
+                 session([
+                'topStrand' => $topStrand, 
+                'recommended_strand' => $topStrand 
+            ]);
+                return redirect()->route('strand.recommender');
+               }
+
+                // calculate yung total score
+                $totalScore = array_sum($score);
+
+                // tapos i convert to percentages para mas maganda tingnan
+                $strandBreakdown = [];
+                foreach ($score as $strand => $points) {
+                    $strandBreakdown[$strand] = $totalScore > 0 ? round(($points / $totalScore) * 100, 2) : 0;
+                }
+
+
                 // Store temporarily in session to prefill later
                 session(['recommended_strand' => $finalStrand]);
 
@@ -327,6 +363,7 @@ class FillupFormsController extends Controller
                 $applicant = Applicant::where('account_id', auth()->user()->id)->first();
                 if ($applicant) {
                     $applicant->recommended_strand = $finalStrand;
+                    $applicant->strand_breakdown = json_encode($strandBreakdown);
                     $applicant->save();
                 
                 }
@@ -335,6 +372,5 @@ class FillupFormsController extends Controller
 
 
             }
-
 
             }

@@ -57,18 +57,6 @@
             </div>
         @endforeach
     </div>
-    
-        <div class="d-flex gap-4 align-items-center flex-wrap mt-1">
-        @foreach ($steps as $stepNum => $label)
-            <div class="text-center" style="width: 55px;">
-                <small style="font-size: 0.75rem;" class="{{ $stepNum == $applicant->current_step ? 'fw-bold text-success' : 'text-muted' }}">
-                    {{ $label }}
-                </small>
-            </div>
-        @endforeach
-    </div> 
-
-
 </div>
 
 

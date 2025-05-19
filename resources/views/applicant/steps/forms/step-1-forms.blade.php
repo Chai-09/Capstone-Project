@@ -7,17 +7,24 @@
         $readOnly = isset($applicant) && $applicant->current_step > 1;
     @endphp
 
-    @if (session('strand_recommendation'))
-    {{--swal for strand recommendation result --}}
-    <script>
-        Swal.fire({
-            icon: 'info',
-            title: 'Strand Suggested',
-            html: 'Your recommended strand is <b>{{ session('strand_recommendation') }}</b>. You can still choose another strand if you want.',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#28a745'
-        });
-    </script>
+    <!-- strand recommendation modal display-->
+  @if (session('strand_recommendation'))
+<script>
+Swal.fire({
+    icon: 'info',
+    title: 'Strand Suggested',
+    html: 'Your recommended strand is <b>{{ session('strand_recommendation') }}</b>. You can still choose another strand if you want.',
+    showCancelButton: true,
+    confirmButtonText: 'View Strand Breakdown',
+    cancelButtonText: 'Close',
+    confirmButtonColor: '#28a745',
+}).then((result) => {
+    if (result.isConfirmed) {
+        const breakdownModal = new bootstrap.Modal(document.getElementById('scoreBreakdownModal'));
+        breakdownModal.show();
+    }
+});
+</script>
 @endif
 
 
@@ -381,7 +388,10 @@
 @endsection
 
 
-@if ($showStrandModal && !session('strand_modal_shown'))
+<!---------------------------------------- STRAND RECOMMENDER MODALS AND SWEETALERTS ----------------------------------------------------------------------------->
+
+
+@if ($showStrandModal && !session('strand_modal_shown') && empty($applicant->recommended_strand))
     @php
         session(['strand_modal_shown' => true]); // ipakita lang once per session
     @endphp
@@ -404,6 +414,33 @@
         });
     </script>
 @endif
+
+
+<!-- Strand breakdown modal display -->
+@if (isset($applicant->strand_breakdown))
+    @php
+        $breakdown = json_decode($applicant->strand_breakdown, true);
+    @endphp
+    <div class="modal fade" id="scoreBreakdownModal" tabindex="-1" aria-labelledby="scoreBreakdownModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="scoreBreakdownModalLabel">Strand Breakdown</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-unstyled">
+                        @foreach ($breakdown as $strand => $percent)
+                            <li><strong>{{ strtoupper($strand) }}</strong> – {{ $percent }}%</li>
+                        @endforeach
+                    </ul>
+                    <p class="text-muted small mt-3">*Only main strands are included in this breakdown. Sub-strands are considered separately.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 
 
 
