@@ -34,7 +34,7 @@
             </div>
 
             {{-- Main content --}}
-            <div class="forms col-lg-9 px-4 py-3">
+            <div class="forms col-lg-9">
                 @yield('content')
             </div>
         </div>
@@ -48,3 +48,22 @@
     @vite('resources/js/applicant/exam-schedule.js')
 </body>
 </html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const navbarCollapse = document.getElementById('navbarCollapse');
+    const sidebarWrapper = document.getElementById('sidebarWrapper');
+
+    if (navbarCollapse && sidebarWrapper) {
+        navbarCollapse.addEventListener('show.bs.collapse', function () {
+            sidebarWrapper.classList.add('navbar-open');
+        }); 
+
+        navbarCollapse.addEventListener('hide.bs.collapse', function () {
+            setTimeout(() => {
+                sidebarWrapper.classList.remove('navbar-open');
+            }, 450);
+        });
+    }
+});
+</script>

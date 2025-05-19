@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg px-4 py-2">
+<nav class="navbar navbar-expand-lg fixed-top px-4 py-2">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="#">
             <img src="/images/applicants/feudiliman_logo.png" width="30" height="35" class="me-2" alt="FEU Logo">

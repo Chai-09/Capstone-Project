@@ -3,7 +3,7 @@
 @endphp
 
 
-<div class="sidebar-nav-wrapper">
+<div class="sidebar-nav-wrapper" id="sidebarWrapper">
     <ul class="sidebar-nav nav-pills flex-column">
         <li class="nav-item {{ $currentStep > 1 ? 'completed' : '' }}  {{ $currentStep == 1 ? 'active' : '' }}">
             <span class="step-number">
@@ -93,7 +93,3 @@
     </ul>
 </div>
 
-
-<script>
-    
-</script>
