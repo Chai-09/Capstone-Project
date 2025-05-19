@@ -11,8 +11,12 @@
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    {{-- CSS --}}
+    @vite('resources/css/partials/tables.css')
+
+    {{-- JS --}}
     @vite('resources/js/accounting/payment.js')
-    @vite('resources/css/accounting/table.css')
+
 </head>
 <body>
 
@@ -21,7 +25,7 @@
         @include('partials.sidebar')
 
         {{-- Main Content --}}
-        <div id="content" class="flex-grow-1 p-2">
+        <div class="container table-design" id="content" class="flex-grow-1 p-2">
             @yield('content')
         </div>
     </div>

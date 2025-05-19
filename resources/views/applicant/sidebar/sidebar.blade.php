@@ -1,7 +1,9 @@
 @php
     $currentStep = $currentStep;
+    $incomingGrLvl = $applicant->incoming_grlvl ?? '';
+    $currentStep = $applicant->current_step ?? 1;
+    $isSeniorHigh = in_array($incomingGrLvl, ['GRADE 11', 'GRADE 12']);
 @endphp
-
 
 <div class="sidebar-nav-wrapper" id="sidebarWrapper">
     <ul class="sidebar-nav nav-pills flex-column">
@@ -70,20 +72,13 @@
                 <i class="fa-solid fa-square-poll-vertical"></i> Results
             </a>
         </li>
-        <div class="double-line pb-5">
+        <div class="double-line">
             <div class="line"></div>
             <div class="line"></div>
         </div>
-
-        {{-- Eto yung button sa sidebar, for recommendation --}}
-        @php
-        $incomingGrLvl = $applicant->incoming_grlvl ?? '';
-        $currentStep = $applicant->current_step ?? 1;
-        $isSeniorHigh = in_array($incomingGrLvl, ['GRADE 11', 'GRADE 12']);
-    @endphp
-
+       
     @if ($isSeniorHigh && $currentStep == 1)
-        <li class="nav-item">
+        <li class="nav-item pt-4">
             <a href="{{ route('strand.recommender') }}"  id="open-questionnaire" class="nav-link text-success fw-semibold" style="white-space: normal; line-height: 1.3;">
                 <i class="fa-solid fa-circle-question"></i>
                 Need help choosing your strand?

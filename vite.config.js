@@ -31,11 +31,11 @@ export default defineConfig({
 
                 //3 Sidebar
                 'resources/js/partials/sidebar.js',
-                'resources/css/accounting/table.css',
+                'resources/css/partials/tables.css',
+                'resources/css/partials/layout.css',
 
                 // Accountant 
                 'resources/js/accounting/payment.js',
-                'resources/css/accounting/table.css',
 
                 // Admission
                 'resources/js/admission/applicant-list.js',

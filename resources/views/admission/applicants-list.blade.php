@@ -1,7 +1,7 @@
 @extends('admission.admission-home')
 
 @section('content')
-<div class="container table-design">
+<div class="table-design">
 
     {{-- SweetAlert Flash --}}
     @if (session('success'))

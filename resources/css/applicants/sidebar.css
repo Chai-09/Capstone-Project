@@ -130,3 +130,61 @@
     color:#00753F !important;
 }
 
+@media (max-height: 980px) {
+    .sidebar-nav .nav-item {
+        padding-bottom: 6px;
+    }
+
+    .sidebar-nav .step-number {
+        font-size: 0.7rem;
+        min-width: 36px;
+    }
+
+    .sidebar-nav .double-line {
+        gap: 12px;
+        margin: 0.4rem 0;
+        padding-bottom: 6px;
+    }
+}
+
+@media (max-height: 820px) {
+    .sidebar-nav .nav-item {
+        padding-bottom: 3px;
+    }
+
+    .sidebar-nav .step-number {
+        font-size: 0.7rem;
+        min-width: 36px;
+    }
+
+    .sidebar-nav .double-line {
+        gap: 12px;
+        margin: 0.2rem 0;
+        padding-bottom: 3px;
+    }
+}
+
+@media (max-height: 735px) {
+
+    .sidebar-nav-wrapper {
+        top: 45px;
+    }
+    .sidebar-nav .nav-item {
+        padding-top: 0px;
+        padding-bottom: 1px;
+    }
+
+    .sidebar-nav .step-number {
+        font-size: 0.7rem;
+        min-width: 36px;
+    }
+
+    .sidebar-nav .double-line {
+        gap: 12px;
+        margin: 0.1rem 0;
+        padding-bottom: 1px;
+    }
+}
+
+
+

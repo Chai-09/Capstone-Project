@@ -12,8 +12,9 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>ApplySmart | Admissions</title>
-       @vite('resources/css/accounting/table.css')
-       @vite('resources/js/admission/applicant-list.js')
+        @vite('resources/css/partials/layout.css')
+        @vite('resources/css/partials/tables.css')
+        @vite('resources/js/admission/applicant-list.js')
 </head>
 <body>
 
@@ -22,7 +23,7 @@
         @include('partials.sidebar')
 
         {{-- Main Content --}}
-        <div id="content" class="flex-grow-1 p-2">
+        <div class="container" id="content" class="flex-grow-1 p-2">
           @yield('content')
         </div>
     </div>

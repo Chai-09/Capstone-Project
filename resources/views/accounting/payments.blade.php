@@ -1,8 +1,8 @@
 @extends('accounting.index')
 
 @section('content')
-  <div class="container table-design">
 
+  <div class="table-design">
     {{-- Alert --}}
     @if (session('success'))
     <div class="alert alert-success text-center">
