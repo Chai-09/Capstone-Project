@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 17, 2025 at 05:29 PM
+-- Generation Time: May 19, 2025 at 02:25 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -59,14 +59,14 @@ INSERT INTO `accounts` (`id`, `name`, `email`, `password`, `role`, `created_at`,
 (38, 'MEH . MEH', 'meh@gmail.com', '$2y$12$T1K02sY482e3/M8x02PF9eH0lW90nT//LeSkpNztNgWlC4S9v.FLu', 'administrator', NULL, NULL),
 (54, 'ACCOUNTANT . ACCOUNTANT', 'accountant@gmail.com', '$2y$12$gyjTmD66YVOl14d6RKoO0.I91hFE5trOw2ZIv6CzbU2u2s9Pn42TS', 'accounting', NULL, NULL),
 (61, 'AERO  AERO', 'aero@gmail.com', '$2y$12$cT4wNzWqdd82/AO88DEylO39n36rkm/AsaZmVnyJrA11jbGUo/uL6', 'admission', NULL, NULL),
-(71, 'ERNESTO M. BARCENAS', 'gaberanx@gmail.com', '$2y$12$e5iorgL8EzjxcOJ5Zx/EXOk3QXOGW3lfkPfJs1WSC.r0c6TyVWORa', 'applicant', NULL, NULL),
 (74, 'ERNESTO  BARCENAS III', 'jayanthonysp@gmail.com', '$2y$12$6btujZvmYot23ta67KGlb.75GkHZqLNP1eiPIazKMAU88FImedKbm', 'applicant', NULL, NULL),
 (96, 'GFIRST  GLAST', 'eiryksardalla696@gmail.com', '$2y$12$epxiLo3AAsVosX6EjM.iHuxtb6UxXdXPwAQSeUYzf/e78dPE7Bi3K', 'applicant', NULL, NULL),
 (100, 'ERNESTO M. BARCENAS', 'gabebarcenas08@gmail.com', '$2y$12$0oi3G9NM7/MplQgGAi8vIuh/QCv6JZIDzPTfpwdNmkjefw0xV9Ska', 'applicant', '2025-05-14 07:06:18', '2025-05-14 07:06:18'),
 (101, 'DEBIE J. GRAYSON', 'gabebarcenas02@gmail.com', '$2y$12$BeaFxega9oZcempZ9njVruH2GSeNv1Jo.vOx0sQ.mybZ64r8J2.fG', 'applicant', '2025-05-14 07:13:37', '2025-05-14 07:13:37'),
 (103, 'GUSTAVE M. OBSCUR', 'gabebarcenas01@gmail.com', '$2y$12$V1/UqUiO6AxH0jdo/obDSutenDs1DdgRedZQcLdYBICRlf8Mbm8pG', 'applicant', '2025-05-15 05:08:02', '2025-05-15 05:08:02'),
 (104, 'SHYLLA MAE  GANDA', 'kyrie.sardalla@gmail.com', '$2y$12$ZeVXfhsGtMqYLhasVGSipu5O/8jg92xkfQ7br.er1J2AqXKgr5g0W', 'applicant', '2025-05-16 23:04:32', '2025-05-16 23:04:32'),
-(106, 'SHYLLA MAE  LOVELOVE', 'eiryk.sardalla30@gmail.com', '$2y$12$AH2lk0FkHoahMySXzVdIx..IniS1uvvp2apWLiZ/5pSDOsAxLBznu', 'applicant', '2025-05-16 23:17:51', '2025-05-16 23:17:51');
+(106, 'SHYLLA MAE  LOVELOVE', 'eiryk.sardalla30@gmail.com', '$2y$12$AH2lk0FkHoahMySXzVdIx..IniS1uvvp2apWLiZ/5pSDOsAxLBznu', 'applicant', '2025-05-16 23:17:51', '2025-05-16 23:17:51'),
+(108, 'TOJI M. FUSHIGURO', 'gaberanx@gmail.com', '$2y$12$NwIV9xIYnm07ykjeJMq7Luw2qKZJAB.fM8bSL9ujTQ2zT41ypbKfG', 'applicant', '2025-05-19 10:59:42', '2025-05-19 10:59:42');
 
 -- --------------------------------------------------------
 
@@ -86,31 +86,32 @@ CREATE TABLE `applicants` (
   `current_school` varchar(255) NOT NULL,
   `incoming_grlvl` varchar(32) NOT NULL,
   `recommended_strand` varchar(255) DEFAULT NULL,
-  `current_step` int(11) NOT NULL DEFAULT 1
+  `current_step` int(11) NOT NULL DEFAULT 1,
+  `strand_breakdown` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`strand_breakdown`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `applicants`
 --
 
-INSERT INTO `applicants` (`id`, `account_id`, `guardian_fname`, `guardian_mname`, `guardian_lname`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `current_school`, `incoming_grlvl`, `recommended_strand`, `current_step`) VALUES
-(1, 1, 'PAUL AERON', 'A.', 'GUILLERMO', 'PAUL AERON', 'O.', 'GUILLERMO', 'Virgen Del Pilar School', 'Grade 9', NULL, 1),
-(3, 3, 'Ernesto', 'M.', 'Barcenas', 'Kyrie', 'S.', 'Sardalla', 'FEU', 'Grade 8', NULL, 1),
-(8, 8, 'JHGJGGHJGHJ', 'JHJGHJGH.', 'JGHJGH', 'NMBNMBN', 'BMBN.', 'BMBN', 'BNMBN', 'GRADE 9', NULL, 1),
-(10, 10, 'HDI', 'ADS.', 'ADS', 'AWDAS', 'ADAS.', 'ADS', 'ASDAA', 'GRADE 10', NULL, 1),
-(11, 11, 'JEDI', 'J.', 'JEDI', 'BARA', 'J.', 'BARA', 'SDA', 'GRADE 10', NULL, 1),
-(12, 12, 'FGH', 'FGH.', 'FGH', 'FGH', 'FGH.', 'FGH', 'FGH', 'GRADE 11', NULL, 1),
-(13, 13, 'DASDAS', 'ADAS.', 'DAS', 'JFGHFG', 'FHFGH.', 'FGHFG', 'FGHGF', 'GRADE 12', NULL, 1),
-(15, 15, 'JEDI', 'J.', 'JEDI', 'JACOB', 'J.', 'JEDI', 'PASIG GREEN PASTURES', 'GRADE 11', NULL, 1),
-(27, 27, 'ANDREW', 'O.', 'GUILLERMO', 'ANDREI', 'O.', 'GUILLERMO', 'VIRGEN DEL PILAR SCHOOL', 'GRADE 11', NULL, 1),
-(68, 71, 'ERNESTO', 'M.', 'BARCENAS', 'GABE', 'M.', 'BARCENAS', 'UST', 'GRADE 1', NULL, 3),
-(71, 74, 'ERNESTO', '', 'BARCENAS III', 'J. ANTHONY', 'BAUTISTA.', 'SAN PASCUAL', 'FEU DILIMAN', 'GRADE 11', NULL, 4),
-(93, 96, 'GFIRST', '', 'GLAST', 'AFIRST', '', 'ALAST', 'TESTING', 'GRADE 7', NULL, 4),
-(97, 100, 'ERNESTO', 'M.', 'BARCENAS', 'MARK', 'M.', 'GRAYSON', 'URATH HIGH', 'GRADE 11', NULL, 4),
-(98, 101, 'DEBIE', 'J.', 'GRAYSON', 'OLIVER', 'J.', 'GRAYSON', 'RON KINDER LAND', 'GRADE 1', NULL, 1),
-(100, 103, 'GUSTAVE', 'M.', 'OBSCUR', 'CLAIRE', 'M.', 'OBSCUR', 'UST', 'GRADE 11', NULL, 1),
-(101, 104, 'SHYLLA MAE', '', 'GANDA', 'EYREK', '', 'SARDALLA', 'FEU DILIMAN', 'GRADE 11', 'GAS', 5),
-(103, 106, 'SHYLLA MAE', '', 'LOVELOVE', 'EIRYK', NULL, 'SARDALLA', 'FEU DILIMAN', 'GRADE 11', NULL, 4);
+INSERT INTO `applicants` (`id`, `account_id`, `guardian_fname`, `guardian_mname`, `guardian_lname`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `current_school`, `incoming_grlvl`, `recommended_strand`, `current_step`, `strand_breakdown`) VALUES
+(1, 1, 'PAUL AERON', 'A.', 'GUILLERMO', 'PAUL AERON', 'O.', 'GUILLERMO', 'Virgen Del Pilar School', 'Grade 9', NULL, 1, NULL),
+(3, 3, 'Ernesto', 'M.', 'Barcenas', 'Kyrie', 'S.', 'Sardalla', 'FEU', 'Grade 8', NULL, 1, NULL),
+(8, 8, 'JHGJGGHJGHJ', 'JHJGHJGH.', 'JGHJGH', 'NMBNMBN', 'BMBN.', 'BMBN', 'BNMBN', 'GRADE 9', NULL, 1, NULL),
+(10, 10, 'HDI', 'ADS.', 'ADS', 'AWDAS', 'ADAS.', 'ADS', 'ASDAA', 'GRADE 10', NULL, 1, NULL),
+(11, 11, 'JEDI', 'J.', 'JEDI', 'BARA', 'J.', 'BARA', 'SDA', 'GRADE 10', NULL, 1, NULL),
+(12, 12, 'FGH', 'FGH.', 'FGH', 'FGH', 'FGH.', 'FGH', 'FGH', 'GRADE 11', NULL, 1, NULL),
+(13, 13, 'DASDAS', 'ADAS.', 'DAS', 'JFGHFG', 'FHFGH.', 'FGHFG', 'FGHGF', 'GRADE 12', NULL, 1, NULL),
+(15, 15, 'JEDI', 'J.', 'JEDI', 'JACOB', 'J.', 'JEDI', 'PASIG GREEN PASTURES', 'GRADE 11', NULL, 1, NULL),
+(27, 27, 'ANDREW', 'O.', 'GUILLERMO', 'ANDREI', 'O.', 'GUILLERMO', 'VIRGEN DEL PILAR SCHOOL', 'GRADE 11', NULL, 1, NULL),
+(71, 74, 'ERNESTO', '', 'BARCENAS III', 'J. ANTHONY', 'BAUTISTA.', 'SAN PASCUAL', 'FEU DILIMAN', 'GRADE 11', NULL, 4, NULL),
+(93, 96, 'GFIRST', '', 'GLAST', 'AFIRST', NULL, 'ALAST', 'TESTING', 'GRADE 7', NULL, 4, NULL),
+(97, 100, 'ERNESTO', 'M.', 'BARCENAS', 'MARK', 'M.', 'GRAYSON', 'URATH HIGH', 'GRADE 11', NULL, 4, NULL),
+(98, 101, 'DEBIE', 'J.', 'GRAYSON', 'OLIVER', 'J.', 'GRAYSON', 'RON KINDER LAND', 'GRADE 1', NULL, 1, NULL),
+(100, 103, 'GUSTAVE', 'M.', 'OBSCUR', 'CLAIRE', 'M.', 'OBSCUR', 'UST', 'GRADE 11', 'STEM Engineering', 1, '{\"stem\":27.4,\"abm\":23.29,\"humss\":23.29,\"sports\":19.18,\"gas\":6.85}'),
+(101, 104, 'SHYLLA MAE', '', 'GANDA', 'EYREK', '', 'SARDALLA', 'FEU DILIMAN', 'GRADE 11', 'GAS', 5, NULL),
+(103, 106, 'SHYLLA MAE', '', 'LOVELOVE', 'EIRYK', NULL, 'SARDALLA', 'FEU DILIMAN', 'GRADE 11', NULL, 4, NULL),
+(105, 108, 'TOJI', 'M.', 'FUSHIGURO', 'MEGUMI', 'M.', 'FUSHIGURO', 'JUJUTSU HIGH', 'GRADE 11', 'STEM Health Allied', 1, '{\"stem\":29.73,\"abm\":29.73,\"sports\":17.57,\"humss\":13.51,\"gas\":9.46}');
 
 -- --------------------------------------------------------
 
@@ -137,7 +138,7 @@ CREATE TABLE `applicant_schedules` (
 --
 
 INSERT INTO `applicant_schedules` (`id`, `applicant_id`, `admission_number`, `applicant_name`, `applicant_contact_number`, `incoming_grade_level`, `exam_date`, `start_time`, `end_time`, `created_at`, `updated_at`) VALUES
-(54, 93, '2025-00002', 'AFIRST  ALAST', '09999999999', 'GRADE 7', '2025-05-13', '09:00:00', '10:00:00', '2025-05-10 02:33:58', '2025-05-10 02:33:58'),
+(54, 93, '2025-00002', 'AFIRST ALAST', '09999999999', 'GRADE 7', '2025-05-13', '09:00:00', '10:00:00', '2025-05-10 02:33:58', '2025-05-10 02:33:58'),
 (56, 101, '2025-00003', 'EYREK  SARDALLA', '09999999999', 'GRADE 11', '2025-05-24', '08:00:00', '09:00:00', '2025-05-16 23:08:20', '2025-05-16 23:08:20');
 
 -- --------------------------------------------------------
@@ -228,7 +229,8 @@ INSERT INTO `form_change_logs` (`id`, `changed_by`, `created_at`, `field_name`, 
 (21, 'aero@gmail.com', '2025-05-17 01:15:34', 'relation', 65, 'Brother/Sister', 'Parents', '2025-05-17 01:15:34'),
 (22, 'aero@gmail.com', '2025-05-17 01:15:52', 'source', 65, 'Website', 'Billboard', '2025-05-17 01:15:52'),
 (23, 'aero@gmail.com', '2025-05-17 01:20:23', 'age', 65, '14', '13', '2025-05-17 01:20:23'),
-(24, 'aero@gmail.com', '2025-05-17 01:29:03', 'source', 65, 'Billboard', 'Website', '2025-05-17 01:29:03');
+(24, 'aero@gmail.com', '2025-05-17 01:29:03', 'source', 65, 'Billboard', 'Website', '2025-05-17 01:29:03'),
+(25, 'aero@gmail.com', '2025-05-19 11:14:19', 'lrn_no', 57, '123', '1234', '2025-05-19 11:14:19');
 
 -- --------------------------------------------------------
 
@@ -277,9 +279,8 @@ CREATE TABLE `form_submissions` (
 --
 
 INSERT INTO `form_submissions` (`id`, `applicant_id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_contact_number`, `applicant_email`, `region`, `province`, `city`, `barangay`, `numstreet`, `postal_code`, `age`, `gender`, `nationality`, `guardian_fname`, `guardian_mname`, `guardian_lname`, `guardian_contact_number`, `guardian_email`, `relation`, `current_school`, `current_school_city`, `school_type`, `educational_level`, `incoming_grlvl`, `applicant_bday`, `lrn_no`, `strand`, `source`, `created_at`, `updated_at`) VALUES
-(35, 68, 'GABE', 'M.', 'BARCENAS', '09234567891', 'gaberanx@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Pasong Tamo', '12 C', '123', 6, 'Male', 'Filipino', 'ERNESTO', 'M.', 'BARCENAS', '09876543212', 'gaberanx@gmail.com', 'Parents', 'UST', 'Quezon City, Metro Manila', 'Private Sectarian', 'Grade School', 'GRADE 1', '2019-06-04', '202210123', NULL, 'Billboard', NULL, NULL),
 (37, 71, 'J. ANTHONY', 'BAUTISTA.', 'SAN PASCUAL', '09672980038', 'jayanthonysp@gmail.com', 'CALABARZON', 'Rizal', 'Rodriguez', 'San Rafael', 'Blk 12 Lot 2 San Antonio St.', '0618', 22, 'Male', 'Doctor', 'ERNESTO', NULL, 'BARCENAS III', '09876543210', 'jayanthonysp@gmail.com', 'Grandparents', 'FEU DILIMAN', 'Quezon, Quezon', 'Public', 'Senior High School', 'GRADE 11', NULL, '097876548872', 'STEM Engineering', 'Social Media (Facebook, TikTok, Instagram, Youtube, etc)', NULL, NULL),
-(57, 93, 'AFIRST', NULL, 'ALAST', '09999999999', 'eiryksardalla696@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Pasong Tamo', 'fds232', '1231', 13, 'Male', 'filipino', 'GFIRST', NULL, 'GLAST', '09999999999', 'eiryksardalla696@gmail.com', 'Parents', 'TESTING', 'Quezon City, Metro Manila', 'Public', 'Junior High School', 'GRADE 7', NULL, '1234', NULL, 'Social Media (Facebook, TikTok, Instagram, Youtube, etc)', NULL, NULL),
+(57, 93, 'AFIRST', NULL, 'ALAST', '09999999999', 'eiryksardalla696@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Pasong Tamo', 'fds232', '1231', 13, 'Male', 'filipino', 'GFIRST', NULL, 'GLAST', '09999999999', 'eiryksardalla696@gmail.com', 'Parents', 'TESTING', 'Quezon City, Metro Manila', 'Public', 'Junior High School', 'GRADE 7', NULL, '123', NULL, 'Social Media (Facebook, TikTok, Instagram, Youtube, etc)', NULL, '2025-05-19 11:14:19'),
 (61, 97, 'MARK', 'M.', 'GRAYSON', '09111111111', 'gabebarcenas02@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Damayan', '16T', '1222', 14, 'Male', 'Viltrumite', 'ERNESTO', 'M.', 'BARCENAS', '09666666666', 'gabebarcenas08@gmail.com', 'Cousin', 'URATH HIGH', 'Quezon, Quezon', 'Private Non-Sectarian', 'Senior High School', 'GRADE 11', NULL, '209910123', 'STEM Information Technology', 'Friends/Family/Relatives', NULL, NULL),
 (63, 101, 'EYREK', NULL, 'SARDALLA', '09999999999', 'kyrie.sardalla@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Batasan Hills', 'fds232', '1231', 13, 'Male', 'filipino', 'SHYLLA MAE', NULL, 'GANDA', '09999999999', 'kyrie.sardalla@gmail.com', 'Parents', 'FEU DILIMAN', 'Quezon City, Metro Manila', 'Public', 'Senior High School', 'GRADE 11', NULL, '1234', 'GAS', 'Friends/Family/Relatives', NULL, NULL),
 (65, 103, 'EIRYK', NULL, 'SARDALLA', '09999999999', 'kyrie.sardalla@gmail.com', 'NCR', 'Metro Manila (NCR)', 'Quezon City', 'Batasan Hills', 'fds232', '1231', 14, 'Male', 'filipino', 'SHYLLA MAE', NULL, 'LOVELOVE', '09999999999', 'eiryk.sardalla30@gmail.com', 'Brother/Sister', 'FEU DILIMAN', 'Quezon City, Metro Manila', 'Private Non-Sectarian', 'Senior High School', 'GRADE 11', NULL, '21412123', 'STEM Information Technology', 'Billboard', '2025-05-16 23:18:57', '2025-05-17 01:29:03');
@@ -337,7 +338,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (44, '2025_05_13_105352_add_timestamps_to_accounts', 31),
 (45, '2025_05_15_071759_add_recommended_strand_to_applicants_table', 32),
 (46, '2025_05_17_031034_add_timestamps_to_form_submissions', 33),
-(47, '2025_05_17_035621_add_unique_to_admission_number_in_applicant_schedules', 33);
+(47, '2025_05_17_035621_add_unique_to_admission_number_in_applicant_schedules', 33),
+(48, '2025_05_17_115442_add_strand_breakdown_to_applicants_table', 34);
 
 -- --------------------------------------------------------
 
@@ -393,9 +395,8 @@ CREATE TABLE `payment` (
 --
 
 INSERT INTO `payment` (`id`, `applicant_id`, `applicant_fname`, `applicant_mname`, `applicant_lname`, `applicant_email`, `applicant_contact_number`, `guardian_fname`, `guardian_mname`, `guardian_lname`, `incoming_grlvl`, `payment_method`, `proof_of_payment`, `payment_status`, `remarks`, `ocr_number`, `payment_date`, `payment_time`, `created_at`, `updated_at`, `receipt`) VALUES
-(28, 68, 'GABE', 'M.', 'BARCENAS', 'gaberanx@gmail.com', '09234567891', NULL, NULL, NULL, 'GRADE 1', 'BDO', 'payment_proofs/proof_6817497e0ccfd3.73477546.png', 'approved', 'YOU WIN', '202022022', '2025-05-04', '19:03:26', '2025-05-04 03:03:26', '2025-05-04 05:57:14', 'payment_receipts/avMDa7Mald2YaeJ69M7Z1aDHptBfpWXD7QXlNanx.jpg'),
 (31, 71, 'J. ANTHONY', 'BAUTISTA.', 'SAN PASCUAL', 'jayanthonysp@gmail.com', '09672980038', NULL, NULL, NULL, 'GRADE 11', 'BDO', 'payment_proofs/proof_68180d3ae76743.87459667.jpg', 'approved', 'bobo ka kys', '0987654321', '2025-05-05', '08:58:35', '2025-05-04 16:58:35', '2025-05-04 17:01:26', 'payment_receipts/O3aS6d7gP0GEnSDgFmLzeGf2A0VdkbsJmH9EZARS.jpg'),
-(52, 93, 'AFIRST', '', 'ALAST', 'eiryksardalla696@gmail.com', '09999999999', NULL, NULL, NULL, 'GRADE 7', 'Metrobank', 'payment_proofs/proof_681f2b7d717509.59037391.png', 'approved', NULL, NULL, '2025-05-10', '18:33:33', '2025-05-10 02:33:33', '2025-05-10 02:33:41', NULL),
+(52, 93, 'AFIRST', NULL, 'ALAST', 'eiryksardalla696@gmail.com', '09999999999', NULL, NULL, NULL, 'GRADE 7', 'Metrobank', 'payment_proofs/proof_681f2b7d717509.59037391.png', 'approved', NULL, NULL, '2025-05-10', '18:33:33', '2025-05-10 02:33:33', '2025-05-10 02:33:41', NULL),
 (56, 97, 'MARK', 'M.', 'GRAYSON', 'gabebarcenas02@gmail.com', '09111111111', 'ERNESTO', 'M.', 'BARCENAS', 'GRADE 11', 'LandBank', 'payment_proofs/proof_6824b253597d01.94511524.png', 'approved', 'Whats Up', '123456', '2025-05-14', '23:10:12', '2025-05-14 07:10:12', '2025-05-14 07:10:48', 'payment_receipts/HIrXf6JGW96C61ouoE2jxNrSqSloG5P43zeZZJeB.png'),
 (57, 101, 'EYREK', '', 'SARDALLA', 'kyrie.sardalla@gmail.com', '09999999999', 'SHYLLA MAE', '', 'GANDA', 'GRADE 11', 'BDO', 'payment_proofs/proof_682835b2996a34.76568868.jpg', 'approved', NULL, NULL, '2025-05-17', '15:07:31', '2025-05-16 23:07:31', '2025-05-16 23:08:02', NULL),
 (59, 103, 'EIRYK', NULL, 'SARDALLA', 'kyrie.sardalla@gmail.com', '09999999999', 'SHYLLA MAE', '', 'LOVELOVE', 'GRADE 11', 'BDO', 'payment_proofs/proof_68283879411d15.28943068.png', 'approved', NULL, NULL, '2025-05-17', '15:19:21', '2025-05-16 23:19:21', '2025-05-16 23:19:53', NULL);
@@ -420,9 +421,9 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('GkMxQSZkuNaniSY9VvjKiioeUz1Z5QfbVP8m0Emr', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoidGN6aUpuakZCZVdIVW14Q3FValp0ZTJKWm5ZOHJNZVdCdE1XSUk3eSI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyODoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL3N0ZXAtNCI7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjI4OiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvc3RlcC00Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1747487917),
-('iBz1cuDvkSpRfx77QdaKIe23Q7wMu9NUF89A7RjT', 106, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0', 'YTo4OntzOjY6Il90b2tlbiI7czo0MDoiNzJFN09OR0RlWTlCWm1qZnYwR25JR2Q4R1BTQXJxUURnT3FyeGRlcyI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyODoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL3N0ZXAtNCI7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjI4OiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvc3RlcC00Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTA2O3M6NDoibmFtZSI7czoyMDoiU0hZTExBIE1BRSAgTE9WRUxPVkUiO3M6NToiZW1haWwiO3M6MjY6ImVpcnlrLnNhcmRhbGxhMzBAZ21haWwuY29tIjtzOjQ6InJvbGUiO3M6OToiYXBwbGljYW50Ijt9', 1747491219),
-('JgHa0RQsuOpWJqw3PiRaE1xA1fY0IVJhkRg59qsK', 61, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo3OntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjY6Il90b2tlbiI7czo0MDoib1BTMEd6d3hIa3ZyR1RoSzNNYnR1TE16MDRGQTkwZU5kTHk1R3I2SiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pc3Npb24vcmVwb3J0cy9hZG1pc3Npb24tcmVwb3J0cyI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjYxO3M6NDoibmFtZSI7czoxMDoiQUVSTyAgQUVSTyI7czo1OiJlbWFpbCI7czoxNDoiYWVyb0BnbWFpbC5jb20iO3M6NDoicm9sZSI7czo5OiJhZG1pc3Npb24iO30=', 1747495503);
+('9qFmiVBGUFrTbKWt4H0BAmdu6f0LCxekoIWpM8P4', 61, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo3OntzOjY6Il90b2tlbiI7czo0MDoiWGFWeEZrNTFLY0x1QTlIRDFhaWNTaUlibHpJQlBLd09nQWE2QURoUSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pc3Npb24vZWRpdC1hcHBsaWNhbnQvOTMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo2MTtzOjQ6Im5hbWUiO3M6MTA6IkFFUk8gIEFFUk8iO3M6NToiZW1haWwiO3M6MTQ6ImFlcm9AZ21haWwuY29tIjtzOjQ6InJvbGUiO3M6OToiYWRtaXNzaW9uIjt9', 1747654712),
+('lrnqCGz8M3XTUy4HTdgViB2QDT2ZhTBN0pl4aNS7', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjY6Il90b2tlbiI7czo0MDoiQjl2OVhDWGZKMEtWY1FJMGZWbjl1UFZpNnJJYlRYZnZVTnhXWjNSUiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fX0=', 1747657220),
+('okF3odBxldJVVgdqqRGxm3nTBADX3F7S7fVoYlcA', 103, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo4OntzOjY6Il90b2tlbiI7czo0MDoiRHVHaDhSSWVDRWZlR0l4aHhUUGJZeGFNbFJIMjBSTjRqMXNpdHBZMiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTAzO3M6NDoibmFtZSI7czoxNzoiR1VTVEFWRSBNLiBPQlNDVVIiO3M6NToiZW1haWwiO3M6MjQ6ImdhYmViYXJjZW5hczAxQGdtYWlsLmNvbSI7czo0OiJyb2xlIjtzOjk6ImFwcGxpY2FudCI7czoxODoic3RyYW5kX21vZGFsX3Nob3duIjtiOjE7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fX0=', 1747653103);
 
 -- --------------------------------------------------------
 
@@ -533,13 +534,13 @@ ALTER TABLE `signup_otps`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- AUTO_INCREMENT for table `applicants`
 --
 ALTER TABLE `applicants`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
 
 --
 -- AUTO_INCREMENT for table `applicant_schedules`
@@ -563,7 +564,7 @@ ALTER TABLE `exam_schedules`
 -- AUTO_INCREMENT for table `form_change_logs`
 --
 ALTER TABLE `form_change_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `form_submissions`
@@ -575,7 +576,7 @@ ALTER TABLE `form_submissions`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `payment`
@@ -587,7 +588,7 @@ ALTER TABLE `payment`
 -- AUTO_INCREMENT for table `signup_otps`
 --
 ALTER TABLE `signup_otps`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- Constraints for dumped tables
