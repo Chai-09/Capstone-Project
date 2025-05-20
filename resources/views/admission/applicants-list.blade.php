@@ -64,6 +64,7 @@
         Export to Excel
     </a>
     </form>
+    
 
 
     <div class="table-wrapper">
@@ -72,12 +73,125 @@
             <thead>
                 <tr>
                     <th style="width: 5%;">#</th>
-                    <th style="width: 18%;">Name</th>
+                    <th style="width: 18%; position: relative;">
+    <div class="dropdown">
+        <button class="btn btn-sm btn-light border dropdown-toggle w-100 d-flex justify-content-between align-items-center"
+                type="button"
+                id="sortNameDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+            <span>Name</span>
+            <i class="bi bi-sort-alpha-down ms-1"></i>
+        </button>
+
+        {{-- Dropdown appears BELOW the th --}}
+        <ul class="dropdown-menu"
+            aria-labelledby="sortNameDropdown"
+            style="z-index: 1055; min-width: 200px;">
+            <li><strong class="dropdown-header">Sort by Name</strong></li>
+            <li>
+                <a class="dropdown-item {{ request('sort_name') === 'asc' ? 'active' : '' }}"
+                   href="{{ request()->fullUrlWithQuery(['sort_name' => 'asc', 'sort_id' => null]) }}">
+                    A to Z
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item {{ request('sort_name') === 'desc' ? 'active' : '' }}"
+                   href="{{ request()->fullUrlWithQuery(['sort_name' => 'desc', 'sort_id' => null]) }}">
+                    Z to A
+                </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item {{ !request('sort_name') && !request('sort_id') ? 'active' : '' }}"
+                   href="{{ request()->url() }}">
+                    Default
+                </a>
+            </li>
+        </ul>
+    </div>
+</th>
+
+
+
+
+
+
                     <th style="width: 20%;">Email Address</th>
                     <th style="width: 12%;">Contact Number</th>
                     <th style="width: 17%;">Current School</th>
-                    <th style="width: 10%;">Grade Level</th>
-                    <th style="width: 10%;">Current Stage</th>
+                    <th style="width: 10%; position: relative;">
+    <div class="dropdown">
+        <button class="btn btn-sm btn-light border dropdown-toggle w-100 d-flex justify-content-between align-items-center"
+                type="button"
+                id="sortGradeDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+            <span>Grade Level</span>
+            <i class="bi bi-sort-numeric-down ms-1"></i>
+        </button>
+
+        <ul class="dropdown-menu" aria-labelledby="sortGradeDropdown" style="z-index: 1055;">
+            <li><strong class="dropdown-header">Sort by Grade</strong></li>
+            <li>
+                <a class="dropdown-item {{ request('sort_grade') === 'asc' ? 'active' : '' }}"
+                   href="{{ request()->fullUrlWithQuery(['sort_grade' => 'asc', 'sort_name' => null, 'sort_step' => null]) }}">
+                    Kinder to Grade 12
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item {{ request('sort_grade') === 'desc' ? 'active' : '' }}"
+                   href="{{ request()->fullUrlWithQuery(['sort_grade' => 'desc', 'sort_name' => null, 'sort_step' => null]) }}">
+                    Grade 12 to Kinder
+                </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item {{ !request('sort_grade') ? 'active' : '' }}"
+                   href="{{ request()->url() }}">
+                    Default
+                </a>
+            </li>
+        </ul>
+    </div>
+</th>
+
+                    <th style="width: 10%; position: relative;">
+    <div class="dropdown">
+        <button class="btn btn-sm btn-light border dropdown-toggle w-100 d-flex justify-content-between align-items-center"
+                type="button"
+                id="sortStepDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+            <span>Current Stage</span>
+            <i class="bi bi-sort-numeric-down ms-1"></i>
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sortStepDropdown" style="z-index: 1055;">
+            <li><strong class="dropdown-header">Sort by Stage</strong></li>
+            <li>
+                <a class="dropdown-item {{ request('sort_step') === 'asc' ? 'active' : '' }}"
+                   href="{{ request()->fullUrlWithQuery(['sort_step' => 'asc', 'sort_name' => null, 'sort_id' => null]) }}">
+                    Ascending
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item {{ request('sort_step') === 'desc' ? 'active' : '' }}"
+                   href="{{ request()->fullUrlWithQuery(['sort_step' => 'desc', 'sort_name' => null, 'sort_id' => null]) }}">
+                    Descending
+                </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item {{ !request('sort_step') && !request('sort_name') && !request('sort_id') ? 'active' : '' }}"
+                   href="{{ request()->url() }}">
+                    Default
+                </a>
+            </li>
+        </ul>
+    </div>
+</th>
+
                     <th style="width: 8%;">Action</th>
                 </tr>
             </thead>
@@ -125,5 +239,22 @@
         <p class="text-center">No applicants found.</p>
     @endif
 </div>
+<style>
+    /* Allow dropdowns to appear outside the table header */
+    .table-wrapper {
+        position: relative;
+        overflow: visible;
+    }
+
+    .custom-table th {
+        overflow: visible !important;
+    }
+
+    .dropdown-menu {
+        z-index: 1055;
+    }
+</style>
+
+
 @endsection
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>

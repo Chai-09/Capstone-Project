@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Applicant;
 use App\Models\Accounts;
 
+
 class AdmissionsAppListController extends Controller
 {
     public function index(Request $request)
@@ -33,6 +34,53 @@ class AdmissionsAppListController extends Controller
     if ($request->filled('stage')) {
         $query->where('current_step', $request->stage);
     }
+
+    
+
+    // Sort by name
+if ($request->filled('sort_name') && in_array($request->sort_name, ['asc', 'desc'])) {
+    $query->orderBy('applicant_fname', $request->sort_name)
+          ->orderBy('applicant_lname', $request->sort_name);
+}
+
+// Sort by current_step
+elseif ($request->filled('sort_step') && in_array($request->sort_step, ['asc', 'desc'])) {
+    $query->orderBy('current_step', $request->sort_step);
+}
+
+// Sort by grade level
+// Sort by grade level (custom logic)
+elseif ($request->filled('sort_grade') && in_array($request->sort_grade, ['asc', 'desc'])) {
+    $customOrder = [
+        'KINDER', 'GRADE 1', 'GRADE 2', 'GRADE 3', 'GRADE 4',
+        'GRADE 5', 'GRADE 6', 'GRADE 7', 'GRADE 8', 'GRADE 9',
+        'GRADE 10', 'GRADE 11', 'GRADE 12'
+    ];
+
+    $direction = $request->sort_grade;
+
+    $applicants = $query->get()->sortBy(function ($applicant) use ($customOrder) {
+        $level = strtoupper(trim($applicant->incoming_grlvl));
+        return array_search($level, $customOrder) !== false ? array_search($level, $customOrder) : 999;
+    }, SORT_REGULAR, $direction === 'desc');
+
+    // Reset pagination manually (if needed)
+    $page = $request->get('page', 1);
+    $perPage = 12;
+    $paged = $applicants->slice(($page - 1) * $perPage, $perPage)->values();
+    $applicants = new \Illuminate\Pagination\LengthAwarePaginator(
+        $paged,
+        $applicants->count(),
+        $perPage,
+        $page,
+        ['path' => $request->url(), 'query' => $request->query()]
+    );
+
+    return view('admission.applicants-list', compact('applicants'));
+}
+
+
+
 
     // Paginate results
     $applicants = $query->paginate(12);

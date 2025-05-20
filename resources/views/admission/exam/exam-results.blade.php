@@ -23,8 +23,10 @@
                     <td>{{ $result->applicant_name }}</td>
                     <td>{{ $result->incoming_grade_level }}</td>
                     <td>{{ \Carbon\Carbon::parse($result->exam_date)->format('F d, Y') }}</td>
-                    <td>{{ ucfirst($result->exam_status) }}</td>
-                    <td>{{ ucfirst($result->exam_result) }}</td>
+                    <td>{{ ucwords(str_replace('_', ' ', strtolower($result->exam_status))) }}
+</td>
+                    <td>{{ ucwords(str_replace('_', ' ', strtolower($result->exam_result))) }}
+</td>
                     <td>
                     <form method="POST" action="{{ route('exam.results.update') }}" class="result-form">
     <input type="hidden" name="applicant_id" value="{{ $result->applicant_id }}">
@@ -37,7 +39,7 @@
                                     <option value="failed" {{ $result->exam_result === 'failed' ? 'selected' : '' }}>Failed</option>
                                     <option value="scholarship" {{ $result->exam_result === 'scholarship' ? 'selected' : '' }}>Scholarship</option>
                                     <option value="interview" {{ $result->exam_result === 'interview' ? 'selected' : '' }}>Interview</option>
-                                    <option value="no_show" {{ $result->exam_result === 'no_show' ? 'selected' : '' }}>No Show</option>
+                                    <option value="no_show" {{ $result->exam_result === 'no show' ? 'selected' : '' }}>No Show</option>
                                 </select>
                                 <button type="button" class="btn btn-success confirm-btn">Confirm</button>
                             </div>
