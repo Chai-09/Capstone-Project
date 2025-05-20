@@ -45,7 +45,7 @@ class ExamResultController extends Controller
             // only overwrite result if status is no_show
             if ($existing->exam_status === 'no show') {
 
-                $existing->exam_result = 'no_show';
+                $existing->exam_result = 'no show';
             }
 
             $existing->save();

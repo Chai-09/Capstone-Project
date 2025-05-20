@@ -14,9 +14,9 @@
     "file": "assets/login-bg-DOMhYrel.png",
     "src": "public/images/login/login-bg.png"
   },
-  "resources/css/accounting/table.css": {
-    "file": "assets/table-Din2Tu9A.css",
-    "src": "resources/css/accounting/table.css",
+  "resources/css/admission/edit-applicant.css": {
+    "file": "assets/edit-applicant-tn0RQdqM.css",
+    "src": "resources/css/admission/edit-applicant.css",
     "isEntry": true
   },
   "resources/css/app.css": {
@@ -35,7 +35,7 @@
     "isEntry": true
   },
   "resources/css/applicants/sidebar.css": {
-    "file": "assets/sidebar-eVvDRaSK.css",
+    "file": "assets/sidebar-De4BtrcM.css",
     "src": "resources/css/applicants/sidebar.css",
     "isEntry": true
   },
@@ -79,9 +79,19 @@
     "src": "resources/css/login/login.css",
     "isEntry": true
   },
+  "resources/css/partials/layout.css": {
+    "file": "assets/layout-Clk1twnh.css",
+    "src": "resources/css/partials/layout.css",
+    "isEntry": true
+  },
   "resources/css/partials/sidebar.css": {
     "file": "assets/sidebar-DI8nOQPs.css",
     "src": "resources/css/partials/sidebar.css",
+    "isEntry": true
+  },
+  "resources/css/partials/tables.css": {
+    "file": "assets/tables-Din2Tu9A.css",
+    "src": "resources/css/partials/tables.css",
     "isEntry": true
   },
   "resources/js/accounting/payment.js": {
