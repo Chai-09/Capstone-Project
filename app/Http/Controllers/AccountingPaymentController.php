@@ -27,6 +27,10 @@ class AccountingPaymentController extends Controller
         $query->where('payment_method', $request->input('payment_method'));
     }
 
+    if ($request->filled('payment_for')) {
+    $query->where('payment_for', $request->input('payment_for'));
+}
+
     if ($request->filled('search')) {
         $search = $request->input('search');
         $query->where(function($q) use ($search) {

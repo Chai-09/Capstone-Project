@@ -13,7 +13,8 @@
             </div>
         </div>
         <div class="form-section">
-            @forelse ($payments as $payment)
+           @if ($existingPayment)
+            @php $payment = $existingPayment; @endphp
             <div class="form-row">
                 <p><span class="fw-semibold">Applicant’s Name:</span> {{ $payment->applicant_fname }} {{ $payment->applicant_mname }} {{ $payment->applicant_lname }}</p>
             </div>
@@ -99,11 +100,12 @@
                 </div>
             @endif
         </div>
-        @empty
+        
+        @else
             <div class="alert alert-info text-center">
                 No payment records found.
             </div>
-        @endforelse
+         @endif
     </div>
 </div>
 

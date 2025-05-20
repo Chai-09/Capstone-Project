@@ -54,6 +54,16 @@
                 <option value="BPI" {{ request('payment_method') == 'BPI' ? 'selected' : '' }}>BPI</option>
               </select>
             </div>
+
+            {{-- Payment Type --}}
+            <div class="mb-3">
+              <label for="payment_for" class="form-label">Payment Type</label>
+              <select name="payment_for" class="form-select">
+              <option value="">All Types</option>
+              <option value="first-time" {{ request('payment_for') == 'first-time' ? 'selected' : '' }}>First-Time</option>
+              <option value="resched" {{ request('payment_for') == 'resched' ? 'selected' : '' }}>Resched</option>
+             </select>
+            </div>
           </div>
         </div>
 
@@ -76,12 +86,13 @@
         {{-- Category Names --}}
         <thead>
           <tr>
-            <th style="width: 8%">#</th>
+            <th style="width: 5%">#</th>
             <th style="width: 30%">Applicant Name</th>
-            <th style="width: 20%">Grade Level</th>
+            <th style="width: 15%">Grade Level</th>
             <th style="width: 16%">Payment Method</th>
             <th style="width: 16%">Proof of Payment</th>
             <th>Status</th>
+            <th>Type</th>
           </tr>
         </thead>
         
@@ -107,10 +118,17 @@
                   <span class="payment-status denied">Denied</span>
                 @endif
               </td>
+              <td>
+              @if ($payment->payment_for === 'resched')
+                  <span class="badge bg-warning text-dark">RESCHED</span> {{-- Dito ko kinuha badges pre if gusto mo gamitin or something https://getbootstrap.com/docs/4.0/components/badge/ --}}
+              @else
+                  <span class="badge bg-success">FIRST-TIME</span>
+              @endif
+             </td>
             </tr>
             @empty
             <tr>
-              <td colspan="8">No payments found.</td>
+              <td colspan="7">No payments found.</td>
             </tr>
           @endforelse
         </tbody>
@@ -152,6 +170,7 @@
                 <h6>Payment Information</h6>
                 <p><strong>Time of Payment:</strong> <span id="paymentTime"></span></p>
                 <p><strong>Mode of Payment:</strong> <span id="paymentMethod"></span></p>
+                <p><strong>Payment Type:</strong> <span id="paymentType"></span></p>
 
                 <div class="mb-3">
                   <label class="form-label"><strong>Status:</strong></label><br>

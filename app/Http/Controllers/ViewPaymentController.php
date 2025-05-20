@@ -11,37 +11,32 @@ use App\Models\Applicant;
 class ViewPaymentController extends Controller
 {
     public function index()
-    {
-        $applicant = Applicant::where('account_id', Auth::id())->first();
+{
+    $applicant = Applicant::where('account_id', Auth::id())->firstOrFail();
 
-        $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
+    $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
 
-        if (!$applicant) {
-            return redirect()->back()->with('error', 'No applicant found.');
-        }
-
-        $payments = Payment::select(
-            'id',
-            'applicant_fname',
-            'applicant_mname',
-            'applicant_lname',
-            'incoming_grlvl',
-            'applicant_email',
-            'applicant_contact_number',
-            'payment_method',
-            'proof_of_payment',
-            'payment_status',
-            'remarks', //dinagdagan ko lang to para sa applicants.
-            'ocr_number',
-            'receipt'
-        )
-            ->where('applicant_id', $applicant->id)
-            ->get();
-
-        $currentStep = $applicant->current_step ?? 1;
-
-        return view('applicant.steps.payment.payment-verification', compact('currentStep', 'payments', 'applicant'));
+    if (!$formSubmission) {
+        return redirect()->back()->with('error', 'No form submission found.');
     }
+
+    $hasExamSchedule = \App\Models\ApplicantSchedule::where('applicant_id', $applicant->id)->exists();
+    $paymentType = $hasExamSchedule ? 'resched' : 'first-time';
+
+    $existingPayment = Payment::where('applicant_id', $applicant->id)
+        ->where('payment_for', $paymentType)
+        ->whereIn('payment_status', ['pending', 'approved', 'denied'])
+        ->latest()
+        ->first();
+
+    $currentStep = $applicant->current_step ?? 1;
+
+    return view('applicant.steps.payment.payment-verification', [
+        'existingPayment' => $existingPayment,
+        'applicant' => $applicant,
+        'currentStep' => $currentStep,
+    ]);
+}
 
     public function delete($id)
     {

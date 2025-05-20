@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('paymentTime').innerText = new Date(data.created_at).toLocaleString();
         document.getElementById('paymentMethod').innerText = data.payment_method;
+        document.getElementById('paymentType').innerText = data.payment_for
+        ? (data.payment_for === 'resched' ? 'Reschedule' : 'First-Time')
+        : 'N/A';
 
         const proofContainer = document.getElementById('proofContainer');
         const fileUrl = `/storage/${data.proof_of_payment}`;
