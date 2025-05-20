@@ -325,14 +325,14 @@ Swal.fire({
                         <label>Strand<span class="text-danger">*</span></label>
                         <select name="strand" id="strand" {{ $readOnly ? 'disabled' : '' }}>
                         <option value="">Select</option>
-                        <option value="STEM Health Allied" {{ (session('recommended_strand') === 'STEM Health Allied' || (isset($formSubmission) && $formSubmission->strand == 'STEM Health Allied')) ? 'selected' : '' }}>STEM Health Allied</option>
-                        <option value="STEM Engineering" {{ (session('recommended_strand') === 'STEM Engineering' || (isset($formSubmission) && $formSubmission->strand == 'STEM Engineering')) ? 'selected' : '' }}>STEM Engineering</option>
-                        <option value="STEM Information Technology" {{ (session('recommended_strand') === 'STEM Information Technology' || (isset($formSubmission) && $formSubmission->strand == 'STEM Information Technology')) ? 'selected' : '' }}>STEM Information Technology</option>
-                        <option value="ABM Accountancy" {{ (session('recommended_strand') === 'ABM Accountancy' || (isset($formSubmission) && $formSubmission->strand == 'ABM Accountancy')) ? 'selected' : '' }}>ABM Accountancy</option>
-                        <option value="ABM Business Management" {{ (session('recommended_strand') === 'ABM Business Management' || (isset($formSubmission) && $formSubmission->strand == 'ABM Business Management')) ? 'selected' : '' }}>ABM Business Management</option>
-                        <option value="HUMSS" {{ (session('recommended_strand') === 'HUMSS' || (isset($formSubmission) && $formSubmission->strand == 'HUMSS')) ? 'selected' : '' }}>HUMSS</option>
-                        <option value="GAS" {{ (session('recommended_strand') === 'GAS' || (isset($formSubmission) && $formSubmission->strand == 'GAS')) ? 'selected' : '' }}>GAS</option>
-                        <option value="SPORTS" {{ (session('recommended_strand') === 'SPORTS' || (isset($formSubmission) && $formSubmission->strand == 'SPORTS')) ? 'selected' : '' }}>SPORTS</option>
+                        <option value="STEM Health Allied" {{ ($applicant->recommended_strand === 'STEM Health Allied' || (isset($formSubmission) && $formSubmission->strand == 'STEM Health Allied')) ? 'selected' : '' }}>STEM Health Allied</option>
+                        <option value="STEM Engineering" {{ ($applicant->recommended_strand === 'STEM Engineering' || (isset($formSubmission) && $formSubmission->strand == 'STEM Engineering')) ? 'selected' : '' }}>STEM Engineering</option>
+                        <option value="STEM Information Technology" {{ ($applicant->recommended_strand === 'STEM Information Technology' || (isset($formSubmission) && $formSubmission->strand == 'STEM Information Technology')) ? 'selected' : '' }}>STEM Information Technology</option>
+                        <option value="ABM Accountancy" {{ ($applicant->recommended_strand === 'ABM Accountancy' || (isset($formSubmission) && $formSubmission->strand == 'ABM Accountancy')) ? 'selected' : '' }}>ABM Accountancy</option>
+                        <option value="ABM Business Management" {{ ($applicant->recommended_strand === 'ABM Business Management' || (isset($formSubmission) && $formSubmission->strand == 'ABM Business Management')) ? 'selected' : '' }}>ABM Business Management</option>
+                        <option value="HUMSS" {{ ($applicant->recommended_strand === 'HUMSS' || (isset($formSubmission) && $formSubmission->strand == 'HUMSS')) ? 'selected' : '' }}>HUMSS</option>
+                        <option value="GAS" {{ ($applicant->recommended_strand === 'GAS' || (isset($formSubmission) && $formSubmission->strand == 'GAS')) ? 'selected' : '' }}>GAS</option>
+                        <option value="SPORTS" {{ ($applicant->recommended_strand === 'SPORTS' || (isset($formSubmission) && $formSubmission->strand == 'SPORTS')) ? 'selected' : '' }}>SPORTS</option>
                     </select>
 
                     </div>
