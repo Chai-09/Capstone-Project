@@ -11,56 +11,95 @@ use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
-
     public function showPaymentForm()
-    {
-        // Check if nakasubmit na si applicant ng step 1 forms if di pa 403 type shi
-        //might have to change this to applicant_id since its more secure'
-        $applicant = Applicant::where('account_id', Auth::user()->id)->first();
-        $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
+{
+    $applicant = Applicant::where('account_id', Auth::id())->firstOrFail();
+    $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
 
-        if (!$formSubmission) {
-            return redirect()->route('applicantdashboard');
-        }
-
-        //Assign Current Step Variable for the Sidebar
-        $currentStep = $applicant->current_step ?? 1;
-
-        $deniedPayment = Payment::where('applicant_id', $applicant->id)
-            ->where('payment_status', 'denied')
-            ->latest()
-            ->first();
-
-        //similar code to the one in ViewPaymentController this is here to ensure that if the user clicks the sidebar button instead of the back button the image still gets deleted either way
-        if ($deniedPayment) {
-            if ($deniedPayment->proof_of_payment && \Storage::disk('public')->exists($deniedPayment->proof_of_payment)) {
-                \Storage::disk('public')->delete($deniedPayment->proof_of_payment);
-            }
-
-            $deniedPayment->delete();
-
-            // Make sure step is reset to 2 if di na click back button
-            $applicant->current_step = 2;
-            $applicant->save();
-        }
-
-        $hasExamSchedule = \App\Models\ApplicantSchedule::where('applicant_id', $applicant->id)->exists();
-        $paymentType = $hasExamSchedule ? 'resched' : 'first-time';
-
-        // Check if may payment if and if dendied si applicant
-        $existingPayment = Payment::where('applicant_id', $applicant->id)
-            ->where('payment_for', $paymentType)
-            ->whereIn('payment_status', ['pending', 'approved'])
-            ->latest()
-            ->first();
-
-        return view('applicant.steps.payment.payment', [
-            'formSubmission' => $formSubmission,
-            'existingPayment' => $existingPayment,
-            'currentStep' => $currentStep,
-            'isReschedPayment' => $paymentType === 'resched',
-        ]);
+    if (!$formSubmission) {
+        return redirect()->route('applicantdashboard');
     }
+
+    $currentStep = $applicant->current_step ?? 1;
+
+    // STEP 1: Check if resched payment exists
+    $reschedPayment = Payment::where('applicant_id', $applicant->id)
+        ->where('payment_for', 'resched')
+        ->whereIn('payment_status', ['pending', 'approved'])
+        ->latest()
+        ->first();
+
+    // STEP 2: If none, check first-time payment
+    $firstTimePayment = Payment::where('applicant_id', $applicant->id)
+        ->where('payment_for', 'first-time')
+        ->whereIn('payment_status', ['pending', 'approved'])
+        ->latest()
+        ->first();
+
+    // Use resched if it exists, else fallback
+    $existingPayment = $reschedPayment ?? $firstTimePayment;
+    $isReschedPayment = $existingPayment && $existingPayment->payment_for === 'resched';
+
+    return view('applicant.steps.payment.payment', [
+        'formSubmission' => $formSubmission,
+        'existingPayment' => $existingPayment,
+        'currentStep' => $currentStep,
+        'isReschedPayment' => $isReschedPayment,
+    ]);
+}
+
+
+    // public function showPaymentForm()
+    // {
+    //     // Check if nakasubmit na si applicant ng step 1 forms if di pa 403 type shi
+    //     //might have to change this to applicant_id since its more secure'
+    //     $applicant = Applicant::where('account_id', Auth::user()->id)->first();
+    //     $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
+
+    //     if (!$formSubmission) {
+    //         return redirect()->route('applicantdashboard');
+    //     }
+
+    //     //Assign Current Step Variable for the Sidebar
+    //     $currentStep = $applicant->current_step ?? 1;
+
+    //     $deniedPayment = Payment::where('applicant_id', $applicant->id)
+    //         ->where('payment_status', 'denied')
+    //         ->latest()
+    //         ->first();
+
+    //     //similar code to the one in ViewPaymentController this is here to ensure that if the user clicks the sidebar button instead of the back button the image still gets deleted either way
+    //     if ($deniedPayment) {
+    //         if ($deniedPayment->proof_of_payment && \Storage::disk('public')->exists($deniedPayment->proof_of_payment)) {
+    //             \Storage::disk('public')->delete($deniedPayment->proof_of_payment);
+    //         }
+
+    //         $deniedPayment->delete();
+
+    //         // Make sure step is reset to 2 if di na click back button
+    //         $applicant->current_step = 2;
+    //         $applicant->save();
+    //     }
+
+    //     $hasExamSchedule = \App\Models\ApplicantSchedule::where('applicant_id', $applicant->id)->exists();
+    //     $paymentType = $hasExamSchedule ? 'resched' : 'first-time';
+
+    //     // Check if may payment if and if dendied si applicant
+    //     $existingPayment = Payment::where('applicant_id', $applicant->id)
+    //     ->whereIn('payment_status', ['pending', 'approved'])
+    //     ->latest()
+    //     ->first();
+
+    //     $isReschedPayment = $existingPayment && $existingPayment->payment_for === 'resched';
+
+    //     return view('applicant.steps.payment.payment', [
+    //         'formSubmission' => $formSubmission,
+    //         'existingPayment' => $existingPayment,
+    //         'currentStep' => $applicant->current_step,
+    //         'isReschedPayment' => $isReschedPayment,
+    // ]);
+
+    // }
 
 
     public function store(Request $request)

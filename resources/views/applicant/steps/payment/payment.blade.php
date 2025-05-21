@@ -11,7 +11,7 @@
             
             <!-- Image -->
             <div class="image mb-3">
-                <img src="{{ asset('images/applicants/PaymentChannels.jpg') }}" class="img-fluid">
+                <img src="{{ asset('images/applicants/payment.png') }}" class="img-fluid">
             </div>
                 @if ($existingPayment)
                     <div class="alert alert-info">

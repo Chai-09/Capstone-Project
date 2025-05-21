@@ -13,20 +13,16 @@ class ViewPaymentController extends Controller
     public function index()
 {
     $applicant = Applicant::where('account_id', Auth::id())->firstOrFail();
-
     $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
 
     if (!$formSubmission) {
         return redirect()->back()->with('error', 'No form submission found.');
     }
 
-    $hasExamSchedule = \App\Models\ApplicantSchedule::where('applicant_id', $applicant->id)->exists();
-    $paymentType = $hasExamSchedule ? 'resched' : 'first-time';
-
+    //  Always get latest payment regardless of type
     $existingPayment = Payment::where('applicant_id', $applicant->id)
-        ->where('payment_for', $paymentType)
         ->whereIn('payment_status', ['pending', 'approved', 'denied'])
-        ->latest()
+        ->orderByDesc('created_at')
         ->first();
 
     $currentStep = $applicant->current_step ?? 1;
@@ -37,6 +33,7 @@ class ViewPaymentController extends Controller
         'currentStep' => $currentStep,
     ]);
 }
+
 
     public function delete($id)
     {
