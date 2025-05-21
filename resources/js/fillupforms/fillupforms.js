@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (submitBtn) {
         submitBtn.addEventListener('click', function (event) {
-            event.preventDefault(); // Stop any native form submission
+            event.preventDefault(); 
 
             if (form.checkValidity()) {
                 Swal.fire({

@@ -19,6 +19,34 @@
 </head>
 <body>
 
+         <!-- College Restriction Modal -->
+        @if (session('seen_college_notice'))
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const collegeModal = new bootstrap.Modal(document.getElementById('collegeNoticeModal'));
+        collegeModal.show();
+    });
+</script>
+@endif
+
+<div class="modal fade" id="collegeNoticeModal" tabindex="-1" aria-labelledby="collegeNoticeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-3 shadow-lg">
+            <div class="modal-header bg-warning-subtle">
+                <h5 class="modal-title text-dark" id="collegeNoticeModalLabel"><i class="fas fa-triangle-exclamation text-warning me-2"></i>Important Notice</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-dark">
+                This portal is <strong>not</strong> for college applications. It is only for <strong>Kinder to Grade 12</strong> applicants.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success px-4" data-bs-dismiss="modal">Got it</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="main">
     <div class="wrapper1">
         <img src="/images/login/logo_name.png">
