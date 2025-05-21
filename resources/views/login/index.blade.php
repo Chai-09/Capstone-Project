@@ -29,7 +29,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body text-center">
-                <img src="{{ asset('/images/login/college-warning.png') }}" alt="Not for college" class="img-fluid mb-2" style="max-height: 300px;">
+                <img src="/images/login/college-warning.png" alt="Not for college" class="img-fluid mb-2" style="max-height: 300px;">
                 <br>
                 This admission form is for students applying in the K-12 Program (Kinder to Grade 12). If you
                 are applying for the Tertiary Level, please refer to the Tertiary Level’s Admission Form. You may
