@@ -21,7 +21,7 @@
 
                 <!-- Payment Form --> 
                 <!-- Added disable condition if payment exists -->
-                <form class="step-form" action="{{ route('payment.store') }}" method="POST" enctype="multipart/form-data">
+                <form class="step-form" id="step2Payment" action="{{ route('payment.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class ="form-row">
                         <div class="form-col payment-label">
@@ -46,22 +46,13 @@
                         </div>
                     </div>
 
-                    {{-- @if (!$existingPayment)
-                        <div class="form-row text-center">
-                            <div class="form-col">
-                                <button type="submit" class="btn btn-submit">Submit</button>
-                            </div>
-                        </div>
-                    @endif --}}
-
                     @if (!$existingPayment)
                     <div class="form-row text-center">
                         <div class="form-col">
-                            <button type="submit" class="btn btn-submit">Submit</button>
+                            <button type="button" class="btn btn-submit" id="paymentSubmission">Submit</button>
                         </div>
                     </div>
                     @endif
-
 
                 </form>
         </div>

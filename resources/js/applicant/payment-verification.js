@@ -1,3 +1,35 @@
+
+document.addEventListener('DOMContentLoaded', function () {
+    const paymentForm = document.getElementById('step2Payment');
+    const paymentSubmitBtn = document.getElementById('paymentSubmission');
+
+    if (paymentSubmitBtn) {
+        paymentSubmitBtn.addEventListener('click', function (event) {
+            event.preventDefault(); 
+
+            if (paymentForm.checkValidity()) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Please review all information before submitting.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#00753F',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Confirm'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        paymentSubmitBtn.disabled = true;
+                        paymentSubmitBtn.textContent = 'Submitting...';
+                        paymentForm.submit(); // Only submit here
+                    }
+                });
+            } else {
+                paymentForm.reportValidity(); // Show native HTML5 validation
+            }
+        });
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     const successMessage = document.querySelector('meta[name="success-message"]');
     if (successMessage) {
