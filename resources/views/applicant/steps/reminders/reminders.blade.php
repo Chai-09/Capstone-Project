@@ -64,30 +64,18 @@
             <div class="form-row">
                 <p>See you there, <span class="tamaraw-text">FEU</span>ture Tamaraw!</p>
             </div>
-            <div class="form-row">
+            <div class="form-row d-flex justify-content-center">
+
                 {{-- Proceed button magpapakita lang if may exam_result and step == 5 --}}
-                {{-- Babaguhin ko rin 'to --}}
                 @if ($showProceedButton)
-                    <div>
-                        <a href="{{ route('applicant.exam.result') }}" class="btn btn-submit">
-                            Proceed
-                        </a>
-                    </div>
+                    <button type="button" class="btn btn-submit" onclick="window.location.href='{{ route('applicant.exam.result') }}'">
+                        Proceed
+                    </button>
                 @endif
+
             </div>
         </div>
     </div>
 </div>
-{{-- 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        Swal.fire({
-            icon: 'success',
-            title: 'Schedule Confirmed!',
-            text: 'You have successfully selected a schedule. Please wait for further instructions.',
-            confirmButtonColor: '#007f3e'
-        });
-    });
-</script> --}}
 
 @endsection

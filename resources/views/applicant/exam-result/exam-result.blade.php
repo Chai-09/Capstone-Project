@@ -62,7 +62,8 @@
                     </div>
                 </div>
 
-                @if ($hasScheduled && !$hasReschedPayment)
+                @if ($hasScheduled && !$hasReschedPayment && $examResult->exam_result === 'no_show')
+
                 <form method="POST" action="{{ route('payment.resched.trigger') }}">
                     @csrf
                     <div class="d-flex justify-content-center">
