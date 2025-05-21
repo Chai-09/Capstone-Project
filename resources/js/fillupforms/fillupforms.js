@@ -1,7 +1,6 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/themes/material_green.css";
 
-
 document.addEventListener('DOMContentLoaded', function () {
     const educationalLevelInput = document.querySelector('input[name="educational_level"]'); // readonly input
     const incomingGradeInput = document.querySelector('input[name="incoming_grlvl"]'); // readonly input
@@ -241,4 +240,104 @@ document.addEventListener('DOMContentLoaded', function () {
             suggestionBox.innerHTML = '';
         }
     });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Strand Recommendation SweetAlert
+    if (window.strandRecommendation) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Strand Suggested',
+            html: 'Your recommended strand is <b>' + window.strandRecommendation + '</b>. You can still choose another strand if you want.',
+            showCancelButton: true,
+            confirmButtonText: 'View Strand Breakdown',
+            cancelButtonText: 'Close',
+            confirmButtonColor: '#28a745',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const breakdownModal = new bootstrap.Modal(document.getElementById('scoreBreakdownModal'));
+                breakdownModal.show();
+            }
+        });
+    }
+
+    // Modal to suggest taking the recommender test
+    if (window.showStrandModal && window.strandRecommenderRoute) {
+        Swal.fire({
+            title: 'Need help choosing your strand?',
+            text: 'If you are undecided on your strand, why not try a set of questions to see our recommendations?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, answer now',
+            cancelButtonText: 'No, maybe later',
+            confirmButtonColor: '#28a745'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = window.strandRecommenderRoute;
+            }
+        });
+    }
+
+    // Chart.js strand breakdown pie chart
+    if (window.strandBreakdown && document.getElementById('strandChart')) {
+        const ctx = document.getElementById('strandChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(window.strandBreakdown).map(s => s.toUpperCase()),
+                datasets: [{
+                    data: Object.values(window.strandBreakdown),
+                    backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return context.label + ': ' + context.formattedValue + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('step1Forms');
+    const submitBtn = document.getElementById('formSubmission');
+
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function (event) {
+            event.preventDefault(); // Stop any native form submission
+
+            if (form.checkValidity()) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Please review all information before submitting.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#00753F',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Confirm'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = 'Submitting...';
+                        form.submit(); // Only submit here
+                    }
+                });
+            } else {
+                form.reportValidity(); // Show native HTML5 validation
+            }
+        });
+    }
 });

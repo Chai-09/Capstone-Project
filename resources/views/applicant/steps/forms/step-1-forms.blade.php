@@ -1,32 +1,18 @@
 @extends('applicant.index')
 
 @section('content')
-<form action="{{ route('applicantdashboard') }}" method="POST">
-    @csrf   
-    @php
-        $readOnly = isset($applicant) && $applicant->current_step > 1;
-    @endphp
+    <form  id="step1Forms"action="{{ route('applicantdashboard') }}" method="POST">
+        @csrf   
+        @php
+            $readOnly = isset($applicant) && $applicant->current_step > 1;
+        @endphp
 
     <!-- strand recommendation modal display-->
-  @if (session('strand_recommendation'))
-<script>
-Swal.fire({
-    icon: 'info',
-    title: 'Strand Suggested',
-    html: 'Your recommended strand is <b>{{ session('strand_recommendation') }}</b>. You can still choose another strand if you want.',
-    showCancelButton: true,
-    confirmButtonText: 'View Strand Breakdown',
-    cancelButtonText: 'Close',
-    confirmButtonColor: '#28a745',
-}).then((result) => {
-    if (result.isConfirmed) {
-        const breakdownModal = new bootstrap.Modal(document.getElementById('scoreBreakdownModal'));
-        breakdownModal.show();
-    }
-});
-</script>
-@endif
-
+    @if (session('strand_recommendation'))
+        <script>
+            window.strandRecommendation = @json(session('strand_recommendation'));
+        </script>
+    @endif
 
     {{-- Front End Error --}}
     <div id="alert-wrapper">
@@ -377,10 +363,10 @@ Swal.fire({
                 <div class="form-col">
                     <div class="text-end">    
                         @if(!$readOnly)
-                        <button type="submit" class="btn btn-submit">Submit</button>
-                    @endif
-                </div>
-                </div>
+                            <button type="button" class="btn btn-submit" id="formSubmission">Submit</button>
+                        @endif
+                    </div>
+                </div>  
             </div>
         </div>
     </div>
@@ -392,111 +378,69 @@ Swal.fire({
 
 
 @if ($showStrandModal && !session('strand_modal_shown') && empty($applicant->recommended_strand))
-    @php
-        session(['strand_modal_shown' => true]); // ipakita lang once per session
-    @endphp
+    @php session(['strand_modal_shown' => true]); @endphp
     <script>
-        //script for modal auto load
-        document.addEventListener('DOMContentLoaded', function () {
-            Swal.fire({
-                title: 'Need help choosing your strand?',
-                text: 'If you are undecided on your strand, why not try a set of questions to see our recommendations?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, answer now',
-                cancelButtonText: 'No, maybe later',
-                confirmButtonColor: '#28a745'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "{{ route('strand.recommender') }}";
-                }
-            });
-        });
+        window.showStrandModal = true;
+        window.strandRecommenderRoute = "{{ route('strand.recommender') }}";
     </script>
 @endif
 
-
-<!-- Strand breakdown modal display -->
 @if (isset($applicant->strand_breakdown))
     @php
         $breakdown = json_decode($applicant->strand_breakdown, true);
     @endphp
+    <script>
+        window.strandBreakdown = @json($breakdown);
+    </script>
    <div class="modal fade" id="scoreBreakdownModal" tabindex="-1" aria-labelledby="scoreBreakdownModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 shadow-sm border-0">
-            <div class="modal-header border-bottom-0">
-                <h5 class="modal-title fw-bold" id="scoreBreakdownModalLabel">Strand Score Breakdown</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+
+            <div class="modal-content rounded-4 shadow-sm border-0">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold" id="scoreBreakdownModalLabel">Strand Score Breakdown</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+         <div class="modal-body d-flex flex-wrap gap-4 justify-content-between">
+            
+            
+            <!-- Left: Table -->
+            <div class="flex-grow-1 bg-light rounded-3 p-3" style="min-width: 250px;">
+                <div class="mb-4 text-center">
+                    <h6 class="mb-1">Your recommended strand is</h6>
+                    <h3 class="tamaraw-text fw-semibold">{{ $applicant->recommended_strand }}</h3>
+                </div>
+
+                <table class="table table-borderless mb-0">
+                    <tbody>
+                        @foreach ($breakdown as $strand => $percent)
+                            <tr class="border-bottom">
+                                <td class="fw-semibold text-uppercase">{{ $strand }}</td>
+                                <td class="text-end fw-semibold">{{ $percent }}%</td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td class="fw-bold text-uppercase">Total</td>
+                            <td class="text-end fw-bold">100%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                    <p class="text-muted small mt-3 mb-0">
+                        *Only main strands are included in this breakdown. Sub-strands are calculated separately.
+                    </p>
+                </div>
+
+                <!-- Right: Chart -->
+                <!-- Chart Container -->
+                <div class="d-flex justify-content-center align-items-center w-100" style="flex: 1 1 400px; max-width: 100%; height: auto;">
+                    <div style="position: relative; width: 100%; max-width: 400px; height: 400px;">
+                        <canvas id="strandChart" style= "width: 100%; height: 100%;"></canvas>
+                    </div>
+                </div>
             </div>
-
-            <div class="modal-header border-bottom-0">
-            <h6>Your recommended strand is <b>{{ $applicant->recommended_strand }}</b>.</h6>
-            </div>
-
-            <div class="modal-body">
-    <div class="bg-light rounded-3 p-3">
-        <table class="table table-borderless mb-0">
-            <tbody>
-                @foreach ($breakdown as $strand => $percent)
-                    <tr class="border-bottom">
-                        <td class="fw-semibold text-uppercase">{{ $strand }}</td>
-                        <td class="text-end fw-semibold">{{ $percent }}%</td>
-                    </tr>
-                @endforeach
-                <tr>
-                    <td class="fw-bold text-uppercase">Total</td>
-                    <td class="text-end fw-bold">100%</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <p class="text-muted small mt-3 mb-0">
-        *Only main strands are included in this breakdown. Sub-strands are calculated separately.
-    </p>
-
-    <!-- For Chart.js display --> 
-    <canvas id="strandChart" width="100%" height="100" class="mt-4"></canvas>
-             </div>
         </div>
     </div>
 </div>
-
-<script>
-    //script logic for chart.js pie chart
-document.addEventListener('DOMContentLoaded', function () {
-    const breakdown = @json($breakdown);
-
-    const ctx = document.getElementById('strandChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: Object.keys(breakdown).map(s => s.toUpperCase()),
-            datasets: [{
-                data: Object.values(breakdown),
-                backgroundColor: [
-                    '#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            return context.label + ': ' + context.formattedValue + '%';
-                        }
-                    }
-                }
-            }
-        }
-    });
-});
-</script>
 
 @endif
 

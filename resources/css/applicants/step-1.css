@@ -92,3 +92,9 @@
 .recommender input[type="radio"]:checked::after {
     display: block;
 }
+
+/* Recommender Output */
+
+.tamaraw-text {
+    color: #00753F;
+}
