@@ -320,6 +320,8 @@ namespace App\Models {
     /**
      * App\Models\Applicant
      *
+     * @property \Illuminate\Support\Carbon|null $updated_at
+     * @property \Illuminate\Support\Carbon|null $created_at
      * @property string|null $strand_breakdown
      * @property mixed $current_step
      * @property string|null $recommended_strand
@@ -351,6 +353,8 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereRecommendedStrand($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereCurrentStep($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereStrandBreakdown($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereCreatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant query()
@@ -651,6 +655,7 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property string|null $venue
      * @property string $end_time
      * @property string $start_time
      * @property string $exam_date
@@ -670,6 +675,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereExamDate($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereStartTime($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereEndTime($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereVenue($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule newModelQuery()
@@ -1637,6 +1643,8 @@ namespace App\Models {
      * @property mixed $applicant_id
      * @property int $id
      * @property-read \App\Models\Applicant $applicant
+     * @property-read \App\Models\Payment $payment
+     * @property-read \App\Models\ApplicantSchedule $schedule
      * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereApplicantId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<FillupForms>|FillupForms whereApplicantFname($value)

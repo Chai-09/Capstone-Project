@@ -1,13 +1,21 @@
 @extends('applicant.index')
 
 @section('content')
-<div class="container mt-4 mb-5">
-    <h2 class="mb-4 text-center fw-bold">Strand Recommendation Questionnaire</h2>
-    <p> Hello! Please answer the following set of questions as best as you can to receive the most  accurate results. However, please remember that the results you’ll receive are only recommended based on your answers and are not final. The course you’ll pick will still be based on your final decision.</p>
+<div class="container recommender">
+    <div class="question-form">
+            <div class="form-row">
+                <h2 class="fw-semibold text-center w-100">Strand Recommendation Questionnaire</h2>
+                <p>
+                    Hello! Please answer the following set of questions as best as you can to receive the most accurate results. However, please remember that the results you’ll receive are only recommended based on your answers and are not final. The course you’ll pick will still be based on your final decision.
+                </p>
+            </div>
+        </div>
+   
+
     <form method="POST" action="{{ route('strand.recommender.submit') }}">
         @csrf
 
-                {{-- Questions Array --}}
+        {{-- Questions Array --}}
         @php
             $questions = [
                 1 => [
@@ -175,96 +183,95 @@
                         'gas' => 'General responsibilities'
                     ]
                 ]
-
-                
-            ];          
-                        //subquestions
-
-                    if (isset($topStrand) && strtoupper($topStrand) === 'STEM') {
-            $questions[21] = [
-                'label' => 'If given a research project, would you prefer:',
-                'options' => [
-                    'engineering' => 'Designing and building structures or systems',
-                    'health' => 'Analyzing health-related data and medical advancements',
-                    'it' => 'Developing software and technological solutions',
-                ],
-                'conditional' => 'stem'
             ];
-            $questions[22] = [
-                'label' => 'In a problem-solving scenario, would you prefer:',
-                'options' => [
-                    'engineering' => 'Designing and testing mechanical or structural solutions',
-                    'health' => 'Researching medical innovations and treatments',
-                    'it' => 'Developing software and coding programs',
-                ],
-                'conditional' => 'stem'
-            ];
-        }
 
-        if (isset($topStrand) && strtoupper($topStrand) === 'ABM') {
-            $questions[21] = [
-                'label' => 'In a business simulation, would you prefer:',
-                'options' => [
-                    'accounting' => 'Handling financial records and accounting tasks',
-                    'management' => 'Strategizing, planning, and managing operations',
-                ],
-                'conditional' => 'abm'
-            ];
-            $questions[22] = [
-                'label' => 'In a business competition, would you rather:',
-                'options' => [
-                    'accounting' => 'Focus on financial planning and auditing',
-                    'management' => 'Manage business operations and decision-making',
-                ],
-                'conditional' => 'abm'
-            ];
-        }
+            if (isset($topStrand) && strtoupper($topStrand) === 'STEM') {
+                $questions[21] = [
+                    'label' => 'If given a research project, would you prefer:',
+                    'options' => [
+                        'engineering' => 'Designing and building structures or systems',
+                        'health' => 'Analyzing health-related data and medical advancements',
+                        'it' => 'Developing software and technological solutions',
+                    ],
+                    'conditional' => 'stem'
+                ];
+                $questions[22] = [
+                    'label' => 'In a problem-solving scenario, would you prefer:',
+                    'options' => [
+                        'engineering' => 'Designing and testing mechanical or structural solutions',
+                        'health' => 'Researching medical innovations and treatments',
+                        'it' => 'Developing software and coding programs',
+                    ],
+                    'conditional' => 'stem'
+                ];
+            }
 
-                @endphp
-
-        
+            if (isset($topStrand) && strtoupper($topStrand) === 'ABM') {
+                $questions[21] = [
+                    'label' => 'In a business simulation, would you prefer:',
+                    'options' => [
+                        'accounting' => 'Handling financial records and accounting tasks',
+                        'management' => 'Strategizing, planning, and managing operations',
+                    ],
+                    'conditional' => 'abm'
+                ];
+                $questions[22] = [
+                    'label' => 'In a business competition, would you rather:',
+                    'options' => [
+                        'accounting' => 'Focus on financial planning and auditing',
+                        'management' => 'Manage business operations and decision-making',
+                    ],
+                    'conditional' => 'abm'
+                ];
+            }
+        @endphp
 
         @php
-    $showOnlySubquestions = session('topStrand') === 'STEM' || session('topStrand') === 'ABM';
-@endphp
+            $showOnlySubquestions = session('topStrand') === 'STEM' || session('topStrand') === 'ABM';
+        @endphp
 
-@if ($showOnlySubquestions)
-    <div class="alert alert-info fw-semibold">
-        Please answer these additional questions to finalize your strand recommendation.
-    </div>
-@endif
-
-@foreach ($questions as $number => $q)
-    @php
-        $isSub = isset($q['conditional']);
-        $isVisible = !$showOnlySubquestions && !$isSub || ($showOnlySubquestions && $isSub && session('topStrand') === strtoupper($q['conditional']));
-    @endphp
-
-    @if ($isVisible)
-    <div class="mb-4">
-        <label class="fw-semibold">Q{{ $number }}. {{ $q['label'] }}</label>
-        @foreach ($q['options'] as $value => $label)
-            <div class="form-check">
-                <input class="form-check-input" 
-                       type="radio" 
-                       name="q{{ $number }}" 
-                       id="q{{ $number }}_{{ $value }}" 
-                       value="{{ $value }}" 
-                       required>
-                <label class="form-check-label" for="q{{ $number }}_{{ $value }}">
-                    {{ $label }}
-                </label>
+        @if ($showOnlySubquestions)
+            <div class="alert alert-info fw-semibold">
+                Please answer these additional questions to finalize your strand recommendation.
             </div>
-        @endforeach
-    </div>
-@endif
-@endforeach
+        @endif
+
+        <div class="question-form">
+            <hr>
+            @foreach ($questions as $number => $q)
+                @php
+                    $isSub = isset($q['conditional']);
+                    $isVisible = !$showOnlySubquestions && !$isSub || ($showOnlySubquestions && $isSub && session('topStrand') === strtoupper($q['conditional']));
+                @endphp
+
+                @if ($isVisible)
+                    <div class="form-row">
+                        <div class="form-col w-100 mb-4 mt-4">
+                            <label class="fw-semibold d-block">{{ $number }}. {{ $q['label'] }}</label>
+                            @foreach ($q['options'] as $value => $label)
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input"
+                                        type="radio"
+                                        name="q{{ $number }}"
+                                        id="q{{ $number }}_{{ $value }}"
+                                        value="{{ $value }}"
+                                        required>
+                                    <label class="form-check-label" for="q{{ $number }}_{{ $value }}">
+                                        {{ $label }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <hr>
+                @endif
+            @endforeach
+        </div>
 
 
-        <div class="text-center">
-            <button type="submit" class="btn btn-success">Submit</button>
+        <div class="text-center mb-4">
+            <button type="submit" class="btn btn-submit">Submit</button>
         </div>
     </form>
 </div>
 @endsection
-

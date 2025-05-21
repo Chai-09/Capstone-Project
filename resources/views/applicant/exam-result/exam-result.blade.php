@@ -2,6 +2,15 @@
 
 @section('content')
 
+@php
+    $applicantId = \App\Models\Applicant::where('account_id', Auth::id())->value('id');
+    $hasScheduled = \App\Models\ApplicantSchedule::where('applicant_id', $applicantId)->exists();
+
+    $hasReschedPayment = \App\Models\Payment::where('applicant_id', $applicantId)
+        ->where('payment_for', 'resched')
+        ->exists();
+@endphp
+
 <div class="container exam-result"> 
     <div class="step-form">
         <div class="form-section">
@@ -21,12 +30,6 @@
                             You have been selected for an interview. Details will be sent to your email.
                         @elseif($examResult->exam_result === 'no_show')
                             You were marked as a no-show for the exam. Please contact Admissions for rescheduling.
-                           <form method="POST" action="{{ route('payment.resched.trigger') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-outline-primary">
-                                    Reschedule (Submit New Payment)
-                                </button>
-                            </form>
                         @endif
                     </div>
                 </div>
@@ -58,6 +61,18 @@
                         </div>
                     </div>
                 </div>
+
+                @if ($hasScheduled && !$hasReschedPayment)
+                <form method="POST" action="{{ route('payment.resched.trigger') }}">
+                    @csrf
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-submit w-25">
+                            Reschedule (Submit New Payment)
+                        </button>
+                    </div>
+                </form>
+                @endif
+                
             @else
                 <div class="alert alert-warning text-center mt-3">
                     Please wait for announcements.
