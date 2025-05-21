@@ -88,9 +88,26 @@ class AuthController extends Controller
     }
 
 
+    // public function logout()
+    // {
+    //     session()->flush();
+    //     return redirect()->route('login')->with('success', 'Logged out successfully.'); 
+    // }
+
     public function logout()
     {
         session()->flush();
-        return redirect()->route('login')->with('success', 'Logged out successfully.'); //kingina ginawa na pala to
+
+        // This flag tells login page to clear localStorage
+        return redirect()->route('login')->with('just_logged_out', true);
     }
+
+
+
+    public function showLoginPage()
+    {
+        session()->put('show_college_modal', true); // trigger the modal only initially
+        return view('login.index');
+    }
+
 }

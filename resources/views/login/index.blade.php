@@ -18,29 +18,25 @@
 
 </head>
 <body>
-
-         <!-- College Restriction Modal -->
-        @if (session('seen_college_notice'))
-<script>
-    window.addEventListener('DOMContentLoaded', () => {
-        const collegeModal = new bootstrap.Modal(document.getElementById('collegeNoticeModal'));
-        collegeModal.show();
-    });
-</script>
-@endif
-
+<!-- Modal: College Notice -->
 <div class="modal fade" id="collegeNoticeModal" tabindex="-1" aria-labelledby="collegeNoticeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 rounded-3 shadow-lg">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content shadow rounded-3">
             <div class="modal-header bg-warning-subtle">
-                <h5 class="modal-title text-dark" id="collegeNoticeModalLabel"><i class="fas fa-triangle-exclamation text-warning me-2"></i>Important Notice</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title text-dark" id="collegeNoticeModalLabel">
+                    <i class="fas fa-triangle-exclamation text-warning me-2"></i> Important Notice
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body text-dark">
-                This portal is <strong>not</strong> for college applications. It is only for <strong>Kinder to Grade 12</strong> applicants.
+            <div class="modal-body text-center">
+                <img src="{{ asset('/images/login/college-warning.png') }}" alt="Not for college" class="img-fluid mb-2" style="max-height: 300px;">
+                <br>
+                This admission form is for students applying in the K-12 Program (Kinder to Grade 12). If you
+                are applying for the Tertiary Level, please refer to the Tertiary Level’s Admission Form. You may
+                contact The School’s Admissions Office for the Admission Form for the Tertiary Level.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success px-4" data-bs-dismiss="modal">Got it</button>
+                <button class="btn btn-success" data-bs-dismiss="modal">Got it</button>
             </div>
         </div>
     </div>
@@ -79,6 +75,26 @@
 
 </body>
 </html>
+
+@if (session('just_logged_out'))
+<script>
+    // Clear the flag on logout so it can show again next time
+    localStorage.removeItem('collegeNoticeSeen');
+</script>
+@endif
+
+@if (session('show_college_modal') && request()->is('login'))
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        // Show modal only if not previously seen in this browser
+        if (!localStorage.getItem('collegeNoticeSeen')) {
+            const modal = new bootstrap.Modal(document.getElementById('collegeNoticeModal'));
+            modal.show();
+            localStorage.setItem('collegeNoticeSeen', 'true');
+        }
+    });
+</script>
+@endif
 
 {{-- Validation when account is created successfully. --}}
 @if (session()->has('success'))

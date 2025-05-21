@@ -27,7 +27,7 @@ use App\Http\Controllers\AdmissionChartController;
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
 // Log in Routes
 Route::redirect('/', '/login');
-Route::view('/login', 'login.index')->middleware('guest')->name('login');
+Route::get('/login', [AuthController::class, 'showLoginPage'])->middleware('guest')->name('login');
 
 Route::post('/signup', [SignupFormsController::class, 'store'])->name('loginForms.store');
 Route::post('/login', [AuthController::class, 'login'])->name('login.store');
