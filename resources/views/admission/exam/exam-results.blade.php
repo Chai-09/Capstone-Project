@@ -19,32 +19,42 @@
             </thead>
             <tbody>
                 @forelse($results as $result)
+
+                    @php 
+                    $isReadOnly = $result->exam_result !== 'pending' || $result->exam_status === 'no show';
+                    @endphp 
                 <tr>
                     <td>{{ $result->applicant_name }}</td>
                     <td>{{ $result->incoming_grade_level }}</td>
                     <td>{{ \Carbon\Carbon::parse($result->exam_date)->format('F d, Y') }}</td>
-                    <td>{{ ucwords(str_replace('_', ' ', strtolower($result->exam_status))) }}
-</td>
-                    <td>{{ ucwords(str_replace('_', ' ', strtolower($result->exam_result))) }}
-</td>
+                    <td>{{ ucwords(str_replace('_', ' ', strtolower($result->exam_status))) }}</td>
+                
                     <td>
-                    <form method="POST" action="{{ route('exam.results.update') }}" class="result-form">
-    <input type="hidden" name="applicant_id" value="{{ $result->applicant_id }}">
-
                             @csrf
                             <div class="input-group input-group-sm">
-                                <select name="exam_result" class="form-select">
+                                <select name="exam_result" class="form-select" {{ $isReadOnly ? 'disabled' : '' }}>
                                     <option value="pending" {{ $result->exam_result === 'pending' ? 'selected' : '' }}>Pending</option>
                                     <option value="passed" {{ $result->exam_result === 'passed' ? 'selected' : '' }}>Passed</option>
                                     <option value="failed" {{ $result->exam_result === 'failed' ? 'selected' : '' }}>Failed</option>
                                     <option value="scholarship" {{ $result->exam_result === 'scholarship' ? 'selected' : '' }}>Scholarship</option>
                                     <option value="interview" {{ $result->exam_result === 'interview' ? 'selected' : '' }}>Interview</option>
-                                    <option value="no_show" {{ $result->exam_result === 'no show' ? 'selected' : '' }}>No Show</option>
-                                </select>
-                                <button type="button" class="btn btn-success confirm-btn">Confirm</button>
+                                </select>                      
                             </div>
-                        </form>
-                    </td>
+                        </td>
+                           <td>
+                            <form method="POST" action="{{ route('exam.results.update') }}">
+                            @csrf
+                            <input type="hidden" name="applicant_id" value="{{ $result->applicant_id }}">
+                            <input type="hidden" name="exam_result" class="hidden-result-value">
+                            
+                        <div class="text-center mt-2">
+                            @if ($isReadOnly)
+                                <button type="button" class="btn btn-success edit-btn me-2" data-editing="false"><i class="bi bi-pencil-square"></i></button>
+                            @endif
+                            <button type="button" class="btn btn-success submit-btn" {{ $isReadOnly ? 'disabled' : '' }}>&#10003;</button>
+                        </div>
+                    </form>
+                </td>
                 </tr>
                 @empty
                 <tr>
@@ -57,7 +67,50 @@
 </div>
 
 <script>
-    document.querySelectorAll('.confirm-btn').forEach(button => {
+ document.querySelectorAll('.submit-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const form = this.closest('form');
+        const row = this.closest('tr'); 
+        const select = row.querySelector('select[name="exam_result"]');
+        const hiddenInput = form.querySelector('.hidden-result-value');
+
+      if (!form || !select || !hiddenInput) return;
+
+        const selectedResult = select.value;
+        hiddenInput.value = selectedResult; 
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You are about to set this result to "${selectedResult}".`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, confirm it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+});
+
+
+    @if (session('success'))
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    @endif
+</script>
+
+<script>
+    //edit button script block and sweetalerts
+    document.querySelectorAll('.submit-btn').forEach(button => {
         button.addEventListener('click', function () {
             const form = this.closest('form');
             const selectedResult = form.querySelector('select[name="exam_result"]').value;
@@ -77,6 +130,7 @@
         });
     });
 
+    //sweetalert for sucess
     @if (session('success'))
         Swal.fire({
             toast: true,
@@ -88,6 +142,37 @@
             timerProgressBar: true
         });
     @endif
+
+     // Edit button logic
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const row = this.closest('tr');
+            const select = row.querySelector('select[name="exam_result"]');
+            const confirmBtn = row.querySelector('.submit-btn');
+
+            const isEditing = button.dataset.editing === 'true';
+
+            if (isEditing) {
+                // para sa Cancel edit
+                if (select) select.setAttribute('disabled', 'disabled');
+                if (confirmBtn) confirmBtn.setAttribute('disabled', 'disabled');
+
+                button.innerHTML = '<i class="bi bi-pencil-square"></i>';
+                button.classList.remove('btn-danger');
+                button.classList.add('btn-success');
+                button.dataset.editing = 'false';
+            } else {
+                // para sa Enable edit
+                if (select) select.removeAttribute('disabled');
+                if (confirmBtn) confirmBtn.removeAttribute('disabled');
+
+                button.innerHTML = '<i class="bi bi-x-lg"></i>';
+                button.classList.remove('btn-success');
+                button.classList.add('btn-danger');
+                button.dataset.editing = 'true';
+            }
+        });
+    });
 </script>
 
 @endsection

@@ -66,18 +66,33 @@
                                     {{ \Carbon\Carbon::parse($app->end_time)->format('g:i A') }}
                                 </td>
                                 <td>
+                                    @php
+                                    $examStatus = optional($app->examResult)->exam_status;
+                                    @endphp
+
+                                @if (!$examStatus)
                                     <form method="POST" action="{{ route('exam.markAttendance') }}" class="d-inline">
                                         @csrf
                                         <input type="hidden" name="schedule_id" value="{{ $app->id }}">
                                         <input type="hidden" name="status" value="done">
                                         <button type="submit" class="btn btn-success btn-sm">Done</button>
                                     </form>
+
                                     <form method="POST" action="{{ route('exam.markAttendance') }}" class="d-inline ms-1">
                                         @csrf
                                         <input type="hidden" name="schedule_id" value="{{ $app->id }}">
                                         <input type="hidden" name="status" value="no show">
                                         <button type="submit" class="btn btn-danger btn-sm">No Show</button>
                                     </form>
+
+                                @elseif ($examStatus === 'done')
+                                    <button class="btn btn-success btn-sm" disabled>Done</button>
+
+                                @elseif ($examStatus === 'no show')
+                                    <button class="btn btn-danger btn-sm" disabled>No Show</button>
+                                @endif
+
+
                                 </td>
                             </tr>
                         @endforeach
@@ -90,17 +105,17 @@
 
 
 
-</div>
-<script>
-    @if(session('alert_message'))
-        Swal.fire({
-            icon: '{{ session('alert_type') }}',
-            title: '{{ session('alert_message') }}',
-            showConfirmButton: false,
-            timer: 2000
-        });
-    @endif
-</script>
+                    </div>
+                    <script>
+                        @if(session('alert_message'))
+                            Swal.fire({
+                                icon: '{{ session('alert_type') }}',
+                                title: '{{ session('alert_message') }}',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        @endif
+                    </script>
 
-</body>
-</html>
+                    </body>
+                    </html>

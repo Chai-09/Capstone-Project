@@ -85,7 +85,7 @@
         </li>
     @endif
 
-    @if ($isSeniorHigh && $currentStep == 1 && !empty($applicant->strand_breakdown))
+    @if ($isSeniorHigh && request()->routeIs('applicantdashboard') && !empty($applicant->strand_breakdown))
     <li class="nav-item">
         <a href="#scoreBreakdownModal" class="nav-link text-success fw-semibold" data-bs-toggle="modal">
             <i class="fa-solid fa-chart-pie"></i>

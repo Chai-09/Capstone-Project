@@ -245,7 +245,7 @@ class ExamScheduleController extends Controller
     {
         $date = $request->query('date');
 
-        $applicants = ApplicantSchedule::with('applicant')
+        $applicants = ApplicantSchedule::with('applicant', 'examResult')
             ->whereDate('exam_date', $date)
             ->get();
 
