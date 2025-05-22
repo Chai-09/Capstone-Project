@@ -24,6 +24,14 @@ class AdminAccountController extends Controller
         });
     }
 
+    // Sorting logic
+    $sort = $request->input('sort', 'created_at'); // default sort by created_at
+    $direction = $request->input('direction', 'desc'); // default direction
+
+    if (in_array($sort, ['name', 'created_at']) && in_array($direction, ['asc', 'desc'])) {
+        $query->orderBy($sort, $direction);
+    }
+
     $accounts = $query->paginate(15)->appends($request->all());
 
     return view('administrator.index', compact('accounts'));

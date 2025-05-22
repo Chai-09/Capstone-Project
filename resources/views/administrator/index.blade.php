@@ -7,10 +7,51 @@
     <link rel="website icon" type="png" href="{{ asset('applysmart_logo.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Administrator | Dashboard</title>
     @vite('resources/js/partials/sidebar.js')
     @vite('resources/css/partials/sidebar.css')
+
+    <style>
+        .table-wrapper {
+        position: relative;
+        overflow: visible;
+        }
+
+        .custom-table th {
+        overflow: visible !important;
+        }
+
+        /* Bootstrap override to support CSS-only toggle */
+        .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1055;
+        }
+
+        /* Show the dropdown when the wrapper is focused */
+        .dropdown:focus-within .dropdown-menu {
+        display: block;
+        }
+
+        /* Hide dropdown menu by default */
+        .custom-toggle-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1055;
+        }
+
+        /* Toggle visible when checkbox is checked */
+        #dropdownToggle:checked ~ .custom-toggle-dropdown {
+        display: block;
+        }
+
+    </style>
 </head>
 <body>
 
@@ -55,7 +96,54 @@
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th> 
-                        <th>Name</th>
+                        <th style="width: 30%; position: relative;">
+                            <div class="dropdown" style="position: relative;">
+                                <input type="checkbox" id="dropdownToggle" class="d-none">
+                                <label for="dropdownToggle" class="btn btn-sm btn-light border dropdown-toggle w-100 d-flex justify-content-between align-items-center"
+                                    style="cursor: pointer;">
+                                <span>Name</span>
+                                <i class="bi bi-sort-alpha-down ms-1"></i>
+                                </label>
+
+                                <ul class="dropdown-menu custom-toggle-dropdown"
+                                    style="min-width: 250px;"
+                                    aria-labelledby="sortNameDropdown">
+                                <li><strong class="dropdown-header">Sort by Name</strong></li>
+                                <li>
+                                    <a class="dropdown-item {{ request('sort') === 'name' && request('direction') === 'asc' ? 'active' : '' }}"
+                                    href="{{ request()->fullUrlWithQuery(['sort' => 'name', 'direction' => 'asc']) }}">
+                                    A to Z
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item {{ request('sort') === 'name' && request('direction') === 'desc' ? 'active' : '' }}"
+                                    href="{{ request()->fullUrlWithQuery(['sort' => 'name', 'direction' => 'desc']) }}">
+                                    Z to A
+                                    </a>
+                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <li><strong class="dropdown-header">Sort by Created Date</strong></li>
+                                <li>
+                                    <a class="dropdown-item {{ request('sort') === 'created_at' && request('direction') === 'asc' ? 'active' : '' }}"
+                                    href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => 'asc']) }}">
+                                    Oldest First
+                                    </a>
+                                </li>
+                                
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <li>
+                                    <a class="dropdown-item {{ !request('sort') ? 'active' : '' }}"
+                                    href="{{ request()->url() }}">
+                                    Default (Latest)
+                                    </a>
+                                </li>
+                                </ul>
+                            </div>
+                        </th>
                         <th>Email</th>
                         <th>Role</th>
                         <th>Actions</th>

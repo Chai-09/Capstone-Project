@@ -15,24 +15,25 @@ class AccountingPaymentController extends Controller
 {
     $query = Payment::query();
 
+    // Filters
     if ($request->filled('educational_level')) {
-        $query->where('incoming_grlvl', $request->input('educational_level'));
+        $query->where('incoming_grlvl', $request->educational_level);
     }
 
     if ($request->filled('payment_status')) {
-        $query->where('payment_status', $request->input('payment_status'));
+        $query->where('payment_status', $request->payment_status);
     }
 
     if ($request->filled('payment_method')) {
-        $query->where('payment_method', $request->input('payment_method'));
+        $query->where('payment_method', $request->payment_method);
     }
 
     if ($request->filled('payment_for')) {
-    $query->where('payment_for', $request->input('payment_for'));
-}
+        $query->where('payment_for', $request->payment_for);
+    }
 
     if ($request->filled('search')) {
-        $search = $request->input('search');
+        $search = $request->search;
         $query->where(function($q) use ($search) {
             $q->where('applicant_fname', 'like', "%$search%")
               ->orWhere('applicant_mname', 'like', "%$search%")
@@ -40,7 +41,35 @@ class AccountingPaymentController extends Controller
         });
     }
 
-    $payments = $query->latest()->paginate(10);
+    // Sorting
+    if ($request->filled('sort_name')) {
+        $direction = $request->input('sort_name') === 'asc' ? 'asc' : 'desc';
+    
+        // Smart alphabetical sort: starts from first letter, uses next ones if same
+        $query->orderByRaw("CONCAT(applicant_fname, ' ', IFNULL(applicant_mname, ''), ' ' ,applicant_lname) $direction");
+
+    } elseif ($request->filled('sort_date')) {
+        $direction = $request->input('sort_date') === 'asc' ? 'asc' : 'desc';
+        $query->orderBy('created_at', $direction);
+    
+    } elseif ($request->filled('sort_grade')) {
+        $direction = $request->input('sort_grade') === 'asc' ? 'asc' : 'desc';
+    
+        // Custom logical sort by grade level using FIELD
+        $gradeOrder = [
+            'Kinder','Grade 1','Grade 2','Grade 3','Grade 4','Grade 5',
+            'Grade 6','Grade 7','Grade 8','Grade 9','Grade 10','Grade 11','Grade 12'
+        ];
+    
+        $query->orderByRaw("FIELD(incoming_grlvl, '" . implode("','", $gradeOrder) . "') $direction");
+    }
+    else {
+        // Default sort by latest payment
+        $query->orderBy('created_at', 'desc');
+    }
+    
+
+    $payments = $query->paginate(10)->withQueryString();
 
     return view('accounting.payments', compact('payments'));
 }

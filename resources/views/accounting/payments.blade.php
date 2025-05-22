@@ -87,8 +87,93 @@
         <thead>
           <tr>
             <th style="width: 5%">#</th>
-            <th style="width: 30%">Applicant Name</th>
-            <th style="width: 15%">Grade Level</th>
+            <th style="width: 30%; position: relative;">
+              <div class="dropdown">
+                <button class="btn btn-sm btn-light border dropdown-toggle w-100 d-flex justify-content-between align-items-center"
+                        type="button"
+                        id="sortNameDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                  <span>Applicant Name</span>
+                  <i class="bi bi-sort-alpha-down ms-1"></i>
+                </button>
+
+                <ul class="dropdown-menu"
+                    aria-labelledby="sortNameDropdown"
+                    style="z-index: 1055; min-width: 250px;">
+                  <li><strong class="dropdown-header">Sort by Name</strong></li>
+                  <li>
+                    <a class="dropdown-item {{ request('sort_name') === 'asc' ? 'active' : '' }}"
+                      href="{{ request()->fullUrlWithQuery(['sort_name' => 'asc', 'sort_date' => null]) }}">
+                      A to Z
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item {{ request('sort_name') === 'desc' ? 'active' : '' }}"
+                      href="{{ request()->fullUrlWithQuery(['sort_name' => 'desc', 'sort_date' => null]) }}">
+                      Z to A
+                    </a>
+                  </li>
+
+                  <li><hr class="dropdown-divider"></li>
+
+                  <li><strong class="dropdown-header">Sort by Payment Date</strong></li>
+                  <li>
+                    <a class="dropdown-item {{ request('sort_date') === 'asc' ? 'active' : '' }}"
+                      href="{{ request()->fullUrlWithQuery(['sort_date' => 'asc', 'sort_name' => null]) }}">
+                      Oldest First
+                    </a>
+                  </li>
+                
+
+                  <li><hr class="dropdown-divider"></li>
+
+                  <li>
+                    <a class="dropdown-item {{ !request('sort_name') && !request('sort_date') ? 'active' : '' }}"
+                      href="{{ request()->url() }}">
+                      Default (Latest)
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </th>
+            <th style="width: 15%; position: relative;">
+              <div class="dropdown">
+                <button class="btn btn-sm btn-light border dropdown-toggle w-100 d-flex justify-content-between align-items-center"
+                        type="button"
+                        id="sortGradeDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                  <span>Grade Level</span>
+                  <i class="bi bi-sort-numeric-down ms-1"></i>
+                </button>
+
+                <ul class="dropdown-menu"
+                    aria-labelledby="sortGradeDropdown"
+                    style="z-index: 1055; min-width: 200px;">
+                  <li><strong class="dropdown-header">Sort by Grade</strong></li>
+                  <li>
+                    <a class="dropdown-item {{ request('sort_grade') === 'asc' ? 'active' : '' }}"
+                      href="{{ request()->fullUrlWithQuery(['sort_grade' => 'asc', 'sort_name' => null, 'sort_date' => null]) }}">
+                      Kinder to Grade 12
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item {{ request('sort_grade') === 'desc' ? 'active' : '' }}"
+                      href="{{ request()->fullUrlWithQuery(['sort_grade' => 'desc', 'sort_name' => null, 'sort_date' => null]) }}">
+                      Grade 12 to Kinder
+                    </a>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <a class="dropdown-item {{ !request('sort_grade') ? 'active' : '' }}"
+                      href="{{ request()->url() }}">
+                      Default
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </th>
             <th style="width: 16%">Payment Method</th>
             <th style="width: 16%">Proof of Payment</th>
             <th>Status</th>
@@ -216,4 +301,19 @@
       </div>
     </div>
 @endsection
+<style>
+.table-wrapper {
+  position: relative;
+  overflow: visible;
+}
+
+.custom-table th {
+  overflow: visible !important;
+}
+
+.dropdown-menu {
+  z-index: 1055;
+}
+</style>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
