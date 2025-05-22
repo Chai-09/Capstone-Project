@@ -231,7 +231,8 @@
             form.querySelector('[name="applicant_mname"]').classList.remove('border-danger');
         }
 
-        grecaptcha.execute(signupWidgetId);
+        // grecaptcha.execute(signupWidgetId); comment out
+        document.getElementById('signup-form').submit();
     });
 
     document.addEventListener('DOMContentLoaded', () => {

@@ -96,14 +96,15 @@
         }
 
         // reCAPTCHA
-        grecaptcha.execute(widgetId);
+        // grecaptcha.execute(widgetId); //comment out after
+        document.getElementById('login-form').submit(); //remove after
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-        if (typeof initRecaptcha === 'function') {
-            initRecaptcha();
-        }
-    });
+    // document.addEventListener('DOMContentLoaded', () => {
+    //     if (typeof initRecaptcha === 'function') {
+    //         initRecaptcha();
+    //     }
+    // });
 
     function onSubmitRecaptcha(token) {
         const form = document.getElementById('login-form');
