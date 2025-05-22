@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('payment', function (Blueprint $table) {
-            $table->string('payment_for')->default('first-time');
+        Schema::table('applicants', function (Blueprint $table) {
+            $table->boolean('is_reschedule_active')->default(false);
         });
     }
 
@@ -21,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('payment', function (Blueprint $table) {
-            $table->dropColumn('payment_for');
+        Schema::table('applicants', function (Blueprint $table) {
+            $table->dropColumn('is_reschedule_active');
         });
     }
-
 };

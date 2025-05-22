@@ -666,6 +666,7 @@ namespace App\Models {
      * @property mixed $applicant_id
      * @property int $id
      * @property-read \App\Models\Applicant $applicant
+     * @property-read \App\Models\ExamResult $examResult
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereApplicantId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ApplicantSchedule>|ApplicantSchedule whereAdmissionNumber($value)

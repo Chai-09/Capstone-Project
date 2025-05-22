@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    protected $isRescheduling = false;
+    
     public function login(Request $request)
     {
 
