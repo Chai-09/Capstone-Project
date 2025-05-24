@@ -36,6 +36,7 @@ export default defineConfig({
 
                 // Accountant 
                 'resources/js/accounting/payment.js',
+                'resources/css/accounting/payment-modal.css',
 
                 // Admission
                 'resources/js/admission/applicant-list.js',

@@ -18,6 +18,20 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    let currentProofUrl = ''; // Global variable
+
+    window.viewProofFromModal = function () {
+    if (currentProofUrl) {
+        viewProof(currentProofUrl);
+    } else {
+        Swal.fire({
+        icon: 'info',
+        title: 'No receipt uploaded',
+        text: 'This applicant did not submit a proof of payment.'
+        });
+    }
+    }
+
     window.viewInfo = function (data) {
         const oldForm = document.getElementById('updateForm');
         const newForm = oldForm.cloneNode(true);
@@ -38,11 +52,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const proofContainer = document.getElementById('proofContainer');
         const fileUrl = `/storage/${data.proof_of_payment}`;
-        const isPDF = fileUrl.toLowerCase().endsWith('.pdf');
+        currentProofUrl = fileUrl;  
+        // const isPDF = fileUrl.toLowerCase().endsWith('.pdf');
 
-        proofContainer.innerHTML = isPDF
-            ? `<iframe src="${fileUrl}" width="100%" height="400px" style="border: none;"></iframe>`
-            : `<img src="${fileUrl}" alt="Proof of Payment" class="img-fluid rounded shadow" style="max-height: 400px;">`;
+        // proofContainer.innerHTML = isPDF
+        //     ? `<iframe src="${fileUrl}" width="100%" height="400px" style="border: none;"></iframe>`
+        //     : `<img src="${fileUrl}" alt="Proof of Payment" class="img-fluid rounded shadow" style="max-height: 400px;">`;
+
 
         document.getElementById('acceptStatus').checked = data.payment_status === 'approved';
         document.getElementById('denyStatus').checked = data.payment_status === 'denied';

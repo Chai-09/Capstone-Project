@@ -320,6 +320,7 @@ namespace App\Models {
     /**
      * App\Models\Applicant
      *
+     * @property bool $is_reschedule_active
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
      * @property string|null $strand_breakdown
@@ -355,6 +356,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereStrandBreakdown($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereUpdatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant whereIsRescheduleActive($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Applicant>|Applicant query()
@@ -1304,6 +1306,8 @@ namespace App\Models {
      * @property string $start_time
      * @property string $exam_date
      * @property int $id
+     * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ApplicantSchedule> $applicantSchedules
+     * @property-read int|null $applicantSchedules_count
      * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereExamDate($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereStartTime($value)

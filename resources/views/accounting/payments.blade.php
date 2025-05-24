@@ -2,6 +2,48 @@
 
 @section('content')
 
+  <div class="dashboard">
+    <div class="content">
+      <h2 class="text-white mb-4">Dashboard Metrics</h2>
+      <div class="row g-4">
+
+          <!-- New Applicants -->
+          <div class="col-md-3">
+              <div class="dashboard-card bg-white rounded p-4">
+                  <span class="fw-semibold text-muted">Pending Payments</span>
+                  <h3 class="mb-0">{{ $pendingPayments }}</h3>
+              </div>
+          </div>
+
+          <!-- Examinees -->
+          <div class="col-md-3">
+              <div class="dashboard-card bg-white rounded p-4">
+                  <span class="fw-semibold text-muted">Approved Payments</span>
+                  <h3 class="mb-0">{{ $approvedPayments }}</h3>
+              </div>
+          </div>
+
+          <!-- Verified Payments -->
+          <div class="col-md-3">
+              <div class="dashboard-card bg-white rounded p-4">
+                  <span class="fw-semibold text-muted">Denied Payments</span>
+                  <h3 class="mb-0">{{ $deniedPayments }}</h3>
+              </div>
+          </div>
+
+          <!-- Completed Applicants -->
+          <div class="col-md-3">
+              <div class="dashboard-card bg-white rounded p-4">
+                  <span class="fw-semibold text-muted">Total Payments</span>
+                  <h3 class="mb-0">{{ $totalPayments }}</h3>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  </div>
+
+
   <div class="table-design">
     {{-- Alert --}}
     @if (session('success'))
@@ -9,44 +51,6 @@
         {{ session('success') }}
     </div>
     @endif
-
-    <div class="container mt-4">
-    <h2 class="text-white mb-4">Dashboard Metrics</h2>
-    <div class="row g-4">
-
-        <!-- New Applicants -->
-        <div class="col-md-3">
-            <div class="dashboard-card bg-white rounded p-4">
-                <span class="fw-semibold text-muted">Pending Payments</span>
-                <h3 class="mb-0">{{ $pendingPayments }}</h3>
-            </div>
-        </div>
-
-        <!-- Examinees -->
-        <div class="col-md-3">
-            <div class="dashboard-card bg-white rounded p-4">
-                <span class="fw-semibold text-muted">Approved Payments</span>
-                <h3 class="mb-0">{{ $approvedPayments }}</h3>
-            </div>
-        </div>
-
-        <!-- Verified Payments -->
-        <div class="col-md-3">
-            <div class="dashboard-card bg-white rounded p-4">
-                <span class="fw-semibold text-muted">Denied Payments</span>
-                <h3 class="mb-0">{{ $deniedPayments }}</h3>
-            </div>
-        </div>
-
-        <!-- Completed Applicants -->
-        <div class="col-md-3">
-            <div class="dashboard-card bg-white rounded p-4">
-                <span class="fw-semibold text-muted">Total Payments</span>
-                <h3 class="mb-0">{{ $totalPayments }}</h3>
-            </div>
-        </div>
-    </div>
-</div>
 
     {{-- Filter Methods --}}
     <form method="GET" action="{{ route('accountingdashboard') }}">
@@ -264,80 +268,107 @@
     {{ $payments->withQueryString()->links('pagination::bootstrap-5') }}
   </div>
 
+<!-- Applicant's Payment Info Modal -->
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content shadow rounded-4">
+      <div class="modal-header bg-light border-0">
+        <h5 class="modal-title fw-semibold" id="infoModalLabel">Applicant's Payment Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-  <!-- Applicant's Payment Info Modal (ito na yung bagong way of showing yung payment info ng mga applicants-->
-  <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="infoModalLabel">Applicant's Information</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form id="updateForm" method="POST" action="">
-          @csrf
-          @method('PUT')
-          <div class="modal-body overflow-auto" style="max-height: 80vh; padding-bottom: 50px;">
-            <div class="row">
-              <!-- nasa left mga info per figma -->
-              <div class="col-md-7">
-                <input type="hidden" id="paymentId" name="payment_id">
+      <form id="updateForm" method="POST" action="">
+        @csrf
+        @method('PUT')
 
-                <p><strong>ID Number:</strong> <span id="idNumber"></span></p>
-                <p><strong>Applicant's Name:</strong> <span id="applicantName"></span></p>
-                <p><strong>Grade Level:</strong> <span id="gradeLevel"></span></p>
-                <p><strong>Contact Number:</strong> <span id="contactNumber"></span></p>
-                <p><strong>Guardian's Name:</strong> <span id="guardianName"></span></p>
+        <div class="modal-body py-4">
+          <input type="hidden" id="paymentId" name="payment_id">
 
-                <hr>
+          <div class="container-fluid">
+            <!-- Applicant Info -->
+            <h6 class="fw-semibold mb-3">Applicant’s Information</h6>
+            <div class="row mb-4">
+              <div class="col-md-3"><label>ID Number:</label><br><span id="idNumber"></span></div>
+              <div class="col-md-3"><label>Applicant's Name:</label><br><span id="applicantName"></span></div>
+              <div class="col-md-3"><label>Grade Level:</label><br><span id="gradeLevel"></span></div>
+              <div class="col-md-3"><label>Contact Number:</label><br><span id="contactNumber"></span></div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-md-6"><label>Guardian's Name:</label><br><span id="guardianName"></span></div>
+            </div>
 
-                <h6>Payment Information</h6>
-                <p><strong>Time of Payment:</strong> <span id="paymentTime"></span></p>
-                <p><strong>Mode of Payment:</strong> <span id="paymentMethod"></span></p>
-                <p><strong>Payment Type:</strong> <span id="paymentType"></span></p>
+            <hr>
 
-                <div class="mb-3">
-                  <label class="form-label"><strong>Status:</strong></label><br>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="payment_status" id="acceptStatus" value="approved">
-                    <label class="form-check-label" for="acceptStatus">Accept</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="payment_status" id="denyStatus" value="denied">
-                    <label class="form-check-label" for="denyStatus">Deny</label>
-                  </div>
+            <!-- Payment Info -->
+            <h6 class="fw-semibold mb-3">Payment Information</h6>
+            <div class="row mb-4">
+              <div class="col-md-4"><label>Time of Payment:</label><br><span id="paymentTime"></span></div>
+              <div class="col-md-4"><label>Mode of Payment:</label><br><span id="paymentMethod"></span></div>
+              <div class="col-md-4">
+                <label>Status:</label><br>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="payment_status" id="acceptStatus" value="approved">
+                  <label class="form-check-label" for="acceptStatus">Accept</label>
                 </div>
-                <div class="mb-3">
-                  <label for="remarks" class="form-label"><strong>Remarks:</strong></label>
-                  <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="payment_status" id="denyStatus" value="denied">
+                  <label class="form-check-label" for="denyStatus">Deny</label>
                 </div>
-                <div id="approvedFields">
-                <div class="mb-3">
-                  <p><strong>NOTE: Add OCR and Receipt only if payment is approved</p></strong>
-                  <label for="ocr_number" class="form-label"><strong>OCR Number:</strong></label>
-                  <input type="text" class="form-control" id="ocr_number" name="ocr_number" placeholder="Enter OCR Number">
-              </div>
-              <div class="mb-3">
-                <label class="form-label"><strong>Upload Receipt:</strong></label>
-                <p>Upload limit is 2MB. Accepted file types: png, jpg, jpeg, pdf.</p>
-                <div id="receiptDropzone" class="dropzone border border-secondary rounded" style="padding: 20px;"></div>
-                <input type="hidden" name="receipt" id="receipt">
-              </div>  
-          </div>
-          </div> 
-          
-          
-              <!-- nilagay ko sa right yung image per figma -->
-              <div class="col-md-5 text-center">
-                <div id="proofContainer" class="text-center"></div>
               </div>
             </div>
-          </div>
-          <div class="modal-footer bg-white sticky-bottom">
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
-        </form>
-      </div>
+            <div class="row mb-4">
+              <div class="col-md-4">
+                <label>Payment Type:</label><br>
+                <span id="paymentType"></span>
+              </div>
+              <div class="col-md-4">
+                <label>Proof of Payment:</label><br>
+                <a href="#" onclick="event.preventDefault(); viewProofFromModal();" class="text-decoration-underline">
+                  Click here to view uploaded receipt
+                </a>
+              </div>
+              <div class="col-md-4">
+       
+              </div>
+            </div>
+
+            <hr>
+
+            <!-- Remarks -->
+            <div class="mb-3">
+              <label for="remarks" class="form-label fw-semibold">Remarks:</label>
+              <textarea class="form-control" id="remarks" name="remarks" rows="3" placeholder="Enter remarks here..."></textarea>
+            </div>
+
+          <!-- OCR and Receipt Upload (only if approved) -->
+<div id="approvedFields" style="display: none;">
+  <p class="fw-bold text-danger">NOTE: Add OCR and Receipt only if payment is approved.</p>
+  <div class="row align-items-start">
+
+    <!-- Upload Receipt Dropzone -->
+    <div class="col-md-6">
+      <label class="form-label fw-semibold">Upload Receipt</label>
+      <div class="small text-muted mb-2">Max 2MB. Accepted: PNG, JPG, JPEG, PDF.</div>
+      <div id="receiptDropzone" class="dropzone border border-secondary rounded p-3" style="min-height: 120px;"></div>
+      <input type="hidden" name="receipt" id="receipt">
     </div>
+    <!-- OCR Number Input -->
+    <div class="col-md-6">
+      <label for="ocr_number" class="form-label fw-semibold">OCR Number</label>
+      <input type="text" class="form-control" id="ocr_number" name="ocr_number" placeholder="Enter OCR Number">
+    </div>
+  </div>
+</div>
+
+
+        <div class="modal-footer bg-white border-0">
+          <button type="submit" class="btn btn-success w-100">Submit Decision</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 @endsection
 <style>
 .table-wrapper {

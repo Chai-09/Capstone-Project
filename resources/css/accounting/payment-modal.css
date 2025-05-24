@@ -1,0 +1,52 @@
+#infoModal label {
+    font-weight: 500;
+}
+
+/* Optional: Improve vertical spacing in modal */
+.spaced-table td,
+.spaced-table th {
+  padding: 6px 12px !important;
+  vertical-align: top;
+}
+
+/* Radio Button */
+#infoModal input[type="radio"] {
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+#infoModal input[type="radio"]:checked {
+    border-color: #198754; 
+    background-color: #198754;
+}
+
+#infoModal input[type="radio"]::after {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: white;
+    display: none;
+}
+
+#infoModal input[type="radio"]:checked::after {
+    display: block;
+}
+
+
+.dashboard {
+    background-color: rgb(13, 13, 105);
+    height: 30%;
+    margin-top: -20px;
+    margin-left: -200px;    
+    margin-right: -200px;
+    margin-bottom: 20px;
+}
+
+.dashboard .content {
+    padding-top: 20px;
+    padding-left: 200px;
+    padding-right: 200px;
+}
