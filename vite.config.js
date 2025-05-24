@@ -29,10 +29,11 @@ export default defineConfig({
                 'resources/js/applicant/payment-verification.js',
                 'resources/js/applicant/exam-schedule.js',
 
-                //3 Sidebar
+                // Partials
                 'resources/js/partials/sidebar.js',
                 'resources/css/partials/tables.css',
                 'resources/css/partials/layout.css',
+                'resources/css/partials/dashboard.css',
 
                 // Accountant 
                 'resources/js/accounting/payment.js',

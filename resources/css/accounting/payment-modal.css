@@ -62,12 +62,9 @@
   transform: translateY(4px);
   z-index: 1055;
   min-width: max-content;
-  max-height: 300px;/
+  max-height: 300px;
   overflow-y: auto;
 }
-
-
-
 
 /* Removed Spin Buttot in Number */
 input[type="number"]::-webkit-inner-spin-button,
