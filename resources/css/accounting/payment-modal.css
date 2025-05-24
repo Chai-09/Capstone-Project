@@ -35,18 +35,43 @@
     display: block;
 }
 
-
-.dashboard {
-    background-color: rgb(13, 13, 105);
-    height: 30%;
-    margin-top: -20px;
-    margin-left: -200px;    
-    margin-right: -200px;
-    margin-bottom: 20px;
+.table-wrapper {
+  position: relative;
+  overflow: visible;
 }
 
-.dashboard .content {
-    padding-top: 20px;
-    padding-left: 200px;
-    padding-right: 200px;
+/* Make sure th does not cut off dropdowns */
+.custom-table th {
+  position: relative;
+  overflow: visible !important; 
+  vertical-align: middle;
+  padding: 0.75rem 1rem;
+}
+
+/* Ensure dropdown stays aligned to the button */
+.custom-table th .dropdown {
+  position: relative;
+}
+
+/* Position the menu right below the toggle */
+.custom-table th .dropdown-menu {
+  position: absolute;
+  top: 100%; 
+  left: auto;
+  right: 0;
+  transform: translateY(4px);
+  z-index: 1055;
+  min-width: max-content;
+  max-height: 300px;/
+  overflow-y: auto;
+}
+
+
+
+
+/* Removed Spin Buttot in Number */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

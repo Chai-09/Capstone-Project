@@ -12,8 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 title: 'Proof of Payment',
                 imageUrl: fileUrl,
                 imageAlt: 'Proof of Payment',
-                width: 600,
-                confirmButtonText: 'Close'
+                width: 450,
+                padding: '1em',
+                confirmButtonText: 'Close',
             });
         }
     }
@@ -53,12 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const proofContainer = document.getElementById('proofContainer');
         const fileUrl = `/storage/${data.proof_of_payment}`;
         currentProofUrl = fileUrl;  
-        // const isPDF = fileUrl.toLowerCase().endsWith('.pdf');
-
-        // proofContainer.innerHTML = isPDF
-        //     ? `<iframe src="${fileUrl}" width="100%" height="400px" style="border: none;"></iframe>`
-        //     : `<img src="${fileUrl}" alt="Proof of Payment" class="img-fluid rounded shadow" style="max-height: 400px;">`;
-
 
         document.getElementById('acceptStatus').checked = data.payment_status === 'approved';
         document.getElementById('denyStatus').checked = data.payment_status === 'denied';
@@ -74,11 +69,44 @@ document.addEventListener('DOMContentLoaded', function () {
         newForm.action = `/accountant/payment-decision/${data.id}`;
 
         newForm.addEventListener('submit', function (e) {
-            if (myDropzone && myDropzone.getQueuedFiles().length > 0) {
-                e.preventDefault();
-                myDropzone.processQueue();
+            const isApproved = document.getElementById('acceptStatus')?.checked;
+
+            if (isApproved) {
+                const ocrValue = document.getElementById('ocr_number').value.trim();
+                const files = myDropzone ? myDropzone.getAcceptedFiles() : [];
+                const hasFile = files.length > 0;
+
+                // Validate OCR and Dropzone presence
+                if (!ocrValue || !hasFile) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Missing Required Fields',
+                        text: 'Please upload a receipt and enter the OCR number before submitting.'
+                    });
+                    return;
+                }
+
+                // Validate file size
+                const file = files[0];
+                if (file.size > 2 * 1024 * 1024) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'File Too Large',
+                        text: 'The uploaded receipt must be 2MB or less.'
+                    });
+                    return;
+                }
+
+                // Handle file queue
+                if (myDropzone.getQueuedFiles().length > 0) {
+                    e.preventDefault();
+                    myDropzone.processQueue();
+                }
             }
         });
+
 
         new bootstrap.Modal(document.getElementById('infoModal')).show();
     }

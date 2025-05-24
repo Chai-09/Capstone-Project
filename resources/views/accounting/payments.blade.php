@@ -2,42 +2,65 @@
 
 @section('content')
 
-  <div class="dashboard">
+  <div class="dashboard" style="display: block;">
     <div class="content">
-      <h2 class="text-white mb-4">Dashboard Metrics</h2>
+      <h2 class="text-white mb-4 fw-semibold">Dashboard</h2>
       <div class="row g-4">
 
           <!-- New Applicants -->
-          <div class="col-md-3">
-              <div class="dashboard-card bg-white rounded p-4">
-                  <span class="fw-semibold text-muted">Pending Payments</span>
-                  <h3 class="mb-0">{{ $pendingPayments }}</h3>
+          <div class="col-md-3 col-sm-6">
+            <div class="dashboard-card bg-white rounded p-4 d-flex justify-content-between align-items-center shadow-sm">
+              <div>
+                <div class="text-muted small fw-semibold mb-1">Pending</div>
+                <h3 class="mb-0 fw-bold">{{ $pendingPayments }}</h3>
               </div>
+              <div class="icon-box bg-primary bg-opacity-10 text-primary rounded p-2">
+                <i class="bi bi-briefcase-fill fs-4"></i>
+              </div>
+            </div>
           </div>
+
 
           <!-- Examinees -->
-          <div class="col-md-3">
-              <div class="dashboard-card bg-white rounded p-4">
-                  <span class="fw-semibold text-muted">Approved Payments</span>
-                  <h3 class="mb-0">{{ $approvedPayments }}</h3>
+                  <!-- Approved -->
+          <div class="col-md-3 col-sm-6">
+            <div class="dashboard-card bg-white rounded p-4 d-flex justify-content-between align-items-center shadow-sm">
+              <div>
+                <div class="text-muted small fw-semibold mb-1">Approved</div>
+                <h3 class="mb-0 fw-bold">{{ $approvedPayments }}</h3>
               </div>
+              <div class="icon-box bg-info bg-opacity-10 text-info rounded p-2">
+                <i class="bi bi-list-check fs-4"></i>
+              </div>
+            </div>
           </div>
 
-          <!-- Verified Payments -->
-          <div class="col-md-3">
-              <div class="dashboard-card bg-white rounded p-4">
-                  <span class="fw-semibold text-muted">Denied Payments</span>
-                  <h3 class="mb-0">{{ $deniedPayments }}</h3>
+          <!-- Denied -->
+          <div class="col-md-3 col-sm-6">
+            <div class="dashboard-card bg-white rounded p-4 d-flex justify-content-between align-items-center shadow-sm">
+              <div>
+                <div class="text-muted small fw-semibold mb-1">Denied</div>
+                <h3 class="mb-0 fw-bold">{{ $deniedPayments }}</h3>
               </div>
+              <div class="icon-box bg-danger bg-opacity-10 text-danger rounded p-2">
+                <i class="bi bi-person-x-fill fs-4"></i>
+              </div>
+            </div>
           </div>
 
-          <!-- Completed Applicants -->
-          <div class="col-md-3">
-              <div class="dashboard-card bg-white rounded p-4">
-                  <span class="fw-semibold text-muted">Total Payments</span>
-                  <h3 class="mb-0">{{ $totalPayments }}</h3>
+          <!-- Total -->
+          <div class="col-md-3 col-sm-6">
+            <div class="dashboard-card bg-white rounded p-4 d-flex justify-content-between align-items-center shadow-sm">
+              <div>
+                <div class="text-muted small fw-semibold mb-1">Total</div>
+                <h3 class="mb-0 fw-bold">{{ $totalPayments }}</h3>
               </div>
+              <div class="icon-box bg-success bg-opacity-10 text-success rounded p-2">
+                <i class="bi bi-bullseye fs-4"></i>
+              </div>
+            </div>
           </div>
+
       </div>
   </div>
 
@@ -47,10 +70,12 @@
   <div class="table-design">
     {{-- Alert --}}
     @if (session('success'))
-    <div class="alert alert-success text-center">
+    <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
         {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
+
 
     {{-- Filter Methods --}}
     <form method="GET" action="{{ route('accountingdashboard') }}">
@@ -102,8 +127,8 @@
               <label for="payment_for" class="form-label">Payment Type</label>
               <select name="payment_for" class="form-select">
               <option value="">All Types</option>
-              <option value="first-time" {{ request('payment_for') == 'first-time' ? 'selected' : '' }}>First-Time</option>
-              <option value="resched" {{ request('payment_for') == 'resched' ? 'selected' : '' }}>Resched</option>
+              <option value="first-time" {{ request('payment_for') == 'first-time' ? 'selected' : '' }}>First Time</option>
+              <option value="resched" {{ request('payment_for') == 'resched' ? 'selected' : '' }}>Reschedule</option>
              </select>
             </div>
           </div>
@@ -130,69 +155,59 @@
           <tr>
             <th style="width: 5%">#</th>
             <th style="width: 30%; position: relative;">
-              <div class="dropdown">
-                <button class="btn btn-sm btn-light border dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                        type="button"
-                        id="sortNameDropdown"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                  <span>Applicant Name</span>
-                  <i class="bi bi-sort-alpha-down ms-1"></i>
-                </button>
+              <div class="d-flex justify-content-between align-items-center w-100">
+                <span>Applicant Name</span>
+                <div class="dropdown">
+                  <button class="btn btn-sm btn-light border dropdown-toggle"
+                          type="button"
+                          id="sortNameDropdown"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false">
+                    <i class="bi bi-funnel"></i>
+                  </button>
 
-                <ul class="dropdown-menu"
-                    aria-labelledby="sortNameDropdown"
-                    style="z-index: 1055; min-width: 250px;">
-                  <li><strong class="dropdown-header">Sort by Name</strong></li>
-                  <li>
-                    <a class="dropdown-item {{ request('sort_name') === 'asc' ? 'active' : '' }}"
-                      href="{{ request()->fullUrlWithQuery(['sort_name' => 'asc', 'sort_date' => null]) }}">
-                      A to Z
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item {{ request('sort_name') === 'desc' ? 'active' : '' }}"
-                      href="{{ request()->fullUrlWithQuery(['sort_name' => 'desc', 'sort_date' => null]) }}">
-                      Z to A
-                    </a>
-                  </li>
-
-                  <li><hr class="dropdown-divider"></li>
-
-                  <li><strong class="dropdown-header">Sort by Payment Date</strong></li>
-                  <li>
-                    <a class="dropdown-item {{ request('sort_date') === 'asc' ? 'active' : '' }}"
-                      href="{{ request()->fullUrlWithQuery(['sort_date' => 'asc', 'sort_name' => null]) }}">
-                      Oldest First
-                    </a>
-                  </li>
-                
-
-                  <li><hr class="dropdown-divider"></li>
-
-                  <li>
-                    <a class="dropdown-item {{ !request('sort_name') && !request('sort_date') ? 'active' : '' }}"
-                      href="{{ request()->url() }}">
-                      Default (Latest)
-                    </a>
-                  </li>
-                </ul>
+                  <ul class="dropdown-menu dropdown-menu-end"
+                      aria-labelledby="sortNameDropdown"
+                      style="min-width: 200px;">
+                    <li><strong class="dropdown-header">Sort by Name</strong></li>
+                    <li>
+                      <a class="dropdown-item {{ request('sort_name') === 'asc' ? 'active' : '' }}"
+                        href="{{ request()->fullUrlWithQuery(['sort_name' => 'asc', 'sort_date' => null]) }}">
+                        A to Z
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item {{ request('sort_name') === 'desc' ? 'active' : '' }}"
+                        href="{{ request()->fullUrlWithQuery(['sort_name' => 'desc', 'sort_date' => null]) }}">
+                        Z to A
+                      </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                      <a class="dropdown-item {{ !request('sort_name') && !request('sort_date') ? 'active' : '' }}"
+                        href="{{ request()->url() }}">
+                        Default (Latest)
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </th>
-            <th style="width: 15%; position: relative;">
+
+           <th style="width: 15%; position: relative;">
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <span>Grade Level</span>
               <div class="dropdown">
-                <button class="btn btn-sm btn-light border dropdown-toggle w-100 d-flex justify-content-between align-items-center"
+                <button class="btn btn-sm btn-light border dropdown-toggle"
                         type="button"
                         id="sortGradeDropdown"
                         data-bs-toggle="dropdown"
                         aria-expanded="false">
-                  <span>Grade Level</span>
-                  <i class="bi bi-sort-numeric-down ms-1"></i>
+                  <i class="bi bi-funnel"></i>
                 </button>
-
-                <ul class="dropdown-menu"
+                <ul class="dropdown-menu dropdown-menu-end"
                     aria-labelledby="sortGradeDropdown"
-                    style="z-index: 1055; min-width: 200px;">
+                    style="min-width: 200px;">
                   <li><strong class="dropdown-header">Sort by Grade</strong></li>
                   <li>
                     <a class="dropdown-item {{ request('sort_grade') === 'asc' ? 'active' : '' }}"
@@ -215,7 +230,8 @@
                   </li>
                 </ul>
               </div>
-            </th>
+            </div>
+          </th>
             <th style="width: 16%">Payment Method</th>
             <th style="width: 16%">Proof of Payment</th>
             <th>Status</th>
@@ -247,9 +263,9 @@
               </td>
               <td>
               @if ($payment->payment_for === 'resched')
-                  <span class="badge bg-warning text-dark">RESCHED</span> {{-- Dito ko kinuha badges pre if gusto mo gamitin or something https://getbootstrap.com/docs/4.0/components/badge/ --}}
+                  <span class="badge bg-warning text-dark">Reschedule</span>  
               @else
-                  <span class="badge bg-success">FIRST-TIME</span>
+                  <span class="badge bg-success">First Time</span>
               @endif
              </td>
             </tr>
@@ -323,7 +339,7 @@
               </div>
               <div class="col-md-4">
                 <label>Proof of Payment:</label><br>
-                <a href="#" onclick="event.preventDefault(); viewProofFromModal();" class="text-decoration-underline">
+                <a href="#" onclick="event.preventDefault(); viewProofFromModal();" class="proof-text">
                   Click here to view uploaded receipt
                 </a>
               </div>
@@ -337,29 +353,28 @@
             <!-- Remarks -->
             <div class="mb-3">
               <label for="remarks" class="form-label fw-semibold">Remarks:</label>
-              <textarea class="form-control" id="remarks" name="remarks" rows="3" placeholder="Enter remarks here..."></textarea>
+              <textarea class="form-control" id="remarks" name="remarks" rows="3" placeholder="Enter remarks here..." required></textarea>
             </div>
 
           <!-- OCR and Receipt Upload (only if approved) -->
-<div id="approvedFields" style="display: none;">
-  <p class="fw-bold text-danger">NOTE: Add OCR and Receipt only if payment is approved.</p>
-  <div class="row align-items-start">
+          <div id="approvedFields" style="display: none;">
+            <p class="fw-bold text-danger">NOTE: Add OCR and Receipt only if payment is approved.</p>
+            <div class="row align-items-start">
 
-    <!-- Upload Receipt Dropzone -->
-    <div class="col-md-6">
-      <label class="form-label fw-semibold">Upload Receipt</label>
-      <div class="small text-muted mb-2">Max 2MB. Accepted: PNG, JPG, JPEG, PDF.</div>
-      <div id="receiptDropzone" class="dropzone border border-secondary rounded p-3" style="min-height: 120px;"></div>
-      <input type="hidden" name="receipt" id="receipt">
-    </div>
-    <!-- OCR Number Input -->
-    <div class="col-md-6">
-      <label for="ocr_number" class="form-label fw-semibold">OCR Number</label>
-      <input type="text" class="form-control" id="ocr_number" name="ocr_number" placeholder="Enter OCR Number">
-    </div>
-  </div>
-</div>
-
+              <!-- Upload Receipt Dropzone -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Upload Receipt</label>
+                <div class="small text-muted mb-2">Max 2MB. Accepted: PNG, JPG, JPEG, PDF.</div>
+                <div id="receiptDropzone" class="dropzone border border-secondary rounded p-3" style="min-height: 120px;" required></div>
+                <input type="hidden" name="receipt" id="receipt">
+              </div>
+              <!-- OCR Number Input -->
+              <div class="col-md-6">
+                <label for="ocr_number" class="form-label fw-semibold">OCR Number</label>
+                <input type="number" class="form-control" id="ocr_number" name="ocr_number" placeholder="Enter OCR Number" required>
+              </div>
+            </div>
+          </div>
 
         <div class="modal-footer bg-white border-0">
           <button type="submit" class="btn btn-success w-100">Submit Decision</button>
@@ -370,19 +385,6 @@
 </div>
 
 @endsection
-<style>
-.table-wrapper {
-  position: relative;
-  overflow: visible;
-}
 
-.custom-table th {
-  overflow: visible !important;
-}
-
-.dropdown-menu {
-  z-index: 1055;
-}
-</style>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
