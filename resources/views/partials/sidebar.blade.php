@@ -40,7 +40,7 @@
 
       <!-- Dynamic Navigation links based on Role -->
       @if(auth()->check() && auth()->user()->role == 'admission')
-        <a href="{{ route('admission.dashboard') }}" class="nav-link" title="Dashboard">
+        <a href="{{ route('admissiondashboard') }}" class="nav-link" title="Dashboard">
           <div class="icon-wrapper"><i class="fa-solid fa-table-columns"></i></div>
           <span>Dashboard</span>
         </a>
