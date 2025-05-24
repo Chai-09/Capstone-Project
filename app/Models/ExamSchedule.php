@@ -18,4 +18,11 @@ class ExamSchedule extends Model
         'max_participants',
         'educational_level',
     ];
+
+    // In ExamSchedule model
+public function applicantSchedules()
+{
+    return $this->hasMany(ApplicantSchedule::class, 'exam_date', 'exam_date');
+}
+
 }

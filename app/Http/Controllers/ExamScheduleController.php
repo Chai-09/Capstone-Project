@@ -16,15 +16,43 @@ class ExamScheduleController extends Controller
 {
     
     public function index(Request $request)
-    {
-        $selectedDate = $request->query('date');
+{
+    $selectedDate = $request->query('date');
+    $today = now()->startOfDay();
 
-        // Fetch all exam schedules, ordered and grouped by date
-        $schedules = ExamSchedule::orderBy('exam_date')
+    $rawSchedules = ExamSchedule::orderBy('exam_date')
         ->orderBy('start_time')
         ->get()
-        ->map(function ($schedule) {
-            // Get only applicants that match this schedule's level
+        ->groupBy('exam_date');
+
+    $schedules = collect();
+    $notifications = [];
+
+    foreach ($rawSchedules as $date => $daySchedules) {
+        $dateObj = \Carbon\Carbon::parse($date);
+        $applicantIds = ApplicantSchedule::whereDate('exam_date', $date)->pluck('applicant_id');
+
+        // Fetch exam results for these applicants
+        $examResults = \App\Models\ExamResult::whereIn('applicant_id', $applicantIds)->get();
+
+        $hasIncomplete = false;
+
+        foreach ($applicantIds as $id) {
+            $result = $examResults->firstWhere('applicant_id', $id);
+
+            if (!$result || is_null($result->exam_status) || is_null($result->exam_result)) {
+                $hasIncomplete = true;
+                break;
+            }
+        }
+
+        // Hide the date if all are complete
+        if (!$hasIncomplete && $applicantIds->isNotEmpty()) {
+            continue;
+        }
+
+        // ✅ Include day schedule in display
+        $filteredDaySchedules = $daySchedules->map(function ($schedule) {
             $usedSlots = ApplicantSchedule::with('applicant.formSubmission')
                 ->whereDate('exam_date', $schedule->exam_date)
                 ->whereTime('start_time', $schedule->start_time)
@@ -42,16 +70,34 @@ class ExamScheduleController extends Controller
                 ->count();
 
             $schedule->remaining_slots = $schedule->max_participants - $usedSlots;
-
             return $schedule;
-        })
-        ->groupBy('exam_date');
+        });
 
+        $schedules[$date] = $filteredDaySchedules;
 
-        $applicants = collect(); 
+        // 🔔 SweetAlert Notifications if date is 7+ days old and missing fields
+        if ($dateObj->lt($today->copy()->subDays(7)) && $applicantIds->isNotEmpty()) {
+            foreach ($applicantIds as $appId) {
+                $result = $examResults->firstWhere('applicant_id', $appId);
 
-        return view('admission.exam.exam-schedule', compact('schedules', 'selectedDate', 'applicants'));
+                if (!$result || is_null($result->exam_status) || is_null($result->exam_result)) {
+                    $missing = [];
+                    if (!$result || is_null($result->exam_status)) $missing[] = 'exam_status';
+                    if (!$result || is_null($result->exam_result)) $missing[] = 'exam_result';
+
+                    $notifications[] = [
+                        'date' => $date,
+                        'applicant_id' => $appId,
+                        'missing' => implode(', ', $missing)
+                    ];
+                }
+            }
+        }
     }
+
+    return view('admission.exam.exam-schedule', compact('schedules', 'selectedDate', 'notifications'));
+}
+
 
 
     // Delete specific time slot

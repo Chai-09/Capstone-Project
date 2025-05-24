@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Payment;
+use App\Models\Applicant;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -44,35 +45,40 @@ class AccountingPaymentController extends Controller
     // Sorting
     if ($request->filled('sort_name')) {
         $direction = $request->input('sort_name') === 'asc' ? 'asc' : 'desc';
-    
-        // Smart alphabetical sort: starts from first letter, uses next ones if same
         $query->orderByRaw("CONCAT(applicant_fname, ' ', IFNULL(applicant_mname, ''), ' ' ,applicant_lname) $direction");
 
     } elseif ($request->filled('sort_date')) {
         $direction = $request->input('sort_date') === 'asc' ? 'asc' : 'desc';
         $query->orderBy('created_at', $direction);
-    
+
     } elseif ($request->filled('sort_grade')) {
         $direction = $request->input('sort_grade') === 'asc' ? 'asc' : 'desc';
-    
-        // Custom logical sort by grade level using FIELD
         $gradeOrder = [
             'Kinder','Grade 1','Grade 2','Grade 3','Grade 4','Grade 5',
             'Grade 6','Grade 7','Grade 8','Grade 9','Grade 10','Grade 11','Grade 12'
         ];
-    
         $query->orderByRaw("FIELD(incoming_grlvl, '" . implode("','", $gradeOrder) . "') $direction");
-    }
-    else {
-        // Default sort by latest payment
+
+    } else {
         $query->orderBy('created_at', 'desc');
     }
-    
 
     $payments = $query->paginate(10)->withQueryString();
 
-    return view('accounting.payments', compact('payments'));
+    $pendingPayments = Payment::where('payment_status', 'pending')->count();
+    $approvedPayments = Payment::where('payment_status', 'approved')->count();
+    $deniedPayments = Payment::where('payment_status', 'denied')->count();
+    $totalPayments = Applicant::where('current_step', '>=', 4)->count();
+
+    return view('accounting.payments', compact(
+        'payments',
+        'pendingPayments',
+        'approvedPayments',
+        'deniedPayments',
+        'totalPayments'
+    ));
 }
+
 
 
     // Approve payment

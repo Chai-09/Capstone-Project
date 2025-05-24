@@ -237,8 +237,9 @@ Route::middleware(['auth', 'role:accounting'])->group(function () {
 
     Route::post('/delete-receipt', [AccountingPaymentController::class, 'deleteReceipt'])->name('delete.receipt');
 
-    //sort
-    
+    //cards
+    Route::get('/accounting-dashboard', [AccountReportController::class, 'showAccountingDashboard'])->name('accountingdashboard');
+
 
 });
 

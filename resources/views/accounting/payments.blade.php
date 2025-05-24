@@ -10,6 +10,44 @@
     </div>
     @endif
 
+    <div class="container mt-4">
+    <h2 class="text-white mb-4">Dashboard Metrics</h2>
+    <div class="row g-4">
+
+        <!-- New Applicants -->
+        <div class="col-md-3">
+            <div class="dashboard-card bg-white rounded p-4">
+                <span class="fw-semibold text-muted">Pending Payments</span>
+                <h3 class="mb-0">{{ $pendingPayments }}</h3>
+            </div>
+        </div>
+
+        <!-- Examinees -->
+        <div class="col-md-3">
+            <div class="dashboard-card bg-white rounded p-4">
+                <span class="fw-semibold text-muted">Approved Payments</span>
+                <h3 class="mb-0">{{ $approvedPayments }}</h3>
+            </div>
+        </div>
+
+        <!-- Verified Payments -->
+        <div class="col-md-3">
+            <div class="dashboard-card bg-white rounded p-4">
+                <span class="fw-semibold text-muted">Denied Payments</span>
+                <h3 class="mb-0">{{ $deniedPayments }}</h3>
+            </div>
+        </div>
+
+        <!-- Completed Applicants -->
+        <div class="col-md-3">
+            <div class="dashboard-card bg-white rounded p-4">
+                <span class="fw-semibold text-muted">Total Payments</span>
+                <h3 class="mb-0">{{ $totalPayments }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
     {{-- Filter Methods --}}
     <form method="GET" action="{{ route('accountingdashboard') }}">
       <div class="filter-bar" style="gap: 10px;">

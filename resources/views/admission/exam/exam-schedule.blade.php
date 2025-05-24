@@ -177,6 +177,26 @@
             });
         });
     });
+
+    @if(!empty($notifications))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let messages = @json($notifications).map(entry => 
+                `Date: ${entry.date}<br>Applicant ID: ${entry.applicant_id}<br>Missing: ${entry.missing}`
+            ).join('<hr>');
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Applicants Missing Exam Info',
+                html: messages,
+                confirmButtonText: 'OK',
+                width: 600
+            });
+        });
+    </script>
+@endif
+
+
 </script>
 
 @endsection
