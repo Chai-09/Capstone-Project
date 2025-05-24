@@ -84,6 +84,7 @@ class EditApplicantController extends Controller
             'guardian_contact_number' => 'nullable|max:20',
             'guardian_email' => 'nullable|email',
             'relation' => 'nullable|in:Parents,Brother/Sister,Uncle/Aunt,Cousin,Grandparents',
+            'current_school'=>'nullable|max:255',
             'current_school_city' => 'nullable|max:255',
             'school_type' => 'nullable|in:Private,Public,Private Sectarian,Private Non-Sectarian',
             'educational_level' => ['nullable', Rule::in(['Grade School', 'Junior High School', 'Senior High School'])],
