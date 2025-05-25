@@ -158,14 +158,14 @@
               <div class="d-flex justify-content-between align-items-center w-100">
                 <span>Applicant Name</span>
                 <div class="dropdown">
-                  <button class="btn btn-sm btn-light border dropdown-toggle"
+                  <button class="btn btn-light btn-sm p-1 px-2 border rounded"
                           type="button"
                           id="sortNameDropdown"
                           data-bs-toggle="dropdown"
-                          aria-expanded="false">
+                          aria-expanded="false"
+                          style="line-height: 1;">
                     <i class="bi bi-funnel"></i>
                   </button>
-
                   <ul class="dropdown-menu dropdown-menu-end"
                       aria-labelledby="sortNameDropdown"
                       style="min-width: 200px;">
@@ -198,11 +198,12 @@
             <div class="d-flex justify-content-between align-items-center w-100">
               <span>Grade Level</span>
               <div class="dropdown">
-                <button class="btn btn-sm btn-light border dropdown-toggle"
+                <button class="btn btn-light btn-sm p-1 px-2 border rounded"
                         type="button"
-                        id="sortGradeDropdown"
+                        id="sortNameDropdown"
                         data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                        aria-expanded="false"
+                        style="line-height: 1;">
                   <i class="bi bi-funnel"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end"

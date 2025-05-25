@@ -40,46 +40,11 @@
   overflow: visible;
 }
 
-/* Make sure th does not cut off dropdowns */
-.custom-table th {
-  position: relative;
-  overflow: visible !important; 
-  vertical-align: middle;
-  padding: 0.75rem 1rem;
-}
-
-/* Ensure dropdown stays aligned to the button */
-.custom-table th .dropdown {
-  position: relative;
-}
-
-/* Position the menu right below the toggle */
-.custom-table th .dropdown-menu {
-  position: absolute;
-  top: 100%; 
-  left: auto;
-  right: 0;
-  transform: translateY(4px);
-  z-index: 1055;
-  min-width: max-content;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
 /* Removed Spin Buttot in Number */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
-
-.dashboard {
-  background-color: rgb(13, 13, 105);
-  margin: -20px -200px 20px -200px;
-}
-
-.dashboard .content {
-  padding: 20px 200px;
 }
 
 .dashboard-card {

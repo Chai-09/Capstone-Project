@@ -1,6 +1,7 @@
+/* With Reports */
 .dashboard  {
   display: block;
-  background-color: rgb(13, 13, 105);
+  background-color: rgb(8, 8, 68);
   margin: -20px -200px 20px -200px;
 }
 
@@ -17,6 +18,10 @@
     align-items: center;
 }
 
+/* Only title */
+.dashboard .content h2 {
+    padding-top: 1%;
+}
 
 /* Admission Side */
 .admission-dashboard table tbody tr {
