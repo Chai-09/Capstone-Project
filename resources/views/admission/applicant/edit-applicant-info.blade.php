@@ -27,194 +27,192 @@
         6 => 'Results',
         7 => 'Complete',
     ];
-@endphp
+    @endphp
 
-<div class="mb-4">
-    <h6 class="fw-bold">Progress Tracker</h6>
-    <p>Current Stage: <span class="fw-semibold">{{ $steps[$applicant->current_step] ?? 'Unknown' }}</span></p>
-    <div class="d-flex gap-2 align-items-center flex-wrap">
+    <div class="mb-4">
+        <h6 class="fw-bold">Progress Tracker</h6>
+        <p>Current Stage: <span class="fw-semibold">{{ $steps[$applicant->current_step] ?? 'Unknown' }}</span></p>
+        <div class="d-flex gap-2 align-items-center flex-wrap">
 
-        @foreach ($steps as $stepNum => $label)
-            <div class="d-flex align-items-center">
-                <div class="border rounded d-flex justify-content-center align-items-center
-                    @if ($stepNum < $applicant->current_step || $stepNum == 7 && $applicant->current_step == 7) bg-success text-white border-success
-                    @elseif ($stepNum == $applicant->current_step) border-success text-success fw-bold
-                    @else border-secondary text-secondary
-                    @endif"
-                    style="width: 40px; height: 40px;">
-                    @if ($stepNum == 7)
-                        &#10003; <!-- ginawa ko nalang checkmark, dito ko kinuha https://www.w3schools.com/charsets/ref_utf_dingbats.asp -->
-                    @else
-                        {{ $stepNum }}
+            @foreach ($steps as $stepNum => $label)
+                <div class="d-flex align-items-center">
+                    <div class="border rounded d-flex justify-content-center align-items-center step-circle
+                        @if ($stepNum < $applicant->current_step || $stepNum == 7 && $applicant->current_step == 7) bg-success text-white border-success
+                        @elseif ($stepNum == $applicant->current_step) border-success text-success fw-bold
+                        @else border-secondary text-secondary
+                        @endif"
+                        style="width: 40px; height: 40px; cursor: pointer"
+                        onclick="showStepContent({{ $stepNum }})">
+                        @if ($stepNum == 7)
+                            &#10003; <!-- ginawa ko nalang checkmark, dito ko kinuha https://www.w3schools.com/charsets/ref_utf_dingbats.asp -->
+                        @else
+                            {{ $stepNum }}
+                        @endif
+                    </div>
+                    @if ($stepNum < count($steps))
+                        <div class="mx-1"
+                            style="width: 25px; height: 3px;
+                            background-color: {{ $stepNum < $applicant->current_step ? '#198754' : '#ccc' }};">
+                        </div>
                     @endif
                 </div>
-                @if ($stepNum < count($steps))
-                    <div class="mx-1"
-                         style="width: 25px; height: 3px;
-                         background-color: {{ $stepNum < $applicant->current_step ? '#198754' : '#ccc' }};">
-                    </div>
-                @endif
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
-</div>
 
 
     @if ($formData)
     <form method="POST" action="{{ route('applicant.update', $formData->id) }}">
-        @csrf
-        @method('PUT')
-        <div class="card p-4">
-            <h5 class="text-primary">Applicant Information</h5>
-            <div class="row">
-                <div class="col-md-4">
-                    <label>First Name</label>
-                    <input type="text" class="form-control" name="applicant_fname" value="{{ $formData->applicant_fname }}" readonly>
-                </div>
-                <div class="col-md-4">
-                    <label>Middle Initial</label>
-                    <input type="text" class="form-control" name="applicant_mname" value="{{ $formData->applicant_mname }}" readonly>
-                </div>
-                <div class="col-md-4">
-                    <label>Last Name</label>
-                    <input type="text" class="form-control" name="applicant_lname" value="{{ $formData->applicant_lname }}" readonly>
-                </div>
-            </div>
-
-            <div class="row mt-3">
-                <div class="col-md-4">
-                    <label>Contact Number</label>
-                    <input type="text" class="form-control" name="applicant_contact_number" value="{{ $formData->applicant_contact_number }}" readonly>
-                </div>
-                <div class="col-md-4">
-                    <label>Email</label>
-                    <input type="email" class="form-control" name="applicant_email" value="{{ $formData->applicant_email }}" readonly>
-                </div>
-                <div class="col-md-4">
-                    <label>Birthday</label>
-                    <input type="date" class="form-control" name="applicant_bday" value="{{ $formData->applicant_bday }}" readonly>
-                </div>
-            </div>
-
-            <div class="row mt-3">
-                <div class="col-md-4">
-                    <label>Age</label>
-                    <input type="number" class="form-control" name="age" value="{{ $formData->age }}" readonly>
-                </div>
-                <div class="col-md-4">
-                    <label>Gender</label>
-                    <select class="form-control" name="gender" readonly disabled>
-                        <option value="">Select Gender</option>
-                        <option value="Male" {{ $formData->gender == 'Male' ? 'selected' : '' }}>Male</option>
-                        <option value="Female" {{ $formData->gender == 'Female' ? 'selected' : '' }}>Female</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label>Nationality</label>
-                    <input type="text" class="form-control" name="nationality" value="{{ $formData->nationality }}" readonly>
-                </div>
-            </div>
-
-            <hr>
-            <h5 class="text-primary mt-4">Address</h5>
-            <div class="row">
-            <div class="col-md-4">
-                <label>Region</label>
-                <select id="region" name="region" class="form-control" data-selected="{{ $formData->region }}" disabled></select>
-            </div>
-            <div class="col-md-4">
-                <label>Province</label>
-                <select id="province" name="province" class="form-control" data-selected="{{ $formData->province }}" disabled></select>
-            </div>
-
-            <div class="col-md-4">
-                <label>City</label>
-                <select id="city" name="city" class="form-control" data-selected="{{ $formData->city }}" disabled></select>
-            </div>
-                        </div>
-                        <div class="row mt-3">
-                        <div class="col-md-6">
-                <label>Barangay</label>
-                <select id="barangay" name="barangay" class="form-control" data-selected="{{ $formData->barangay }}" disabled></select>
-            </div>
-                <div class="col-md-3"><label>Street/No.</label><input type="text" class="form-control" name="numstreet" value="{{ $formData->numstreet }}" readonly></div>
-                <div class="col-md-3"><label>Postal Code</label><input type="text" class="form-control" name="postal_code" value="{{ $formData->postal_code }}" readonly></div>
-            </div>
-
-            <hr>
-            <h5 class="text-primary mt-4">Guardian Information</h5>
-            <div class="row">
-                <div class="col-md-4"><label>First Name</label><input type="text" class="form-control" name="guardian_fname" value="{{ $formData->guardian_fname }}" readonly></div>
-                <div class="col-md-4"><label>Middle Initial</label><input type="text" class="form-control" name="guardian_mname" value="{{ $formData->guardian_mname }}" readonly></div>
-                <div class="col-md-4"><label>Last Name</label><input type="text" class="form-control" name="guardian_lname" value="{{ $formData->guardian_lname }}" readonly></div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-md-6"><label>Contact Number</label><input type="text" class="form-control" name="guardian_contact_number" value="{{ $formData->guardian_contact_number }}" readonly></div>
-                <div class="col-md-6"><label>Email</label><input type="email" class="form-control" name="guardian_email" value="{{ $formData->guardian_email }}" readonly></div>
-            </div>
-            <div class="mt-3">
-                <label>Relation</label>
-                <select class="form-control" name="relation" readonly disabled>
-                    <option value="">Select Relation</option>
-                    <option value="Parents" {{ $formData->relation == 'Parents' ? 'selected' : '' }}>Parents</option>
-                    <option value="Brother/Sister" {{ $formData->relation == 'Brother/Sister' ? 'selected' : '' }}>Brother/Sister</option>
-                    <option value="Uncle/Aunt" {{ $formData->relation == 'Uncle/Aunt' ? 'selected' : '' }}>Uncle/Aunt</option>
-                    <option value="Cousin" {{ $formData->relation == 'Cousin' ? 'selected' : '' }}>Cousin</option>
-                    <option value="Grandparents" {{ $formData->relation == 'Grandparents' ? 'selected' : '' }}>Grandparents</option>
-                </select>
-            </div>
-
-
-            <hr>
-            <h5 class="text-primary mt-4">School Information</h5>
-            <div class="row">
-                <div class="col-md-4"><label>Current School</label><input type="text" class="form-control" name="current_school" value="{{ $formData->current_school }}" readonly></div>
-                <div class="col-md-4"><label>School City</label><input type="text" class="form-control" name="current_school_city" value="{{ $formData->current_school_city }}" readonly></div>
-                <div class="col-md-4">
-                    <label>School Type</label>
-                    <select class="form-control" name="school_type" readonly disabled>
-                        <option value="">Select School Type</option>
-                        <option value="Public" {{ $formData->school_type == 'Public' ? 'selected' : '' }}>Public</option>
-                        <option value="Private Sectarian" {{ $formData->school_type == 'Private Sectarian' ? 'selected' : '' }}>Private Sectarian</option>
-                        <option value="Private Non-Sectarian" {{ $formData->school_type == 'Private Non-Sectarian' ? 'selected' : '' }}>Private Non-Sectarian</option>
-                    </select>
-                </div>
-
-            </div>
-            <div class="row mt-3">
-            <div class="col-md-4">
-                <label>Educational Level</label>
-                <select class="form-control" name="educational_level" readonly disabled>
-                    <option value="">Select Level</option>
-                    <option value="Grade School" {{ $formData->educational_level == 'Grade School' ? 'selected' : '' }}>Grade School</option>
-                    <option value="Junior High School" {{ $formData->educational_level == 'Junior High School' ? 'selected' : '' }}>Junior High School</option>
-                    <option value="Senior High School" {{ $formData->educational_level == 'Senior High School' ? 'selected' : '' }}>Senior High School</option>
-                </select>
-            </div>
-
-                <div class="col-md-4"><label>Grade Level</label><input type="text" class="form-control" name="incoming_grlvl" value="{{ $formData->incoming_grlvl }}" readonly></div>
-                <div class="col-md-4"><label>LRN</label><input type="text" class="form-control" name="lrn_no" value="{{ $formData->lrn_no }}" readonly></div>
-            </div>
-            @if($formData->educational_level === 'Senior High School')
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <label>Strand</label>
-                        <select class="form-control" name="strand" readonly disabled>
-                            <option value="">Select Strand</option>
-                            <option value="STEM Health Allied" {{ $formData->strand == 'STEM Health Allied' ? 'selected' : '' }}>STEM Health Allied</option>
-                            <option value="STEM Engineering" {{ $formData->strand == 'STEM Engineering' ? 'selected' : '' }}>STEM Engineering</option>
-                            <option value="STEM Information Technology" {{ $formData->strand == 'STEM Information Technology' ? 'selected' : '' }}>STEM IT</option>
-                            <option value="ABM Accountancy" {{ $formData->strand == 'ABM Accountancy' ? 'selected' : '' }}>ABM Accountancy</option>
-                            <option value="ABM Business Management" {{ $formData->strand == 'ABM Business Management' ? 'selected' : '' }}>ABM Business Management</option>
-                            <option value="HUMSS" {{ $formData->strand == 'HUMSS' ? 'selected' : '' }}>HUMSS</option>
-                            <option value="GAS" {{ $formData->strand == 'GAS' ? 'selected' : '' }}>GAS</option>
-                            <option value="SPORTS" {{ $formData->strand == 'SPORTS' ? 'selected' : '' }}>SPORTS</option>
-                        </select>
+        <div id="step1Content">
+            @csrf
+            @method('PUT')
+            <div class="card p-4">
+                <h5 class="text-primary">Applicant Information</h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>First Name</label>
+                        <input type="text" class="form-control" name="applicant_fname" value="{{ $formData->applicant_fname }}" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Middle Initial</label>
+                        <input type="text" class="form-control" name="applicant_mname" value="{{ $formData->applicant_mname }}" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control" name="applicant_lname" value="{{ $formData->applicant_lname }}" readonly>
                     </div>
                 </div>
-            @endif
 
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <label>Contact Number</label>
+                        <input type="text" class="form-control" name="applicant_contact_number" value="{{ $formData->applicant_contact_number }}" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Email</label>
+                        <input type="email" class="form-control" name="applicant_email" value="{{ $formData->applicant_email }}" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Birthday</label>
+                        <input type="date" class="form-control" name="applicant_bday" value="{{ $formData->applicant_bday }}" readonly>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <label>Age</label>
+                        <input type="number" class="form-control" name="age" value="{{ $formData->age }}" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Gender</label>
+                        <select class="form-control" name="gender" readonly disabled>
+                            <option value="">Select Gender</option>
+                            <option value="Male" {{ $formData->gender == 'Male' ? 'selected' : '' }}>Male</option>
+                            <option value="Female" {{ $formData->gender == 'Female' ? 'selected' : '' }}>Female</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Nationality</label>
+                        <input type="text" class="form-control" name="nationality" value="{{ $formData->nationality }}" readonly>
+                    </div>
+                </div>
+
+                <hr>
+                <h5 class="text-primary mt-4">Address</h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Region</label>
+                        <select id="region" name="region" class="form-control" data-selected="{{ $formData->region }}" disabled></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Province</label>
+                        <select id="province" name="province" class="form-control" data-selected="{{ $formData->province }}" disabled></select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>City</label>
+                        <select id="city" name="city" class="form-control" data-selected="{{ $formData->city }}" disabled></select>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label>Barangay</label>
+                        <select id="barangay" name="barangay" class="form-control" data-selected="{{ $formData->barangay }}" disabled></select>
+                    </div>
+                    <div class="col-md-3"><label>Street/No.</label><input type="text" class="form-control" name="numstreet" value="{{ $formData->numstreet }}" readonly></div>
+                    <div class="col-md-3"><label>Postal Code</label><input type="text" class="form-control" name="postal_code" value="{{ $formData->postal_code }}" readonly></div>
+                </div>
+
+                <hr>
+                <h5 class="text-primary mt-4">Guardian Information</h5>
+                <div class="row">
+                    <div class="col-md-4"><label>First Name</label><input type="text" class="form-control" name="guardian_fname" value="{{ $formData->guardian_fname }}" readonly></div>
+                    <div class="col-md-4"><label>Middle Initial</label><input type="text" class="form-control" name="guardian_mname" value="{{ $formData->guardian_mname }}" readonly></div>
+                    <div class="col-md-4"><label>Last Name</label><input type="text" class="form-control" name="guardian_lname" value="{{ $formData->guardian_lname }}" readonly></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6"><label>Contact Number</label><input type="text" class="form-control" name="guardian_contact_number" value="{{ $formData->guardian_contact_number }}" readonly></div>
+                    <div class="col-md-6"><label>Email</label><input type="email" class="form-control" name="guardian_email" value="{{ $formData->guardian_email }}" readonly></div>
+                </div>
+                <div class="mt-3">
+                    <label>Relation</label>
+                    <select class="form-control" name="relation" readonly disabled>
+                        <option value="">Select Relation</option>
+                        <option value="Parents" {{ $formData->relation == 'Parents' ? 'selected' : '' }}>Parents</option>
+                        <option value="Brother/Sister" {{ $formData->relation == 'Brother/Sister' ? 'selected' : '' }}>Brother/Sister</option>
+                        <option value="Uncle/Aunt" {{ $formData->relation == 'Uncle/Aunt' ? 'selected' : '' }}>Uncle/Aunt</option>
+                        <option value="Cousin" {{ $formData->relation == 'Cousin' ? 'selected' : '' }}>Cousin</option>
+                        <option value="Grandparents" {{ $formData->relation == 'Grandparents' ? 'selected' : '' }}>Grandparents</option>
+                    </select>
+                </div>
+
+                <hr>
+                <h5 class="text-primary mt-4">School Information</h5>
+                <div class="row">
+                    <div class="col-md-4"><label>Current School</label><input type="text" class="form-control" name="current_school" value="{{ $formData->current_school }}" readonly></div>
+                    <div class="col-md-4"><label>School City</label><input type="text" class="form-control" name="current_school_city" value="{{ $formData->current_school_city }}" readonly></div>
+                    <div class="col-md-4">
+                        <label>School Type</label>
+                        <select class="form-control" name="school_type" readonly disabled>
+                            <option value="">Select School Type</option>
+                            <option value="Public" {{ $formData->school_type == 'Public' ? 'selected' : '' }}>Public</option>
+                            <option value="Private Sectarian" {{ $formData->school_type == 'Private Sectarian' ? 'selected' : '' }}>Private Sectarian</option>
+                            <option value="Private Non-Sectarian" {{ $formData->school_type == 'Private Non-Sectarian' ? 'selected' : '' }}>Private Non-Sectarian</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <label>Educational Level</label>
+                        <select class="form-control" name="educational_level" readonly disabled>
+                            <option value="">Select Level</option>
+                            <option value="Grade School" {{ $formData->educational_level == 'Grade School' ? 'selected' : '' }}>Grade School</option>
+                            <option value="Junior High School" {{ $formData->educational_level == 'Junior High School' ? 'selected' : '' }}>Junior High School</option>
+                            <option value="Senior High School" {{ $formData->educational_level == 'Senior High School' ? 'selected' : '' }}>Senior High School</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4"><label>Grade Level</label><input type="text" class="form-control" name="incoming_grlvl" value="{{ $formData->incoming_grlvl }}" readonly></div>
+                    <div class="col-md-4"><label>LRN</label><input type="text" class="form-control" name="lrn_no" value="{{ $formData->lrn_no }}" readonly></div>
+                </div>
+                @if($formData->educational_level === 'Senior High School')
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label>Strand</label>
+                            <select class="form-control" name="strand" readonly disabled>
+                                <option value="">Select Strand</option>
+                                <option value="STEM Health Allied" {{ $formData->strand == 'STEM Health Allied' ? 'selected' : '' }}>STEM Health Allied</option>
+                                <option value="STEM Engineering" {{ $formData->strand == 'STEM Engineering' ? 'selected' : '' }}>STEM Engineering</option>
+                                <option value="STEM Information Technology" {{ $formData->strand == 'STEM Information Technology' ? 'selected' : '' }}>STEM IT</option>
+                                <option value="ABM Accountancy" {{ $formData->strand == 'ABM Accountancy' ? 'selected' : '' }}>ABM Accountancy</option>
+                                <option value="ABM Business Management" {{ $formData->strand == 'ABM Business Management' ? 'selected' : '' }}>ABM Business Management</option>
+                                <option value="HUMSS" {{ $formData->strand == 'HUMSS' ? 'selected' : '' }}>HUMSS</option>
+                                <option value="GAS" {{ $formData->strand == 'GAS' ? 'selected' : '' }}>GAS</option>
+                                <option value="SPORTS" {{ $formData->strand == 'SPORTS' ? 'selected' : '' }}>SPORTS</option>
+                            </select>
+                        </div>
+                    </div>
+                @endif
 
                 <div class="col-md-6">
                     <label>Source</label>
@@ -230,46 +228,200 @@
                 </div>
             </div>
 
-            <div class="mt-4 text-end d-flex justify-content-end gap-2">
-                <button type="button" class="btn btn-secondary d-none" id="cancelBtn">Cancel</button>
-                <button type="submit" class="btn btn-success d-none" id="saveBtn">Save Changes</button>
+                
             </div>
         </div>
-    </form>
-    <div class="card mb-4">
-    <div class="card-header bg-primary text-white">
-        <strong>Time stamp per Stage</strong>
-    </div>
-    <div class="card-body">
-    <ul class="list-group list-group-flush">
-    <li class="list-group-item">
-        <strong>Account Created:</strong>
-        {{ $timestamps['account_created'] !== '—' ? \Carbon\Carbon::parse($timestamps['account_created'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
-    </li>
-    <li class="list-group-item">
-        <strong>Fill-up Forms:</strong>
-        {{ $timestamps['form_submitted'] !== '—' ? \Carbon\Carbon::parse($timestamps['form_submitted'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
-    </li>
-    <li class="list-group-item">
-        <strong>Send Payment:</strong>
-        {{ $timestamps['payment_sent'] !== '—' ? \Carbon\Carbon::parse($timestamps['payment_sent'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
-    </li>
-    <li class="list-group-item">
-        <strong>Payment Verified:</strong>
-        {{ $timestamps['payment_verified'] !== '—' ? \Carbon\Carbon::parse($timestamps['payment_verified'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
-    </li>
-    <li class="list-group-item">
-        <strong>Exam Booking:</strong>
-        {{ $timestamps['exam_booked'] !== '—' ? \Carbon\Carbon::parse($timestamps['exam_booked'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
-    </li>
-    <li class="list-group-item">
-        <strong>Exam Results:</strong>
-        {{ $timestamps['exam_result'] !== '—' ? \Carbon\Carbon::parse($timestamps['exam_result'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
-    </li>
-</ul>
+    
 
-    </div>
+        <div id="step2Content" class="d-none">
+            <div class="card p-4">
+                <h5 class="text-primary">Payment Information</h5>
+                <div class="row mb-3">
+                    <div class="col-md-6"><strong>Full Name:</strong> {{ $formData->applicant_fname }} {{ $formData->applicant_mname }} {{ $formData->applicant_lname }}</div>
+                    <div class="col-md-6"><strong>Email:</strong> {{ $formData->applicant_email }}</div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6"><strong>Contact Number:</strong> {{ $formData->applicant_contact_number }}</div>
+                    <div class="col-md-6"><strong>Guardian Name:</strong> {{ $formData->guardian_fname }} {{ $formData->guardian_mname }} {{ $formData->guardian_lname }}</div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6"><strong>Incoming Grade Level:</strong> {{ $formData->incoming_grlvl }}</div>
+                    <div class="col-md-6"><strong>Payment Method:</strong> {{ $existingPayment->payment_method ?? 'N/A' }}</div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Proof of Payment:</strong>
+                        @if($existingPayment && $existingPayment->proof_of_payment)
+                            <a href="javascript:void(0)" onclick="showProofModal('{{ asset('storage/' . $existingPayment->proof_of_payment) }}')">View Proof</a>
+                        @else
+                            No file uploaded
+                        @endif
+                    </div>
+                    <div class="col-md-3"><strong>Payment Date:</strong> {{ $existingPayment->payment_date ?? 'N/A' }}</div>
+                    <div class="col-md-3"><strong>Payment Time:</strong> {{ $existingPayment->payment_time ?? 'N/A' }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="step3Content" class="d-none">
+            <div class="card p-4">
+                <h5 class="text-primary">Payment Result</h5>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Payment Status:</strong><br>
+                        {{ $existingPayment->payment_status ?? 'N/A' }}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>OCR Number:</strong><br>
+                        {{ $existingPayment->ocr_number ?? 'N/A' }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <strong>Remarks:</strong><br>
+                    <div class="border rounded p-2 bg-light">
+                        {{ $existingPayment->remarks ?? 'N/A' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="step4Content" class="d-none">
+        <div class="card p-4">
+            <h5 class="text-primary">Applicant Schedule</h5>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>Admission Number</label>
+                    <input type="text" name="admission_number" class="form-control" value="{{ $schedule->admission_number ?? '' }}" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label>Exam Date</label>
+                    <select name="exam_date" class="form-control" {{ $isEditable ? '' : 'disabled' }}>
+    @foreach($availableSchedules->groupBy('exam_date') as $date => $schedules)
+        <option value="{{ $date }}" {{ $schedule->exam_date == $date ? 'selected' : '' }}>
+            {{ \Carbon\Carbon::parse($date)->format('F d, Y') }}
+        </option>
+    @endforeach
+</select>
+
+                </div>
+            </div>
+
+            <div class="mb-3">
+    <label for="time_slot">Available Time Slots</label>
+    <select id="time_slot" name="time_slot" class="form-control" {{ $isEditable ? '' : 'disabled' }}>
+        <option value="">Select time</option>
+        @if(isset($schedule->start_time, $schedule->end_time))
+            <option selected value="{{ $schedule->start_time }}|{{ $schedule->end_time }}">
+                {{ \Carbon\Carbon::parse($schedule->start_time)->format('g:i A') }} to {{ \Carbon\Carbon::parse($schedule->end_time)->format('g:i A') }}
+            </option>
+        @endif
+    </select>
 </div>
+
+
+            
+        </div>
+    </div>
+
+        
+        <div id="step5Content" class="d-none">
+            <div class="card p-4">
+                <h5 class="text-primary">Applicant Schedule</h5>
+                <p>meh</p>
+            </div>
+        </div>
+
+        <div id="step6Content" class="d-none">
+        <div class="card p-4">
+            <h5 class="text-primary">Exam Result</h5>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>Admission Number</label>
+                    <input type="text" name="exam_admission_number" class="form-control" value="{{ $examResult->admission_number ?? '' }}" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label>Exam Date</label>
+                    <input type="date" name="exam_exam_date" class="form-control" value="{{ $examResult->exam_date ?? '' }}" readonly>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label>Exam Status</label>
+                <select name="exam_status" class="form-control" readonly disabled>
+                    <option value="">Select Status</option>
+                    <option value="done" {{ ($examResult->exam_status ?? '') == 'done' ? 'selected' : '' }}>Done</option>
+                    <option value="no show" {{ ($examResult->exam_status ?? '') == 'no show' ? 'selected' : '' }}>No Show</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label>Exam Result</label>
+                <select name="exam_result" class="form-control" readonly disabled>
+    <option value="">Select Result</option>
+    <option value="passed" {{ ($examResult->exam_result ?? '') == 'passed' ? 'selected' : '' }}>Passed</option>
+    <option value="failed" {{ ($examResult->exam_result ?? '') == 'failed' ? 'selected' : '' }}>Failed</option>
+    <option value="pending" {{ ($examResult->exam_result ?? '') == 'pending' ? 'selected' : '' }}>Pending</option>
+    <option value="interview" {{ ($examResult->exam_result ?? '') == 'interview' ? 'selected' : '' }}>Interview</option>
+    <option 
+        value="no show"
+        {{ ($examResult->exam_result ?? '') == 'no show' ? 'selected' : '' }}
+        style="{{ ($examResult->exam_status ?? '') != 'no show' ? 'display: none;' : '' }}">
+        No Show
+    </option>
+</select>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 text-end d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary d-none" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-success d-none" id="saveBtn">Save Changes</button>
+                    </div>
+
+                    </form>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <strong>Time stamp per Stage</strong>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Account Created:</strong>
+                        {{ $timestamps['account_created'] !== '—' ? \Carbon\Carbon::parse($timestamps['account_created'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Fill-up Forms:</strong>
+                        {{ $timestamps['form_submitted'] !== '—' ? \Carbon\Carbon::parse($timestamps['form_submitted'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Send Payment:</strong>
+                        {{ $timestamps['payment_sent'] !== '—' ? \Carbon\Carbon::parse($timestamps['payment_sent'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Payment Verified:</strong>
+                        {{ $timestamps['payment_verified'] !== '—' ? \Carbon\Carbon::parse($timestamps['payment_verified'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Exam Booking:</strong>
+                        {{ $timestamps['exam_booked'] !== '—' ? \Carbon\Carbon::parse($timestamps['exam_booked'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Exam Results:</strong>
+                        {{ $timestamps['exam_result'] !== '—' ? \Carbon\Carbon::parse($timestamps['exam_result'])->timezone('Asia/Manila')->format('M d, Y - h:i A') : '—' }}
+                    </li>
+                </ul>
+            </div>
+        </div>
 
     @if(isset($historyLogs) && count($historyLogs))
     <div class="card mt-4">
@@ -278,7 +430,6 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                
                     @if($historyLogs->count())
 <div class="card mt-4">
     <div class="card-body">
@@ -358,14 +509,16 @@
     selects.forEach(select => originalValues[select.name] = select.value);
 
     editBtn.addEventListener('click', () => {
-        inputs.forEach(input => input.removeAttribute('readonly'));
-        selects.forEach(select => {
-            select.removeAttribute('disabled');
-            select.removeAttribute('readonly');
+    document.querySelectorAll('#step1Content input, #step1Content select, #step4Content input, #step4Content select, #step6Content input, #step6Content select')
+        .forEach(el => {
+            el.removeAttribute('readonly');
+            el.removeAttribute('disabled');
         });
-        saveBtn.classList.remove('d-none');
-        cancelBtn.classList.remove('d-none');
-    });
+
+    saveBtn.classList.remove('d-none');
+    cancelBtn.classList.remove('d-none');
+});
+
 
     cancelBtn.addEventListener('click', () => {
         inputs.forEach(input => {
@@ -566,6 +719,200 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+
+function showStepContent(step) {
+    const allSteps = ['step1Content', 'step2Content', 'step3Content', 'step4Content', 'step6Content', 'step5Content'];
+    allSteps.forEach(id => document.getElementById(id)?.classList.add('d-none'));
+
+    const target = document.getElementById('step' + step + 'Content');
+    if (target) target.classList.remove('d-none');
+
+    const editBtn = document.getElementById('editBtn');
+
+    if (step === 2 || step === 3) {
+        editBtn?.classList.add('d-none');
+    } else {
+        editBtn?.classList.remove('d-none');
+    }
+}
+
+function showProofModal(fileUrl) {
+    const isImage = fileUrl.match(/\.(jpeg|jpg|png|gif)$/i);
+
+    Swal.fire({
+        title: 'Proof of Payment',
+        html: isImage 
+            ? `<img src="${fileUrl}" alt="Proof" style="max-width:100%; max-height:400px;" />`
+            : `<a href="${fileUrl}" target="_blank">Open File</a>`,
+        showCloseButton: true,
+        showConfirmButton: false,
+        width: 600,
+        customClass: {
+            popup: 'text-start'
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const examDateSelect = document.querySelector('[name="exam_date"]');
+    const timeSlotSelect = document.getElementById('time_slot');
+    const applicantLevel = @json($formData->educational_level);
+
+    if (examDateSelect) {
+        examDateSelect.addEventListener('change', function () {
+            const selectedDate = this.value;
+            if (!selectedDate) return;
+
+            fetch(`/get-time-slots?exam_date=${selectedDate}&educational_level=${encodeURIComponent(applicantLevel)}`)
+                .then(response => response.json())
+                .then(slots => {
+                    timeSlotSelect.innerHTML = '<option value="">Select time</option>';
+
+                    slots.forEach(slot => {
+                        const label = formatTime(slot.start_time) + ' to ' + formatTime(slot.end_time);
+                        const value = `${slot.start_time}|${slot.end_time}`;
+                        timeSlotSelect.innerHTML += `<option value="${value}">${label}</option>`;
+                    });
+                });
+        });
+    }
+
+    function formatTime(timeStr) {
+        const [hour, minute] = timeStr.split(':');
+        const h = parseInt(hour);
+        const suffix = h >= 12 ? 'PM' : 'AM';
+        const formattedHour = h % 12 || 12;
+        return `${formattedHour}:${minute} ${suffix}`;
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const toggleBtn = document.getElementById('toggleHistoryBtn');
+    const limitedLogs = document.getElementById('limitedLogs');
+    const allLogs = document.getElementById('allLogs');
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function () {
+            const isExpanded = !allLogs.classList.contains('d-none');
+
+            if (isExpanded) {
+                allLogs.classList.add('d-none');
+                limitedLogs.classList.remove('d-none');
+                toggleBtn.textContent = 'Show All';
+            } else {
+                limitedLogs.classList.add('d-none');
+                allLogs.classList.remove('d-none');
+                toggleBtn.textContent = 'Show Less';
+            }
+        });
+    }
+});
+
+
+function showStepContent(step) {
+    const allSteps = ['step1Content', 'step2Content', 'step3Content', 'step4Content', 'step6Content', 'step5Content'];
+    allSteps.forEach(id => document.getElementById(id)?.classList.add('d-none'));
+
+    const target = document.getElementById('step' + step + 'Content');
+    if (target) target.classList.remove('d-none');
+
+    const editBtn = document.getElementById('editBtn');
+
+    if (step === 2 || step === 3) {
+        editBtn?.classList.add('d-none');
+    } else {
+        editBtn?.classList.remove('d-none');
+    }
+}
+
+function showProofModal(fileUrl) {
+    const isImage = fileUrl.match(/\.(jpeg|jpg|png|gif)$/i);
+
+    Swal.fire({
+        title: 'Proof of Payment',
+        html: isImage 
+            ? `<img src="${fileUrl}" alt="Proof" style="max-width:100%; max-height:400px;" />`
+            : `<a href="${fileUrl}" target="_blank">Open File</a>`,
+        showCloseButton: true,
+        showConfirmButton: false,
+        width: 600,
+        customClass: {
+            popup: 'text-start'
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const examDateSelect = document.querySelector('[name="exam_date"]');
+    const timeSlotSelect = document.getElementById('time_slot');
+    const applicantLevel = @json($formData->educational_level);
+
+    if (examDateSelect) {
+        examDateSelect.addEventListener('change', function () {
+            const selectedDate = this.value;
+            if (!selectedDate) return;
+
+            fetch(`/get-time-slots?exam_date=${selectedDate}&educational_level=${encodeURIComponent(applicantLevel)}`)
+                .then(response => response.json())
+                .then(slots => {
+                    timeSlotSelect.innerHTML = '<option value="">Select time</option>';
+
+                    slots.forEach(slot => {
+                        const label = formatTime(slot.start_time) + ' to ' + formatTime(slot.end_time);
+                        const value = `${slot.start_time}|${slot.end_time}`;
+                        timeSlotSelect.innerHTML += `<option value="${value}">${label}</option>`;
+                    });
+                });
+        });
+    }
+
+    function formatTime(timeStr) {
+        const [hour, minute] = timeStr.split(':');
+        const h = parseInt(hour);
+        const suffix = h >= 12 ? 'PM' : 'AM';
+        const formattedHour = h % 12 || 12;
+        return `${formattedHour}:${minute} ${suffix}`;
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const statusSelect = document.querySelector('select[name="exam_status"]');
+    const resultSelect = document.querySelector('select[name="exam_result"]');
+
+    if (statusSelect && resultSelect) {
+        statusSelect.addEventListener('change', function () {
+            if (this.value === 'no show') {
+                resultSelect.value = 'no show';
+            }
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const examStatusSelect = document.querySelector('[name="exam_status"]');
+    const examResultSelect = document.getElementById('exam_result');
+    const noShowOption = examResultSelect.querySelector('option[value="no show"]');
+
+    // If the field is disabled, monitor only for autofill
+    if (examStatusSelect && examResultSelect) {
+        const selectedStatus = examStatusSelect.querySelector('option:checked')?.value;
+
+        if (selectedStatus === 'no show') {
+            noShowOption.style.display = 'block';
+            examResultSelect.value = 'no show';
+        } else {
+            noShowOption.style.display = 'none';
+
+            
+            if (examResultSelect.value === 'no show') {
+                examResultSelect.value = '';
+            }
+        }
+    }
+});
+
+
 </script>
 
 

@@ -9,51 +9,66 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Models\Accounts;
+use App\Models\Payment;
+use App\Models\ExamSchedule;
 
 class EditApplicantController extends Controller
 {
     public function show($id)
-{
-    $applicant = \App\Models\Applicant::findOrFail($id);
-    $formData = \App\Models\FillupForms::where('applicant_id', $applicant->id)->first();
+    {
+        $applicant = Applicant::findOrFail($id);
+        $formData = FillupForms::where('applicant_id', $applicant->id)->first();
+        $isEditable = false;
+        if (!$formData) {
+            return back()->with('error', 'Form submission not found.');
+        }
 
-    if (!$formData) {
-        return back()->with('error', 'Form submission not found.');
+        $educationalLevel = $formData->educational_level;
+
+        // Fetch only relevant exam schedules based on applicant's educational level
+        if (in_array($educationalLevel, ['Grade School', 'Junior High School'])) {
+            $availableSchedules = ExamSchedule::whereIn('educational_level', ['Grade School', 'Junior High School'])->get();
+        } elseif ($educationalLevel === 'Senior High School') {
+            $availableSchedules = ExamSchedule::where('educational_level', 'Senior High School')->get();
+        } else {
+            $availableSchedules = collect(); // empty fallback
+        }
+
+        $existingPayment = Payment::where('applicant_id', $applicant->id)->latest()->first();
+        $account = $applicant->account;
+        $payment = Payment::where('applicant_id', $applicant->id)->first();
+        $schedule = \App\Models\ApplicantSchedule::where('applicant_id', $applicant->id)->first();
+        $examResult = \App\Models\ExamResult::where('applicant_id', $applicant->id)->first();
+
+        $timestamps = [
+            'account_created'   => optional($account)->created_at ?? '—',
+            'form_submitted'    => optional($formData)->created_at ?? '—',
+            'payment_sent'      => optional($payment)->created_at ?? '—',
+            'payment_verified'  => optional($payment)->updated_at ?? '—',
+            'exam_booked'       => optional($schedule)->created_at ?? '—',
+            'exam_result'       => optional($examResult)->created_at ?? '—',
+        ];
+
+        $historyLogs = DB::table('form_change_logs')
+            ->where('form_submission_id', $formData->id)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $limitedLogs = $historyLogs->take(5);
+
+        return view('admission.applicant.edit-applicant-info', compact(
+            'applicant',
+            'formData',
+            'historyLogs',
+            'limitedLogs',
+            'timestamps',
+            'existingPayment',
+            'schedule',
+            'examResult',
+            'availableSchedules', // ✅ Include available exam dates based on level
+            'isEditable'
+        ));
     }
-
-    // Fetch related records
-    $account = $applicant->account;
-    // or ->where('id', $applicant->user_id)->first()
-    $payment = \App\Models\Payment::where('applicant_id', $applicant->id)->first();
-    $schedule = \App\Models\ApplicantSchedule::where('applicant_id', $applicant->id)->first();
-    $examResult = \App\Models\ExamResult::where('applicant_id', $applicant->id)->first();
-
-    // Match exact timestamps from tables
-    $timestamps = [
-        'account_created'   => optional($account)->created_at ?? '—',
-        'form_submitted'    => optional($formData)->created_at ?? '—',
-        'payment_sent'      => optional($payment)->created_at ?? '—',
-        'payment_verified'  => optional($payment)->updated_at ?? '—',
-        'exam_booked'       => optional($schedule)->created_at ?? '—',
-        'exam_result'       => optional($examResult)->created_at ?? '—',
-    ];    
-
-    // Get change history logs
-    $historyLogs = \DB::table('form_change_logs')
-        ->where('form_submission_id', $formData->id)
-        ->orderByDesc('created_at')
-        ->get();
-
-    $limitedLogs = $historyLogs->take(5);
-
-    return view('admission.applicant.edit-applicant-info', compact(
-        'applicant',
-        'formData',
-        'historyLogs',
-        'limitedLogs',
-        'timestamps'
-    ));
-}
 
     
 
@@ -104,6 +119,7 @@ class EditApplicantController extends Controller
                 'ABM Accountancy', 'ABM Business Management',
                 'HUMSS', 'GAS', 'SPORTS'
             ])],
+           
         ];
 
         $validated = $request->validate($rules);
@@ -115,6 +131,43 @@ class EditApplicantController extends Controller
         $fullName = strtoupper(trim(($validated['applicant_fname'] ?? $form->applicant_fname) . ' ' . ($validated['applicant_lname'] ?? $form->applicant_lname)));
         $email = strtolower($validated['applicant_email'] ?? $form->applicant_email);
 
+        // ✅ Save applicant schedule (Step 4)
+// Extract start_time and end_time from combined time_slot field
+if ($request->filled('exam_date') && $request->filled('time_slot')) {
+    [$start_time, $end_time] = explode('|', $request->time_slot);
+
+    DB::table('applicant_schedules')->updateOrInsert(
+        ['applicant_id' => $form->applicant_id],
+        [
+            'exam_date' => $request->exam_date,
+            'start_time' => $start_time,
+            'end_time' => $end_time,
+            'updated_at' => now()
+        ]
+    );
+}
+
+
+// ✅ Save exam result (Step 6)
+if ($request->filled('exam_status')) {
+    $examStatus = $request->exam_status;
+    $examResult = $examStatus === 'no show' ? 'no show' : ($request->input('exam_result') ?? 'pending'); // default to pending if none
+
+    DB::table('exam_results')
+        ->updateOrInsert(
+            ['applicant_id' => $form->applicant_id],
+            [
+                'exam_status' => $examStatus,
+                'exam_result' => $examResult,
+                'updated_at' => now()
+            ]
+        );
+}
+
+
+
+        
+
         // Update related tables
         Applicant::where('id', $applicantId)->update([
             'applicant_fname' => $validated['applicant_fname'] ?? $form->applicant_fname,
@@ -123,13 +176,33 @@ class EditApplicantController extends Controller
      
         ]);
         
-        DB::table('applicant_schedules')->where('applicant_id', $applicantId)->update([
-            'applicant_name' => $fullName,
-        ]);
+        if (isset($start_time, $end_time, $request->exam_date)) {
+            DB::table('applicant_schedules')->where('applicant_id', $applicantId)->update([
+                'applicant_name' => $fullName,
+                'exam_date' => $request->exam_date,
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+            ]);
+        } else {
+            DB::table('applicant_schedules')->where('applicant_id', $applicantId)->update([
+                'applicant_name' => $fullName,
+            ]);
+        }
+        
 
-        DB::table('exam_results')->where('applicant_id', $applicantId)->update([
-            'applicant_name' => $fullName,
-        ]);
+        if ($request->filled(['exam_status', 'exam_result'])) {
+            DB::table('exam_results')->where('applicant_id', $applicantId)->update([
+                'applicant_name' => $fullName,
+                'exam_date' => $request->exam_date,
+                'exam_status' => $request->exam_status,
+                'exam_result' => $request->exam_result,
+            ]);
+        } else {
+            DB::table('exam_results')->where('applicant_id', $applicantId)->update([
+                'applicant_name' => $fullName,
+            ]);
+        }
+        
 
         DB::table('payment')->where('applicant_id', $applicantId)->update([
             'applicant_fname' => $validated['applicant_fname'] ?? $form->applicant_fname,
@@ -165,4 +238,50 @@ class EditApplicantController extends Controller
         ]);
         
     }
+
+    public function saveExamSchedule(Request $request)
+{
+    $request->validate([
+        'exam_date' => 'required|date',
+        'start_time' => 'required|date_format:H:i:s',
+        'end_time' => 'required|date_format:H:i:s',
+    ]);
+
+    $applicant = Applicant::where('account_id', Auth::id())->firstOrFail();
+
+    DB::table('applicant_schedules')->updateOrInsert(
+        ['applicant_id' => $applicant->id],
+        [
+            'exam_date' => $request->exam_date,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'updated_at' => now()
+        ]
+    );
+
+    return response()->json(['success' => true]);
+}
+
+public function getTimeSlots(Request $request)
+{
+    $date = $request->input('exam_date');
+    $level = $request->input('educational_level');
+
+    if (!$date || !$level) {
+        return response()->json([]);
+    }
+
+    $query = ExamSchedule::whereDate('exam_date', $date);
+
+    if (in_array($level, ['Grade School', 'Junior High School'])) {
+        $query->whereIn('educational_level', ['Grade School', 'Junior High School']);
+    } elseif ($level === 'Senior High School') {
+        $query->where('educational_level', 'Senior High School');
+    }
+
+    $slots = $query->get(['start_time', 'end_time']);
+
+    return response()->json($slots);
+}
+
 }

@@ -215,6 +215,8 @@ Route::get('/admission/reports/admission-reports', [AdmissionChartController::cl
 
     /*Route::get('/admission/dashboard', [App\Http\Controllers\AdmissionChartController::class, 'showAdmissionDashboard'])
     ->name('admission.dashboard');*/
+    Route::post('/applicant/save-exam-schedule', [EditApplicantController::class, 'saveExamSchedule'])->name('applicant.saveExamSchedule');
+    Route::get('/get-time-slots', [EditApplicantController::class, 'getTimeSlots'])->name('get.time.slots');
 });
 
 //ACCOUNTING ROUTES

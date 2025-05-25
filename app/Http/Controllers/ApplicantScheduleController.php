@@ -29,6 +29,7 @@ class ApplicantScheduleController extends Controller
 
         return view('applicant.steps.reminders.reminders', compact('schedule', 'showProceedButton'))->with('currentStep', $applicant->current_step);
     }
+
     public function store(Request $request)
     {
         $user = Auth::user();
@@ -86,9 +87,6 @@ class ApplicantScheduleController extends Controller
         if ($applicant->current_step == 4) {
             $applicant->update(['current_step' => 5]);
         }
-
-
-
         return response()->json(['success' => true]);
     }
 }
