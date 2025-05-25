@@ -157,7 +157,7 @@ Route::middleware(['auth', 'role:administrator'])->group(function () {
 
 
 //ADMISSION ROUTES
-Route::middleware(['auth', 'role:admission'])->group(function () {
+Route::middleware(['auth', 'role:admission,administrator'])->group(function () {
     //Route::get('/applicant/steps/exam_date/exam-date', [ExamScheduleController::class, 'showExamDates'])->name('exam.dates');
     Route::get('/admission/dashboard', [App\Http\Controllers\AdmissionChartController::class, 'showAdmissionDashboard'])->name('admissiondashboard'); //tanggalin ko to
 
@@ -218,7 +218,7 @@ Route::get('/admission/reports/admission-reports', [AdmissionChartController::cl
 });
 
 //ACCOUNTING ROUTES
-Route::middleware(['auth', 'role:accounting'])->group(function () {
+Route::middleware(['auth', 'role:accounting,administrator'])->group(function () {
     Route::get('/accounting/dashboard', [AccountingPaymentController::class, 'index'])->name('accountingdashboard');
 
     Route::get('/accountant/payments', [AccountingPaymentController::class, 'index'])->name('accountant.payments');
