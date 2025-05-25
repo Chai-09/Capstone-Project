@@ -112,7 +112,8 @@ public function showAdmissionDashboard()
         'Payment Verification' => \App\Models\Applicant::where('current_step', 3)->count(),
         'Schedule Entrance Exam' => \App\Models\Applicant::where('current_step', 4)->count(),
         'Examination' => \App\Models\Applicant::where('current_step', 5)->count(),
-        'Results' => \App\Models\Applicant::where('current_step', 7)->count(),
+        'Results' => \App\Models\Applicant::where('current_step', 6)->count(),
+        'Completed' => \App\Models\Applicant::where('current_step', 7)->count(),
     ];
 
     return view('admission.reports.dashboard-cards', compact(

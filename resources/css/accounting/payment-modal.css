@@ -72,3 +72,37 @@ input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+.dashboard {
+  background-color: rgb(13, 13, 105);
+  margin: -20px -200px 20px -200px;
+}
+
+.dashboard .content {
+  padding: 20px 200px;
+}
+
+.dashboard-card {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+}
+
+.dashboard-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+

@@ -12,10 +12,16 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>ApplySmart | Admissions</title>
-        @vite('resources/css/partials/layout.css')
-        @vite('resources/css/partials/tables.css')
-        @vite('resources/css/admission/edit-applicant.css')
-        @vite('resources/js/admission/applicant-list.js')
+
+    {{-- CSS --}}
+    @vite('resources/css/partials/layout.css')
+    @vite('resources/css/partials/tables.css')
+    @vite('resources/css/admission/edit-applicant.css')
+    @vite('resources/css/partials/dashboard.css')
+
+    {{-- JavaSript --}}
+    @vite('resources/js/admission/applicant-list.js')
+
 </head>
 <body>
 

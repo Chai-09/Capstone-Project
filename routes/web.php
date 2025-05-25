@@ -159,7 +159,7 @@ Route::middleware(['auth', 'role:administrator'])->group(function () {
 //ADMISSION ROUTES
 Route::middleware(['auth', 'role:admission'])->group(function () {
     //Route::get('/applicant/steps/exam_date/exam-date', [ExamScheduleController::class, 'showExamDates'])->name('exam.dates');
-    Route::get('/admissiondashboard', [App\Http\Controllers\AdmissionChartController::class, 'showAdmissionDashboard'])->name('admissiondashboard'); //tanggalin ko to
+    Route::get('/admission/dashboard', [App\Http\Controllers\AdmissionChartController::class, 'showAdmissionDashboard'])->name('admissiondashboard'); //tanggalin ko to
 
     Route::get('/add-exam-date', [ExamDateController::class, 'create'])->name('examdate.create');
     Route::post('/store-exam-date', [ExamDateController::class, 'store'])->name('examdate.store');

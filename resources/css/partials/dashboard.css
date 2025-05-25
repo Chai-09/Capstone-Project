@@ -1,14 +1,33 @@
-.dashboard {
-    background-color: rgb(13, 13, 105);
-    height: 250px;
-    margin-top: -20px;
-    margin-left: -200px;    
-    margin-right: -200px;
-    margin-bottom: 20px;
+.dashboard  {
+  display: block;
+  background-color: rgb(13, 13, 105);
+  margin: -20px -200px 20px -200px;
 }
 
 .dashboard .content {
-    padding-top: 20px;
-    padding-left: 200px;
-    padding-right: 200px;
+  padding: 20px 200px;
+}
+
+.dashboard .icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Admission Side */
+.admission-dashboard table tbody tr {
+  background-color: #fff;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.admission-dashboard table tbody td {
+  padding: 1rem 1.25rem;
 }
