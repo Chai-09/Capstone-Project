@@ -143,6 +143,7 @@
         {{-- Submit Button --}}
         <button type="submit" class="btn btn-search">Search</button>
       </div>
+      <a href="{{ route('export.accounting') }}" class="btn btn-success mb-2">Export to Excel</a>
     </form>
 
     

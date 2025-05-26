@@ -240,6 +240,7 @@ Route::middleware(['auth', 'role:accounting,administrator'])->group(function () 
     //cards
     // Route::get('/accounting-dashboard', [AccountReportController::class, 'showAccountingDashboard'])->name('accountingdashboard');
 
+    Route::get('/export/accounting', [ExportController::class, 'exportAccounting'])->name('export.accounting');
 
 });
 

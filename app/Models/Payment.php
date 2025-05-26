@@ -36,4 +36,9 @@ class Payment extends Model
     return $this->hasOne(FillupForms::class, 'applicant_id', 'applicant_id');
 }
 
+public function applicant()
+{
+    return $this->hasOne(Payment::class, 'applicant_id', 'applicant_id');
+}
+
 }
