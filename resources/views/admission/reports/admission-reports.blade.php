@@ -3,205 +3,267 @@
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+@vite('resources/js/admission/admission-chart.css')
 
+<div class="dashboard">
+    <div class="content">
+        <h2 class="text-white mb-4 fw-semibold">Reports</h2>
+    </div>
+</div>
 
-<style>
-    .btn-toggle {
-        border-radius: 30px 0 0 30px;
-        background-color: white;
-        color: #333;
-        border: 1px solid #ccc;
-        padding: 8px 20px;
-        transition: all 0.2s ease-in-out;
-    }
+<div class="report-layout">
 
-    .btn-toggle:last-child {
-        border-radius: 0 30px 30px 0;
-        border-left: none;
-    }
+    <div class="mb-4">
+        Dito mo lagay kyrie
+    </div>
 
-    .btn-toggle.active {
-        background-color: #6f42c1;
-        color: white;
-        border-color: #6f42c1;
-    }
-</style>
-
-<div class="d-flex justify-content-end mb-4">
+    <div class="mb-4 d-flex flex-column align-items-center gap-2">
     <div class="btn-group toggle-group chart-toggle" role="group">
         <button type="button" class="btn btn-toggle active" data-filter="demographic">Demographic</button>
         <button type="button" class="btn btn-toggle" data-filter="academic">Academic</button>
     </div>
 
+    <div class="level-toggle-container">
+        <div class="btn-group toggle-group level-toggle" role="group">
+            <button type="button" class="btn btn-toggle active" data-level="all">All Levels</button>
+            <button type="button" class="btn btn-toggle" data-level="Grade School">Grade School</button>
+            <button type="button" class="btn btn-toggle" data-level="Junior High School">Junior High</button>
+            <button type="button" class="btn btn-toggle" data-level="Senior High School">Senior High</button>
+        </div>
     </div>
-    <div class="d-flex justify-content-end mb-4">
-    <div class="btn-group toggle-group level-toggle" role="group">
-        <button type="button" class="btn btn-toggle active" data-level="all">All Levels</button>
-        <button type="button" class="btn btn-toggle" data-level="Grade School">Grade School</button>
-        <button type="button" class="btn btn-toggle" data-level="Junior High School">Junior High</button>
-        <button type="button" class="btn btn-toggle" data-level="Senior High School">Senior High</button>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 chart-section demographic">
+        <div class="col">
+            <div class="card chart-card">
+                <div class="card-header bg-primary text-white">Educational Level</div>
+                <div class="card-body"><canvas id="applicantChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card chart-card">
+                <div class="card-header bg-primary text-white">Gender</div>
+                <div class="card-body"><canvas id="GenderChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card chart-card">
+                <div class="card-header bg-primary text-white">Age</div>
+                <div class="card-body"><canvas id="AgeChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card chart-card">
+                <div class="card-header bg-primary text-white">City</div>
+                <div class="card-body"><canvas id="CityChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card chart-card">
+                <div class="card-header bg-primary text-white">Region</div>
+                <div class="card-body"><canvas id="RegionChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card chart-card">
+                <div class="card-header bg-primary text-white">Nationality</div>
+                <div class="card-body"><canvas id="NationalityChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card chart-card">
+                <div class="card-header bg-primary text-white">School Type</div>
+                <div class="card-body"><canvas id="SchoolTypeChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card chart-card">
+                <div class="card-header bg-primary text-white">Source</div>
+                <div class="card-body"><canvas id="SourceChart"></canvas></div>
+            </div>
+        </div>
     </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 chart-section academic" style="display: none;">
+        <div class="col">
+            <div class="card chart-card">
+                <div class="card-header bg-primary text-white">Senior High School Strands</div>
+                <div class="card-body"><canvas id="StrandChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card chart-card">
+                <div class="card-header bg-primary text-white">Exam Results</div>
+                <div class="card-body"><canvas id="ExamStatusChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card chart-card">
+                <div class="card-header bg-primary text-white">Incoming Grade Level</div>
+                <div class="card-body"><canvas id="IncomingGradeChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </div>
 
-<div class="container mt-5">
-    <h3 class="mb-4">Admission Reports Dashboard</h3>
-
-    <div class="chart-card demographic">
-        <div class="card">
-            <div class="card-header bg-primary text-white">Applicant Count by Educational Level</div>
-            <div class="card-body">
-                <canvas id="applicantChart" height="80"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="chart-card demographic">
-        <div class="card">
-            <div class="card-header bg-primary text-white">Applicant Count by Gender</div>
-            <div class="card-body">
-                <canvas id="GenderChart" style="height: 300px;"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="chart-card demographic">
-        <div class="card">
-            <div class="card-header bg-primary text-white">Applicant Count by Age</div>
-            <div class="card-body">
-                <canvas id="AgeChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="chart-card demographic">
-        <div class="card">
-            <div class="card-header bg-primary text-white">Applicant Count by City</div>
-            <div class="card-body">
-                <canvas id="CityChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="chart-card demographic">
-        <div class="card">
-            <div class="card-header bg-primary text-white">Applicant Count by Region</div>
-            <div class="card-body">
-                <canvas id="RegionChart" style="height: 300px;"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="chart-card demographic">
-        <div class="card">
-            <div class="card-header bg-primary text-white">Applicant Count by Nationality</div>
-            <div class="card-body">
-                <canvas id="NationalityChart" style="height: 300px;"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="chart-card demographic">
-        <div class="card">
-            <div class="card-header bg-primary text-white">Applicant Count by School Type</div>
-            <div class="card-body">
-                <canvas id="SchoolTypeChart" height="300px"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="chart-card demographic">
-        <div class="card">
-            <div class="card-header bg-primary text-white">Applicant Count by Source</div>
-            <div class="card-body" style="height: 400px;">
-                <canvas id="SourceChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-        
-    <div class="chart-card academic" style="display: none;">
-        <div class="card mt-4">
-            <div class="card-header bg-primary text-white">Applicant Count by Strands</div>
-            <div class="card-body">
-                <canvas id="StrandChart" height="300px"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="chart-card academic" style="display: none;">
-        <div class="card mt-4">
-            <div class="card-header bg-primary text-white">Applicant Count by Exam Results</div>
-            <div class="card-body">
-                <canvas id="ExamStatusChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="chart-card academic" style="display: none;">
-        <div class="card mt-4">
-            <div class="card-header bg-primary text-white">Applicant Count by Incoming Grade Level</div>
-            <div class="card-body">
-                <canvas id="IncomingGradeChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-</div>
 
 <script>
-    //Chart.register(ChartDataLabels);
-    //can be used as a sample
-    const educationCtx = document.getElementById('applicantChart').getContext('2d');
+    document.querySelectorAll('.chart-toggle .btn-toggle').forEach(btn => {
+        btn.addEventListener('click', function () {
+            // Toggle active class
+            document.querySelectorAll('.chart-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
 
+            const selected = this.getAttribute('data-filter');
+
+            // Show the correct chart section
+            document.querySelectorAll('.chart-section').forEach(section => {
+                section.style.display = section.classList.contains(selected) ? 'flex' : 'none';
+            });
+
+            const levelToggleContainer = document.querySelector('.level-toggle-container');
+
+              if (selected === 'academic') {
+                // Hide level filter
+                levelToggleContainer.style.display = 'none';
+
+                // Automatically trigger click on "Senior High School"
+                // When switching to academic, do NOT trigger any level button.
+                // Instead, ensure the "All Levels" button stays selected.
+                document.querySelectorAll('.level-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
+                const allBtn = document.querySelector('.level-toggle .btn-toggle[data-level="all"]');
+                if (allBtn) allBtn.classList.add('active');
+
+                // Manually trigger fetch for All Levels data
+                fetch('/chart-data?level=all')
+                    .then(res => res.json())
+                    .then(data => {
+                        applicantGenderChart.data.datasets[0].data = [
+                            data.gender.find(g => g.gender === 'Male')?.total || 0,
+                            data.gender.find(g => g.gender === 'Female')?.total || 0
+                        ];
+                        applicantGenderChart.update();
+
+                        ageChart.data.labels = data.age.map(a => a.age);
+                        ageChart.data.datasets[0].data = data.age.map(a => a.total);
+                        ageChart.update();
+
+                        cityChart.data.labels = data.city.map(c => c.city);
+                        cityChart.data.datasets[0].data = data.city.map(c => c.total);
+                        cityChart.update();
+
+                        regionChart.data.labels = data.region.map(r => r.region);
+                        regionChart.data.datasets[0].data = data.region.map(r => r.total);
+                        regionChart.update();
+
+                        nationalityChart.data.labels = data.nationality.map(n => n.nationality);
+                        nationalityChart.data.datasets[0].data = data.nationality.map(n => n.total);
+                        nationalityChart.update();
+
+                        schoolTypeChart.data.labels = data.schoolType.map(s => s.school_type);
+                        schoolTypeChart.data.datasets[0].data = data.schoolType.map(s => s.total);
+                        schoolTypeChart.update();
+
+                        sourceChart.data.labels = data.source.map(s => s.source);
+                        sourceChart.data.datasets[0].data = data.source.map(s => s.total);
+                        sourceChart.update();
+
+                        strandChart.data.labels = data.strand.map(s => s.strand);
+                        strandChart.data.datasets[0].data = data.strand.map(s => s.total);
+                        strandChart.update();
+
+                        incomingGradeChart.data.labels = data.incomingGrades.map(g => g.incoming_grlvl);
+                        incomingGradeChart.data.datasets[0].data = data.incomingGrades.map(g => g.total);
+                        incomingGradeChart.update();
+                    });
+
+            } else {
+                levelToggleContainer.style.display = 'block';
+            }
+        });
+    });
+
+    const educationCtx = document.getElementById('applicantChart').getContext('2d');
     const applicantLabels = ['Grade School', 'Junior High', 'Senior High'];
     const applicantValues = [{{ $gradeSchool ?? 0 }}, {{ $juniorHigh ?? 0 }}, {{ $seniorHigh ?? 0 }}];
     const applicantTotal = applicantValues.reduce((a, b) => a + b, 0);
-    const applicantChart = new Chart(educationCtx, {
-        type: 'bar',
-        data: {
-            labels: applicantLabels,
-            datasets: [{
-                label: 'Number of Applicants',
+
+    const themePalette = [
+        '#129439', // main green
+        '#f39c12', // amber
+        '#1abc9c', // turquoise
+        '#9b59b6', // violet
+        '#31c75a', // bright leaf green
+
+        '#e67e22', // orange
+        '#117a65', // deep jade
+        '#8e44ad', // deep purple
+        '#6ccf5d', // lime green
+        '#2980b9', // denim blue
+
+        '#0b722f', // dark forest green
+        '#d35400', // burnt orange
+        '#2e8b57', // sea green
+        '#4db849', // mid green
+        '#1f618d', // steel blue
+
+        '#27ae60', // emerald
+        '#20c997', // teal
+        '#2471a3'  // navy blue
+        ];
+
+        const applicantChart = new Chart(educationCtx, {
+            type: 'bar',
+            data: {
+                labels: applicantLabels,
+                datasets: [{
                 data: applicantValues,
-                backgroundColor: ['#0d6efd', '#20c997', '#ffc107']
+                backgroundColor: themePalette,
+                borderColor: '#ffffff',
+                borderWidth: 1
             }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const value = context.parsed.y;
-                            const percentage = applicantTotal > 0 ? ((value / applicantTotal) * 100).toFixed(2) : 0;
-                            return `${context.dataset.label}: ${value} (${percentage}%)`;
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.parsed.y;
+                                const percentage = applicantTotal > 0 ? ((value / applicantTotal) * 100).toFixed(2) : 0;
+                                return `${context.label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    },
+                    datalabels: {
+                        anchor: 'center',
+                        align: 'center',
+                        color: '#fff',
+                        font: {
+                            weight: 'bold'
+                        },
+                        formatter: function(value) {
+                            const percentage = applicantTotal > 0 ? ((value / applicantTotal) * 100).toFixed(1) : 0;
+                            return `${percentage}%`;
                         }
                     }
                 },
-                datalabels: {
-                    anchor: 'center',
-                    align: 'center',
-                    color: '#fff',
-                    font: {
-                        weight: 'bold'
-                    },
-                    formatter: function(value, context) {
-                        const percentage = applicantTotal > 0 ? ((value / applicantTotal) * 100).toFixed(1) : 0;
-                        return `${percentage}%`;
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        precision: 0
                     }
                 }
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    precision: 0
-                }
-            }
-        },
-        plugins: [ChartDataLabels]
-    });
-
+            plugins: [ChartDataLabels]
+        });
 
     const genderCtx = document.getElementById('GenderChart').getContext('2d');
     const applicantGenderChart = new Chart(genderCtx, {
@@ -211,7 +273,9 @@
             datasets: [{
                 label: 'Number of Applicants',
                 data: [{{ $male ?? 0 }}, {{ $female ?? 0 }}],
-                backgroundColor: ['#0d6efd', '#20c997']
+                backgroundColor: themePalette,
+                borderColor: '#ffffff',
+                borderWidth: 1
             }]
         },
         options: {
@@ -243,17 +307,11 @@
         data: {
             labels: {!! json_encode($ageCounts->pluck('age')) !!},
             datasets: [{
-                label: 'Number of Applicants',
-                data: ageData,
-                backgroundColor: [
-                    '#0d6efd', '#20c997', '#ffc107', '#fd7e14',
-                    '#6610f2', '#dc3545', '#198754', '#6f42c1',
-                    '#17a2b8', '#e83e8c', '#adb5bd', '#ff6b6b',
-                    '#4dabf7', '#343a40', '#f8f9fa'
-                ],
-                borderColor: '#fff',
-                borderWidth: 1
-            }]
+            data: ageData,
+            backgroundColor: themePalette,
+            borderColor: '#ffffff',
+            borderWidth: 1
+        }]
         },
         options: {
             responsive: true,
@@ -265,7 +323,7 @@
                 }
             },
             plugins: {
-                legend: { display: true, position: 'bottom' },
+                legend: { display: false},
                 datalabels: {
                     color: '#fff',  
                     anchor: 'center',  
@@ -294,8 +352,8 @@
             datasets: [{
                 label: 'Number of Applicants',
                 data: CityData,
-                backgroundColor: ['#0d6efd', '#20c997'],
-                borderColor: '#20c997',
+                backgroundColor: themePalette,
+                borderColor: '#ffffff',
                 borderWidth: 1
             }]
         },
@@ -307,7 +365,7 @@
                 x: { beginAtZero: true, ticks: { precision: 0 } }
             },
             plugins: {
-                legend: { display: true, position: 'bottom' },
+                legend: { display: false},
                 datalabels: {
                     color: '#fff',
                     anchor: 'center',
@@ -334,7 +392,9 @@
             datasets: [{
                 label: 'Number of Applicants',
                 data: RegionData,
-                backgroundColor: ['#6f42c1', '#20c997']
+                backgroundColor: themePalette,
+                borderColor: '#ffffff',
+                borderWidth: 1
             }]
         },
         options: {
@@ -364,12 +424,8 @@
             datasets: [{
                 label: 'Number of Applicants',
                 data: NationalityData,
-                backgroundColor: [
-                    '#6f42c1', '#20c997', '#0d6efd', '#ffc107',
-                    '#fd7e14', '#198754', '#dc3545', '#6610f2',
-                    '#e83e8c', '#17a2b8', '#f8f9fa', '#adb5bd'
-                ],
-                borderColor: '#fff',
+                backgroundColor: themePalette,
+                borderColor: '#ffffff',
                 borderWidth: 1
             }]
         },
@@ -400,8 +456,8 @@
             datasets: [{
                 label: 'Number of Applicants',
                 data: SchoolTypeData,
-                backgroundColor: ['#0d6efd', '#20c997', '#ffc107', '#fd7e14', '#dc3545'],
-                borderColor: '#fff',
+                backgroundColor: themePalette,
+                borderColor: '#ffffff',
                 borderWidth: 1
             }]
         },
@@ -412,7 +468,7 @@
                 y: { beginAtZero: true, ticks: { precision: 0 } }
             },
             plugins: {
-                legend: { display: true, position: 'bottom' },
+                legend: { display: false },
                 datalabels: {
                     color: '#fff',
                     anchor: 'center',
@@ -438,11 +494,8 @@
             datasets: [{
                 label: 'Number of Applicants',
                 data: SourceData,
-                backgroundColor: [
-                    '#0d6efd', '#20c997', '#ffc107', '#dc3545',
-                    '#6f42c1', '#fd7e14', '#17a2b8', '#6610f2'
-                ],
-                borderColor: '#fff',
+                backgroundColor: themePalette,
+                borderColor: '#ffffff',
                 borderWidth: 1
             }]
         },
@@ -463,46 +516,48 @@
         plugins: [ChartDataLabels]
     });
 
-    const StrandData = {!! json_encode($strand->pluck('total')) !!};
-    const StrandDataTotal = StrandData.reduce((a, b) => a + b, 0);
     const strandCtx = document.getElementById('StrandChart').getContext('2d');
-    const strandChart = new Chart(strandCtx, {
-        type: 'bar',
-        data: {
-            labels: {!! json_encode($strand->pluck('strand')) !!},
-            datasets: [{
-                label: 'Number of Applicants',
-                data: StrandData,
-                backgroundColor: [
-                    '#0d6efd', '#20c997', '#ffc107', '#fd7e14',
-                    '#6610f2', '#dc3545', '#198754', '#6f42c1'
-                ],
-                borderColor: '#fff',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: { beginAtZero: true, ticks: { precision: 0 } }
+const strandLabels = {!! json_encode($strand->pluck('strand')) !!};
+const strandData = {!! json_encode($strand->pluck('total')) !!};
+const strandTotal = strandData.reduce((a, b) => a + b, 0);
+
+const strandChart = new Chart(strandCtx, {
+    type: 'pie',
+    data: {
+        labels: strandLabels,
+        datasets: [{
+            data: strandData,
+            backgroundColor: themePalette.slice(0, strandLabels.length),
+            borderColor: '#fff',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'bottom', // show color-keyed labels under the pie
+                labels: {
+                    boxWidth: 20,
+                    padding: 15
+                }
             },
-            plugins: {
-                legend: { display: true, position: 'bottom' },
-                datalabels: {
-                    color: '#fff',
-                    anchor: 'center',
-                    align: 'center',
-                    font: { weight: 'bold', size: 12 },
-                    formatter: (value) => {
-                        let percentage = StrandDataTotal > 0 ? (value / StrandDataTotal) * 100 : 0;
-                        return percentage.toFixed(1) + '%';
-                    }
+            datalabels: {
+                color: '#fff',
+                font: {
+                    weight: 'bold'
+                },
+                formatter: (value) => {
+                    const percentage = strandTotal > 0 ? (value / strandTotal) * 100 : 0;
+                    return `${percentage.toFixed(1)}%`;
                 }
             }
-        },
-        plugins: [ChartDataLabels]
-    });
+        }
+    },
+    plugins: [ChartDataLabels]
+});
 
     const ExamStatusData = {!! json_encode($examStatus->pluck('total')) !!};
     const ExamStatusDataTotal = ExamStatusData.reduce((a, b) => a + b, 0);
@@ -514,8 +569,8 @@
             datasets: [{
                 label: 'Number of Applicants',
                 data: ExamStatusData,
-                backgroundColor: ['#198754', '#dc3545', '#ffc107', '#6c757d'],
-                borderColor: '#fff',
+                backgroundColor: themePalette,
+                borderColor: '#ffffff',
                 borderWidth: 1
             }]
         },
@@ -527,7 +582,7 @@
                 x: { beginAtZero: true, ticks: { precision: 0 } }
             },
             plugins: {
-                legend: { display: true, position: 'bottom' },
+                legend: { display: false},
                 datalabels: {
                     color: '#fff',
                     anchor: 'center',
@@ -553,12 +608,8 @@
             datasets: [{
                 label: 'Number of Applicants',
                 data: IncomingGradeData,
-                backgroundColor: [
-                    '#0d6efd', '#20c997', '#ffc107', '#fd7e14',
-                    '#6610f2', '#dc3545', '#198754', '#6f42c1',
-                    '#17a2b8', '#e83e8c', '#adb5bd', '#ff6b6b', '#4dabf7'
-                ],
-                borderColor: '#fff',
+                backgroundColor: themePalette,
+                borderColor: '#ffffff',
                 borderWidth: 1
             }]
         },
@@ -569,7 +620,7 @@
                 y: { beginAtZero: true, ticks: { precision: 0 } }
             },
             plugins: {
-                legend: { display: true, position: 'bottom' },
+                legend: { display: false},
                 datalabels: {
                     color: '#fff',
                     anchor: 'center',
@@ -585,26 +636,22 @@
         plugins: [ChartDataLabels]
     });
 
-
-
     document.querySelectorAll('.chart-toggle .btn-toggle').forEach(btn => {
         btn.addEventListener('click', function () {
             document.querySelectorAll('.chart-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
 
             const selected = this.getAttribute('data-filter');
-            const cards = document.querySelectorAll('.chart-card');
-
-            cards.forEach(card => {
-                if (selected === 'all' || card.classList.contains(selected)) {
-                    card.style.display = 'block';
+            document.querySelectorAll('.chart-section').forEach(section => {
+                if (section.classList.contains(selected)) {
+                    section.style.display = 'flex'; 
                 } else {
-                    card.style.display = 'none';
+                    section.style.display = 'none';
                 }
             });
+
         });
     });
-
 
     document.querySelectorAll('.level-toggle .btn-toggle').forEach(btn => {
         btn.addEventListener('click', function () {

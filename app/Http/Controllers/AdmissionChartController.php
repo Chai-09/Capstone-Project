@@ -46,10 +46,12 @@ class AdmissionChartController extends Controller
             ->get();
 
                 
-        $strand = FillupForms::selectRaw('strand, COUNT(*) as total')
+        $strand = FillupForms::where('educational_level', 'Senior High School')
+            ->selectRaw('strand, COUNT(*) as total')
             ->groupBy('strand')
             ->orderBy('strand')
             ->get();
+
 
         $examStatus = \App\Models\ExamResult::selectRaw('exam_status, COUNT(*) as total')
             ->groupBy('exam_status')

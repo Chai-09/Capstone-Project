@@ -18,6 +18,7 @@
     @vite('resources/css/partials/tables.css')
     @vite('resources/css/admission/edit-applicant.css')
     @vite('resources/css/partials/dashboard.css')
+    @vite('resources/css/partials/reports.css')
 
     {{-- JavaSript --}}
     @vite('resources/js/admission/applicant-list.js')

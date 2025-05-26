@@ -34,6 +34,7 @@ export default defineConfig({
                 'resources/css/partials/tables.css',
                 'resources/css/partials/layout.css',
                 'resources/css/partials/dashboard.css',
+                'resources/css/partials/reports.css',
 
                 // Accountant 
                 'resources/js/accounting/payment.js',

@@ -2004,6 +2004,7 @@ namespace App\Models {
      * @property mixed $applicant_id
      * @property int $id
      * @property-read \App\Models\FillupForms $formSubmission
+     * @property-read \App\Models\Payment $applicant
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereApplicantId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Payment>|Payment whereApplicantFname($value)
