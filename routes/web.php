@@ -23,6 +23,7 @@ use App\Http\Controllers\ExamResultController;
 use App\Http\Controllers\EditApplicantController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\AdmissionChartController;
+use App\Http\Controllers\AccountingChartController;
 
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
 // Log in Routes
@@ -241,6 +242,8 @@ Route::middleware(['auth', 'role:accounting,administrator'])->group(function () 
     // Route::get('/accounting-dashboard', [AccountReportController::class, 'showAccountingDashboard'])->name('accountingdashboard');
 
     Route::get('/export/accounting', [ExportController::class, 'exportAccounting'])->name('export.accounting');
+    Route::get('/accounting/reports/accounting-reports', [AccountingChartController::class, 'index'])->name('accounting.reports');
+    Route::get('/export/accounting/{year}/{month}', [ExportController::class, 'exportAccountingByMonth'])->name('export.accounting.month');
 
 });
 

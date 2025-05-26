@@ -66,7 +66,7 @@
           <div class="icon-wrapper"><i class="fa-solid fa-table-columns"></i></div>
           <span>Dashboard</span>
         </a>
-        <a href="#" class="nav-link" title="Reports">
+        <a href="{{ route('accounting.reports') }}" class="nav-link" title="Reports">
           <div class="icon-wrapper"><i class="fa-solid fa-square-poll-vertical"></i></div>
           <span>Reports</span>
         </a>

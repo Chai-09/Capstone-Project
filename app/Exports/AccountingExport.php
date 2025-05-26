@@ -9,12 +9,18 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class AccountingExport implements FromCollection, WithMapping, WithHeadings
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
+    protected $data;
+
+    // Accepts custom data when exporting (used for month-based export)
+    public function __construct($data = null)
+    {
+        $this->data = $data;
+    }
+
     public function collection()
     {
-        return Payment::all();
+        // Use provided data or export all if not specified
+        return $this->data ?? Payment::all();
     }
 
     public function map($form): array  {
@@ -30,4 +36,6 @@ class AccountingExport implements FromCollection, WithMapping, WithHeadings
             'OR Number'
         ];
     }
+
+    
 }
