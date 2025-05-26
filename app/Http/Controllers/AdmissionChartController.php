@@ -78,26 +78,26 @@ class AdmissionChartController extends Controller
     public function getChartData(Request $request)
 {
     $level = $request->query('level');
-
-    $query = FillupForms::query();
+    $baseQuery = FillupForms::query();
     if ($level && $level !== 'all') {
-        $query->where('educational_level', $level);
+        $baseQuery->where('educational_level', $level);
     }
 
     $data = [
-        'gender' => $query->selectRaw('gender, COUNT(*) as total')->groupBy('gender')->get(),
-        'age' => $query->selectRaw('age, COUNT(*) as total')->groupBy('age')->orderBy('age')->get(),
-        'city' => $query->selectRaw('city, COUNT(*) as total')->groupBy('city')->get(),
-        'region' => $query->selectRaw('region, COUNT(*) as total')->groupBy('region')->get(),
-        'nationality' => $query->selectRaw('nationality, COUNT(*) as total')->groupBy('nationality')->get(),
-        'schoolType' => $query->selectRaw('school_type, COUNT(*) as total')->groupBy('school_type')->get(),
-        'source' => $query->selectRaw('source, COUNT(*) as total')->groupBy('source')->get(),
-        'strand' => $query->selectRaw('strand, COUNT(*) as total')->groupBy('strand')->get(),
-        'incomingGrades' => $query->selectRaw('incoming_grlvl, COUNT(*) as total')->groupBy('incoming_grlvl')->get(),
+        'gender' => (clone $baseQuery)->selectRaw('gender, COUNT(*) as total')->groupBy('gender')->get(),
+        'age' => (clone $baseQuery)->selectRaw('age, COUNT(*) as total')->groupBy('age')->orderBy('age')->get(),
+        'city' => (clone $baseQuery)->selectRaw('city, COUNT(*) as total')->groupBy('city')->get(),
+        'region' => (clone $baseQuery)->selectRaw('region, COUNT(*) as total')->groupBy('region')->get(),
+        'nationality' => (clone $baseQuery)->selectRaw('nationality, COUNT(*) as total')->groupBy('nationality')->get(),
+        'schoolType' => (clone $baseQuery)->selectRaw('school_type, COUNT(*) as total')->groupBy('school_type')->get(),
+        'source' => (clone $baseQuery)->selectRaw('source, COUNT(*) as total')->groupBy('source')->get(),
+        'strand' => (clone $baseQuery)->selectRaw('strand, COUNT(*) as total')->groupBy('strand')->get(),
+        'incomingGrades' => (clone $baseQuery)->selectRaw('incoming_grlvl, COUNT(*) as total')->groupBy('incoming_grlvl')->get(),
     ];
 
     return response()->json($data);
 }
+
 
 public function showAdmissionDashboard()
 {
