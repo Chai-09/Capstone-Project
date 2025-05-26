@@ -303,7 +303,7 @@
                     <label>Exam Date</label>
                     <select name="exam_date" class="form-control" {{ $isEditable ? '' : 'disabled' }}>
     @foreach($availableSchedules->groupBy('exam_date') as $date => $schedules)
-        <option value="{{ $date }}" {{ $schedule->exam_date == $date ? 'selected' : '' }}>
+        <option value="{{ $date }}" {{ ($schedule && $schedule->exam_date == $date) ? 'selected' : '' }}>
             {{ \Carbon\Carbon::parse($date)->format('F d, Y') }}
         </option>
     @endforeach
