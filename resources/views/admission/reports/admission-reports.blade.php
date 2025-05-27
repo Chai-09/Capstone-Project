@@ -13,8 +13,36 @@
 
 <div class="report-layout">
 
-    <div class="mb-4">
-        Dito mo lagay kyrie
+    <div class="monthlyreports">
+        <div class="card mb-4">
+            <div class="card-header bg-light fw-bold">Monthly Applicant Form Reports</div>
+            <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Reports</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($months as $month)
+                            <tr>
+                                <td>{{ \Carbon\Carbon::create($month['year'], $month['month'])->format('F Y') }}</td>
+                                <td class="text-end">
+                                    <button
+                                        class="btn btn-link p-0 text-decoration-none export-confirm"
+                                        data-year="{{ $month['year'] }}"
+                                        data-month="{{ $month['month'] }}"
+                                    >
+                                        Download
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <div class="mb-4 d-flex flex-column align-items-center gap-2">
@@ -746,5 +774,40 @@ const recommendedStrandChart = new Chart(recommendedStrandCtx, {
         });
     });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.querySelectorAll('.export-confirm').forEach(button => {
+    button.addEventListener('click', function () {
+        const year = this.getAttribute('data-year');
+        const month = this.getAttribute('data-month');
+
+        const today = new Date();
+        const isCurrentMonth = parseInt(month) === (today.getMonth() + 1) && parseInt(year) === today.getFullYear();
+        const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        const isEndOfMonth = today.getDate() === lastDay;
+
+        if (isCurrentMonth && !isEndOfMonth) {
+            Swal.fire({
+                title: 'Incomplete Month',
+                text: "This month's report isn't finished yet. Do you still want to export data up to today?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, export anyway',
+                cancelButtonText: 'Cancel'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    window.location.href = `/export/forms/${year}/${month}`;
+                }
+            });
+        } else {
+            window.location.href = `/export/forms/${year}/${month}`;
+        }
+    });
+});
+</script>
+
+
 @endsection
 

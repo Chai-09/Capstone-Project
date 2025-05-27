@@ -218,6 +218,8 @@ Route::get('/admission/reports/admission-reports', [AdmissionChartController::cl
     ->name('admission.dashboard');*/
     Route::post('/applicant/save-exam-schedule', [EditApplicantController::class, 'saveExamSchedule'])->name('admission.saveExamSchedule');
     Route::get('/get-time-slots', [EditApplicantController::class, 'getTimeSlots'])->name('get.time.slots');
+    Route::get('/export/forms/{year}/{month}', [ExportController::class, 'exportFormsByMonth'])->name('export.forms.month');
+
 });
 
 //ACCOUNTING ROUTES

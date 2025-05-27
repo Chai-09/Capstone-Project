@@ -11,7 +11,6 @@ class AccountingExport implements FromCollection, WithMapping, WithHeadings
 {
     protected $data;
 
-    // Accepts custom data when exporting (used for month-based export)
     public function __construct($data = null)
     {
         $this->data = $data;
@@ -19,7 +18,6 @@ class AccountingExport implements FromCollection, WithMapping, WithHeadings
 
     public function collection()
     {
-        // Use provided data or export all if not specified
         return $this->data ?? Payment::all();
     }
 

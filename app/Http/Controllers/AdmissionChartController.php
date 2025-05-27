@@ -53,90 +53,89 @@ class AdmissionChartController extends Controller
             ->orderBy('strand')
             ->get();
 
-            $recommendedStrand = \App\Models\Applicant::whereNotNull('recommended_strand')
-            ->selectRaw('recommended_strand, COUNT(*) as total')
-            ->groupBy('recommended_strand')
-            ->orderBy('recommended_strand')
-            ->get();
+        $recommendedStrand = \App\Models\Applicant::whereNotNull('recommended_strand')
+        ->selectRaw('recommended_strand, COUNT(*) as total')
+        ->groupBy('recommended_strand')
+        ->orderBy('recommended_strand')
+        ->get();
 
         $examStatus = \App\Models\ExamResult::selectRaw('exam_status, COUNT(*) as total')
-            ->groupBy('exam_status')
-            ->orderBy('exam_status')
-            ->get();
+        ->groupBy('exam_status')
+        ->orderBy('exam_status')
+        ->get();
 
-            $incomingGradeLevels = [
-                'KINDER', 'GRADE 1', 'GRADE 2', 'GRADE 3', 'GRADE 4', 'GRADE 5', 'GRADE 6',
-                'GRADE 7', 'GRADE 8', 'GRADE 9', 'GRADE 10',
-                'GRADE 11', 'GRADE 12'
-            ];
+        $incomingGradeLevels = [
+            'KINDER', 'GRADE 1', 'GRADE 2', 'GRADE 3', 'GRADE 4', 'GRADE 5', 'GRADE 6',
+            'GRADE 7', 'GRADE 8', 'GRADE 9', 'GRADE 10',
+            'GRADE 11', 'GRADE 12'
+        ];
             
-            $incomingGrades = \App\Models\FillupForms::selectRaw('incoming_grlvl, COUNT(*) as total')
-    ->whereIn('incoming_grlvl', $incomingGradeLevels)
-    ->groupBy('incoming_grlvl')
-    ->orderByRaw("FIELD(incoming_grlvl, '" . implode("','", $incomingGradeLevels) . "')")
-    ->get();
+        $incomingGrades = \App\Models\FillupForms::selectRaw('incoming_grlvl, COUNT(*) as total')
+        ->whereIn('incoming_grlvl', $incomingGradeLevels)
+        ->groupBy('incoming_grlvl')
+        ->orderByRaw("FIELD(incoming_grlvl, '" . implode("','", $incomingGradeLevels) . "')")
+        ->get();
+
+        $months = \App\Models\FillupForms::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month')
+            ->groupBy('year', 'month')
+            ->orderByRaw('year DESC, month DESC')
+            ->get()
+            ->toArray();
 
     return view('admission.reports.admission-reports', compact(
             'gradeSchool', 'juniorHigh', 'seniorHigh',
             'male', 'female', 'ageCounts', 'city', 'region', 'nationality', 'schoolType', 'source', 
-            'strand', 'examStatus', 'incomingGrades', 'recommendedStrand'
+            'strand', 'examStatus', 'incomingGrades', 'recommendedStrand', 'months'
         ));
     }
 
     public function getChartData(Request $request)
-{
-    $level = $request->query('level');
-    $baseQuery = FillupForms::query();
-    if ($level && $level !== 'all') {
-        $baseQuery->where('educational_level', $level);
+    {
+        $level = $request->query('level');
+        $baseQuery = FillupForms::query();
+        if ($level && $level !== 'all') {
+            $baseQuery->where('educational_level', $level);
+        }
+
+        $data = [
+            'gender' => (clone $baseQuery)->selectRaw('gender, COUNT(*) as total')->groupBy('gender')->get(),
+            'age' => (clone $baseQuery)->selectRaw('age, COUNT(*) as total')->groupBy('age')->orderBy('age')->get(),
+            'city' => (clone $baseQuery)->selectRaw('city, COUNT(*) as total')->groupBy('city')->get(),
+            'region' => (clone $baseQuery)->selectRaw('region, COUNT(*) as total')->groupBy('region')->get(),
+            'nationality' => (clone $baseQuery)->selectRaw('nationality, COUNT(*) as total')->groupBy('nationality')->get(),
+            'schoolType' => (clone $baseQuery)->selectRaw('school_type, COUNT(*) as total')->groupBy('school_type')->get(),
+            'source' => (clone $baseQuery)->selectRaw('source, COUNT(*) as total')->groupBy('source')->get(),
+            'strand' => (clone $baseQuery)->whereNotNull('strand')->selectRaw('strand, COUNT(*) as total')->groupBy('strand')->get(),
+            'incomingGrades' => (clone $baseQuery)->selectRaw('incoming_grlvl, COUNT(*) as total')->groupBy('incoming_grlvl')->get(),
+        ];
+
+        return response()->json($data);
     }
 
-    $data = [
-        'gender' => (clone $baseQuery)->selectRaw('gender, COUNT(*) as total')->groupBy('gender')->get(),
-        'age' => (clone $baseQuery)->selectRaw('age, COUNT(*) as total')->groupBy('age')->orderBy('age')->get(),
-        'city' => (clone $baseQuery)->selectRaw('city, COUNT(*) as total')->groupBy('city')->get(),
-        'region' => (clone $baseQuery)->selectRaw('region, COUNT(*) as total')->groupBy('region')->get(),
-        'nationality' => (clone $baseQuery)->selectRaw('nationality, COUNT(*) as total')->groupBy('nationality')->get(),
-        'schoolType' => (clone $baseQuery)->selectRaw('school_type, COUNT(*) as total')->groupBy('school_type')->get(),
-        'source' => (clone $baseQuery)->selectRaw('source, COUNT(*) as total')->groupBy('source')->get(),
-        'strand' => (clone $baseQuery)->whereNotNull('strand')->selectRaw('strand, COUNT(*) as total')->groupBy('strand')->get(),
-        'incomingGrades' => (clone $baseQuery)->selectRaw('incoming_grlvl, COUNT(*) as total')->groupBy('incoming_grlvl')->get(),
-    ];
 
-    return response()->json($data);
-}
+    public function showAdmissionDashboard()
+    {
+        $newApplicants = \App\Models\Applicant::whereDate('created_at', today())->count();
+        $examinees = \App\Models\ApplicantSchedule::distinct('applicant_id')->count('applicant_id');
+        $verifiedPayments = \App\Models\Payment::where('payment_status', 'approved')->count();
+        $doneApplicants = \App\Models\Applicant::where('current_step', 7)->count();
 
+        $stepCounts = [
+            'Fill-up Forms' => \App\Models\Applicant::where('current_step', 1)->count(),
+            'Send Payment' => \App\Models\Applicant::where('current_step', 2)->count(),
+            'Payment Verification' => \App\Models\Applicant::where('current_step', 3)->count(),
+            'Schedule Entrance Exam' => \App\Models\Applicant::where('current_step', 4)->count(),
+            'Examination' => \App\Models\Applicant::where('current_step', 5)->count(),
+            'Results' => \App\Models\Applicant::where('current_step', 6)->count(),
+            'Completed' => \App\Models\Applicant::where('current_step', 7)->count(),
+        ];
 
-public function showAdmissionDashboard()
-{
-    $newApplicants = \App\Models\Applicant::whereDate('created_at', today())->count();
-    $examinees = \App\Models\ApplicantSchedule::distinct('applicant_id')->count('applicant_id');
-    $verifiedPayments = \App\Models\Payment::where('payment_status', 'approved')->count();
-    $doneApplicants = \App\Models\Applicant::where('current_step', 7)->count();
-
-    $stepCounts = [
-        'Fill-up Forms' => \App\Models\Applicant::where('current_step', 1)->count(),
-        'Send Payment' => \App\Models\Applicant::where('current_step', 2)->count(),
-        'Payment Verification' => \App\Models\Applicant::where('current_step', 3)->count(),
-        'Schedule Entrance Exam' => \App\Models\Applicant::where('current_step', 4)->count(),
-        'Examination' => \App\Models\Applicant::where('current_step', 5)->count(),
-        'Results' => \App\Models\Applicant::where('current_step', 6)->count(),
-        'Completed' => \App\Models\Applicant::where('current_step', 7)->count(),
-    ];
-
-    return view('admission.reports.dashboard-cards', compact(
-        'newApplicants',
-        'examinees',
-        'verifiedPayments',
-        'doneApplicants',
-        'stepCounts'
-    ));
-}
-
-
-
-
-
-
-
+        return view('admission.reports.dashboard-cards', compact(
+            'newApplicants',
+            'examinees',
+            'verifiedPayments',
+            'doneApplicants',
+            'stepCounts'
+        ));
+    }
 }

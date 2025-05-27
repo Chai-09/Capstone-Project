@@ -8,7 +8,6 @@
   </div>
 </div>
 
-<a href="{{ route('export.forms') }}" class="btn btn-success mb-2">Export to Excel</a>
 
 <div class="table-design">
     @if (session('success'))

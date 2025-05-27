@@ -9,13 +9,16 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class FormsExport implements FromCollection, WithMapping, WithHeadings
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
+    protected $data;
+
+    public function __construct($data = null)
+    {
+        $this->data = $data;
+    }
+
     public function collection()
     {
-        //return FillupForms::all();
-        return FillupForms::with(['payment', 'schedule'])->get();
+        return $this->data ?? FillupForms::with(['payment', 'schedule'])->get();
     }
 
     public function map($form): array
