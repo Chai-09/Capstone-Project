@@ -24,6 +24,7 @@ use App\Http\Controllers\EditApplicantController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\AdmissionChartController;
 use App\Http\Controllers\AccountingChartController;
+use App\Http\Controllers\AdminController;
 
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
 // Log in Routes

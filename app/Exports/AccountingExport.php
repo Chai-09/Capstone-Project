@@ -24,6 +24,9 @@ class AccountingExport implements FromCollection, WithMapping, WithHeadings
     public function map($form): array  {
         return [
             trim("{$form->applicant_fname} {$form->applicant_mname} {$form->applicant_lname}"),
+            $form->incoming_grlvl,
+            $form->payment_date,
+            $form->payment_status,
             $form->ocr_number,
         ];        
     }
@@ -31,6 +34,9 @@ class AccountingExport implements FromCollection, WithMapping, WithHeadings
     public function headings(): array {
         return [
             'Applicant Name',
+            'Incoming Grade Level',
+            'Payment Date',
+            'Payment Status',
             'OR Number'
         ];
     }
