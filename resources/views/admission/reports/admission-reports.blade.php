@@ -95,6 +95,12 @@
         </div>
         <div class="col">
             <div class="card chart-card">
+        <div class="card-header bg-primary text-white">Recommended Strands</div>
+        <div class="card-body"><canvas id="RecommendedStrandChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card chart-card">
                 <div class="card-header bg-primary text-white">Exam Results</div>
                 <div class="card-body"><canvas id="ExamStatusChart"></canvas></div>
             </div>
@@ -558,6 +564,41 @@ const strandChart = new Chart(strandCtx, {
     },
     plugins: [ChartDataLabels]
 });
+
+    const recommendedStrandLabels = {!! json_encode($recommendedStrand->pluck('recommended_strand')) !!};
+const recommendedStrandData = {!! json_encode($recommendedStrand->pluck('total')) !!};
+const recommendedStrandTotal = recommendedStrandData.reduce((a, b) => a + b, 0);
+
+const recommendedStrandCtx = document.getElementById('RecommendedStrandChart').getContext('2d');
+const recommendedStrandChart = new Chart(recommendedStrandCtx, {
+    type: 'pie',
+    data: {
+        labels: recommendedStrandLabels,
+        datasets: [{
+            data: recommendedStrandData,
+            backgroundColor: themePalette.slice(0, recommendedStrandLabels.length),
+            borderColor: '#fff',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: true, position: 'bottom' },
+            datalabels: {
+                color: '#fff',
+                font: { weight: 'bold' },
+                formatter: (value) => {
+                    const percentage = recommendedStrandTotal > 0 ? (value / recommendedStrandTotal) * 100 : 0;
+                    return percentage.toFixed(1) + '%';
+                }
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
+
 
     const ExamStatusData = {!! json_encode($examStatus->pluck('total')) !!};
     const ExamStatusDataTotal = ExamStatusData.reduce((a, b) => a + b, 0);

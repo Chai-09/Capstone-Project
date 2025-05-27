@@ -47,11 +47,17 @@ class AdmissionChartController extends Controller
 
                 
         $strand = FillupForms::where('educational_level', 'Senior High School')
+            ->whereNotNull('strand')
             ->selectRaw('strand, COUNT(*) as total')
             ->groupBy('strand')
             ->orderBy('strand')
             ->get();
 
+            $recommendedStrand = \App\Models\Applicant::whereNotNull('recommended_strand')
+            ->selectRaw('recommended_strand, COUNT(*) as total')
+            ->groupBy('recommended_strand')
+            ->orderBy('recommended_strand')
+            ->get();
 
         $examStatus = \App\Models\ExamResult::selectRaw('exam_status, COUNT(*) as total')
             ->groupBy('exam_status')
@@ -73,7 +79,7 @@ class AdmissionChartController extends Controller
     return view('admission.reports.admission-reports', compact(
             'gradeSchool', 'juniorHigh', 'seniorHigh',
             'male', 'female', 'ageCounts', 'city', 'region', 'nationality', 'schoolType', 'source', 
-            'strand', 'examStatus', 'incomingGrades'
+            'strand', 'examStatus', 'incomingGrades', 'recommendedStrand'
         ));
     }
 
@@ -93,7 +99,7 @@ class AdmissionChartController extends Controller
         'nationality' => (clone $baseQuery)->selectRaw('nationality, COUNT(*) as total')->groupBy('nationality')->get(),
         'schoolType' => (clone $baseQuery)->selectRaw('school_type, COUNT(*) as total')->groupBy('school_type')->get(),
         'source' => (clone $baseQuery)->selectRaw('source, COUNT(*) as total')->groupBy('source')->get(),
-        'strand' => (clone $baseQuery)->selectRaw('strand, COUNT(*) as total')->groupBy('strand')->get(),
+        'strand' => (clone $baseQuery)->whereNotNull('strand')->selectRaw('strand, COUNT(*) as total')->groupBy('strand')->get(),
         'incomingGrades' => (clone $baseQuery)->selectRaw('incoming_grlvl, COUNT(*) as total')->groupBy('incoming_grlvl')->get(),
     ];
 
