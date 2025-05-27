@@ -9,33 +9,33 @@ use App\Models\Accounts;
 class AdminAccountController extends Controller
 {
     public function index(Request $request)
-{
-    $query = Accounts::query();
+    {
+        $query = Accounts::query();
 
-    if ($request->filled('role')) {
-        $query->where('role', strtolower($request->role));
+        if ($request->filled('role')) {
+            $query->where('role', strtolower($request->role));
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Sorting logic
+        $sort = $request->input('sort', 'created_at'); // default sort by created_at
+        $direction = $request->input('direction', 'desc'); // default direction
+
+        if (in_array($sort, ['name', 'created_at']) && in_array($direction, ['asc', 'desc'])) {
+            $query->orderBy($sort, $direction);
+        }
+
+        $accounts = $query->paginate(15)->appends($request->all());
+
+        return view('administrator.index', compact('accounts'));
     }
-
-    if ($request->filled('search')) {
-        $search = $request->search;
-        $query->where(function ($q) use ($search) {
-            $q->where('name', 'like', '%' . $search . '%')
-              ->orWhere('email', 'like', '%' . $search . '%');
-        });
-    }
-
-    // Sorting logic
-    $sort = $request->input('sort', 'created_at'); // default sort by created_at
-    $direction = $request->input('direction', 'desc'); // default direction
-
-    if (in_array($sort, ['name', 'created_at']) && in_array($direction, ['asc', 'desc'])) {
-        $query->orderBy($sort, $direction);
-    }
-
-    $accounts = $query->paginate(15)->appends($request->all());
-
-    return view('administrator.index', compact('accounts'));
-}
 
 
     public function edit($id)
@@ -45,39 +45,45 @@ class AdminAccountController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'applicant_fname' => 'nullable|string|max:255',
-            'applicant_mname' => 'nullable|string|max:255',
-            'applicant_lname' => 'nullable|string|max:255',
-            'applicant_email' => 'nullable|email|unique:accounts,email',
-            'role' => 'nullable|string',
-            'password' => 'nullable|min:6|confirmed',
-        ]);
+{
+    $request->validate([
+        'applicant_fname' => 'nullable|string|max:255',
+        'applicant_mname' => 'nullable|string|max:255',
+        'applicant_lname' => 'nullable|string|max:255',
+        'applicant_email' => 'nullable|email|unique:accounts,email,' . $id,
+        'role' => 'nullable|string',
+        'password' => 'nullable|min:6|confirmed',
+    ]);
 
-        $account = Accounts::findOrFail($id);
+    $account = Accounts::findOrFail($id);
 
-        
-        $fullName = strtoupper($request->applicant_fname . ' ' .
-                    ($request->applicant_mname ? $request->applicant_mname . '.' : '') . ' ' .
-                    $request->applicant_lname);
+    $fullName = strtoupper($request->applicant_fname . ' ' .
+                ($request->applicant_mname ? $request->applicant_mname . '.' : '') . ' ' .
+                $request->applicant_lname);
 
-        $account->name = $fullName;
+    $account->name = $fullName;
 
-        if ($request->filled('applicant_email')) {
-            $account->email = $request->applicant_email;
-        }
-
-        $account->role = strtolower($request->role);
-
-        if ($request->filled('password')) {
-            $account->password = Hash::make($request->password);
-        }
-
-        $account->save();
-
-        return redirect()->route('admindashboard')->with('success', 'Account updated successfully.');
+    if ($request->filled('applicant_email')) {
+        $account->email = $request->applicant_email;
     }
+
+    $originalRole = $account->role; // keep old role
+
+    if (strtolower($originalRole) === 'applicant') {
+        $account->role = 'applicant';
+    } else {
+        $account->role = strtolower($request->role);
+    }
+
+    if ($request->filled('password')) {
+        $account->password = Hash::make($request->password);
+    }
+
+    $account->save();
+
+    return redirect()->route('admindashboard')->with('success', 'Account updated successfully.');
+}
+
 
     public function destroy($id)
     {

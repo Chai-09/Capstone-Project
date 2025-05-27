@@ -149,11 +149,15 @@ Route::middleware(['auth', 'role:administrator'])->group(function () {
         return view('administrator.create-accounts');
     })->name('admin.createaccounts');
 
-    Route::post('/administrator/create-account', [App\Http\Controllers\AdminController::class, 'createAccount'])->name('admin.createAccount');
+    Route::post('/administrator/create-account', [AdminController::class, 'createAccount'])->name('admin.createAccount');
 
     Route::get('/administrator/account/{id}/edit', [AdminAccountController::class, 'edit'])->name('admin.editAccount');
-    Route::put('/administrator/account/{id}', [AdminAccountController::class, 'update'])->name('admin.updateAccount');
-    Route::delete('/administrator/account/{id}', [App\Http\Controllers\AdminAccountController::class, 'destroy'])->name('admin.deleteAccount');
+    Route::put('/admin/accounts/{id}', [AdminAccountController::class, 'update'])->name('admin.updateAccount');
+
+
+    Route::delete('/administrator/account/{id}', [AdminAccountController::class, 'destroy'])->name('admin.deleteAccount');
+
+    Route::get('/administrator/dashboard', [AdminAccountController::class, 'index'])->name('admindashboard');
 });
 
 
@@ -211,7 +215,7 @@ Route::get('/export/forms', [ExportController::class, 'exportForms'])->name('exp
 
 Route::get('/admission/reports/admission-reports', [AdmissionChartController::class, 'index'])->name('admission.reports');
 
-//forfiltering:
+    //forfiltering:
     Route::get('/chart-data', [AdmissionChartController::class, 'getChartData'])->name('chart.data');
 
     /*Route::get('/admission/dashboard', [App\Http\Controllers\AdmissionChartController::class, 'showAdmissionDashboard'])
