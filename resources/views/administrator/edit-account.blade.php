@@ -29,13 +29,13 @@
 @endphp
 
 <p>First Name</p>
-<input type="text" name="applicant_fname" placeholder="First Name" value="{{ old('applicant_fname', $firstName) }}" required>
+<input type="text" name="applicant_fname" placeholder="First Name" value="{{ old('applicant_fname', $first) }}" required>
 
 <p>Middle Initial</p>
-<input type="text" name="applicant_mname" placeholder="Middle Initial" maxlength="1" value="{{ old('applicant_mname', $middleName) }}">
+<input type="text" name="applicant_mname" placeholder="Middle Initial" maxlength="1" value="{{ old('applicant_mname', $middle) }}">
 
 <p>Last Name</p>
-<input type="text" name="applicant_lname" placeholder="Last Name" value="{{ old('applicant_lname', $lastName) }}" required>
+<input type="text" name="applicant_lname" placeholder="Last Name" value="{{ old('applicant_lname', $last) }}" required>
 
 <p>Email Address</p>
 <input type="email" name="applicant_email" id="email" placeholder="Enter email address" value="{{ old('applicant_email', $account->email) }}" required>

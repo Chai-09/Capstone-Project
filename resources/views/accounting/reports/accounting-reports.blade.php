@@ -52,7 +52,7 @@
 
     <div class="chart-card demographic">
         <div class="card">
-            <div class="card-header bg-primary text-white">Applicant Count by Educational Level</div>
+            <div class="card-header bg-primary text-white">Applicant Count by Payment Status</div>
             <div class="card-body">
                 <canvas id="PaymentStatusChart" height="300"></canvas>
             </div>
@@ -61,7 +61,7 @@
 
     <div class="chart-card demographic">
         <div class="card">
-            <div class="card-header bg-primary text-white">Applicant Count by Educational Level</div>
+            <div class="card-header bg-primary text-white">Applicant Count by Payment For</div>
             <div class="card-body">
                 <canvas id="PaymentForChart" height="300"></canvas>
             </div>
@@ -70,6 +70,29 @@
 </div>
 
 <script>
+    const themePalette = [
+        '#129439', // main green
+        '#f39c12', // amber
+        '#1abc9c', // turquoise
+        '#9b59b6', // violet
+        '#31c75a', // bright leaf green
+
+        '#e67e22', // orange
+        '#117a65', // deep jade
+        '#8e44ad', // deep purple
+        '#6ccf5d', // lime green
+        '#2980b9', // denim blue
+
+        '#0b722f', // dark forest green
+        '#d35400', // burnt orange
+        '#2e8b57', // sea green
+        '#4db849', // mid green
+        '#1f618d', // steel blue
+
+        '#27ae60', // emerald
+        '#20c997', // teal
+        '#2471a3'  // navy blue
+        ];
     const GradeLevelData = {!! json_encode($gradeLevel->pluck('total')) !!};
     const GradeLevelTotal = GradeLevelData.reduce((a, b) => a + b, 0);
 
@@ -121,19 +144,15 @@
             labels: {!! json_encode($paymentStatus->pluck('payment_status')) !!},
             datasets: [{
                 label: 'Number of Applicants',
-                data: GradeLevelData,
-                backgroundColor: ['#0d6efd', '#20c997', '#ffc107'],
+                data: PaymentStatusData,
+                backgroundColor: themePalette,
                 borderColor: '#20c997',
                 borderWidth: 1
             }]
         },
         options: {
-            indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                x: { beginAtZero: true, ticks: { precision: 0 } }
-            },
             plugins: {
                 legend: { display: true, position: 'bottom' },
                 datalabels: {
@@ -142,7 +161,7 @@
                     align: 'center',
                     font: { weight: 'bold', size: 12 },
                     formatter: (value) => {
-                        let percentage = GradeLevelTotal > 0 ? (value / GradeLevelTotal) * 100 : 0;
+                        let percentage = PaymentStatusTotal > 0 ? (value / PaymentStatusTotal) * 100 : 0;
                         return percentage.toFixed(1) + '%';
                     }
                 }
@@ -150,6 +169,7 @@
         },
         plugins: [ChartDataLabels]
     });
+
 
     const PaymentForData = {!! json_encode($paymentFor->pluck('total')) !!};
     const PaymentForTotal = PaymentForData.reduce((a, b) => a + b, 0);
@@ -161,8 +181,8 @@
             labels: {!! json_encode($paymentFor->pluck('payment_for')) !!},
             datasets: [{
                 label: 'Number of Applicants',
-                data: GradeLevelData,
-                backgroundColor: ['#0d6efd', '#20c997', '#ffc107'],
+                data: PaymentForData,
+                backgroundColor: themePalette,
                 borderColor: '#20c997',
                 borderWidth: 1
             }]
@@ -182,7 +202,7 @@
                     align: 'center',
                     font: { weight: 'bold', size: 12 },
                     formatter: (value) => {
-                        let percentage = GradeLevelTotal > 0 ? (value / GradeLevelTotal) * 100 : 0;
+                        let percentage = PaymentForTotal > 0 ? (value / PaymentForTotal) * 100 : 0;
                         return percentage.toFixed(1) + '%';
                     }
                 }
