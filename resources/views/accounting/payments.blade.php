@@ -366,13 +366,13 @@
               <div class="col-md-6">
                 <label class="form-label fw-semibold">Upload Receipt</label>
                 <div class="small text-muted mb-2">Max 2MB. Accepted: PNG, JPG, JPEG, PDF.</div>
-                <div id="receiptDropzone" class="dropzone border border-secondary rounded p-3" style="min-height: 120px;" required></div>
+                <div id="receiptDropzone" class="dropzone border border-secondary rounded p-3" style="min-height: 120px;"></div>
                 <input type="hidden" name="receipt" id="receipt">
               </div>
               <!-- OCR Number Input -->
               <div class="col-md-6">
                 <label for="ocr_number" class="form-label fw-semibold">OCR Number</label>
-                <input type="number" class="form-control" id="ocr_number" name="ocr_number" placeholder="Enter OCR Number" required>
+                <input type="number" class="form-control" id="ocr_number" name="ocr_number" placeholder="Enter OCR Number">
               </div>
             </div>
           </div>

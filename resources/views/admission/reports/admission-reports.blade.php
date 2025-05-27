@@ -123,7 +123,7 @@
         </div>
         <div class="col">
             <div class="card chart-card">
-        <div class="card-header bg-primary text-white">Recommended Strands</div>
+        <div class="card-header bg-primary text-white">Recommended Strands (Base on Recommender)</div>
         <div class="card-body"><canvas id="RecommendedStrandChart"></canvas></div>
             </div>
         </div>
