@@ -15,6 +15,7 @@
     @vite('resources/css/partials/tables.css')
     @vite('resources/css/accounting/payment-modal.css')
     @vite('resources/css/partials/dashboard.css')
+    @vite('resources/css/partials/reports.css')
 
     {{-- JS --}}
     @vite('resources/js/accounting/payment.js')

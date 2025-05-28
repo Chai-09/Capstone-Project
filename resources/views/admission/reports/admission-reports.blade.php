@@ -3,7 +3,6 @@
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-@vite('resources/js/admission/admission-chart.css')
 
 <div class="dashboard">
     <div class="content">
@@ -12,10 +11,9 @@
 </div>
 
 <div class="report-layout">
-
     <div class="monthlyreports">
         <div class="card mb-4">
-            <div class="card-header bg-light fw-bold">Monthly Applicant Form Reports</div>
+            <div class="card-header fw-semibold">Monthly Applicant Form Reports</div>
             <div class="table-responsive">
                 <table class="table table-sm mb-0">
                     <thead class="table-light">
@@ -46,102 +44,101 @@
     </div>
 
     <div class="mb-4 d-flex flex-column align-items-center gap-2">
-    <div class="btn-group toggle-group chart-toggle" role="group">
-        <button type="button" class="btn btn-toggle active" data-filter="demographic">Demographic</button>
-        <button type="button" class="btn btn-toggle" data-filter="academic">Academic</button>
-    </div>
+        <div class="btn-group toggle-group chart-toggle" role="group">
+            <button type="button" class="btn btn-toggle active" data-filter="demographic">Demographic</button>
+            <button type="button" class="btn btn-toggle" data-filter="academic">Academic</button>
+        </div>
 
-    <div class="level-toggle-container">
-        <div class="btn-group toggle-group level-toggle" role="group">
-            <button type="button" class="btn btn-toggle active" data-level="all">All Levels</button>
-            <button type="button" class="btn btn-toggle" data-level="Grade School">Grade School</button>
-            <button type="button" class="btn btn-toggle" data-level="Junior High School">Junior High</button>
-            <button type="button" class="btn btn-toggle" data-level="Senior High School">Senior High</button>
-        </div>
-    </div>
-</div>
-
-
-<div class="container-fluid">
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 chart-section demographic">
-        <div class="col">
-            <div class="card chart-card">
-                <div class="card-header bg-primary text-white">Educational Level</div>
-                <div class="card-body"><canvas id="applicantChart"></canvas></div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card chart-card">
-                <div class="card-header bg-primary text-white">Gender</div>
-                <div class="card-body"><canvas id="GenderChart"></canvas></div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card chart-card">
-                <div class="card-header bg-primary text-white">Age</div>
-                <div class="card-body"><canvas id="AgeChart"></canvas></div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card chart-card">
-                <div class="card-header bg-primary text-white">City</div>
-                <div class="card-body"><canvas id="CityChart"></canvas></div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card chart-card">
-                <div class="card-header bg-primary text-white">Region</div>
-                <div class="card-body"><canvas id="RegionChart"></canvas></div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card chart-card">
-                <div class="card-header bg-primary text-white">Nationality</div>
-                <div class="card-body"><canvas id="NationalityChart"></canvas></div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card chart-card">
-                <div class="card-header bg-primary text-white">School Type</div>
-                <div class="card-body"><canvas id="SchoolTypeChart"></canvas></div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card chart-card">
-                <div class="card-header bg-primary text-white">Source</div>
-                <div class="card-body"><canvas id="SourceChart"></canvas></div>
+        <div class="level-toggle-container">
+            <div class="btn-group toggle-group level-toggle" role="group">
+                <button type="button" class="btn btn-toggle active" data-level="all">All Levels</button>
+                <button type="button" class="btn btn-toggle" data-level="Grade School">Grade School</button>
+                <button type="button" class="btn btn-toggle" data-level="Junior High School">Junior High</button>
+                <button type="button" class="btn btn-toggle" data-level="Senior High School">Senior High</button>
             </div>
         </div>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 chart-section academic" style="display: none;">
-        <div class="col">
-            <div class="card chart-card">
-                <div class="card-header bg-primary text-white">Senior High School Strands</div>
-                <div class="card-body"><canvas id="StrandChart"></canvas></div>
+
+    <div class="container-fluid">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 chart-section demographic">
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">Educational Level</div>
+                    <div class="card-body"><canvas id="applicantChart"></canvas></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">Gender</div>
+                    <div class="card-body"><canvas id="GenderChart"></canvas></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">Age</div>
+                    <div class="card-body"><canvas id="AgeChart"></canvas></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">City</div>
+                    <div class="card-body"><canvas id="CityChart"></canvas></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">Region</div>
+                    <div class="card-body"><canvas id="RegionChart"></canvas></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">Nationality</div>
+                    <div class="card-body"><canvas id="NationalityChart"></canvas></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">School Type</div>
+                    <div class="card-body"><canvas id="SchoolTypeChart"></canvas></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">Source</div>
+                    <div class="card-body"><canvas id="SourceChart"></canvas></div>
+                </div>
             </div>
         </div>
-        <div class="col">
-            <div class="card chart-card">
-        <div class="card-header bg-primary text-white">Recommended Strands (Base on Recommender)</div>
-        <div class="card-body"><canvas id="RecommendedStrandChart"></canvas></div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 chart-section academic" style="display: none;">
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">Senior High School Strands</div>
+                    <div class="card-body"><canvas id="StrandChart"></canvas></div>
+                </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card chart-card">
-                <div class="card-header bg-primary text-white">Exam Results</div>
-                <div class="card-body"><canvas id="ExamStatusChart"></canvas></div>
+            <div class="col">
+                <div class="card chart-card">
+            <div class="card-header bg-primary text-white">Recommended Strands (Base on Recommender)</div>
+            <div class="card-body"><canvas id="RecommendedStrandChart"></canvas></div>
+                </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card chart-card">
-                <div class="card-header bg-primary text-white">Incoming Grade Level</div>
-                <div class="card-body"><canvas id="IncomingGradeChart"></canvas></div>
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">Exam Results</div>
+                    <div class="card-body"><canvas id="ExamStatusChart"></canvas></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">Incoming Grade Level</div>
+                    <div class="card-body"><canvas id="IncomingGradeChart"></canvas></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 </div>
 
 

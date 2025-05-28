@@ -1,73 +1,75 @@
-@extends('admission.admission-home')
+@extends('accounting.index')
 
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-<div class="monthlyreports">
-    <div class="card mb-4">
-        <div class="card-header bg-light fw-bold">Monthly Accounting Reports</div>
-        <div class="table-responsive">
-            <table class="table table-sm mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Reports</th>
-                        <th class="text-end">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($months as $month)
+<div class="dashboard">
+    <div class="content">
+        <h2 class="text-white mb-4 fw-semibold">Reports</h2>
+    </div>
+</div>
+
+<div class=report-layout>
+    <div class="monthlyreports">
+        <div class="card mb-4">
+            <div class="card-header fw-semibold">Monthly Accounting Reports</div>
+            <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <td>{{ \Carbon\Carbon::create($month['year'], $month['month'])->format('F Y') }}</td>
-                            <td class="text-end">
-                                <button
-                                    class="btn btn-link p-0 text-decoration-none export-confirm"
-                                    data-year="{{ $month['year'] }}"
-                                    data-month="{{ $month['month'] }}"
-                                >
-                                    Download
-                                </button>
-                            </td>
+                            <th>Reports</th>
+                            <th class="text-end">Action</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($months as $month)
+                            <tr>
+                                <td>{{ \Carbon\Carbon::create($month['year'], $month['month'])->format('F Y') }}</td>
+                                <td class="text-end">
+                                    <button
+                                        class="btn btn-link p-0 text-decoration-none export-confirm"
+                                        data-year="{{ $month['year'] }}"
+                                        data-month="{{ $month['month'] }}"
+                                    >
+                                        Download
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {{-- Reports --}}
+    <div class="container-fluid">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 chart-section demographic">
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">Educational Level</div>
+                    <div class="card-body"><canvas id="GradeLevelChart"></canvas></div>
+                </div>
+            </div>     
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">Payment Status</div>
+                    <div class="card-body"><canvas id="PaymentStatusChart"></canvas></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">Payment Type</div>
+                    <div class="card-body"><canvas id="PaymentForChart"></canvas></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 
 
-<div class="container mt-5">
-    <h3 class="mb-4">Admission Reports Dashboard</h3>
-
-    <div class="chart-card demographic">
-        <div class="card">
-            <div class="card-header bg-primary text-white">Applicant Count by Educational Level</div>
-            <div class="card-body">
-                <canvas id="GradeLevelChart" height="300"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="chart-card demographic">
-        <div class="card">
-            <div class="card-header bg-primary text-white">Applicant Count by Payment Status</div>
-            <div class="card-body">
-                <canvas id="PaymentStatusChart" height="300"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="chart-card demographic">
-        <div class="card">
-            <div class="card-header bg-primary text-white">Applicant Count by Payment For</div>
-            <div class="card-body">
-                <canvas id="PaymentForChart" height="300"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
     const themePalette = [
@@ -104,8 +106,8 @@
             datasets: [{
                 label: 'Number of Applicants',
                 data: GradeLevelData,
-                backgroundColor: ['#0d6efd', '#20c997'],
-                borderColor: '#20c997',
+                backgroundColor: themePalette,
+                borderColor: '#fff',
                 borderWidth: 1
             }]
         },
@@ -117,7 +119,7 @@
                 x: { beginAtZero: true, ticks: { precision: 0 } }
             },
             plugins: {
-                legend: { display: true, position: 'bottom' },
+                legend: { display: false },
                 datalabels: {
                     color: '#fff',
                     anchor: 'center',
@@ -146,7 +148,7 @@
                 label: 'Number of Applicants',
                 data: PaymentStatusData,
                 backgroundColor: themePalette,
-                borderColor: '#20c997',
+                borderColor: '#fff',
                 borderWidth: 1
             }]
         },
@@ -183,7 +185,7 @@
                 label: 'Number of Applicants',
                 data: PaymentForData,
                 backgroundColor: themePalette,
-                borderColor: '#20c997',
+                borderColor: '#fff',
                 borderWidth: 1
             }]
         },
@@ -191,9 +193,6 @@
             indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                x: { beginAtZero: true, ticks: { precision: 0 } }
-            },
             plugins: {
                 legend: { display: true, position: 'bottom' },
                 datalabels: {
