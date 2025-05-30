@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\FillupForms;
+use Illuminate\Support\Facades\DB;
 
 class AdmissionChartController extends Controller
 {
     public function index()
     {
-        $gradeSchool = FillupForms::where('educational_level', 'Grade School')->count();
-        $juniorHigh = FillupForms::where('educational_level', 'Junior High School')->count();
-        $seniorHigh = FillupForms::where('educational_level', 'Senior High School')->count();
+        $educationalLevel = FillupForms::selectRaw('educational_level, COUNT(*) as total')
+        ->groupBy('educational_level')
+        ->orderBy('educational_level')
+        ->get();
 
         $male = FillupForms::where('gender', 'Male')->count();
         $female = FillupForms::where('gender', 'Female')->count();
@@ -76,41 +78,59 @@ class AdmissionChartController extends Controller
         ->orderByRaw("FIELD(incoming_grlvl, '" . implode("','", $incomingGradeLevels) . "')")
         ->get();
 
-        $months = \App\Models\FillupForms::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month')
+        $months = DB::table('form_submissions')
+            ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month')
             ->groupBy('year', 'month')
             ->orderByRaw('year DESC, month DESC')
-            ->get()
-            ->toArray();
+            ->paginate(1); // Adjust 6 to however many items you want per page
 
     return view('admission.reports.admission-reports', compact(
-            'gradeSchool', 'juniorHigh', 'seniorHigh',
+            'educationalLevel',
             'male', 'female', 'ageCounts', 'city', 'region', 'nationality', 'schoolType', 'source', 
             'strand', 'examStatus', 'incomingGrades', 'recommendedStrand', 'months'
         ));
     }
 
     public function getChartData(Request $request)
-    {
-        $level = $request->query('level');
-        $baseQuery = FillupForms::query();
-        if ($level && $level !== 'all') {
-            $baseQuery->where('educational_level', $level);
-        }
+{
+    $level = $request->query('level');
+    $range = $request->query('range', 'annually'); // default = annually
+    $baseQuery = FillupForms::query();
 
-        $data = [
-            'gender' => (clone $baseQuery)->selectRaw('gender, COUNT(*) as total')->groupBy('gender')->get(),
-            'age' => (clone $baseQuery)->selectRaw('age, COUNT(*) as total')->groupBy('age')->orderBy('age')->get(),
-            'city' => (clone $baseQuery)->selectRaw('city, COUNT(*) as total')->groupBy('city')->get(),
-            'region' => (clone $baseQuery)->selectRaw('region, COUNT(*) as total')->groupBy('region')->get(),
-            'nationality' => (clone $baseQuery)->selectRaw('nationality, COUNT(*) as total')->groupBy('nationality')->get(),
-            'schoolType' => (clone $baseQuery)->selectRaw('school_type, COUNT(*) as total')->groupBy('school_type')->get(),
-            'source' => (clone $baseQuery)->selectRaw('source, COUNT(*) as total')->groupBy('source')->get(),
-            'strand' => (clone $baseQuery)->whereNotNull('strand')->selectRaw('strand, COUNT(*) as total')->groupBy('strand')->get(),
-            'incomingGrades' => (clone $baseQuery)->selectRaw('incoming_grlvl, COUNT(*) as total')->groupBy('incoming_grlvl')->get(),
-        ];
-
-        return response()->json($data);
+    if ($level && $level !== 'all') {
+        $baseQuery->where('educational_level', $level);
     }
+
+    switch ($range) {
+        case 'daily':
+            $baseQuery->whereDate('created_at', now()->toDateString());
+            break;
+        case 'monthly':
+            $baseQuery->whereYear('created_at', now()->year)
+                      ->whereMonth('created_at', now()->month);
+            break;
+        case 'annually':
+        default:
+            $baseQuery->whereYear('created_at', now()->year);
+            break;
+    }
+
+    $data = [
+        'educationalLevel' => (clone $baseQuery)->selectRaw('educational_level, COUNT(*) as total')->groupBy('educational_level')->get(),
+        'gender' => (clone $baseQuery)->selectRaw('gender, COUNT(*) as total')->groupBy('gender')->get(),
+        'age' => (clone $baseQuery)->selectRaw('age, COUNT(*) as total')->groupBy('age')->orderBy('age')->get(),
+        'city' => (clone $baseQuery)->selectRaw('city, COUNT(*) as total')->groupBy('city')->get(),
+        'region' => (clone $baseQuery)->selectRaw('region, COUNT(*) as total')->groupBy('region')->get(),
+        'nationality' => (clone $baseQuery)->selectRaw('nationality, COUNT(*) as total')->groupBy('nationality')->get(),
+        'schoolType' => (clone $baseQuery)->selectRaw('school_type, COUNT(*) as total')->groupBy('school_type')->get(),
+        'source' => (clone $baseQuery)->selectRaw('source, COUNT(*) as total')->groupBy('source')->get(),
+        'strand' => (clone $baseQuery)->whereNotNull('strand')->selectRaw('strand, COUNT(*) as total')->groupBy('strand')->get(),
+        'incomingGrades' => (clone $baseQuery)->selectRaw('incoming_grlvl, COUNT(*) as total')->groupBy('incoming_grlvl')->get(),
+    ];
+
+    return response()->json($data);
+}
+
 
 
     public function showAdmissionDashboard()

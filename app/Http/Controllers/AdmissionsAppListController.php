@@ -77,8 +77,10 @@ elseif ($request->filled('sort_grade') && in_array($request->sort_grade, ['asc',
     );
 
     return view('admission.applicants-list', compact('applicants'));
+} else {
+    $query->orderBy('created_at', 'desc');
 }
-
+ 
 
 
 

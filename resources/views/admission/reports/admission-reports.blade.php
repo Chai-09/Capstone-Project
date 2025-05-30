@@ -24,21 +24,23 @@
                     </thead>
                     <tbody>
                         @foreach ($months as $month)
-                            <tr>
-                                <td>{{ \Carbon\Carbon::create($month['year'], $month['month'])->format('F Y') }}</td>
-                                <td class="text-end">
-                                    <button
-                                        class="btn btn-link p-0 text-decoration-none export-confirm"
-                                        data-year="{{ $month['year'] }}"
-                                        data-month="{{ $month['month'] }}"
-                                    >
-                                        Download
-                                    </button>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>{{ \Carbon\Carbon::create($month->year, $month->month)->format('F Y') }}</td>
+                            <td class="text-end">
+                                <button
+                                    class="btn btn-link p-0 text-decoration-none export-confirm"
+                                    data-year="{{ $month->year }}"
+                                    data-month="{{ $month->month }}">
+                                    Download
+                                </button>
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
+                <div class="mt-3 d-flex justify-content-center">
+                    {{ $months->links() }}
+                </div>
             </div>
         </div>
     </div>
@@ -57,6 +59,14 @@
                 <button type="button" class="btn btn-toggle" data-level="Senior High School">Senior High</button>
             </div>
         </div>
+
+        <div class="date-range-toggle-container mt-3">
+            <div class="btn-group toggle-group date-toggle" role="group">
+                <button type="button" class="btn btn-toggle" data-range="daily">Daily</button>
+                <button type="button" class="btn btn-toggle" data-range="monthly">Monthly</button>
+                <button type="button" class="btn btn-toggle active" data-range="annually">Annually</button>
+            </div>
+        </div>
     </div>
 
 
@@ -65,7 +75,7 @@
             <div class="col">
                 <div class="card chart-card">
                     <div class="card-header bg-primary text-white">Educational Level</div>
-                    <div class="card-body"><canvas id="applicantChart"></canvas></div>
+                    <div class="card-body"><canvas id="EducationalLevelChart"></canvas></div>
                 </div>
             </div>
             <div class="col">
@@ -143,85 +153,131 @@
 
 
 <script>
+    let selectedRange = 'annually'; // Default
+    let selectedLevel = 'all';      // Default
+
+    function fetchChartData() {
+        fetch(`/chart-data?level=${encodeURIComponent(selectedLevel)}&range=${encodeURIComponent(selectedRange)}`)
+        .then(res => res.json())
+        .then(data => {
+            const allEmpty = Object.values(data).every(arr => arr.length === 0);
+
+            if (allEmpty) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'No Data',
+                    text: 'No applicant data found for this time range.',
+                    confirmButtonText: 'OK'
+                });
+
+                // Clear all charts
+                [
+                    educationalChart, applicantGenderChart, ageChart, cityChart, regionChart,
+                    nationalityChart, schoolTypeChart, sourceChart, strandChart, incomingGradeChart
+                ].forEach(chart => {
+                    chart.data.labels = [];
+                    chart.data.datasets[0].data = [];
+                    chart.update();
+                });
+                return;
+            }
+            // Educational Level Chart
+            educationalChart.data.labels = data.educationalLevel.map(e => e.educational_level);
+            educationalChart.data.datasets[0].data = data.educationalLevel.map(e => e.total);
+            educationalChart.update();
+
+            // Gender Chart
+            applicantGenderChart.data.datasets[0].data = [
+                data.gender.find(g => g.gender === 'Male')?.total || 0,
+                data.gender.find(g => g.gender === 'Female')?.total || 0
+            ];
+            applicantGenderChart.update();
+
+            // Age Chart
+            ageChart.data.labels = data.age.map(a => a.age);
+            ageChart.data.datasets[0].data = data.age.map(a => a.total);
+            ageChart.update();
+
+            // City Chart
+            cityChart.data.labels = data.city.map(c => c.city);
+            cityChart.data.datasets[0].data = data.city.map(c => c.total);
+            cityChart.update();
+
+            // Region Chart
+            regionChart.data.labels = data.region.map(r => r.region);
+            regionChart.data.datasets[0].data = data.region.map(r => r.total);
+            regionChart.update();
+
+            // Nationality Chart
+            nationalityChart.data.labels = data.nationality.map(n => n.nationality);
+            nationalityChart.data.datasets[0].data = data.nationality.map(n => n.total);
+            nationalityChart.update();
+
+            // School Type Chart
+            schoolTypeChart.data.labels = data.schoolType.map(s => s.school_type);
+            schoolTypeChart.data.datasets[0].data = data.schoolType.map(s => s.total);
+            schoolTypeChart.update();
+
+            // Source Chart
+            sourceChart.data.labels = data.source.map(s => s.source);
+            sourceChart.data.datasets[0].data = data.source.map(s => s.total);
+            sourceChart.update();
+
+            // Strand Chart
+            strandChart.data.labels = data.strand.map(s => s.strand);
+            strandChart.data.datasets[0].data = data.strand.map(s => s.total);
+            strandChart.update();
+
+            // Incoming Grade Chart
+            incomingGradeChart.data.labels = data.incomingGrades.map(g => g.incoming_grlvl);
+            incomingGradeChart.data.datasets[0].data = data.incomingGrades.map(g => g.total);
+            incomingGradeChart.update();
+        });
+    }
+
     document.querySelectorAll('.chart-toggle .btn-toggle').forEach(btn => {
         btn.addEventListener('click', function () {
-            // Toggle active class
             document.querySelectorAll('.chart-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
 
             const selected = this.getAttribute('data-filter');
 
-            // Show the correct chart section
             document.querySelectorAll('.chart-section').forEach(section => {
                 section.style.display = section.classList.contains(selected) ? 'flex' : 'none';
             });
 
             const levelToggleContainer = document.querySelector('.level-toggle-container');
-
-              if (selected === 'academic') {
-                // Hide level filter
+            if (selected === 'academic') {
                 levelToggleContainer.style.display = 'none';
-
-                // Automatically trigger click on "Senior High School"
-                // When switching to academic, do NOT trigger any level button.
-                // Instead, ensure the "All Levels" button stays selected.
                 document.querySelectorAll('.level-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
                 const allBtn = document.querySelector('.level-toggle .btn-toggle[data-level="all"]');
                 if (allBtn) allBtn.classList.add('active');
-
-                // Manually trigger fetch for All Levels data
-                fetch('/chart-data?level=all')
-                    .then(res => res.json())
-                    .then(data => {
-                        applicantGenderChart.data.datasets[0].data = [
-                            data.gender.find(g => g.gender === 'Male')?.total || 0,
-                            data.gender.find(g => g.gender === 'Female')?.total || 0
-                        ];
-                        applicantGenderChart.update();
-
-                        ageChart.data.labels = data.age.map(a => a.age);
-                        ageChart.data.datasets[0].data = data.age.map(a => a.total);
-                        ageChart.update();
-
-                        cityChart.data.labels = data.city.map(c => c.city);
-                        cityChart.data.datasets[0].data = data.city.map(c => c.total);
-                        cityChart.update();
-
-                        regionChart.data.labels = data.region.map(r => r.region);
-                        regionChart.data.datasets[0].data = data.region.map(r => r.total);
-                        regionChart.update();
-
-                        nationalityChart.data.labels = data.nationality.map(n => n.nationality);
-                        nationalityChart.data.datasets[0].data = data.nationality.map(n => n.total);
-                        nationalityChart.update();
-
-                        schoolTypeChart.data.labels = data.schoolType.map(s => s.school_type);
-                        schoolTypeChart.data.datasets[0].data = data.schoolType.map(s => s.total);
-                        schoolTypeChart.update();
-
-                        sourceChart.data.labels = data.source.map(s => s.source);
-                        sourceChart.data.datasets[0].data = data.source.map(s => s.total);
-                        sourceChart.update();
-
-                        strandChart.data.labels = data.strand.map(s => s.strand);
-                        strandChart.data.datasets[0].data = data.strand.map(s => s.total);
-                        strandChart.update();
-
-                        incomingGradeChart.data.labels = data.incomingGrades.map(g => g.incoming_grlvl);
-                        incomingGradeChart.data.datasets[0].data = data.incomingGrades.map(g => g.total);
-                        incomingGradeChart.update();
-                    });
-
+                selectedLevel = 'all';
+                fetchChartData();
             } else {
                 levelToggleContainer.style.display = 'block';
+                fetchChartData();
             }
         });
     });
 
-    const educationCtx = document.getElementById('applicantChart').getContext('2d');
-    const applicantLabels = ['Grade School', 'Junior High', 'Senior High'];
-    const applicantValues = [{{ $gradeSchool ?? 0 }}, {{ $juniorHigh ?? 0 }}, {{ $seniorHigh ?? 0 }}];
-    const applicantTotal = applicantValues.reduce((a, b) => a + b, 0);
+    document.querySelectorAll('.level-toggle .btn-toggle').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.level-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            selectedLevel = this.getAttribute('data-level');
+            fetchChartData();
+        });
+    });
+
+    document.querySelectorAll('.date-toggle .btn-toggle').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.date-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            selectedRange = this.getAttribute('data-range');
+            fetchChartData();
+        });
+    });
 
     const themePalette = [
         '#129439', // main green
@@ -245,56 +301,46 @@
         '#27ae60', // emerald
         '#20c997', // teal
         '#2471a3'  // navy blue
-        ];
+    ];
 
-        const applicantChart = new Chart(educationCtx, {
-            type: 'bar',
-            data: {
-                labels: applicantLabels,
-                datasets: [{
-                data: applicantValues,
+    //new chart for educational level
+    const EducationalLevelData = {!! json_encode($educationalLevel->pluck('total')) !!};
+    const EducationalLevelDataTotal = EducationalLevelData.reduce((a, b) => a + b, 0);
+    const educationalCtx = document.getElementById('EducationalLevelChart').getContext('2d');
+    const educationalChart = new Chart(educationalCtx, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($educationalLevel->pluck('educational_level')) !!},
+            datasets: [{
+                label: 'Number of Applicants',
+                data: EducationalLevelData,
                 backgroundColor: themePalette,
                 borderColor: '#ffffff',
                 borderWidth: 1
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, ticks: { precision: 0 } }
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const value = context.parsed.y;
-                                const percentage = applicantTotal > 0 ? ((value / applicantTotal) * 100).toFixed(2) : 0;
-                                return `${context.label}: ${value} (${percentage}%)`;
-                            }
-                        }
-                    },
-                    datalabels: {
-                        anchor: 'center',
-                        align: 'center',
-                        color: '#fff',
-                        font: {
-                            weight: 'bold'
-                        },
-                        formatter: function(value) {
-                            const percentage = applicantTotal > 0 ? ((value / applicantTotal) * 100).toFixed(1) : 0;
-                            return `${percentage}%`;
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        precision: 0
+            plugins: {
+                legend: { display: false },
+                datalabels: {
+                    color: '#fff',
+                    anchor: 'center',
+                    align: 'center',
+                    font: { weight: 'bold', size: 12 },
+                    formatter: (value) => {
+                        let percentage = EducationalLevelDataTotal > 0 ? (value / EducationalLevelDataTotal) * 100 : 0;
+                        return percentage.toFixed(1) + '%';
                     }
                 }
-            },
-            plugins: [ChartDataLabels]
-        });
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
 
     const genderCtx = document.getElementById('GenderChart').getContext('2d');
     const applicantGenderChart = new Chart(genderCtx, {
@@ -332,7 +378,6 @@
     const ageCtx = document.getElementById('AgeChart').getContext('2d');
     const ageData = {!! json_encode($ageCounts->pluck('total')) !!};
     const total = ageData.reduce((a, b) => a + b, 0);
-
     const ageChart = new Chart(ageCtx, {
         type: 'bar',
         data: {
@@ -548,81 +593,81 @@
     });
 
     const strandCtx = document.getElementById('StrandChart').getContext('2d');
-const strandLabels = {!! json_encode($strand->pluck('strand')) !!};
-const strandData = {!! json_encode($strand->pluck('total')) !!};
-const strandTotal = strandData.reduce((a, b) => a + b, 0);
+    const strandLabels = {!! json_encode($strand->pluck('strand')) !!};
+    const strandData = {!! json_encode($strand->pluck('total')) !!};
+    const strandTotal = strandData.reduce((a, b) => a + b, 0);
 
-const strandChart = new Chart(strandCtx, {
-    type: 'pie',
-    data: {
-        labels: strandLabels,
-        datasets: [{
-            data: strandData,
-            backgroundColor: themePalette.slice(0, strandLabels.length),
-            borderColor: '#fff',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: true,
-                position: 'bottom', // show color-keyed labels under the pie
-                labels: {
-                    boxWidth: 20,
-                    padding: 15
-                }
-            },
-            datalabels: {
-                color: '#fff',
-                font: {
-                    weight: 'bold'
+    const strandChart = new Chart(strandCtx, {
+        type: 'pie',
+        data: {
+            labels: strandLabels,
+            datasets: [{
+                data: strandData,
+                backgroundColor: themePalette.slice(0, strandLabels.length),
+                borderColor: '#fff',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom', // show color-keyed labels under the pie
+                    labels: {
+                        boxWidth: 20,
+                        padding: 15
+                    }
                 },
-                formatter: (value) => {
-                    const percentage = strandTotal > 0 ? (value / strandTotal) * 100 : 0;
-                    return `${percentage.toFixed(1)}%`;
+                datalabels: {
+                    color: '#fff',
+                    font: {
+                        weight: 'bold'
+                    },
+                    formatter: (value) => {
+                        const percentage = strandTotal > 0 ? (value / strandTotal) * 100 : 0;
+                        return `${percentage.toFixed(1)}%`;
+                    }
                 }
             }
-        }
-    },
-    plugins: [ChartDataLabels]
-});
+        },
+        plugins: [ChartDataLabels]
+    });
 
     const recommendedStrandLabels = {!! json_encode($recommendedStrand->pluck('recommended_strand')) !!};
-const recommendedStrandData = {!! json_encode($recommendedStrand->pluck('total')) !!};
-const recommendedStrandTotal = recommendedStrandData.reduce((a, b) => a + b, 0);
+    const recommendedStrandData = {!! json_encode($recommendedStrand->pluck('total')) !!};
+    const recommendedStrandTotal = recommendedStrandData.reduce((a, b) => a + b, 0);
 
-const recommendedStrandCtx = document.getElementById('RecommendedStrandChart').getContext('2d');
-const recommendedStrandChart = new Chart(recommendedStrandCtx, {
-    type: 'pie',
-    data: {
-        labels: recommendedStrandLabels,
-        datasets: [{
-            data: recommendedStrandData,
-            backgroundColor: themePalette.slice(0, recommendedStrandLabels.length),
-            borderColor: '#fff',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { display: true, position: 'bottom' },
-            datalabels: {
-                color: '#fff',
-                font: { weight: 'bold' },
-                formatter: (value) => {
-                    const percentage = recommendedStrandTotal > 0 ? (value / recommendedStrandTotal) * 100 : 0;
-                    return percentage.toFixed(1) + '%';
+    const recommendedStrandCtx = document.getElementById('RecommendedStrandChart').getContext('2d');
+    const recommendedStrandChart = new Chart(recommendedStrandCtx, {
+        type: 'pie',
+        data: {
+            labels: recommendedStrandLabels,
+            datasets: [{
+                data: recommendedStrandData,
+                backgroundColor: themePalette.slice(0, recommendedStrandLabels.length),
+                borderColor: '#fff',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true, position: 'bottom' },
+                datalabels: {
+                    color: '#fff',
+                    font: { weight: 'bold' },
+                    formatter: (value) => {
+                        const percentage = recommendedStrandTotal > 0 ? (value / recommendedStrandTotal) * 100 : 0;
+                        return percentage.toFixed(1) + '%';
+                    }
                 }
             }
-        }
-    },
-    plugins: [ChartDataLabels]
-});
+        },
+        plugins: [ChartDataLabels]
+    });
 
 
     const ExamStatusData = {!! json_encode($examStatus->pluck('total')) !!};
@@ -719,63 +764,12 @@ const recommendedStrandChart = new Chart(recommendedStrandCtx, {
         });
     });
 
-    document.querySelectorAll('.level-toggle .btn-toggle').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.level-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-
-            const level = this.getAttribute('data-level');
-
-            fetch(`/chart-data?level=${encodeURIComponent(level)}`)
-            .then(res => res.json())
-            .then(data => {
-                // Update charts using `data` just like before
-                applicantGenderChart.data.datasets[0].data = [
-                    data.gender.find(g => g.gender === 'Male')?.total || 0,
-                    data.gender.find(g => g.gender === 'Female')?.total || 0
-                ];
-                applicantGenderChart.update();
-
-                ageChart.data.labels = data.age.map(a => a.age);
-                ageChart.data.datasets[0].data = data.age.map(a => a.total);
-                ageChart.update();
-
-                cityChart.data.labels = data.city.map(c => c.city);
-                cityChart.data.datasets[0].data = data.city.map(c => c.total);
-                cityChart.update();
-
-                regionChart.data.labels = data.region.map(r => r.region);
-                regionChart.data.datasets[0].data = data.region.map(r => r.total);
-                regionChart.update();
-
-                nationalityChart.data.labels = data.nationality.map(n => n.nationality);
-                nationalityChart.data.datasets[0].data = data.nationality.map(n => n.total);
-                nationalityChart.update();
-
-                schoolTypeChart.data.labels = data.schoolType.map(s => s.school_type);
-                schoolTypeChart.data.datasets[0].data = data.schoolType.map(s => s.total);
-                schoolTypeChart.update();
-
-                sourceChart.data.labels = data.source.map(s => s.source);
-                sourceChart.data.datasets[0].data = data.source.map(s => s.total);
-                sourceChart.update();
-
-                strandChart.data.labels = data.strand.map(s => s.strand);
-                strandChart.data.datasets[0].data = data.strand.map(s => s.total);
-                strandChart.update();
-
-                incomingGradeChart.data.labels = data.incomingGrades.map(g => g.incoming_grlvl);
-                incomingGradeChart.data.datasets[0].data = data.incomingGrades.map(g => g.total);
-                incomingGradeChart.update();
-            });
-        });
-    });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-document.querySelectorAll('.export-confirm').forEach(button => {
+    ument.querySelectorAll('.export-confirm').forEach(button => {
     button.addEventListener('click', function () {
         const year = this.getAttribute('data-year');
         const month = this.getAttribute('data-month');
