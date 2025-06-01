@@ -180,21 +180,21 @@ class EditApplicantController extends Controller
         }
 
 
-// ✅ Save exam result (Step 6)
-if ($request->filled('exam_status')) {
-    $examStatus = $request->exam_status;
-    $examResult = $examStatus === 'no show' ? 'no show' : ($request->input('exam_result') ?? 'pending'); // default to pending if none
+        // ✅ Save exam result (Step 6)
+        if ($request->filled('exam_status')) {
+            $examStatus = $request->exam_status;
+            $examResult = $examStatus === 'no show' ? 'no show' : ($request->input('exam_result') ?? 'pending'); // default to pending if none
 
-    DB::table('exam_results')
-        ->updateOrInsert(
-            ['applicant_id' => $form->applicant_id],
-            [
-                'exam_status' => $examStatus,
-                'exam_result' => $examResult,
-                'updated_at' => now()
-            ]
-        );
-    }
+            DB::table('exam_results')
+                ->updateOrInsert(
+                    ['applicant_id' => $form->applicant_id],
+                    [
+                        'exam_status' => $examStatus,
+                        'exam_result' => $examResult,
+                        'updated_at' => now()
+                    ]
+                );
+            }
 
         if (isset($validated['applicant_fname'])) {
             $validated['applicant_fname'] = strtoupper($validated['applicant_fname']);

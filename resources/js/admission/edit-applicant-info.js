@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (editBtn) {
         editBtn.addEventListener('click', () => {
             actionButtons.classList.remove('d-none');
-            document.querySelectorAll('#step1Content input, #step1Content select, #step4Content input, #step4Content select, #step6Content input, #step6Content select')
+            document.querySelectorAll('#step1Content input, #step1Content select, #step4Content input, #step4Content select, #step5Content select, select #step6Content input, #step6Content select')
                 .forEach(el => {
                     el.removeAttribute('readonly');
                     el.removeAttribute('disabled');

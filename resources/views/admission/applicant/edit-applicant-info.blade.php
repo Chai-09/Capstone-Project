@@ -489,7 +489,7 @@
                 </div>
             </div>
 
-            {{-- Step 5: Placeholder --}}
+            {{-- Step 5: Exam Status --}}
             <div id="step5Content" class="d-none">
                 <div class="card shadow-sm p-4">
                     <h5 class="fw-bold text-dark mb-4">
@@ -518,9 +518,9 @@
                             <label class="form-label text-muted small">Exam Result</label>
                             <select name="exam_result" class="form-control bg-light" readonly disabled>
                             <option value="">Select Result</option>
+                            <option value="pending" {{ ($examResult->exam_result ?? '') == 'pending' ? 'selected' : '' }}>Pending</option>
                             <option value="passed" {{ ($examResult->exam_result ?? '') == 'passed' ? 'selected' : '' }}>Passed</option>
                             <option value="failed" {{ ($examResult->exam_result ?? '') == 'failed' ? 'selected' : '' }}>Failed</option>
-                            <option value="pending" {{ ($examResult->exam_result ?? '') == 'pending' ? 'selected' : '' }}>Pending</option>
                             <option value="interview" {{ ($examResult->exam_result ?? '') == 'interview' ? 'selected' : '' }}>Interview</option>
                             <option value="scholarship" {{ ($examResult->exam_result ?? '') == 'scholarship' ? 'selected' : '' }}>Scholarship</option>
                             <option value="no show"
