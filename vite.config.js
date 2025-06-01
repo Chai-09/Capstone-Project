@@ -43,6 +43,7 @@ export default defineConfig({
                 // Admission
                 'resources/js/admission/applicant-list.js',
                 'resources/css/admission/edit-applicant.css',
+                'resources/js/admission/edit-applicant-info.js',
 
                 // Legal
                 'resources/css/legal/terms.css',

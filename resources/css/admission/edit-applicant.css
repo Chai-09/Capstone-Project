@@ -29,3 +29,82 @@
     width: 100% !important;
     height: 100% !important;
 }
+
+.breadcrumb {
+    background-color: #f8f9fa;
+    font-size: 0.95rem;
+}
+
+.breadcrumb a {
+    font-weight: 500;
+}
+
+.breadcrumb a:hover {
+    color: #2b1b88;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+
+    color: #6c757d;
+    padding: 0 0.5rem;
+}
+
+.applicant-list  .card{
+    background-color: white;
+    border-color: rgba(29, 27, 27, 0.11);
+}
+
+.applicant-list .step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 16px;
+    background-color: white;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.applicant-list .step-circle:hover {
+    box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.15);
+}
+
+.step-circle.bg-success {
+    background-color: #198754 !important;
+}
+
+.applicant-list .progress-line {
+    width: 30px;
+    height: 2px;
+    background-color: #dee2e6;
+    margin: 0 12px;
+}
+
+.applicant-list .fixed-action-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 1050;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 10px 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.view-proof-link {
+    color: #19abd8;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.view-proof-link:hover {
+    text-decoration: underline;
+    color: #157fa6;
+}

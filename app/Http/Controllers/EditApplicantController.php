@@ -65,12 +65,10 @@ class EditApplicantController extends Controller
             'existingPayment',
             'schedule',
             'examResult',
-            'availableSchedules', // ✅ Include available exam dates based on level
+            'availableSchedules', 
             'isEditable'
         ));
     }
-
-    
 
 
     public function update(Request $request, $id)
@@ -124,6 +122,40 @@ class EditApplicantController extends Controller
 
         $validated = $request->validate($rules);
 
+        $validated['applicant_fname'] = strtoupper($validated['applicant_fname'] ?? $form->applicant_fname);
+        $validated['applicant_mname'] = strtoupper($validated['applicant_mname'] ?? $form->applicant_mname);
+        $validated['applicant_lname'] = strtoupper($validated['applicant_lname'] ?? $form->applicant_lname);
+
+        $validated['guardian_fname'] = strtoupper($validated['guardian_fname'] ?? $form->guardian_fname);
+        $validated['guardian_mname'] = strtoupper($validated['guardian_mname'] ?? $form->guardian_mname);
+        $validated['guardian_lname'] = strtoupper($validated['guardian_lname'] ?? $form->guardian_lname);
+
+        $validated['current_school'] = strtoupper($validated['current_school'] ?? $form->current_school);
+        
+        // Format applicant middle name
+        if (!empty($validated['applicant_mname'])) {
+            $applicantMname = strtoupper($validated['applicant_mname']);
+            $applicantMname = str_replace('.', '', $applicantMname); 
+
+            if (strlen($applicantMname) <= 2) {
+                $validated['applicant_mname'] = $applicantMname . '.';
+            } else {
+                $validated['applicant_mname'] = $applicantMname; 
+            }
+        }
+
+        // Format guardian middle name
+        if (!empty($validated['guardian_mname'])) {
+            $guardianMname = strtoupper($validated['guardian_mname']);
+            $guardianMname = str_replace('.', '', $guardianMname); 
+
+            if (strlen($guardianMname) <= 2) {
+                $validated['guardian_mname'] = $guardianMname . '.';
+            } else {
+                $validated['guardian_mname'] = $guardianMname;
+            }
+        }
+
         // Update the form
         $form->update($validated);
 
@@ -131,21 +163,21 @@ class EditApplicantController extends Controller
         $fullName = strtoupper(trim(($validated['applicant_fname'] ?? $form->applicant_fname) . ' ' . ($validated['applicant_lname'] ?? $form->applicant_lname)));
         $email = strtolower($validated['applicant_email'] ?? $form->applicant_email);
 
-        // ✅ Save applicant schedule (Step 4)
-// Extract start_time and end_time from combined time_slot field
-if ($request->filled('exam_date') && $request->filled('time_slot')) {
-    [$start_time, $end_time] = explode('|', $request->time_slot);
+        //  Save applicant schedule (Step 4)
+        // Extract start_time and end_time from combined time_slot field
+        if ($request->filled('exam_date') && $request->filled('time_slot')) {
+            [$start_time, $end_time] = explode('|', $request->time_slot);
 
-    DB::table('applicant_schedules')->updateOrInsert(
-        ['applicant_id' => $form->applicant_id],
-        [
-            'exam_date' => $request->exam_date,
-            'start_time' => $start_time,
-            'end_time' => $end_time,
-            'updated_at' => now()
-        ]
-    );
-}
+            DB::table('applicant_schedules')->updateOrInsert(
+                ['applicant_id' => $form->applicant_id],
+                [
+                    'exam_date' => $request->exam_date,
+                    'start_time' => $start_time,
+                    'end_time' => $end_time,
+                    'updated_at' => now()
+                ]
+            );
+        }
 
 
 // ✅ Save exam result (Step 6)
@@ -162,11 +194,18 @@ if ($request->filled('exam_status')) {
                 'updated_at' => now()
             ]
         );
-}
+    }
 
+        if (isset($validated['applicant_fname'])) {
+            $validated['applicant_fname'] = strtoupper($validated['applicant_fname']);
+        }
+        if (isset($validated['applicant_mname'])) {
+            $validated['applicant_mname'] = strtoupper($validated['applicant_mname']);
+        }
+        if (isset($validated['applicant_lname'])) {
+            $validated['applicant_lname'] = strtoupper($validated['applicant_lname']);
+        }
 
-
-        
 
         // Update related tables
         Applicant::where('id', $applicantId)->update([
@@ -284,4 +323,30 @@ public function getTimeSlots(Request $request)
     return response()->json($slots);
 }
 
+public function destroy($id)
+{
+    $form = FillupForms::findOrFail($id);
+    $applicant = Applicant::findOrFail($form->applicant_id);
+    $accountId = $applicant->account_id;
+
+    // Delete related records
+    DB::table('payment')->where('applicant_id', $applicant->id)->delete();
+    DB::table('exam_results')->where('applicant_id', $applicant->id)->delete();
+    DB::table('applicant_schedules')->where('applicant_id', $applicant->id)->delete();
+    DB::table('form_change_logs')->where('form_submission_id', $form->id)->delete();
+
+    // Delete main records
+    $form->delete();
+    $applicant->delete();
+
+    // Optional: delete account if no other role/user is tied to it
+    Accounts::where('id', $accountId)->delete();
+
+    return redirect()->route('applicantlist')->with('success', 'Applicant and account deleted successfully.');
 }
+
+
+
+}
+
+
