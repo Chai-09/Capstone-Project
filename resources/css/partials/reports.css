@@ -117,3 +117,86 @@
     background-color: #f1fdf4;
     color: #1733b3;
 }
+
+/* pagination */
+.pagination .page-item .page-link {
+    border: none;
+    background: transparent;
+    color: rgb(31, 31, 31);
+    font-weight: 500;
+    font-size: 15px;
+    padding: 6px 12px;
+    transition: 0.2s;
+}
+
+.pagination .page-item .page-link:hover {
+    color: #86d670;
+    text-decoration: underline;
+}
+
+.pagination .page-item.active .page-link {
+    color: #129439;
+    background-color: white;
+    font-weight: 700;
+    border-radius: 6px;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #aaaaaa;
+}
+
+/* Clean row layout for all toggles */
+.report-layout .report-toggle-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Unified button appearance */
+.report-layout .toggle-group .btn-toggle {
+    border-radius: 30px;
+    padding: 8px 16px;
+    font-weight: 500;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: #333;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Active style */
+.report-layout .toggle-group .btn-toggle.active {
+    background-color: rgb(24, 117, 0);
+    color: white;
+    border-color: rgb(24, 117, 0);
+}
+
+.report-layout .report-toggle-row > .toggle-group {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin: 0; 
+}
+
+.report-layout .btn-toggle {
+    height: 38px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 8px 20px;
+}
+
+@media (max-width: 768px) {
+    .report-layout .report-toggle-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .report-layout .toggle-group {
+        justify-content: center;
+        width: 100%;
+    }
+}

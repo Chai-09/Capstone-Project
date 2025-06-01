@@ -61,9 +61,9 @@ class AdmissionChartController extends Controller
         ->orderBy('recommended_strand')
         ->get();
 
-        $examStatus = \App\Models\ExamResult::selectRaw('exam_status, COUNT(*) as total')
-        ->groupBy('exam_status')
-        ->orderBy('exam_status')
+        $examResult = \App\Models\ExamResult::selectRaw('exam_result, COUNT(*) as total')
+        ->groupBy('exam_result')
+        ->orderBy('exam_result')
         ->get();
 
         $incomingGradeLevels = [
@@ -78,16 +78,22 @@ class AdmissionChartController extends Controller
         ->orderByRaw("FIELD(incoming_grlvl, '" . implode("','", $incomingGradeLevels) . "')")
         ->get();
 
-        $months = DB::table('form_submissions')
-            ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month')
-            ->groupBy('year', 'month')
-            ->orderByRaw('year DESC, month DESC')
-            ->paginate(1); // Adjust 6 to however many items you want per page
+       $months = DB::table('form_submissions')
+        ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month')
+        ->groupBy('year', 'month')
+        ->orderByRaw('year DESC, month DESC')
+        ->paginate(6);
+
+        if ($months->currentPage() > $months->lastPage()) {
+            return redirect()->route('admission.reports', ['page' => 1]);
+        }
+
+
 
     return view('admission.reports.admission-reports', compact(
             'educationalLevel',
             'male', 'female', 'ageCounts', 'city', 'region', 'nationality', 'schoolType', 'source', 
-            'strand', 'examStatus', 'incomingGrades', 'recommendedStrand', 'months'
+            'strand', 'examResult', 'incomingGrades', 'recommendedStrand', 'months'
         ));
     }
 
@@ -126,6 +132,8 @@ class AdmissionChartController extends Controller
         'source' => (clone $baseQuery)->selectRaw('source, COUNT(*) as total')->groupBy('source')->get(),
         'strand' => (clone $baseQuery)->whereNotNull('strand')->selectRaw('strand, COUNT(*) as total')->groupBy('strand')->get(),
         'incomingGrades' => (clone $baseQuery)->selectRaw('incoming_grlvl, COUNT(*) as total')->groupBy('incoming_grlvl')->get(),
+        'examResult' => \App\Models\ExamResult::selectRaw('exam_result, COUNT(*) as total')->groupBy('exam_result')->orderBy('exam_result')->get(),
+
     ];
 
     return response()->json($data);

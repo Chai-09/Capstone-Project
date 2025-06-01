@@ -345,8 +345,6 @@ public function destroy($id)
     return redirect()->route('applicantlist')->with('success', 'Applicant and account deleted successfully.');
 }
 
-
-
 }
 
 

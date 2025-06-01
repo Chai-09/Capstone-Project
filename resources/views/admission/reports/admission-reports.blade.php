@@ -11,7 +11,9 @@
 </div>
 
 <div class="report-layout">
-    <div class="monthlyreports">
+
+    {{-- Monthly Reports --}}
+    <div class="monthlyreports" id="monthly-report-container">
         <div class="card mb-4">
             <div class="card-header fw-semibold">Monthly Applicant Form Reports</div>
             <div class="table-responsive">
@@ -38,36 +40,35 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="mt-3 d-flex justify-content-center">
-                    {{ $months->links() }}
-                </div>
             </div>
         </div>
     </div>
 
-    <div class="mb-4 d-flex flex-column align-items-center gap-2">
+    {{-- Pagination --}}
+    <div class=" d-flex justify-content-end align-items-center">
+        {{ $months->links('pagination::bootstrap-5') }}
+    </div>
+    
+    <div class="mb-4 report-toggle-row d-flex flex-wrap justify-content-center gap-3">
         <div class="btn-group toggle-group chart-toggle" role="group">
             <button type="button" class="btn btn-toggle active" data-filter="demographic">Demographic</button>
             <button type="button" class="btn btn-toggle" data-filter="academic">Academic</button>
         </div>
 
-        <div class="level-toggle-container">
-            <div class="btn-group toggle-group level-toggle" role="group">
-                <button type="button" class="btn btn-toggle active" data-level="all">All Levels</button>
-                <button type="button" class="btn btn-toggle" data-level="Grade School">Grade School</button>
-                <button type="button" class="btn btn-toggle" data-level="Junior High School">Junior High</button>
-                <button type="button" class="btn btn-toggle" data-level="Senior High School">Senior High</button>
-            </div>
+        <div class="btn-group toggle-group level-toggle" role="group">
+            <button type="button" class="btn btn-toggle active" data-level="all">All Levels</button>
+            <button type="button" class="btn btn-toggle" data-level="Grade School">Grade School</button>
+            <button type="button" class="btn btn-toggle" data-level="Junior High School">Junior High</button>
+            <button type="button" class="btn btn-toggle" data-level="Senior High School">Senior High</button>
         </div>
 
-        <div class="date-range-toggle-container mt-3">
-            <div class="btn-group toggle-group date-toggle" role="group">
-                <button type="button" class="btn btn-toggle" data-range="daily">Daily</button>
-                <button type="button" class="btn btn-toggle" data-range="monthly">Monthly</button>
-                <button type="button" class="btn btn-toggle active" data-range="annually">Annually</button>
-            </div>
+        <div class="btn-group toggle-group date-toggle" role="group">
+            <button type="button" class="btn btn-toggle" data-range="daily">Daily</button>
+            <button type="button" class="btn btn-toggle" data-range="monthly">Monthly</button>
+            <button type="button" class="btn btn-toggle active" data-range="annually">Annually</button>
         </div>
     </div>
+
 
 
     <div class="container-fluid">
@@ -138,7 +139,7 @@
             <div class="col">
                 <div class="card chart-card">
                     <div class="card-header bg-primary text-white">Exam Results</div>
-                    <div class="card-body"><canvas id="ExamStatusChart"></canvas></div>
+                    <div class="card-body"><canvas id="ExamResultChart"></canvas></div>
                 </div>
             </div>
             <div class="col">
@@ -151,7 +152,7 @@
     </div>
 </div>
 
-
+{{-- Charts Script --}}
 <script>
     let selectedRange = 'annually'; // Default
     let selectedLevel = 'all';      // Default
@@ -232,7 +233,14 @@
             incomingGradeChart.data.labels = data.incomingGrades.map(g => g.incoming_grlvl);
             incomingGradeChart.data.datasets[0].data = data.incomingGrades.map(g => g.total);
             incomingGradeChart.update();
+
+            // Exam Result
+            examResultChart.data.labels = data.examResult.map(e => e.exam_result);
+            examResultChart.data.datasets[0].data = data.examResult.map(e => e.total);
+            examResultChart.update();
+
         });
+        
     }
 
     document.querySelectorAll('.chart-toggle .btn-toggle').forEach(btn => {
@@ -670,16 +678,16 @@
     });
 
 
-    const ExamStatusData = {!! json_encode($examStatus->pluck('total')) !!};
-    const ExamStatusDataTotal = ExamStatusData.reduce((a, b) => a + b, 0);
-    const examCtx = document.getElementById('ExamStatusChart').getContext('2d');
-    const examStatusChart = new Chart(examCtx, {
+    const ExamResultData = {!! json_encode($examResult->pluck('total')) !!};
+    const ExamResultDataTotal = ExamResultData.reduce((a, b) => a + b, 0);
+    const examCtx = document.getElementById('ExamResultChart').getContext('2d');
+    const examResultChart = new Chart(examCtx, {
         type: 'bar',
         data: {
-            labels: {!! json_encode($examStatus->pluck('exam_status')) !!},
+            labels: {!! json_encode($examResult->pluck('exam_result')) !!},
             datasets: [{
                 label: 'Number of Applicants',
-                data: ExamStatusData,
+                data: ExamResultData,
                 backgroundColor: themePalette,
                 borderColor: '#ffffff',
                 borderWidth: 1
@@ -693,14 +701,14 @@
                 x: { beginAtZero: true, ticks: { precision: 0 } }
             },
             plugins: {
-                legend: { display: false},
+                legend: { display: false },
                 datalabels: {
                     color: '#fff',
                     anchor: 'center',
                     align: 'center',
                     font: { weight: 'bold', size: 12 },
                     formatter: (value) => {
-                        let percentage = ExamStatusDataTotal > 0 ? (value / ExamStatusDataTotal) * 100 : 0;
+                        let percentage = ExamResultDataTotal > 0 ? (value / ExamResultDataTotal) * 100 : 0;
                         return percentage.toFixed(1) + '%';
                     }
                 }
@@ -708,6 +716,7 @@
         },
         plugins: [ChartDataLabels]
     });
+
 
     const IncomingGradeData = {!! json_encode($incomingGrades->pluck('total')) !!};
     const IncomingGradeDataTotal = IncomingGradeData.reduce((a, b) => a + b, 0);
@@ -768,8 +777,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+{{-- Confirm Button --}}
 <script>
-    ument.querySelectorAll('.export-confirm').forEach(button => {
+    document.querySelectorAll('.export-confirm').forEach(button => {
     button.addEventListener('click', function () {
         const year = this.getAttribute('data-year');
         const month = this.getAttribute('data-month');
@@ -798,7 +808,6 @@
     });
 });
 </script>
-
 
 @endsection
 
