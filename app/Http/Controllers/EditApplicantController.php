@@ -27,7 +27,7 @@ class EditApplicantController extends Controller
 
         // Fetch only relevant exam schedules based on applicant's educational level
         if (in_array($educationalLevel, ['Grade School', 'Junior High School'])) {
-            $availableSchedules = ExamSchedule::whereIn('educational_level', ['Grade School', 'Junior High School'])->get();
+            $availableSchedules = ExamSchedule::whereIn('educational_level', ['Grade School and Junior High School'])->get();
         } elseif ($educationalLevel === 'Senior High School') {
             $availableSchedules = ExamSchedule::where('educational_level', 'Senior High School')->get();
         } else {
