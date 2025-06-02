@@ -61,7 +61,8 @@ class AdmissionChartController extends Controller
         ->orderBy('recommended_strand')
         ->get();
 
-        $examResult = \App\Models\ExamResult::selectRaw('exam_result, COUNT(*) as total')
+        $examResult = \App\Models\ExamResult::whereNotNull('exam_result')
+        ->selectRaw('exam_result, COUNT(*) as total')
         ->groupBy('exam_result')
         ->orderBy('exam_result')
         ->get();
@@ -132,7 +133,7 @@ class AdmissionChartController extends Controller
         'source' => (clone $baseQuery)->selectRaw('source, COUNT(*) as total')->groupBy('source')->get(),
         'strand' => (clone $baseQuery)->whereNotNull('strand')->selectRaw('strand, COUNT(*) as total')->groupBy('strand')->get(),
         'incomingGrades' => (clone $baseQuery)->selectRaw('incoming_grlvl, COUNT(*) as total')->groupBy('incoming_grlvl')->get(),
-        'examResult' => \App\Models\ExamResult::selectRaw('exam_result, COUNT(*) as total')->groupBy('exam_result')->orderBy('exam_result')->get(),
+        'examResult' => \App\Models\ExamResult::whereNotNull('exam_result')->selectRaw('exam_result, COUNT(*) as total')->groupBy('exam_result')->orderBy('exam_result')->get(),
 
     ];
 
