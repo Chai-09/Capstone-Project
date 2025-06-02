@@ -2,6 +2,7 @@
     $currentStep = $currentStep;
     $incomingGrLvl = $applicant->incoming_grlvl ?? '';
     $isSeniorHigh = in_array($incomingGrLvl, ['GRADE 11', 'GRADE 12']);
+    $existingPayment = $existingPayment ?? null;
 @endphp
 
 <div class="sidebar-nav-wrapper" id="sidebarWrapper">
@@ -22,10 +23,21 @@
         </div>
         <li class="nav-item {{ $currentStep > 2 ? 'completed' : '' }}  {{ $currentStep == 2 ? 'active' : '' }}">
             <span class="step-number">Step 2</span>
-            <a href="{{ route('applicant.steps.payment.payment') }}
-        " class="nav-link {{ $currentStep > 2 ? 'completed' : '' }}  {{ $currentStep == 2 ? 'active' : '' }}">
+            @if ($existingPayment && $existingPayment->payment_status === 'denied' && $currentStep == 3)
+        <form id="sidebarBackForm" method="POST" action="{{ route('payment.delete', ['id' => $existingPayment->id]) }}">
+            @csrf
+            @method('DELETE')
+            <a href="#" class="nav-link {{ $currentStep == 2 ? 'active' : '' }}" onclick="event.preventDefault(); document.getElementById('sidebarBackForm').submit();">
                 <i class="fa-solid fa-money-bill-wave"></i> Send Payment
             </a>
+        </form>
+    @else
+        {{-- Normal redirect if not denied --}}
+        <a href="{{ route('applicant.steps.payment.payment') }}"
+           class="nav-link {{ $currentStep == 2 ? 'active' : '' }}">
+            <i class="fa-solid fa-money-bill-wave"></i> Send Payment
+        </a>
+    @endif
         </li>
         <div class="double-line">
             <div class="line"></div>

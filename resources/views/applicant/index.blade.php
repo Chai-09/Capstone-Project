@@ -10,6 +10,7 @@
     <script src="https://kit.fontawesome.com/2c99ab7d67.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     {{-- CSS --}}
     @vite('resources/css/fillupforms/fillupforms.css')
     @vite('resources/css/applicants/layout.css')

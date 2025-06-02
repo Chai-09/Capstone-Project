@@ -67,12 +67,11 @@
             <div class="form-row d-flex justify-content-center">
 
                 {{-- Proceed button magpapakita lang if may exam_result and step == 5 --}}
-                @if ($showProceedButton)
+               @if ($showProceedButton && isset($examResult) &&in_array(strtolower($examResult->exam_status), ['done', 'no show']))
                     <button type="button" class="btn btn-submit" onclick="window.location.href='{{ route('applicant.exam.result') }}'">
                         Proceed
                     </button>
                 @endif
-
             </div>
         </div>
     </div>

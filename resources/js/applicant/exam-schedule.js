@@ -97,16 +97,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     })
                     .then(response => response.json())
                     .then(data => {
-                        if (data.success) {
-                            window.location.href = "/step-5";
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: data.message,
-                            });
-                        }
-                    });
+                        console.log("FETCH RESPONSE:", data);
+                    if (data.success && data.redirect) {
+                        window.location.href = data.redirect;
+                    } else if (data.success) {
+                        window.location.href = "/step-5"; // fallback
+                    
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message,
+                        });
+                    }
+                });
+
                 }
             });
         }

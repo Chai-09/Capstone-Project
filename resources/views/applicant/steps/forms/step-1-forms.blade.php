@@ -444,8 +444,53 @@
 
 @endif
 
+<!-- for datalabels percentage, inadd ko para uniform lahat ng charts natin -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (window.strandBreakdown) {
+            const ctx = document.getElementById('strandChart').getContext('2d');
+            const labels = Object.keys(window.strandBreakdown).map(strand => strand.toUpperCase());
+            const data = Object.values(window.strandBreakdown);
 
+            const backgroundColors = [
+                '#129439', '#f39c12', '#1abc9c', '#9b59b6', '#31c75a',
+                '#e67e22', '#117a65', '#8e44ad', '#6ccf5d', '#2980b9'
+            ];
 
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors.slice(0, labels.length),
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            font: {
+                                weight: 'bold'
+                            },
+                            formatter: (value) => {
+                                return value.toFixed(2) + '%';
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+    });
+</script>
 
 
 

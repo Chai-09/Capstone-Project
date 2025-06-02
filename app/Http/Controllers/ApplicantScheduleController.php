@@ -7,6 +7,7 @@ use App\Models\ApplicantSchedule;
 use App\Models\FillupForms;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Applicant;
+use App\Models\ExamResult;
 
 
 class ApplicantScheduleController extends Controller
@@ -17,7 +18,7 @@ class ApplicantScheduleController extends Controller
         $user = auth()->user();
         $applicant = Applicant::where('account_id', $user->id)->first();
         //Magpapakita lang si button if may exam_result sa table and step == 5
-        $hasResult = \App\Models\ExamResult::where('applicant_id', $applicant->id)->exists();
+        $hasResult = ExamResult::where('applicant_id', $applicant->id)->exists();
         $showProceedButton = $hasResult && $applicant->current_step == 5;
 
         if (!$applicant) {
@@ -25,9 +26,11 @@ class ApplicantScheduleController extends Controller
         }
 
         $schedule = ApplicantSchedule::where('applicant_id', $applicant->id)->latest()->first();
+        $examResult = ExamResult::where('applicant_id', $applicant->id)->first();
 
 
-        return view('applicant.steps.reminders.reminders', compact('schedule', 'showProceedButton'))->with('currentStep', $applicant->current_step);
+
+        return view('applicant.steps.reminders.reminders', compact('schedule', 'showProceedButton', 'examResult'))->with('currentStep', $applicant->current_step);
     }
 
     public function store(Request $request)
@@ -45,6 +48,10 @@ class ApplicantScheduleController extends Controller
         if ($applicant->current_step > 4) {
             return response()->json(['success' => false, 'message' => 'Schedule already selected. Cannot be changed.']);
         }
+
+        // Delete any previous schedule by this applicant
+        ApplicantSchedule::where('applicant_id', $applicant->id)->delete();
+
 
 
         // Find applicant info from form_submissions
@@ -83,10 +90,24 @@ class ApplicantScheduleController extends Controller
             'venue'=>'MPR Annex',
         ]);
 
+
+        // Reset exam result only if it already exists
+ExamResult::updateOrCreate(
+    ['applicant_id' => $applicant->id],
+    [
+        'applicant_name' => strtoupper($form->applicant_fname . ' ' . $form->applicant_mname . ' ' . $form->applicant_lname),
+        'incoming_grade_level' => $form->incoming_grlvl,
+        'exam_date' => $request->exam_date,
+        'exam_status' => null, // ← this clears "done" or "no show"
+        'exam_result' => null,
+        'admission_number' => $admissionNumber,
+    ]
+);
+
         //Update Current step to 5 (gawin mong == na din lahat ng update para no issues)
         if ($applicant->current_step == 4) {
             $applicant->update(['current_step' => 5]);
         }
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'redirect' => route('reminders.view')]);
     }
 }
