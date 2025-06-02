@@ -198,6 +198,8 @@ Route::middleware(['auth', 'role:admission,administrator'])->group(function () {
 
     Route::get('/admission/exam/exam-attendance', [ExamAttendanceController::class, 'show'])->name('exam.attendance');
 
+    Route::get('/admission/exam/exam-schedule/by-date', [ExamScheduleController::class, 'fetchByDateTable']);
+
     Route::post('/admission/exam-results/mark', [ExamResultController::class, 'markAttendance'])->name('exam-results.mark');
 
 

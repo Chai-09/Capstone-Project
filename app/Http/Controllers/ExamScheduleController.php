@@ -307,5 +307,41 @@ class ExamScheduleController extends Controller
 
     return view('applicant.steps.exam_date.exam-date', compact('examSchedules', 'currentStep'));
 }
+    // Modal of Timeframes
+    public function fetchByDateTable(Request $request)
+{
+    $date = $request->query('date');
+
+    $schedules = ExamSchedule::whereDate('exam_date', $date)
+        ->orderBy('start_time')
+        ->get()
+        ->map(function ($schedule) {
+            $usedSlots = ApplicantSchedule::with('applicant.formSubmission')
+                ->whereDate('exam_date', $schedule->exam_date)
+                ->whereTime('start_time', $schedule->start_time)
+                ->whereTime('end_time', $schedule->end_time)
+                ->get()
+                ->filter(function ($app) use ($schedule) {
+                    $level = $app->applicant->formSubmission->educational_level ?? null;
+
+                    return match ($schedule->educational_level) {
+                        'Grade School and Junior High School' => in_array($level, ['Grade School', 'Junior High School']),
+                        'Senior High School' => $level === 'Senior High School',
+                        default => false,
+                    };
+                })
+                ->count();
+
+            $schedule->remaining_slots = $schedule->max_participants - $usedSlots;
+
+            return $schedule;
+        });
+
+    if ($schedules->isEmpty()) {
+        return '<div class="alert alert-info text-center">No schedules for this date.</div>';
+    }
+
+    return view('admission.exam.schedule-table', compact('schedules', 'date'))->render();
+}
 
 }

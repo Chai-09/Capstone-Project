@@ -1,3 +1,7 @@
+@extends('admission.admission-home')
+
+@section('content')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,14 +26,6 @@
     </style>
 </head>
 <body>
-
-<nav class="navbar bg-dark p-3 d-flex justify-content-between">
-    <p style="color: white" class="m-0">{{ auth()->user()->name }}</p>
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
-    </form>
-</nav>
 
 <div class="container mt-5">
     <h2 class="mb-4 text-center">Add Exam Date</h2>
@@ -144,3 +140,5 @@
 
 </body>
 </html>
+
+@endsection
