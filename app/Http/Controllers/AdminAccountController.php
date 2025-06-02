@@ -35,7 +35,7 @@ class AdminAccountController extends Controller
 
         $accounts = $query->paginate(15)->appends($request->all());
 
-        return view('administrator.index', compact('accounts'));
+        return view('administrator.dashboard', compact('accounts'));
     }
 
     public function edit($id)
@@ -65,7 +65,7 @@ class AdminAccountController extends Controller
     {
         $request->validate([
             'applicant_fname' => 'nullable|string|max:255',
-            'applicant_mname' => 'nullable|string|max:255',
+            'applicant_mname' => 'nullable|string|max:3',
             'applicant_lname' => 'nullable|string|max:255',
             'applicant_email' => 'nullable|email|unique:accounts,email,' . $id,
             'role' => 'nullable|string',
@@ -82,7 +82,11 @@ class AdminAccountController extends Controller
         // Step 2: Format middle name
         $middleFormatted = '';
         if ($middle) {
-            $middleFormatted = strlen($middle) === 1 ? $middle . '.' : $middle;
+            if (strlen($middle) <= 2 && !str_ends_with($middle, '.')) {
+                $middleFormatted = $middle . '.';
+            } else {
+                $middleFormatted = $middle;
+            }
         }
 
         // Step 3: Combine full name for the `name` field

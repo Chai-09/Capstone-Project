@@ -1,61 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-    <link rel="website icon" type="png" href="{{ asset('applysmart_logo.png') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Administrator | Create Accounts</title>
-</head>
-<body>
+@extends('administrator.index')
 
-<nav class="navbar bg-dark">
-<p style="color: white"> {{ auth()->user()->name }}</p>
+@section('content')
+@vite('resources/js/administrator/create-account.js')
+
+{{-- Breadcrumbs --}}
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{{ route('admindashboard') }}" class="text-decoration-none">Back</a>
+        </li>   
+    </ol>
 </nav>
 
-<form action="{{ route('admin.createAccount') }}" method="POST">
-@csrf
-    @if ($errors->any())
-        <div style="background: #ffe0e0; padding: 10px; border: 1px solid red; margin-top: 10px;">
-            <strong>Form submission failed:</strong>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li style="color: red;">{{ $error }}</li>
-                @endforeach
-            </ul>
+<hr>
+
+<div class="container">
+    {{-- Server Side Validation --}}
+    @include('administrator.error.server-side-error')
+
+    {{-- Front End Error --}}
+    <div id="alert-wrap">
+        <div id="alert-container"></div>
+    </div>
+    
+    <form action="{{ route('admin.createAccount') }}" method="POST" id="adminAccountCreate">
+    @csrf
+        {{-- @if ($errors->any())
+            <div style="background: #ffe0e0; padding: 10px; border: 1px solid red; margin-top: 10px;">
+                <strong>Form submission failed:</strong>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li style="color: red;">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif --}}
+
+    <div class="card p-4 shadow-sm rounder-4 border-0">
+        <h5 class="text-dark fw-bold mb-4"><i class="bi bi-person-lines-fill me-2"></i>Create Account</h5>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label text-muted small">First Name</label><br>
+                <input type="text" class="form-control" name="applicant_fname" placeholder="First Name" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Middle Initial</label><br>
+                <input type="text" class="form-control" name="applicant_mname" placeholder="Middle Initial">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Last Name</label><br>
+                <input type="text" class="form-control" name="applicant_lname" placeholder="Last Name" required>
+            </div>
         </div>
-    @endif
 
-    <p>First Name</p>
-    <input type="text" name="applicant_fname" placeholder="First Name" required>
+        <div class="row g-3 mt-2">
+            <div class="col-md-12">
+                <label class="form-label text-muted small">Email</label><br>
+                <input type="email" class="form-control" name="applicant_email" id="email" placeholder="Enter email address" required>
+            </div>
+        </div>
 
-    <p>Middle Initial</p>
-    <input type="text" name="applicant_mname" placeholder="Middle Initial">
+        <div class="row g-3 mt-2">
+            <div class="col-md-12">
+                <label class="form-label text-muted small">Role</label><br>
+                <select name="role" class="form-control" id="role" required>
+                    <option value="">Select Role</option>
+                        @foreach (['Administrator', 'Admission', 'Accounting'] as $role)
+                    <option value="{{ $role }}">{{ $role }}</option>
+                        @endforeach
+                </select>
+            </div>
+        </div>
 
-    <p>Last Name</p>
-    <input type="text" name="applicant_lname" placeholder="Last Name" required>
+        <div class="row g-3 mt-2">
+            <div class="col-md-12">
+                <label class="form-label text-muted small">Password</label><br>
+                <input type="text" class="form-control" name="password" placeholder="Password" required>
+            </div>
+        </div>
 
-    <p>Email Address</p>           
-    <input type="email" name="applicant_email" id="email" placeholder="Enter email address" required>
+        <div class="row g-3 mt-2 mb-4">
+            <div class="col-md-12">
+                <label class="form-label text-muted small">Confirm Password</label><br>
+                <input type="text" class="form-control" name="password_confirmation" placeholder="Confirm Password" required>
+            </div>
+        </div>
+    </div>
 
-    <p>Role<p>
-    <select name="role" id="role" required>
-        <option value="">Select Role</option>
-            @foreach (['Administrator', 'Admission', 'Accounting'] as $role)
-        <option value="{{ $role }}">{{ $role }}</option>
-            @endforeach
-    </select>
-
-    <p>Password</p>
-    <input type="text" name="password" placeholder="Password" required>
-
-    <p>Last Name</p>
-    <input type="text" name="password_confirmation" placeholder="Confirm Password" required>
-    <button type="submit" class="btn btn-success">Save</button>
-</form>
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-success">Save</button>
+    </div>
+    </form>
+</div>
 @if (session('success'))
 <script>
     Swal.fire({
@@ -67,5 +103,5 @@
     });
 </script>
 @endif
-</body>
-</html>
+
+@endsection

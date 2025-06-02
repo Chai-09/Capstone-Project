@@ -14,7 +14,7 @@ class RoleController extends Controller
 
         switch ($role) {
             case 'administrator':
-                return view('administrator.index');
+                return view('administrator.dashboard');
 
             case 'applicant':
                 return view('applicant.dashboard');

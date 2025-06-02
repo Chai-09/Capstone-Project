@@ -45,6 +45,11 @@ export default defineConfig({
                 'resources/css/admission/edit-applicant.css',
                 'resources/js/admission/edit-applicant-info.js',
 
+                // Administrator
+                'resources/css/administrator/edit-account.css',
+                'resources/js/administrator/edit-account.js',
+                'resources/js/administrator/create-account.js',
+
                 // Legal
                 'resources/css/legal/terms.css',
             ],
