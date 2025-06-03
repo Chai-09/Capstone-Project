@@ -1,42 +1,46 @@
-<div class="card mb-4">
-    <div class="card-body p-0">
-        <table class="table table-bordered align-middle text-center">
-            <thead class="table-light">
-                <tr>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Educational Level</th>
-                    <th>Max</th>
-                    <th>Remaining</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($schedules as $schedule)
+@foreach($groupedSchedules as $level => $schedules)
+    <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-header bg-success text-white fw-semibold">
+            {{$level}}
+        </div>
+
+        <div class="card-body p-0">
+            <table class="table table-bordered align-middle text-center m-0">
+                <thead class="table-light">
                     <tr>
-                        <td>{{ \Carbon\Carbon::parse($schedule->exam_date)->format('F j, Y') }}</td>
-                        <td class="clickable-time"
+                        <th>Time</th>
+                        {{-- <th>Educational Level</th> --}}
+                        <th>Max</th>
+                        <th>Remaining</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($schedules as $schedule)
+                        <tr class="clickable-row"
                             data-date="{{ $schedule->exam_date }}"
                             data-start="{{ $schedule->start_time }}"
                             data-end="{{ $schedule->end_time }}"
                             style="cursor: pointer;">
-                            {{ \Carbon\Carbon::parse($schedule->start_time)->format('g:i A') }} – {{ \Carbon\Carbon::parse($schedule->end_time)->format('g:i A') }}
-                        </td>
-                        <td>{{ $schedule->educational_level }}</td>
-                        <td>{{ $schedule->max_participants }}</td>
-                        <td>{{ $schedule->remaining_slots }}</td>
-                        <td>
-                            <form method="POST" action="{{ route('exam-schedule.destroy', $schedule->id) }}" class="delete-form d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-outline-danger btn-sm delete-btn">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+                            <td class="text-success">
+                                {{ \Carbon\Carbon::parse($schedule->start_time)->format('g:i A') }} – {{ \Carbon\Carbon::parse($schedule->end_time)->format('g:i A') }}
+                            </td>
+                            {{-- <td>{{ $schedule->educational_level }}</td> --}}
+                            <td>{{ $schedule->max_participants }}</td>
+                            <td>{{ $schedule->remaining_slots }}</td>
+                            <td>
+                                <form method="POST" action="{{ route('exam-schedule.destroy', $schedule->id) }}" class="delete-form d-inline" onclick="event.stopPropagation()">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger btn-sm delete-btn">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+@endforeach

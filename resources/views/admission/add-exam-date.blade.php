@@ -2,17 +2,6 @@
 
 @section('content')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-    <link rel="website icon" type="png" href="{{ asset('applysmart_logo.png') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Admissions | Dashboard</title>
 
     <style>
         .remove-timeframe-btn {
@@ -24,58 +13,75 @@
             background: none;
         }
     </style>
-</head>
-<body>
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">Add Exam Date</h2>
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{{ route('admission.exam.schedule') }}" class="text-decoration-none">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
+        </li>   
+    </ol>
+</nav>
 
-    <form action="{{ route('examdate.store') }}" method="POST">
-        @csrf
+<hr>
 
-        <div class="mb-3">
-            <label for="exam_date" class="form-label">Exam Date</label>
-            <input type="date" class="form-control" id="exam_date" name="exam_date" required>
-        </div>
+<div class="container mt-5 mx-auto" style="max-width: 720px;">
+    <div class="card shadow p-4 rounded-4 border-0">
+         <h5 class="text-dark fw-bold mb-4"><i class="bi bi-calendar-plus me-2"></i>Add Exam Date</h5>
 
-        <div id="timeframes">
-            <div class="timeframe border p-3 mb-4 position-relative">
-                <button type="button" class="remove-timeframe-btn" onclick="removeTimeframe(this)">×</button>
-                <h5 class="mb-3">Timeframe 1</h5>
-                <div class="mb-3">
-                    <label class="form-label">Start Time</label>
-                    <input type="time" class="form-control" name="start_time[]" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">End Time</label>
-                    <input type="time" class="form-control" name="end_time[]" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Max Participants</label>
-                    <input type="number" class="form-control" name="max_participants[]" required min="1">
-                </div>
-                <div class="mb-3">
-    <label class="form-label">Educational Level</label>
-    <select class="form-select" name="educational_level[]" required>
-        <option value="">-- Select Level --</option>
-        <option value="Grade School and Junior High School">Grade School + Junior High School (GS + JHS)</option>
-        <option value="Senior High School">Senior High School (SHS)</option>
-    </select>
-</div>
+        <form action="{{ route('examdate.store') }}" method="POST">
+            @csrf
 
+            <div class="mb-3">
+                <label for="exam_date" class="form-label">Exam Date</label>
+                <input type="date" class="form-control" id="exam_date" name="exam_date" required>
             </div>
-        </div>
 
-        <div class="text-center d-flex justify-content-center gap-3">
-    <button type="button" id="addTimeframe" class="btn btn-success">Add</button>
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a href="{{ route('admission.exam.schedule') }}" class="btn btn-secondary">Back to Exam Schedule</a>
+            <div id="timeframes">
+                <div class="timeframe bg-light rounded-3 shadow-sm p-4 mb-4 position-relative border">
+                    <button type="button" class="remove-timeframe-btn" onclick="removeTimeframe(this)">×</button>
+                    <h5 class="mb-3 fw-regular">Timeframe 1</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Start Time</label>
+                        <input type="time" class="form-control" name="start_time[]" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">End Time</label>
+                        <input type="time" class="form-control" name="end_time[]" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Max Participants</label>
+                        <input type="number" class="form-control" name="max_participants[]" required min="1">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Educational Level</label>
+                        <select class="form-select" name="educational_level[]" required>
+                            <option value="">-- Select Level --</option>
+                            <option value="Grade School and Junior High School">Grade School + Junior High School (GS + JHS)</option>
+                            <option value="Senior High School">Senior High School (SHS)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="position-fixed bottom-0 end-0 m-4 z-3" style="max-width: 300px;">
+                <div class="bg-white shadow-lg p-3 border rounded">
+                    <div class="d-flex  gap-2">
+                        <button type="button" id="addTimeframe" class="btn btn-success w-100">
+                            <i class="bi bi-plus-circle"></i> Add Timeframe
+                        </button>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-save"></i> Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
 </div>
-
-
-    </form>
-</div>
-
 <script>
     let timeframeCount = 1;
 
@@ -84,10 +90,10 @@
 
         const container = document.getElementById('timeframes');
         const newTimeframe = document.createElement('div');
-        newTimeframe.classList.add('timeframe', 'border', 'p-3', 'mb-4', 'position-relative');
+        newTimeframe.classList.add('timeframe', 'bg-light', 'p-3', 'mb-4', 'shadow-sm', 'rounded-3' ,'position-relative', 'border');
         newTimeframe.innerHTML = `
             <button type="button" class="remove-timeframe-btn" onclick="removeTimeframe(this)">×</button>
-            <h5 class="mb-3">Timeframe ${timeframeCount}</h5>
+            <h5 class="mb-3 fw-regular">Timeframe ${timeframeCount}</h5>
             <div class="mb-3">
                 <label class="form-label">Start Time</label>
                 <input type="time" class="form-control" name="start_time[]" required>
@@ -101,16 +107,14 @@
                 <input type="number" class="form-control" name="max_participants[]" required min="1">
             </div>
             <div class="mb-3">
-    <label class="form-label">Educational Level</label>
-    <select class="form-select" name="educational_level[]" required>
-        <option value="">-- Select Level --</option>
-        <option value="Grade School and Junior High School">Grade School + Junior High School (GS + JHS)</option>
-        <option value="Senior High School">Senior High School (SHS)</option>
-    </select>
-</div>
-
+                <label class="form-label">Educational Level</label>
+                <select class="form-select" name="educational_level[]" required>
+                    <option value="">-- Select Level --</option>
+                    <option value="Grade School and Junior High School">Grade School + Junior High School (GS + JHS)</option>
+                    <option value="Senior High School">Senior High School (SHS)</option>
+                </select>
+            </div>
         `;
-
         container.appendChild(newTimeframe);
     });
 
@@ -137,8 +141,5 @@
         });
     @endif
 </script>
-
-</body>
-</html>
 
 @endsection

@@ -341,7 +341,13 @@ class ExamScheduleController extends Controller
         return '<div class="alert alert-info text-center">No schedules for this date.</div>';
     }
 
-    return view('admission.exam.schedule-table', compact('schedules', 'date'))->render();
+    $groupedSchedules = $schedules->groupBy('educational_level');
+
+    return view('admission.exam.schedule-table', [
+        'groupedSchedules' => $groupedSchedules,
+        'date' => $date
+    ])->render();
+
 }
 
 }

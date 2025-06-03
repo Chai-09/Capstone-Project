@@ -25,17 +25,7 @@
     
     <form action="{{ route('admin.createAccount') }}" method="POST" id="adminAccountCreate">
     @csrf
-        {{-- @if ($errors->any())
-            <div style="background: #ffe0e0; padding: 10px; border: 1px solid red; margin-top: 10px;">
-                <strong>Form submission failed:</strong>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li style="color: red;">{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif --}}
-
+   
     <div class="card p-4 shadow-sm rounder-4 border-0">
         <h5 class="text-dark fw-bold mb-4"><i class="bi bi-person-lines-fill me-2"></i>Create Account</h5>
         <div class="row g-3">

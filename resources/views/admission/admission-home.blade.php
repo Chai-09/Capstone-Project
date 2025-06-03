@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>ApplySmart | Admissions</title>
 
     {{-- CSS --}}
@@ -19,9 +17,11 @@
     @vite('resources/css/admission/edit-applicant.css')
     @vite('resources/css/partials/dashboard.css')
     @vite('resources/css/partials/reports.css')
+    @vite('resources/css/admission/exam-schedule.css')
 
     {{-- JavaSript --}}
     @vite('resources/js/admission/applicant-list.js')
+    @vite('resources/js/admission/exam-schedule.js')
 
 </head>
 <body>
@@ -39,4 +39,6 @@
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>

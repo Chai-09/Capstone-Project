@@ -44,6 +44,8 @@ export default defineConfig({
                 'resources/js/admission/applicant-list.js',
                 'resources/css/admission/edit-applicant.css',
                 'resources/js/admission/edit-applicant-info.js',
+                'resources/css/admission/exam-schedule.css',
+                'resources/js/admission/exam-schedule.js',
 
                 // Administrator
                 'resources/css/administrator/edit-account.css',
