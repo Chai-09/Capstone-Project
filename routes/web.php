@@ -25,6 +25,7 @@ use App\Http\Controllers\ExportController;
 use App\Http\Controllers\AdmissionChartController;
 use App\Http\Controllers\AccountingChartController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AccountProfileController;
 
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
 // Log in Routes
@@ -159,6 +160,7 @@ Route::middleware(['auth', 'role:administrator'])->group(function () {
     Route::delete('/administrator/account/{id}', [AdminAccountController::class, 'destroy'])->name('admin.deleteAccount');
 
     Route::get('/administrator/dashboard', [AdminAccountController::class, 'index'])->name('admindashboard');
+
 });
 
 
@@ -211,12 +213,12 @@ Route::middleware(['auth', 'role:admission,administrator'])->group(function () {
 
     Route::get('/admission/edit-applicant/{id}', [EditApplicantController::class, 'show'])->name('admission.editApplicant');
     Route::put('/applicants/{id}', [EditApplicantController::class, 'update'])->name('applicant.update');
-Route::delete('/applicants/{id}', [EditApplicantController::class, 'destroy'])->name('applicant.delete');
+    Route::delete('/applicants/{id}', [EditApplicantController::class, 'destroy'])->name('applicant.delete');
 
-Route::get('/export/forms', [ExportController::class, 'exportForms'])->name('export.forms');
-    //Route::get('/admission/edit-applicant/{id}', [EditApplicantController::class, 'show'])->name('admission.editApplicant');
+    Route::get('/export/forms', [ExportController::class, 'exportForms'])->name('export.forms');
+        //Route::get('/admission/edit-applicant/{id}', [EditApplicantController::class, 'show'])->name('admission.editApplicant');
 
-Route::get('/admission/reports/admission-reports', [AdmissionChartController::class, 'index'])->name('admission.reports');
+    Route::get('/admission/reports/admission-reports', [AdmissionChartController::class, 'index'])->name('admission.reports');
 
     //forfiltering:
     Route::get('/chart-data', [AdmissionChartController::class, 'getChartData'])->name('chart.data');
@@ -253,8 +255,15 @@ Route::middleware(['auth', 'role:accounting,administrator'])->group(function () 
     Route::get('/export/accounting', [ExportController::class, 'exportAccounting'])->name('export.accounting');
     Route::get('/accounting/reports/accounting-reports', [AccountingChartController::class, 'index'])->name('accounting.reports');
     Route::get('/export/accounting/{year}/{month}', [ExportController::class, 'exportAccountingByMonth'])->name('export.accounting.month');
-
 });
+
+// Profile Route
+Route::middleware(['auth', 'role:administrator,admission,accounting'])->group(function () {
+    Route::get('/account/profile', [AccountProfileController::class, 'show'])->name('account.profile');
+    Route::put('/account/profile', [AccountProfileController::class, 'update'])->name('account.profile.update');
+});
+
+
 
 //Sidebar
 Route::view('/sidebar', 'partials.sidebar')->name('sidebar');

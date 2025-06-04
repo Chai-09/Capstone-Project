@@ -105,7 +105,7 @@
       <button id="toggleSidebar" class="btn btn-light w-100">☰</button>
 
       {{-- Settings Link for Everyone --}}
-      <a href="#" class="nav-link" title="Profile">
+      <a href="{{ route('account.profile') }}" class="nav-link" title="Profile">
         <div class="icon-wrapper"><i class="fa-solid fa-user"></i></div>
           <span>Profile</span>
       </a>
