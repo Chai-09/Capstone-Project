@@ -11,11 +11,83 @@ use App\Models\FillupForms;
 
 class ExamResultController extends Controller
 {
-    public function index()
+    // public function index()
+    // {
+    //     $results = ExamResult::orderBy('exam_date', 'desc')->get();
+    //     return view('admission.exam.exam-results', compact('results'));
+    // }
+
+    public function index(Request $request)
     {
-        $results = ExamResult::orderBy('exam_date', 'desc')->get();
+        $query = ExamResult::query();
+
+        // Search by name or grade
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('applicant_name', 'like', "%$search%")
+                ->orWhere('incoming_grade_level', 'like', "%$search%");
+            });
+        }
+
+        // Filter by exam result
+        if ($request->filled('result')) {
+            $query->where('exam_result', $request->result);
+        }
+
+        // Filter by exam status
+        if ($request->filled('status')) {
+            $query->where('exam_status', $request->status);
+        }
+
+        // Sort by name
+        if ($request->filled('sort_name') && in_array($request->sort_name, ['asc', 'desc'])) {
+            $query->orderBy('applicant_name', $request->sort_name);
+        }
+
+        // Sort by date
+        elseif ($request->filled('sort_date') && in_array($request->sort_date, ['asc', 'desc'])) {
+            $query->orderBy('exam_date', $request->sort_date);
+        }
+
+        // Sort by grade level (custom)
+        elseif ($request->filled('sort_grade') && in_array($request->sort_grade, ['asc', 'desc'])) {
+            $customOrder = [
+                'KINDER', 'GRADE 1', 'GRADE 2', 'GRADE 3', 'GRADE 4',
+                'GRADE 5', 'GRADE 6', 'GRADE 7', 'GRADE 8', 'GRADE 9',
+                'GRADE 10', 'GRADE 11', 'GRADE 12'
+            ];
+
+            $direction = $request->sort_grade;
+
+            $results = $query->get()->sortBy(function ($item) use ($customOrder) {
+                $level = strtoupper(trim($item->incoming_grade_level));
+                return array_search($level, $customOrder) !== false ? array_search($level, $customOrder) : 999;
+            }, SORT_REGULAR, $direction === 'desc');
+
+            // Manual pagination
+            $page = $request->get('page', 1);
+            $perPage = 10;
+            $paged = $results->slice(($page - 1) * $perPage, $perPage)->values();
+
+            $results = new \Illuminate\Pagination\LengthAwarePaginator(
+                $paged,
+                $results->count(),
+                $perPage,
+                $page,
+                ['path' => $request->url(), 'query' => $request->query()]
+            );
+
+            return view('admission.exam.exam-results', compact('results'));
+        }
+
+        // Default: latest first
+        $query->orderBy('exam_date', 'desc');
+        $results = $query->paginate(12)->withQueryString();
+
         return view('admission.exam.exam-results', compact('results'));
     }
+
 
     public function markAttendance(Request $request)
     {
