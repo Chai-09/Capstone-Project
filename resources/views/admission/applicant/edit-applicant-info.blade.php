@@ -417,6 +417,10 @@
                                 @endif
                             </span>
                         </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Type</label><br>
+                            <span> {{ ucfirst($existingPayment->payment_for ?? 'N/A') }} </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -442,7 +446,7 @@
                     <div class="mb-3">
                         <label class="form-label text-muted small">Remarks</label>
                         <div class="border rounded p-2 bg-light">
-                            {{ $existingPayment->remarks ?? 'N/A' }}
+                            {{ $existingPayment->remarks ?? 'N/ A' }}
                         </div>
                     </div>
                 </div>

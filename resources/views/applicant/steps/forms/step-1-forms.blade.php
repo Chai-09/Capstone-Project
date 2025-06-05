@@ -335,7 +335,7 @@
                         <div id="lrn-container" style="display: none;">
                             <label>LRN Number</label>
                             <span class="text-muted">LRN is the Learner Reference Number that can be found on your Report Card, or School ID.</span>
-                            <input type="text" name="lrn_no" id="lrn_no" value="{{ $formSubmission->lrn_no ?? '' }}" placeholder="Enter LRN number" {{ $readOnly ? 'disabled' : '' }}>
+                            <input type="number" name="lrn_no" id="lrn_no" value="{{ $formSubmission->lrn_no ?? '' }}" placeholder="Enter LRN number" {{ $readOnly ? 'disabled' : '' }}>
                         </div>
                     </div>
                 </div>
