@@ -11,6 +11,9 @@ use Illuminate\Validation\Rule;
 use App\Models\Accounts;
 use App\Models\Payment;
 use App\Models\ExamSchedule;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+
 
 class EditApplicantController extends Controller
 {
@@ -46,7 +49,7 @@ class EditApplicantController extends Controller
             'payment_sent'      => optional($payment)->created_at ?? '—',
             'payment_verified'  => optional($payment)->updated_at ?? '—',
             'exam_booked'       => optional($schedule)->created_at ?? '—',
-            'exam_result'       => optional($examResult)->created_at ?? '—',
+            'exam_result' => (!empty($examResult) && $examResult->exam_result !== null && $examResult->exam_result !== 'pending') ? $examResult->created_at : '—',
         ];
 
         $historyLogs = DB::table('form_change_logs')
@@ -160,41 +163,115 @@ class EditApplicantController extends Controller
         $form->update($validated);
 
         $applicantId = $form->applicant_id;
+        $applicant = Applicant::with('formSubmission')->find($applicantId);
         $fullName = strtoupper(trim(($validated['applicant_fname'] ?? $form->applicant_fname) . ' ' . ($validated['applicant_lname'] ?? $form->applicant_lname)));
         $email = strtolower($validated['applicant_email'] ?? $form->applicant_email);
 
         //  Save applicant schedule (Step 4)
         // Extract start_time and end_time from combined time_slot field
-        if ($request->filled('exam_date') && $request->filled('time_slot')) {
-            [$start_time, $end_time] = explode('|', $request->time_slot);
+       $scheduleRecord = DB::table('applicant_schedules')->where('applicant_id', $form->applicant_id)->first();
 
-            DB::table('applicant_schedules')->updateOrInsert(
-                ['applicant_id' => $form->applicant_id],
-                [
-                    'exam_date' => $request->exam_date,
-                    'start_time' => $start_time,
-                    'end_time' => $end_time,
-                    'updated_at' => now()
-                ]
-            );
-        }
+                if ($request->filled('exam_date') && $request->filled('time_slot')) {
+                    [$start_time, $end_time] = explode('|', $request->time_slot);
+
+                    DB::table('applicant_schedules')->updateOrInsert(
+                        ['applicant_id' => $form->applicant_id],
+                        [
+                            'exam_date' => $request->exam_date,
+                            'start_time' => $start_time,
+                            'end_time' => $end_time,
+                            'updated_at' => now()
+                        ]
+                    );
+                }
 
 
-        // ✅ Save exam result (Step 6)
+                $scheduleChanges = [];
+                if ($scheduleRecord) {
+                    if ($request->exam_date && $scheduleRecord->exam_date !== $request->exam_date) {
+                        $scheduleChanges[] = [
+                            'form_submission_id' => $form->id,
+                            'field_name' => 'exam_date',
+                            'old_value' => Carbon::parse($scheduleRecord->exam_date)->format('F d, Y'),
+                            'new_value' => Carbon::parse($request->exam_date)->format('F d, Y'),
+                            'changed_by' => Auth::user()->email,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                    if ($request->filled('time_slot')) {
+                        if ($scheduleRecord->start_time !== $start_time) {
+                            $scheduleChanges[] = [
+                                'form_submission_id' => $form->id,
+                                'field_name' => 'start_time',
+                                'old_value' => Carbon::parse($scheduleRecord->start_time)->format('h:i A'),
+                                'new_value' => Carbon::parse($start_time)->format('h:i A'),
+                                'changed_by' => Auth::user()->email,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ];
+                        }
+                        if ($scheduleRecord->end_time !== $end_time) {
+                            $scheduleChanges[] = [
+                                'form_submission_id' => $form->id,
+                                'field_name' => 'end_time',
+                                'old_value' => Carbon::parse($scheduleRecord->end_time)->format('h:i A'),
+                                'new_value' => Carbon::parse($end_time)->format('h:i A'),
+                                'changed_by' => Auth::user()->email,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ];
+                        }
+                    }
+                }
+
+
+        // Step 5: Capture original exam result before updating
+        $resultRecord = DB::table('exam_results')->where('applicant_id', $applicantId)->first();
+
+        // Save exam result (Step 6)
         if ($request->filled('exam_status')) {
             $examStatus = $request->exam_status;
             $examResult = $examStatus === 'no show' ? 'no show' : ($request->input('exam_result') ?? 'pending'); // default to pending if none
 
-            DB::table('exam_results')
-                ->updateOrInsert(
+                     $examUpdate = [
+                    'exam_status' => $examStatus,
+                    'exam_result' => $examResult,
+                    'updated_at' => now(),
+                ];
+
+                // Only override created_at if result is finalized (not null/pending)
+                if (!in_array($examResult, [null, 'pending'])) {
+                    $examUpdate['created_at'] = now();
+                }
+
+                DB::table('exam_results')->updateOrInsert(
                     ['applicant_id' => $form->applicant_id],
-                    [
-                        'exam_status' => $examStatus,
-                        'exam_result' => $examResult,
-                        'updated_at' => now()
-                    ]
+                    $examUpdate
                 );
+                
             }
+                    //EMAIL FOR EXAM STATUS
+             if (
+                $request->filled('exam_status') &&
+                $resultRecord &&
+                $resultRecord->exam_status !== $request->exam_status
+            ) {
+                $newStatus = $request->exam_status;
+
+            $email = optional($applicant->formSubmission)->guardian_email;
+
+            if ($email) {
+                Mail::send('emails.exam-status', [
+                    'applicant' => $applicant,
+                    'status' => ucfirst($newStatus),
+                ], function ($message) use ($email) {
+                    $message->to($email)
+                            ->subject('Your Exam Status Has Been Updated');
+                });
+            }
+        }
+
 
         if (isset($validated['applicant_fname'])) {
             $validated['applicant_fname'] = strtoupper($validated['applicant_fname']);
@@ -241,6 +318,57 @@ class EditApplicantController extends Controller
                 'applicant_name' => $fullName,
             ]);
         }
+
+
+                //email for exam_result
+                if ($request->filled('exam_result') &&
+            $resultRecord &&
+            $resultRecord->exam_result !== $request->exam_result &&
+            !in_array($request->exam_result, ['pending', null]) &&
+            ($request->exam_status !== 'no show')) {
+
+            $applicant = Applicant::with('formSubmission')->find($applicantId);
+            $email = optional($applicant->formSubmission)->guardian_email;
+
+            if ($email) {
+                Mail::send('emails.exam-result', [
+                    'applicant' => $applicant,
+                    'result' => ucfirst($request->exam_result),
+                ], function ($message) use ($email) {
+                    $message->to($email)
+                            ->subject('Your Exam Result Is Now Available');
+                });
+            }
+        }
+
+
+                // Log Step 5 (Exam Status) changes
+        $examChanges = [];
+        if ($resultRecord) {
+            if ($request->exam_status && $resultRecord->exam_status !== $request->exam_status) {
+                $examChanges[] = [
+                    'form_submission_id' => $form->id,
+                    'field_name' => 'exam_status',
+                    'old_value' => $resultRecord->exam_status,
+                    'new_value' => $request->exam_status,
+                    'changed_by' => Auth::user()->email,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+    if ($request->exam_result && $resultRecord->exam_result !== $request->exam_result) {
+        $examChanges[] = [
+            'form_submission_id' => $form->id,
+            'field_name' => 'exam_result',
+            'old_value' => $resultRecord->exam_result,
+            'new_value' => $request->exam_result,
+            'changed_by' => Auth::user()->email,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+    }
+}
+
         
 
         DB::table('payment')->where('applicant_id', $applicantId)->update([
@@ -267,8 +395,14 @@ class EditApplicantController extends Controller
             }
         }
 
-        if (!empty($changes)) {
-            DB::table('form_change_logs')->insert($changes);
+         $allChanges = array_merge($changes, $scheduleChanges, $examChanges);
+        if (!empty($allChanges)) {
+            DB::table('form_change_logs')->insert($allChanges);
+        }
+
+        // Update current_step to 7 if result qualifies
+        if ($request->filled('exam_result') && in_array($request->exam_result, ['passed', 'failed', 'interview', 'scholarship'])) {
+            Applicant::where('id', $applicantId)->update(['current_step' => 7]);
         }
 
         return redirect()->back()->with([
@@ -313,7 +447,7 @@ public function getTimeSlots(Request $request)
     $query = ExamSchedule::whereDate('exam_date', $date);
 
     if (in_array($level, ['Grade School', 'Junior High School'])) {
-        $query->whereIn('educational_level', ['Grade School', 'Junior High School']);
+        $query->where('educational_level', 'Grade School and Junior High School');
     } elseif ($level === 'Senior High School') {
         $query->where('educational_level', 'Senior High School');
     }

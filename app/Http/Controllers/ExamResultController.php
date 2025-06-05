@@ -8,6 +8,7 @@ use App\Models\Applicant;
 use App\Models\ApplicantSchedule;
 use Illuminate\Support\Facades\Auth;
 use App\Models\FillupForms;
+use Illuminate\Support\Facades\Mail;
 
 class ExamResultController extends Controller
 {
@@ -133,6 +134,16 @@ class ExamResultController extends Controller
             ]);
         }
 
+
+        //Email to send exam status to applicant
+         Mail::send('emails.exam-status', [
+        'applicant' => $applicant,
+        'status' => ucfirst($status),
+    ], function ($message) use ($applicant) {
+        $message->to($applicant->formSubmission->guardian_email)
+                ->subject('Your Exam Status Has Been Updated');
+    });
+
         return back()->with('alert_type', 'success')->with('alert_message', 'Applicant marked as ' . strtoupper($status));
     }
 
@@ -163,6 +174,20 @@ class ExamResultController extends Controller
                 $applicant->update(['current_step' => 7]);
             }
         }
+
+           //Send email to guardian about exam result
+    $email = optional($applicant->formSubmission)->guardian_email;
+
+    if ($email) {
+        Mail::send('emails.exam-result', [
+            'applicant' => $applicant,
+            'result' => ucfirst($request->exam_result),
+        ], function ($message) use ($email) {
+            $message->to($email)
+                    ->subject('Your Exam Result Is Now Available');
+        });
+    }
+
     
         return redirect()->back()->with('success', 'Exam result updated successfully.');
     }
