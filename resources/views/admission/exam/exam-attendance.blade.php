@@ -64,7 +64,7 @@
                             @endphp
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $app->applicant_id }}</td>
+                                <td>{{ $app->admission_number }}</td>
                                 <td>{{ $app->applicant_name }}</td>
                                 <td>{{ $app->applicant_contact_number }}</td>
                                 <td>{{ $app->incoming_grade_level }}</td>

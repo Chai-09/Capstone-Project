@@ -144,6 +144,17 @@ window.nextStep = function (step) {
                 }
             }
 
+            // Specific validation for age field
+            if (field.name === 'age') {
+                const age = parseInt(value);
+                if (isNaN(age) || age < 4 || age > 100) {
+                    allValid = false;
+                    field.classList.add('border-danger');
+                    showFormError('Please enter a reasonable age.');
+                    return;
+                }
+            }
+
             // If everything okay for this field
             field.classList.remove('border-danger');
         });

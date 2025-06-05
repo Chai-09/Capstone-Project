@@ -89,7 +89,7 @@
 
         <div class="row g-3 mt-2 mb-4">
             <div class="col-md-12">
-                <label class="form-label text-muted small">ConfirmPassword</label><br>
+                <label class="form-label text-muted small">Confirm Password</label><br>
                 <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
             </div>
         </div>
@@ -104,21 +104,15 @@
 </div>
 
 @if (session('success'))
-<script>
-    Swal.fire({
-        title: 'Success!',
-        text: '{{ session('success') }}',
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK'
-    });
-</script>
-
-<script>
-   
-</script>
-
-
+    <script>
+        Swal.fire({
+            title: 'Success!',
+            text: '{{ session('success') }}',
+            icon: 'success',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+        });
+    </script>
 @endif
 
 @endsection

@@ -47,7 +47,6 @@ window.validateInputFormats = function () {
             email.classList.remove("border-danger");
         }
     }
-
     return true;
 };
 

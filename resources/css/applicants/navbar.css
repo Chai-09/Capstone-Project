@@ -119,3 +119,14 @@
     box-shadow: none;             
 }
 
+.d-lg-none .strand-link {
+    color: #fff !important;
+}
+
+.d-lg-none .strand-link:hover {
+    color: #b8eed6 !important;
+}
+
+.d-lg-none .strand-link i {
+    color: #fff !important;
+}

@@ -90,7 +90,7 @@
        
     @if ($isSeniorHigh && $currentStep == 1)
         <li class="nav-item pt-4">
-            <a href="{{ route('strand.recommender') }}"  id="open-questionnaire" class="nav-link text-success fw-semibold" style="white-space: normal; line-height: 1.3;">
+            <a href="{{ route('strand.recommender') }}"  id="open-questionnaire" class="nav-link strand-link fw-semibold" style="white-space: normal; line-height: 1.3;">
                 <i class="fa-solid fa-circle-question"></i>
                 Need help choosing your strand?
             </a>
@@ -99,7 +99,7 @@
 
     @if ($isSeniorHigh && request()->routeIs('applicantdashboard') && !empty($applicant->strand_breakdown))
     <li class="nav-item">
-        <a href="#scoreBreakdownModal" class="nav-link text-success fw-semibold" data-bs-toggle="modal">
+        <a href="#scoreBreakdownModal" class="nav-link strand-link fw-semibold" data-bs-toggle="modal">
             <i class="fa-solid fa-chart-pie"></i>
             View Score Breakdown
         </a>

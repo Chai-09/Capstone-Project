@@ -130,6 +130,15 @@
     color:#00753F !important;
 }
 
+.strand-link {
+    color: #00753F !important; 
+}
+
+/* Optional: desktop hover */
+.strand-link:hover {
+    color: #28a745 !important; 
+}
+
 @media (max-height: 980px) {
     .sidebar-nav .nav-item {
         padding-bottom: 6px;

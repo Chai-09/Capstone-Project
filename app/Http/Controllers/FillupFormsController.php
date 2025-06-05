@@ -62,36 +62,37 @@ class FillupFormsController extends Controller
         default => '',
     };
 
-        //readonlyfields during fillup lang
-        $readOnlyFields = [
-            'applicant_fname',
-            'applicant_mname',
-            'applicant_lname',
-            'guardian_fname',
-            'guardian_mname',
-            'guardian_lname',
-            'guardian_email',
-            'current_school',
-        ];
+    //readonlyfields during fillup lang
+    $readOnlyFields = [
+        'applicant_fname',
+        'applicant_mname',
+        'applicant_lname',
+        'guardian_fname',
+        'guardian_mname',
+        'guardian_lname',
+        'guardian_email',
+        'current_school',
+    ];
 
-        //logic para ipakita lang ang strand modal if senior high
-        $showStrandModal = false;
+    //logic para ipakita lang ang strand modal if senior high
+    $showStrandModal = false;
 
-        if ($formSubmission->educational_level === 'Senior High School' && empty($formSubmission->strand)) {
-            $showStrandModal = true;
-}
-
-        //prefill recommended_strand 
-        if (session('recommended_strand') && empty($formSubmission->strand)) {
-            $formSubmission->strand = session('recommended_strand');
-            session()->forget('recommended_strand');
-            session()->forget('topStrand');
-
-        }
-
-        return view('applicant.steps.forms.step-1-forms', compact('applicant', 'formSubmission', 'readOnlyFields', 'showStrandModal'))->with('currentStep', $applicant->current_step);
+    if ($formSubmission->educational_level === 'Senior High School' && empty($formSubmission->strand)) {
+        $showStrandModal = true;
     }
 
+    //prefill recommended_strand 
+    if (session('recommended_strand') && empty($formSubmission->strand)) {
+        $formSubmission->strand = session('recommended_strand');
+        session()->forget('recommended_strand');
+        session()->forget('topStrand');
+
+    }
+
+    return view('applicant.steps.forms.step-1-forms', compact('applicant', 'formSubmission', 'readOnlyFields', 'showStrandModal'))->with('currentStep', $applicant->current_step);
+ }
+
+ 
     public function postStep3(Request $request)
     {
 
@@ -147,7 +148,7 @@ class FillupFormsController extends Controller
         $grade = $request->incoming_grlvl;
 
         if ($level === 'Grade School') {
-            $rules['lrn_no'] = 'required|max:255';
+            $rules['lrn_no'] = 'nullable|max:255';
             if (in_array($grade, ['KINDER', 'GRADE 1'])) {
                 $rules['applicant_bday'] = 'required|date|before_or_equal:' . now()->year . '-10-01';
 
@@ -175,7 +176,7 @@ class FillupFormsController extends Controller
         }
 
         if ($level === 'Junior High School') {
-            $rules['lrn_no'] = 'required|max:255';
+            $rules['lrn_no'] = 'nullable|max:255';
         }
 
         if ($level === 'Senior High School') {
@@ -201,6 +202,8 @@ class FillupFormsController extends Controller
         ];
 
         $allData = array_merge($validated, $optionalDefaults);
+
+        $allData['nationality'] = strtoupper($allData['nationality']); // Automatic na capital
 
         // Set applicant_id if available
         if ($applicant) {

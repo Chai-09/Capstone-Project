@@ -31,6 +31,7 @@ export default defineConfig({
 
                 // Partials
                 'resources/js/partials/sidebar.js',
+                'resources/js/partials/account-profile.js',
                 'resources/css/partials/tables.css',
                 'resources/css/partials/layout.css',
                 'resources/css/partials/dashboard.css',

@@ -140,13 +140,19 @@
                             <td>{{ $applicant->current_school ?? 'N/A' }}</td>
                             <td>{{ $applicant->incoming_grlvl ?? 'N/A' }}</td>
                             <td>{{ $applicant->current_step }}</td>
-                            <td class="d-flex gap-1">
-                                <a href="{{ route('admission.editApplicant', $applicant->id) }}" class="btn btn-sm btn-primary"><i class="bi bi-pencil-square"></i></a>
-                                <form action="{{ route('admission.applicants.destroy', $applicant->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this applicant?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                                </form>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="{{ route('admission.editApplicant', $applicant->id) }}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <form action="{{ route('admission.applicants.destroy', $applicant->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this applicant?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
