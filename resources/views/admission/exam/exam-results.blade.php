@@ -300,6 +300,23 @@
             confirmButtonColor: '#198754'
         });
     @endif
+    
+    // Auto-enable editing for pending results
+    document.querySelectorAll('tr').forEach(row => {
+        const select = row.querySelector('select[name="exam_result"]');
+        const editBtn = row.querySelector('.edit-btn');
+        const confirmBtn = row.querySelector('.submit-btn');
+
+        if (select && editBtn && confirmBtn) {
+            const result = select.value;
+
+            // If result is 'pending' and editable, auto-enable edit mode
+            if (result === 'pending' && !select.disabled) {
+                // Simulate Edit button click
+                editBtn.click();
+            }
+        }
+    });
 });
 
 </script>

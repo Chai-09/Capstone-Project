@@ -280,7 +280,7 @@ window.showProofModal = function(fileUrl) {
             : `<a href="${fileUrl}" target="_blank">Open File</a>`,
         showCloseButton: true,
         showConfirmButton: false,
-        width: 600,
+        width: '100%',
         customClass: { popup: 'text-start' }
     });
 };

@@ -51,7 +51,7 @@ function viewProof(fileUrl) {
         Swal.fire({
             title: 'Proof of Payment (PDF)',
             html: `<iframe src="${fileUrl}" width="100%" height="500px" style="border:none;"></iframe>`,
-            width: 700,
+            width: '90%',
             confirmButtonText: 'Close',
             customClass: {
                 confirmButton: 'btn-submit'
@@ -61,7 +61,7 @@ function viewProof(fileUrl) {
     Swal.fire({
         imageUrl: fileUrl,
         imageAlt: 'Proof of Payment',
-        width: 500,
+        width: 'auto',
         imageHeight: 'auto',
         padding: '1em',
         confirmButtonText: 'Close',

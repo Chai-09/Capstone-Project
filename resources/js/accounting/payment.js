@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 title: 'Proof of Payment',
                 imageUrl: fileUrl,
                 imageAlt: 'Proof of Payment',
-                width: 450,
+                width: '100%',
                 padding: '1em',
                 confirmButtonText: 'Close',
             });

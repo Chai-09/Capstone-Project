@@ -20,7 +20,8 @@ class ExamResultController extends Controller
 
     public function index(Request $request)
     {
-        $query = ExamResult::query();
+        $query = ExamResult::query()
+            ->whereNotNull('exam_status');
 
         // Search by name or grade
         if ($request->filled('search')) {

@@ -237,7 +237,7 @@
 
         // ✅ Checkbox Validation
         if (!checkbox.checked) {
-            showSignupError('You must agree to the Terms and Privacy Policy before signing up.');
+            showSignupError('You must agree to the Terms, Privacy Policy, and Cookie Use before signing up.');
             return;
         }
 
