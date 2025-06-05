@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="website icon" type="png" href="{{ asset('applysmart_logo.png') }}">
     <title>Terms and Conditions</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     @vite('resources/css/legal/terms.css')
 </head>
 <body>
+
+@include('legal.legal-nav')
+
 <div class="container py-5 w-100">
-    <h1 class="text-center mb-4">Terms and Conditions</h1>
+    <h1 class="text-center mb-4 fw-semibold">Terms and Conditions</h1>
     <h6 class="text-center mb-4">Last updated: April 22, 2025</h6>
     <h6 class="text-center mb-4">Please read these terms and conditions carefully before using Our Service. </h6>
 
@@ -161,9 +165,8 @@
             <p>By continuing to access or use Our Service after those revisions become effective, You agree to be bound by the revised terms. If You do not agree to the new terms, in whole or in part, please stop using the website and the Service.</p>
         </div>
     </div>
-
-
-
 </div>
+@include('partials.footer')
+
 </body>
 </html>

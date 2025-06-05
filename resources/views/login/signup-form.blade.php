@@ -82,7 +82,10 @@
         </fieldset>
 
         <div class="terms">
-            <p>By signing up, you agree to the <a href="{{ asset('legal/terms.pdf') }}" target="_blank" rel="noopener noreferrer">Terms of Service</a>, <a href="{{ asset('legal/privacy.pdf') }}" target="_blank" rel="noopener noreferrer">Privacy Policy</a>, including <a href="{{ asset('legal/cookies.pdf') }}" target="_blank" rel="noopener noreferrer">Cookie Use</a></p>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="agreeTerms" name="agreeTerms">
+                <p for="agreeTerms">I agree to the <a href="{{ route('terms-and-condition') }}" target="_blank" rel="noopener noreferrer">Terms of Service</a>, <a href="{{ route('privacy-policy') }}" target="_blank" rel="noopener noreferrer">Privacy Policy</a>, including <a href="{{ route('cookies-use') }}" target="_blank" rel="noopener noreferrer">Cookie Use</a></p>
+            </div>
         </div>
 
         <div class="form-group">
@@ -130,6 +133,7 @@
     document.getElementById('signup-btn').addEventListener('click', function () {
         const form = document.getElementById('signup-form');
         const requiredFields = form.querySelectorAll('[required]');
+        const checkbox = document.getElementById('agreeTerms')
         let allValid = true;
         let invalidEmail = false;
         const password = document.getElementById('signup-password').value.trim();
@@ -229,6 +233,12 @@
             return;
         } else {
             form.querySelector('[name="applicant_mname"]').classList.remove('border-danger');
+        }
+
+        // ✅ Checkbox Validation
+        if (!checkbox.checked) {
+            showSignupError('You must agree to the Terms and Privacy Policy before signing up.');
+            return;
         }
 
         // grecaptcha.execute(signupWidgetId); comment out

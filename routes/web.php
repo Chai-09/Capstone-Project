@@ -263,10 +263,13 @@ Route::middleware(['auth', 'role:administrator,admission,accounting'])->group(fu
     Route::put('/account/profile', [AccountProfileController::class, 'update'])->name('account.profile.update');
 });
 
-
+// Can be accessed in the public
+Route::view('/terms-and-condition', 'legal.terms')->name('terms-and-condition');
+Route::view('/privacy-policy', 'legal.privacy-policy')->name('privacy-policy');
+Route::view('/cookies-use', 'legal.cookies')->name('cookies-use');
 
 //Sidebar
 Route::view('/sidebar', 'partials.sidebar')->name('sidebar');
 
-//Accountant Dashboard
-Route::view('/accountant-dashboard', 'accounting.index')->name('accounting');
+// //Accountant Dashboard
+// Route::view('/accountant-dashboard', 'accounting.index')->name('accounting');
