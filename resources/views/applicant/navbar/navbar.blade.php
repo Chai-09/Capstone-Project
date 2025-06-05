@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg fixed-top px-4 py-2">
     <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="#">
+        <a class="navbar-brand d-flex align-items-center" href="https://feudiliman.edu.ph/" target="_blank" rel="noopener noreferrer">
             <img src="/images/applicants/feudiliman_logo.png" width="30" height="35" class="me-2" alt="FEU Logo">
             <span class="school-name">FEU Diliman</span>
         </a>
