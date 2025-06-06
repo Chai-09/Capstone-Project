@@ -15,6 +15,8 @@ namespace App\Models {
      * @property-read \App\Models\Applicant $applicant
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
      * @property-read int|null $notifications_count
+     * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
+     * @property-read int|null $tokens_count
      * @method static \Illuminate\Database\Eloquent\Builder<Accounts>|Accounts whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Accounts>|Accounts whereName($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Accounts>|Accounts whereEmail($value)
