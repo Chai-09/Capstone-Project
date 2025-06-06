@@ -108,6 +108,24 @@ ExamResult::updateOrCreate(
         if ($applicant->current_step == 4) {
             $applicant->update(['current_step' => 5]);
         }
+
+
+        //SEND EMAIL TO GUARDIAN
+    $guardianEmail = $form->guardian_email;
+    if ($guardianEmail) {
+        $formattedDate = \Carbon\Carbon::parse($request->exam_date)->format('F d, Y');
+        $formattedTime = \Carbon\Carbon::parse($request->start_time)->format('h:i A') . ' to ' . \Carbon\Carbon::parse($request->end_time)->format('h:i A');
+
+        \Mail::send('emails.exam-schedule-confirmation', [
+            'applicant' => $applicant,
+            'admissionNumber' => $admissionNumber,
+            'date' => $formattedDate,
+            'time' => $formattedTime,
+        ], function ($message) use ($guardianEmail) {
+            $message->to($guardianEmail)
+                ->subject('Your Exam Schedule Has Been Confirmed');
+        });
+    }
         return response()->json(['success' => true, 'redirect' => route('reminders.view')]);
     }
 }
