@@ -187,6 +187,7 @@ class EditApplicantController extends Controller
 
 
                 $scheduleChanges = [];
+
                 if ($scheduleRecord) {
                     if ($request->exam_date && $scheduleRecord->exam_date !== $request->exam_date) {
                         $scheduleChanges[] = [
@@ -222,6 +223,25 @@ class EditApplicantController extends Controller
                                 'updated_at' => now(),
                             ];
                         }
+                    }
+                }
+
+                if (!empty($scheduleChanges)) {
+                    $guardianEmail = optional($form)->guardian_email;
+
+                    if ($guardianEmail) {
+                        $formattedDate = \Carbon\Carbon::parse($request->exam_date)->format('F d, Y');
+                        $formattedTime = \Carbon\Carbon::parse($start_time)->format('h:i A') . ' to ' . \Carbon\Carbon::parse($end_time)->format('h:i A');
+
+                        Mail::send('emails.exam-schedule-confirmation', [
+                            'applicant' => $applicant,
+                            'admissionNumber' => $scheduleRecord->admission_number ?? 'N/A',
+                            'date' => $formattedDate,
+                            'time' => $formattedTime,
+                        ], function ($message) use ($guardianEmail) {
+                            $message->to($guardianEmail)
+                                    ->subject('Your Exam Schedule Has Been Updated');
+                        });
                     }
                 }
 

@@ -82,6 +82,7 @@ class AdmissionChartController extends Controller
        $months = DB::table('form_submissions')
         ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month')
         ->groupBy('year', 'month')
+        ->whereNotNull('created_at')
         ->orderByRaw('year DESC, month DESC')
         ->paginate(6);
 
