@@ -18,21 +18,38 @@ class MobileAuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            //'g-recaptcha-response' => 'required|string',
         ]);
-
+    
+        // reCAPTCHA validation
+        /*$client = new \GuzzleHttp\Client();
+        $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+                'secret' => config('services.recaptcha.secret_key'),
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+            ],
+        ]);
+    
+        $body = json_decode((string) $response->getBody(), true);
+    
+        if (!$body['success']) {
+            return response()->json(['message' => 'reCAPTCHA verification failed'], 400);
+        }*/
+    
         $user = Accounts::where('email', $request->email)->first();
-
+    
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
-
+    
         if ($user->role !== 'applicant') {
             return response()->json(['message' => 'Unauthorized role'], 403);
         }
-
+    
         $token = $user->createToken('mobile-token')->plainTextToken;
         $applicant = Applicant::where('account_id', $user->id)->first();
-
+    
         return response()->json([
             'token' => $token,
             'user' => [
@@ -44,6 +61,7 @@ class MobileAuthController extends Controller
             'step' => $applicant?->current_step ?? 1
         ]);
     }
+    
 
     public function requestOtp(Request $request)
     {
