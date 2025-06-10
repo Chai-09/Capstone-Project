@@ -28,7 +28,7 @@ class MobileFPController extends Controller
             ['token' => $token, 'created_at' => now()]
         );
 
-        $resetLink = "http://localhost:8081/resetpassword/resetpassword?email={$request->email}&token={$token}";
+        $resetLink = "http://localhost:8081/auth/resetpassword?email={$request->email}&token={$token}";
 
 
 
