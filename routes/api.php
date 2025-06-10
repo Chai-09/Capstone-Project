@@ -21,3 +21,6 @@ Route::post('/mobile/reset-password', [MobileResetController::class, 'reset']);
 Route::middleware('auth:sanctum')->get('/mobile/profile', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:sanctum')->post('/mobile/logout', [MobileAuthController::class, 'logout']);
+

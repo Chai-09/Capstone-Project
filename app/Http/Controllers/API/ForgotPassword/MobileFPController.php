@@ -30,8 +30,6 @@ class MobileFPController extends Controller
 
         $resetLink = "http://localhost:8081/auth/resetpassword?email={$request->email}&token={$token}";
 
-
-
         try {
             Mail::send('emails.mobile-reset-password', ['link' => $resetLink], function ($message) use ($request) {
 

@@ -169,4 +169,12 @@ class MobileAuthController extends Controller
             'step' => 1
         ]);
     }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Logged out successfully']);
+    }
+
 }
