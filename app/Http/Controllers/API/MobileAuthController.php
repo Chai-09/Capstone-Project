@@ -170,6 +170,9 @@ class MobileAuthController extends Controller
         ]);
     }
 
+  
+
+
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -177,4 +180,41 @@ class MobileAuthController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
 
+      public function resendOtpMobile(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email'
+    ]);
+
+    $email = $request->email;
+
+    $lastOtp = SignupOtp::where('email', $email)->latest()->first();
+
+    if ($lastOtp && Carbon::parse($lastOtp->created_at)->diffInSeconds(now()) < 60) {
+        $secondsLeft = 60 - Carbon::parse($lastOtp->created_at)->diffInSeconds(now());
+        return response()->json([
+            'status' => 'error',
+            'message' => "Please wait {$secondsLeft} second(s) before requesting a new OTP."
+        ], 429);
+    }
+
+    SignupOtp::where('email', $email)->delete();
+
+    $otp = rand(100000, 999999);
+
+    SignupOtp::create([
+        'email' => $email,
+        'otp' => $otp,
+        'expires_at' => now()->addMinutes(5),
+    ]);
+
+    Mail::send('emails.email-signup-otp', ['otp' => $otp], function ($message) use ($email) {
+        $message->to($email)->subject('Your new ApplySmart OTP Code');
+    });
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'A new OTP has been sent to your email.'
+    ]);
+}
 }

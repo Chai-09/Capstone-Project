@@ -14,6 +14,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/mobile/login', [MobileAuthController::class, 'login']);
 Route::post('/mobile/request-otp', [MobileAuthController::class, 'requestOtp']);
 Route::post('/mobile/verify-otp', [MobileAuthController::class, 'verifyOtpAndRegister']);
+Route::post('/mobile/resend-otp', [MobileAuthController::class, 'resendOtpMobile']);
 
 
 Route::post('/mobile/forgot-password', [MobileFPController::class, 'sendResetLink']);
