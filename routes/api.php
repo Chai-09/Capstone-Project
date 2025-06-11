@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\MobileAuthController;
 use App\Http\Controllers\API\ForgotPassword\MobileFPController;
 use App\Http\Controllers\API\ResetPassword\MobileResetController;
+use App\Http\Controllers\API\MobileFormsController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -21,6 +22,9 @@ Route::post('/mobile/reset-password', [MobileResetController::class, 'reset']);
 Route::middleware('auth:sanctum')->get('/mobile/profile', function (Request $request) {
     return $request->user();
 });
-
 Route::middleware('auth:sanctum')->post('/mobile/logout', [MobileAuthController::class, 'logout']);
+
+// Step 1
+Route::middleware('auth:sanctum')->post('/mobile/forms', [MobileFormsController::class, 'store']);
+
 
