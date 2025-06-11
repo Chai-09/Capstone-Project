@@ -20,8 +20,17 @@ Route::post('/mobile/forgot-password', [MobileFPController::class, 'sendResetLin
 Route::post('/mobile/reset-password', [MobileResetController::class, 'reset']);
 
 Route::middleware('auth:sanctum')->get('/mobile/profile', function (Request $request) {
-    return $request->user();
+    $user = $request->user()->load('applicant');
+    return response()->json([
+        'user' => [
+            'name' => $user->name,
+            'email' => $user->email,
+            'applicant' => $user->applicant,
+        ]
+    ]);
 });
+
+
 Route::middleware('auth:sanctum')->post('/mobile/logout', [MobileAuthController::class, 'logout']);
 
 // Step 1
