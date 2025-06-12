@@ -7,6 +7,10 @@ use App\Http\Controllers\API\ForgotPassword\MobileFPController;
 use App\Http\Controllers\API\ResetPassword\MobileResetController;
 use App\Http\Controllers\API\MobileFormsController;
 use App\Http\Controllers\API\MobileProfileController;
+use App\Http\Controllers\API\MobilePayment\MobilePaymentController;
+use App\Http\Controllers\API\MobileSchedule\MobileScheduleController;
+use App\Http\Controllers\API\ApplicantScheduleController;
+use App\Http\Controllers\API\MobileResult\MobileResultController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) { 
     return $request->user();
@@ -30,3 +34,14 @@ Route::middleware('auth:sanctum')->post('/mobile/logout', [MobileAuthController:
 Route::middleware('auth:sanctum')->post('/mobile/forms', [MobileFormsController::class, 'store']);
 
 
+Route::middleware('auth:sanctum')->post('/mobile/payment', [MobilePaymentController::class, 'store']);
+
+Route::middleware('auth:sanctum')->get('/mobile/payment/view', [MobilePaymentController::class, 'viewPayment']);
+
+Route::middleware('auth:sanctum')->get('/mobile/exam-schedules', [MobileScheduleController::class, 'index']);
+
+Route::middleware('auth:sanctum')->post('/mobile/book-exam', [MobileScheduleController::class, 'book']);
+
+Route::middleware('auth:sanctum')->get('/mobile/take-exam-info', [ApplicantScheduleController::class, 'getSchedule']);
+
+Route::middleware('auth:sanctum')->get('/mobile/exam-result', [MobileResultController::class, 'getExamResult']);
