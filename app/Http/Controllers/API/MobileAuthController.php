@@ -62,7 +62,6 @@ class MobileAuthController extends Controller
         ]);
     }
     
-
     public function requestOtp(Request $request)
     {
         $request->validate([
@@ -155,11 +154,8 @@ class MobileAuthController extends Controller
 
         SignupOtp::where('email', $request->guardian_email)->delete();
 
-        $token = $account->createToken('mobile-token')->plainTextToken;
-
         return response()->json([
             'message' => 'Account created successfully!',
-            'token' => $token,
             'user' => [
                 'id' => $account->id,
                 'name' => $account->name,

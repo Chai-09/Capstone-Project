@@ -96,7 +96,9 @@ class MobileFormsController extends Controller
                     'error' => 'Kinder and Grade 1 applicants must be at least 5 years old on or before October ' . now()->year . '.'
                 ], 422);
             }
-        }
+
+            $validated['applicant_bday'] = Carbon::parse($request->applicant_bday)->format('Y-m-d');
+        }   
 
         $validated['nationality'] = strtoupper($validated['nationality']);
         $validated['applicant_id'] = $applicant->id;
