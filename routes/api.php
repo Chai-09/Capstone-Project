@@ -45,3 +45,5 @@ Route::middleware('auth:sanctum')->post('/mobile/book-exam', [MobileScheduleCont
 Route::middleware('auth:sanctum')->get('/mobile/take-exam-info', [ApplicantScheduleController::class, 'getSchedule']);
 
 Route::middleware('auth:sanctum')->get('/mobile/exam-result', [MobileResultController::class, 'getExamResult']);
+
+Route::middleware('auth:sanctum')->get('/mobile/show-exam-result', [MobileResultController::class, 'show']);
