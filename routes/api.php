@@ -34,15 +34,26 @@ Route::middleware('auth:sanctum')->post('/mobile/logout', [MobileAuthController:
 Route::middleware('auth:sanctum')->post('/mobile/forms', [MobileFormsController::class, 'store']);
 
 
+// Step 2 and 3
 Route::middleware('auth:sanctum')->post('/mobile/payment', [MobilePaymentController::class, 'store']);
 
 Route::middleware('auth:sanctum')->get('/mobile/payment/view', [MobilePaymentController::class, 'viewPayment']);
 
+Route::middleware('auth:sanctum')->post('/mobile/payment/revert', [MobilePaymentController::class, 'revertStep']);
+
+Route::middleware('auth:sanctum')->post('/mobile/payment/advance-step', [MobilePaymentController::class, 'advanceStep']);
+
+
+
+// Step 4 
 Route::middleware('auth:sanctum')->get('/mobile/exam-schedules', [MobileScheduleController::class, 'index']);
 
 Route::middleware('auth:sanctum')->post('/mobile/book-exam', [MobileScheduleController::class, 'book']);
 
-Route::middleware('auth:sanctum')->get('/mobile/take-exam-info', [ApplicantScheduleController::class, 'getSchedule']);
+
+// Step 5
+Route::middleware('auth:sanctum')->get('/mobile/take-exam-info', [MobileScheduleController::class, 'getSchedule']);
+Route::middleware('auth:sanctum')->post('/mobile/advance-step-6', [MobileResultController::class, 'advanceToStep6']);
 
 Route::middleware('auth:sanctum')->get('/mobile/exam-result', [MobileResultController::class, 'getExamResult']);
 

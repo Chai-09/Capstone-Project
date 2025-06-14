@@ -60,6 +60,7 @@ class MobileScheduleController extends Controller
         return response()->json([
             'educational_level' => $level,
             'schedules' => $schedules,
+            'current_step' => $applicant->current_step,
         ]);
     }
 
@@ -162,5 +163,32 @@ class MobileScheduleController extends Controller
 
     return response()->json(['success' => true, 'message' => 'Schedule booked successfully.']);
 }
+
+    public function getSchedule(Request $request)
+    {
+        $user = $request->user();
+
+        $applicant = Applicant::where('account_id', $user->id)->first();
+        if (!$applicant) {
+            return response()->json(['error' => 'Applicant not found'], 404);
+        }
+
+        $schedule = ApplicantSchedule::where('applicant_id', $applicant->id)->latest()->first();
+
+        if (!$schedule) {
+            return response()->json(['error' => 'No schedule found'], 404);
+        }
+
+        return response()->json([
+            'admission_number' => $schedule->admission_number,
+            'applicant_name' => $schedule->applicant_name,
+            'exam_date' => $schedule->exam_date,
+            'start_time' => $schedule->start_time,
+            'end_time' => $schedule->end_time,
+            'venue' => $schedule->venue,
+            'current_step' => $applicant->current_step,
+        ]);
+    }
+
 
 }

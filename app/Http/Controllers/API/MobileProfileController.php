@@ -26,6 +26,7 @@ class MobileProfileController extends Controller
             ],
             'form_data' => $applicant->formSubmission,
             'submitted' => $applicant->formSubmission !== null,
+            'current_step' => $applicant->current_step
         ]);
     }
 }

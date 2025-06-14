@@ -115,5 +115,59 @@ class MobilePaymentController extends Controller
         ]);
     }
 
+        public function revertStep(Request $request)
+        {
+            $user = $request->user();
+            $applicant = $user->applicant;
+
+            if (!$applicant) {
+                return response()->json(['error' => 'Applicant not found'], 404);
+            }
+
+            // Find the latest denied payment
+            $deniedPayment = \App\Models\Payment::where('applicant_id', $applicant->id)
+                ->where('payment_status', 'denied')
+                ->latest()
+                ->first();
+
+            if ($deniedPayment) {
+                // Delete proof of payment if exists
+                if ($deniedPayment->proof_of_payment && Storage::disk('public')->exists($deniedPayment->proof_of_payment)) {
+                    Storage::disk('public')->delete($deniedPayment->proof_of_payment);
+                }
+
+                // Delete receipt if exists
+                if ($deniedPayment->receipt && Storage::disk('public')->exists($deniedPayment->receipt)) {
+                    Storage::disk('public')->delete($deniedPayment->receipt);
+                }
+
+                // Delete the denied payment record
+                $deniedPayment->delete();
+            }
+
+            // Revert current step
+            $applicant->current_step = 2;
+            $applicant->save();
+
+            return response()->json(['message' => 'Denied payment deleted and current step reverted to 2.']);
+        }
+
+       public function advanceStep(Request $request)
+        {
+            $user = $request->user();
+            $applicant = $user->applicant;
+
+            if (!$applicant) {
+                return response()->json(['error' => 'Applicant not found.'], 404);
+            }
+
+            if ($applicant->current_step == 3) {
+                $applicant->current_step = 4;
+                $applicant->save();
+                return response()->json(['message' => 'Step advanced to 4.']);
+            }
+
+            return response()->json(['message' => 'No step change needed.']);
+        }
 
 }

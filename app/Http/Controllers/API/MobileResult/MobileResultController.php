@@ -67,8 +67,25 @@ class MobileResultController extends Controller
             'start_time' => optional($schedule)->start_time,
             'end_time' => optional($schedule)->end_time,
             'exam_result' => $examResult->exam_result,
+            'current_step' => $applicant->current_step,
         ]);
     }
     
+   public function advanceToStep6(Request $request)
+    {
+        $user = $request->user();
+
+        $applicant = \App\Models\Applicant::where('account_id', $user->id)->first();
+        if (!$applicant) {
+            return response()->json(['success' => false, 'message' => 'Applicant not found.'], 404);
+        }
+
+        if ($applicant->current_step == 5) {
+            $applicant->update(['current_step' => 6]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Advanced to Step 6.']);
+    }
+
 
 }

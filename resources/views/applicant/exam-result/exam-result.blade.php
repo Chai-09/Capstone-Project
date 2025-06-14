@@ -67,7 +67,7 @@
                 <form method="POST" action="{{ route('payment.resched.trigger') }}">
                     @csrf
                     <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-submit w-25">
+                        <button type="submit" class="btn btn-submit w-auto">
                             Reschedule (Submit New Payment)
                         </button>
                     </div>
