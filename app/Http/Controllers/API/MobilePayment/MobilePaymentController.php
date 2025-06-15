@@ -57,6 +57,31 @@ class MobilePaymentController extends Controller
 
         $now = Carbon::now('Asia/Manila');
 
+        // Remove all existing schedule, exam result, and payments if rescheduling
+        if ($hasPreviousApproved) {
+            // Delete all old exam results
+            \App\Models\ExamResult::where('applicant_id', $applicant->id)->delete();
+
+            // Delete all old schedules
+            \App\Models\ApplicantSchedule::where('applicant_id', $applicant->id)->delete();
+
+            // Delete all payments EXCEPT the latest one we're about to submit
+            $oldPayments = Payment::where('applicant_id', $applicant->id)->get();
+            foreach ($oldPayments as $oldPayment) {
+                if ($oldPayment->proof_of_payment && Storage::disk('public')->exists($oldPayment->proof_of_payment)) {
+                    Storage::disk('public')->delete($oldPayment->proof_of_payment);
+                }
+                if ($oldPayment->receipt && Storage::disk('public')->exists($oldPayment->receipt)) {
+                    Storage::disk('public')->delete($oldPayment->receipt);
+                }
+                $oldPayment->delete();
+            }
+
+            // Reset applicant progress to allow reprocessing
+            $applicant->current_step = 2;
+        }
+
+
         Payment::create([
             'applicant_id' => $applicant->id,
             'applicant_fname' => $applicant->applicant_fname,
@@ -169,5 +194,22 @@ class MobilePaymentController extends Controller
 
             return response()->json(['message' => 'No step change needed.']);
         }
+
+        public function revertToStepTwo(Request $request)
+        {
+            $user = $request->user();
+            $applicant = Applicant::where('account_id', $user->id)->first();
+
+            if (!$applicant) {
+                return response()->json(['message' => 'Applicant not found.'], 404);
+            }
+
+            $applicant->current_step = 2;
+            $applicant->is_reschedule_active = true; // Optional: if you're using this flag to allow reschedule
+            $applicant->save();
+
+            return response()->json(['message' => 'Applicant reverted to Step 2.']);
+        }
+
 
 }

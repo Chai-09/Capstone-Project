@@ -58,3 +58,16 @@ Route::middleware('auth:sanctum')->post('/mobile/advance-step-6', [MobileResultC
 Route::middleware('auth:sanctum')->get('/mobile/exam-result', [MobileResultController::class, 'getExamResult']);
 
 Route::middleware('auth:sanctum')->get('/mobile/show-exam-result', [MobileResultController::class, 'show']);
+
+
+Route::middleware('auth:sanctum')->get('/mobile/exam-result', function (Request $request) {
+    $applicant = $request->user()->applicant;
+    $result = \App\Models\ExamResult::where('applicant_id', $applicant->id)->first();
+
+    return response()->json([
+        'exam_status' => $result?->exam_status ?? null,
+    ]);
+});
+
+//for reverting current_step to 2
+Route::middleware('auth:sanctum')->post('/mobile/revert-step-2', [MobilePaymentController::class, 'revertToStepTwo']);
