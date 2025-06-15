@@ -11,6 +11,12 @@ use App\Http\Controllers\API\MobilePayment\MobilePaymentController;
 use App\Http\Controllers\API\MobileSchedule\MobileScheduleController;
 use App\Http\Controllers\API\ApplicantScheduleController;
 use App\Http\Controllers\API\MobileResult\MobileResultController;
+use App\Http\Controllers\API\MobileStrandRecommenderController;
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/mobile/strand-recommender', [MobileStrandRecommenderController::class, 'submit']);
+    Route::get('/mobile/strand-recommender', [MobileStrandRecommenderController::class, 'show']);
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) { 
     return $request->user();
