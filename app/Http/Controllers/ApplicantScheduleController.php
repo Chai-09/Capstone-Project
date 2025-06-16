@@ -77,6 +77,12 @@ class ApplicantScheduleController extends Controller
 
         $admissionNumber = $year . '-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
 
+        $examSchedule = \App\Models\ExamSchedule::where('exam_date', $request->exam_date)->first();
+
+        if (!$examSchedule) {
+            return response()->json(['success' => false, 'message' => 'Exam schedule not found.']);
+        }
+
         // Save schedule
         $schedule = ApplicantSchedule::create([
             'applicant_id' => $applicant->id,
@@ -87,7 +93,7 @@ class ApplicantScheduleController extends Controller
             'exam_date' => $request->exam_date,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
-            'venue'=>'MPR Annex',
+            'venue' => $examSchedule ? $examSchedule->venue : 'N/A',
         ]);
 
 

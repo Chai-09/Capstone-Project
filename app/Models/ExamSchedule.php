@@ -15,6 +15,7 @@ class ExamSchedule extends Model
         'exam_date',
         'start_time',
         'end_time',
+        'venue',
         'max_participants',
         'educational_level',
     ];

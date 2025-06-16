@@ -51,6 +51,10 @@
                         <input type="time" class="form-control" name="end_time[]" required>
                     </div>
                     <div class="mb-3">
+                        <label class="form-label">Venue</label>
+                        <input type="text" class="form-control" name="venue[]" required>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Max Participants</label>
                         <input type="number" class="form-control" name="max_participants[]" required min="1">
                     </div>
@@ -102,6 +106,10 @@
                 <label class="form-label">End Time</label>
                 <input type="time" class="form-control" name="end_time[]" required>
             </div>
+            <div class="mb-3">
+                        <label class="form-label">Venue</label>
+                        <input type="text" class="form-control" name="venue[]" required>
+                    </div>
             <div class="mb-3">
                 <label class="form-label">Max Participants</label>
                 <input type="number" class="form-control" name="max_participants[]" required min="1">

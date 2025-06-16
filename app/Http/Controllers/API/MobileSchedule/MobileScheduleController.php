@@ -113,6 +113,8 @@ class MobileScheduleController extends Controller
     $nextNumber = $last ? ((int) substr($last->admission_number, 5)) + 1 : 1;
     $admissionNumber = $year . '-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
 
+    $examSchedule = \App\Models\ExamSchedule::where('exam_date', $request->exam_date)->first();
+
     // Save schedule
     \App\Models\ApplicantSchedule::create([
         'applicant_id' => $applicant->id,
@@ -123,7 +125,7 @@ class MobileScheduleController extends Controller
         'exam_date' => $request->exam_date,
         'start_time' => $request->start_time,
         'end_time' => $request->end_time,
-        'venue' => 'MPR Annex',
+        'venue' => $examSchedule ? $examSchedule->venue : 'N/A',
     ]);
 
     // Reset exam result

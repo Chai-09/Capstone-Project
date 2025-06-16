@@ -19,6 +19,7 @@ public function store(Request $request) // << Add this function
             'exam_date' => 'required|date',
             'start_time' => 'required|array',
             'end_time' => 'required|array',
+            'venue' => 'required|array', // for venue
             'max_participants' => 'required|array',
             'educational_level' => 'required|array',
         ]);
@@ -31,6 +32,7 @@ public function store(Request $request) // << Add this function
                 'exam_date' => $examDate,
                 'start_time' => $request->start_time[$i],
                 'end_time' => $request->end_time[$i],
+                'venue' => $request->venue[$i], // for venue
                 'max_participants' => $request->max_participants[$i],
                 'educational_level' => $request->educational_level[$i],
             ]);
