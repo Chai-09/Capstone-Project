@@ -60,16 +60,14 @@ class MobileFormsController extends Controller
             ])],
         ];
 
+        $rules['lrn_no'] = 'nullable|max:255'; // Always allow
+
         if ($level === 'Grade School') {
-            $rules['lrn_no'] = 'nullable|max:255';
             if (in_array($grade, ['KINDER', 'GRADE 1'])) {
                 $rules['applicant_bday'] = 'required|date|before_or_equal:' . now()->year . '-10-01';
             }
         }
 
-        if ($level === 'Junior High School') {
-            $rules['lrn_no'] = 'nullable|max:255';
-        }
 
         if ($level === 'Senior High School') {
             $rules['strand'] = ['required', Rule::in([
