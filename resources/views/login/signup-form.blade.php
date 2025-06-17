@@ -178,17 +178,17 @@
             return;
         }
 
-         // Password Validation (Paki comment-out to try)
-        // function isValidPassword(passwordInput) {
-        //     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-        //     return passwordInput === "" || passwordPattern.test(passwordInput.trim());
-        // }
+        //  Password Validation (Paki comment-out to try)
+        function isValidPassword(passwordInput) {
+            const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+            return passwordInput === "" || passwordPattern.test(passwordInput.trim());
+        }
 
-        // if (!isValidPassword(password)) {
-        //     showSignupError('Password must be at least 8 characters and include uppercase, lowercase, number, and special character.');
-        //     document.getElementById('signup-password').classList.add('border-danger');
-        //     return;
-        // }
+        if (!isValidPassword(password)) {
+            showSignupError('Password must be at least 8 characters and include uppercase, lowercase, number, and special character.');
+            document.getElementById('signup-password').classList.add('border-danger');
+            return;
+        }
 
 
         if (password.length < 6) {
