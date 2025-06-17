@@ -58,7 +58,6 @@ export default defineConfig({
                 'resources/css/legal/terms.css',
             ],
             refresh: true,
-            buildDirectory: 'build'
         }),
         tailwindcss(),
     ],
@@ -67,5 +66,10 @@ export default defineConfig({
         outDir: 'public/build',    
         manifest: true,
         emptyOutDir: true,
+        rollupOptions: {
+            output: {
+                manualChunks: undefined,
+            },
+        },
     },
 });
