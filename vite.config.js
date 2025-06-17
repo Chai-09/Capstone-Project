@@ -5,7 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 
+            input: [
+                'resources/css/app.css',
                 'resources/css/login/login.css',
                 'resources/css/fillupforms/fillupforms.css',
 
@@ -60,4 +61,12 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    build: {
+        outDir: 'public/build',
+        manifest: true,
+        emptyOutDir: true,
+        rollupOptions: {
+            input: 'resources/js/app.js',
+        },
+    },
 });

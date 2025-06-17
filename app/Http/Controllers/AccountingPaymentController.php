@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\Applicant;
 use Illuminate\Support\Facades\Storage;
+use App\Services\SmsService;
+use Illuminate\Support\Str;
+
 
 
 
@@ -127,6 +130,30 @@ public function update(Request $request, $id)
     $payment->ocr_number = $request->ocr_number;
     $payment->receipt = $request->receipt;
     $payment->save();
+
+    // Generate SMS message
+    $smsMessage = null;
+    $applicantName = strtoupper($payment->applicant_lname ?? 'Applicant');
+
+    if ($payment->payment_status === 'approved') {
+        $smsMessage = "Hi Ma'am/Sir $applicantName, your payment has been APPROVED. ";
+        if ($payment->ocr_number) {
+            $smsMessage .= "OCR: " . $payment->ocr_number . ". ";
+        }
+        $smsMessage .= "Check your ApplySmart account for full details.";
+    } elseif ($payment->payment_status === 'denied') {
+        $smsMessage = "Hi Ma'am/Sir $applicantName, your payment has been DENIED. ";
+        if ($payment->remarks) {
+            $smsMessage .= "Reason: " . Str::limit($payment->remarks, 60) . " ";
+        }
+        $smsMessage .= "Check your ApplySmart account for more info.";
+    }
+
+    // Send SMS if number is available
+    if ($payment->formSubmission && $payment->formSubmission->guardian_contact_number) {
+        SmsService::send($payment->formSubmission->guardian_contact_number, $smsMessage);
+    }
+
 
     if ($payment->formSubmission && $payment->formSubmission->guardian_email) {
         \Mail::to($payment->formSubmission->guardian_email)->send(new \App\Mail\PaymentStatusMail($payment));

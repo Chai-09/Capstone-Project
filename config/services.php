@@ -41,5 +41,12 @@ return [
     'secret_key' => env('RECAPTCHA_SECRET_KEY'),
 ],
 
+    #SEMAPHORE
+    'semaphore' => [
+    'key' => env('SEMAPHORE_API_KEY'),
+    'sender' => env('SEMAPHORE_SENDER_NAME', 'FEUD UPDATE'),
+],
+
+
 
 ];
