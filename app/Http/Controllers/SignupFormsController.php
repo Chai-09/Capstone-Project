@@ -27,29 +27,26 @@ class SignupFormsController extends Controller
             'applicant_lname' => 'required|max:64',
             'current_school' => 'required|max:255',
             'incoming_grlvl' => 'required|in:Kinder,Grade 1,Grade 2,Grade 3,Grade 4,Grade 5,Grade 6,Grade 7,Grade 8,Grade 9,Grade 10,Grade 11,Grade 12',
-            // 'g-recaptcha-response' => 'required', comment out
+            'g-recaptcha-response' => 'required', 
         ], [
             'password.same' => 'Password do not match.',
         ]);
 
-        #For verification of ReCaptcha from google  Comment out
-        // $client = new \GuzzleHttp\Client();
-        // $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
-        //     'form_params' => [
-        //         'secret' => config('services.recaptcha.secret_key'),
-        //         'response' => $request->input('g-recaptcha-response'),
-        //         'remoteip' => $request->ip(),
+        #For verification of ReCaptcha from google 
+        $client = new \GuzzleHttp\Client();
+        $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+                'secret' => config('services.recaptcha.secret_key'),
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+            ],
+        ]);
+        #JSON request to make sure the system parses the response
+        $body = json_decode((string) $response->getBody());
 
-
-        //     ],
-        // ]);
-        // #JSON request to make sure the system parses the response
-        // $body = json_decode((string) $response->getBody());
-
-        // if (!$body->success) {
-        //     return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA verification failed'])->withInput();
-        // }
-
+        if (!$body->success) {
+            return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA verification failed'])->withInput();
+        }
 
         // Generate ng random number for otp and store it
         $otp = rand(100000, 999999);

@@ -17,24 +17,24 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            // 'g-recaptcha-response' => 'required',
+            'g-recaptcha-response' => 'required',
         ]);
 
-        // reCAPTCHA check (Comment out)
-        // $client = new \GuzzleHttp\Client();
-        // $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
-        //     'form_params' => [
-        //         'secret' => config('services.recaptcha.secret_key'),
-        //         'response' => $request->input('g-recaptcha-response'),
-        //         'remoteip' => $request->ip(),
-        //     ],
-        // ]);
+        // reCAPTCHA 
+        $client = new \GuzzleHttp\Client();
+        $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+                'secret' => config('services.recaptcha.secret_key'),
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+            ],
+        ]);
 
-        // $body = json_decode((string) $response->getBody());
+        $body = json_decode((string) $response->getBody());
 
-        // if (!$body->success) {
-        //     return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA verification failed'])->withInput();
-        // }
+        if (!$body->success) {
+            return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA verification failed'])->withInput();
+        }
 
         $account = Accounts::where('email', $request->email)->first();
 

@@ -241,8 +241,7 @@
             return;
         }
 
-        // grecaptcha.execute(signupWidgetId); comment out
-        document.getElementById('signup-form').submit();
+        grecaptcha.execute(signupWidgetId); 
     });
 
     document.addEventListener('DOMContentLoaded', () => {
