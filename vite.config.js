@@ -58,13 +58,7 @@ export default defineConfig({
                 'resources/css/legal/terms.css',
             ],
             refresh: true,
-            buildDirectory: 'build'
         }),
         tailwindcss(),
     ],
-    build: {
-        outDir: 'public/build',
-        manifest: true,
-        emptyOutDir: true,
-    },
 });
