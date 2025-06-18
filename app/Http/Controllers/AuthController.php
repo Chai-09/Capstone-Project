@@ -61,7 +61,7 @@ class AuthController extends Controller
     }
 
     //New function to control where applicant will go depending on stored step in fillupforms
-    private function redirectApplicantBasedOnStep()
+    public function redirectApplicantBasedOnStep()
     {
         $applicant = \App\Models\Applicant::where('account_id', Auth::user()->id)->first();
 

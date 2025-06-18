@@ -27,9 +27,27 @@ use App\Http\Controllers\AccountingChartController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AccountProfileController;
 
+
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
 // Log in Routes
-Route::redirect('/', '/login');
+
+Route::get('/', function () {
+    if (Auth::check()) {
+        $role = Auth::user()->role;
+
+        return match ($role) {
+            'applicant' => app(AuthController::class)->redirectApplicantBasedOnStep(),
+            'administrator' => redirect()->route('admindashboard'),
+            'admission' => redirect()->route('admissiondashboard'),
+            'accounting' => redirect()->route('accountingdashboard'),
+            default => redirect()->route('login'),
+        };
+    }
+
+    return view('login.index');
+});
+
+
 Route::get('/login', [AuthController::class, 'showLoginPage'])->middleware('guest')->name('login');
 
 Route::post('/signup', [SignupFormsController::class, 'store'])->name('loginForms.store');
