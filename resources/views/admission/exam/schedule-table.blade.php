@@ -12,6 +12,7 @@
                         {{-- <th>Educational Level</th> --}}
                         <th>Max</th>
                         <th>Remaining</th>
+                        <th>Venue</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -28,6 +29,7 @@
                             {{-- <td>{{ $schedule->educational_level }}</td> --}}
                             <td>{{ $schedule->max_participants }}</td>
                             <td>{{ $schedule->remaining_slots }}</td>
+                            <td>{{ $schedule->venue }}</td>
                             <td>
                                 <form method="POST" action="{{ route('exam-schedule.destroy', $schedule->id) }}" class="delete-form d-inline" onclick="event.stopPropagation()">
                                     @csrf

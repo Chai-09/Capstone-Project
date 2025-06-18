@@ -53,6 +53,7 @@
                             <th>Grade Level</th>
                             <th>Educational Level</th>
                             <th>Exam Time</th>
+                            <th>Venue</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -73,6 +74,9 @@
                                     {{ \Carbon\Carbon::parse($app->start_time)->format('g:i A') }}
                                     –
                                     {{ \Carbon\Carbon::parse($app->end_time)->format('g:i A') }}
+                                </td>
+                                <td>
+                                    {{ $app->venue ?? 'N/A' }}
                                 </td>
                                 <td>
                                     @if (!$examStatus)
