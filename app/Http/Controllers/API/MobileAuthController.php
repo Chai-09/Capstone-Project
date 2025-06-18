@@ -41,14 +41,15 @@ class MobileAuthController extends Controller
                 'remoteip' => $request->ip(),
             ],
         ]);
+
+        
     
         $body = json_decode((string) $response->getBody(), true);
+        Log::info('reCAPTCHA raw response', $body);
     
         if (!$body['success']) {
             return response()->json(['message' => 'reCAPTCHA verification failed'], 400);
         }
-
-        Log::info('reCAPTCHA raw response', $body);
 
     
         $user = Accounts::where('email', $request->email)->first();
