@@ -15,13 +15,6 @@ class MobileAuthController extends Controller
 {
     public function login(Request $request)
     {
-
-        // Add this at the start of login method
-\Log::info('Login Request:', [
-    'email' => $request->email,
-    'has_recaptcha_token' => !empty($request->input('g-recaptcha-response')),
-    'token_length' => strlen($request->input('g-recaptcha-response') ?? '')
-]);
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -38,15 +31,7 @@ class MobileAuthController extends Controller
             ],
         ]);
     
-        
         $body = json_decode((string) $response->getBody(), true);
-
-        // Add this right after the Google API call
-\Log::info('reCAPTCHA Response:', [
-    'success' => $body['success'] ?? 'missing',
-    'error-codes' => $body['error-codes'] ?? 'none',
-    'full_body' => $body
-]);
     
         if (!$body['success']) {
             return response()->json(['message' => 'reCAPTCHA verification failed'], 400);
