@@ -11,8 +11,6 @@ use App\Models\Applicant;
 use App\Models\SignupOtp;
 use Carbon\Carbon;
 
-
-
 class MobileAuthController extends Controller
 {
     public function login(Request $request)
@@ -23,27 +21,23 @@ class MobileAuthController extends Controller
             'g-recaptcha-response' => 'required|string',
         ]);
 
-         session()->put('recaptcha_mobile_attempt', true);
-         session()->save();
-
+        \Log::info('Client IP:', ['ip' => $request->ip()]);
+    
         // reCAPTCHA validation
         $client = new \GuzzleHttp\Client();
         $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
             'form_params' => [
                 'secret' => config('services.recaptcha.secret_key'),
                 'response' => $request->input('g-recaptcha-response'),
-                'remoteip' => $request->ip(),
+                
             ],
         ]);
-
-        
     
         $body = json_decode((string) $response->getBody(), true);
     
         if (!$body['success']) {
             return response()->json(['message' => 'reCAPTCHA verification failed'], 400);
         }
-
     
         $user = Accounts::where('email', $request->email)->first();
     
