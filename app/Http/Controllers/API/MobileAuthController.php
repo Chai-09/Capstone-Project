@@ -47,6 +47,9 @@ class MobileAuthController extends Controller
         if (!$body['success']) {
             return response()->json(['message' => 'reCAPTCHA verification failed'], 400);
         }
+
+        Log::info('reCAPTCHA raw response', $body);
+
     
         $user = Accounts::where('email', $request->email)->first();
     
