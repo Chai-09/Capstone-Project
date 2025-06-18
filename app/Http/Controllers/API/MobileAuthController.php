@@ -10,6 +10,8 @@ use App\Models\Accounts;
 use App\Models\Applicant;
 use App\Models\SignupOtp;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+
 
 class MobileAuthController extends Controller
 {
@@ -19,6 +21,15 @@ class MobileAuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
             'g-recaptcha-response' => 'required|string',
+        ]);
+
+        // ✅ Add this block to test and force session creation
+        Log::info('Session before', session()->all());
+        session()->put('recaptcha_attempt', true); // any dummy flag
+        session()->save();
+        Log::info('Session after save', [
+            'id' => session()->getId(),
+            'data' => session()->all(),
         ]);
     
         // reCAPTCHA validation
