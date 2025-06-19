@@ -90,7 +90,7 @@ Route::get('/signup/request-otp', function () {
 //APPLICANT ROUTES
 
 //Fillupforms middleware (parent middleware)
-Route::middleware(['auth', 'role:applicant'])->group(function () {
+Route::middleware(['auth', 'role:applicant', 'prevent-back-history'])->group(function () {
 
     // Submitting of Forms (Step 1 default)
     Route::get('/step-1', [FillupFormsController::class, 'createStep3'])->name('applicantdashboard');
@@ -162,7 +162,7 @@ Route::middleware(['auth', 'role:applicant'])->group(function () {
 
 //-------------------------------------------------------------------------------------------------------//
 //ADMIN ROUTES
-Route::middleware(['auth', 'role:administrator'])->group(function () {
+Route::middleware(['auth', 'role:administrator', 'prevent-back-history'])->group(function () {
     Route::get('/administrator/dashboard', [AdminAccountController::class, 'index'])->name('admindashboard');
 
     Route::get('/administrator/create-accounts', function () {
@@ -183,7 +183,7 @@ Route::middleware(['auth', 'role:administrator'])->group(function () {
 
 
 //ADMISSION ROUTES
-Route::middleware(['auth', 'role:admission,administrator'])->group(function () {
+Route::middleware(['auth', 'role:admission,administrator', 'prevent-back-history'])->group(function () {
     //Route::get('/applicant/steps/exam_date/exam-date', [ExamScheduleController::class, 'showExamDates'])->name('exam.dates');
     Route::get('/admission/dashboard', [App\Http\Controllers\AdmissionChartController::class, 'showAdmissionDashboard'])->name('admissiondashboard'); //tanggalin ko to
 
@@ -250,7 +250,7 @@ Route::middleware(['auth', 'role:admission,administrator'])->group(function () {
 });
 
 //ACCOUNTING ROUTES
-Route::middleware(['auth', 'role:accounting,administrator'])->group(function () {
+Route::middleware(['auth', 'role:accounting,administrator', 'prevent-back-history'])->group(function () {
     Route::get('/accounting/dashboard', [AccountingPaymentController::class, 'index'])->name('accountingdashboard');
 
     Route::get('/accountant/payments', [AccountingPaymentController::class, 'index'])->name('accountant.payments');
@@ -276,7 +276,7 @@ Route::middleware(['auth', 'role:accounting,administrator'])->group(function () 
 });
 
 // Profile Route
-Route::middleware(['auth', 'role:administrator,admission,accounting'])->group(function () {
+Route::middleware(['auth', 'role:administrator,admission,accounting', 'prevent-back-history'])->group(function () {
     Route::get('/account/profile', [AccountProfileController::class, 'show'])->name('account.profile');
     Route::put('/account/profile', [AccountProfileController::class, 'update'])->name('account.profile.update');
 });

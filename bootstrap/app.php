@@ -18,6 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'payment.verified' => \App\Http\Middleware\EnsurePaymentApprovedForExam::class,
             'exam.schedule.selected' => \App\Http\Middleware\ExamScheduleSelected::class,
             'exam.result.exists' => \App\Http\Middleware\EnsureExamResultExists::class,
+
+            'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
