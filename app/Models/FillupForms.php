@@ -62,5 +62,9 @@ public function schedule()
 {
     return $this->hasOne(\App\Models\ApplicantSchedule::class, 'applicant_id', 'applicant_id');
 }
+public function examResult()
+{
+    return $this->hasOne(\App\Models\ExamResult::class, 'applicant_id', 'applicant_id');
+}
 
 }

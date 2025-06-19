@@ -18,7 +18,7 @@ class FormsExport implements FromCollection, WithMapping, WithHeadings
 
     public function collection()
     {
-        return $this->data ?? FillupForms::with(['payment', 'schedule'])->get();
+        return $this->data ?? FillupForms::with(['payment', 'schedule', 'examResult'])->get();
     }
 
     public function map($form): array
@@ -63,6 +63,9 @@ class FormsExport implements FromCollection, WithMapping, WithHeadings
             $form->schedule->start_time ?? '—',
             $form->schedule->end_time ?? '—',
             $form->schedule->venue ?? '-',
+            optional($form->examResult)->exam_status ?? '—',
+            optional($form->examResult)->exam_result ?? '—',
+
         ];
     }
 
@@ -96,6 +99,8 @@ class FormsExport implements FromCollection, WithMapping, WithHeadings
             'Start Time',
             'End Time',
             'Venue',
+            'Exam Status',
+            'Exam Result',
         ];
     }
 
