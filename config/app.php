@@ -53,6 +53,8 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    'mobile_reset_url' => env('MOBILE_RESET_URL', 'applysmartmobile://auth/resetpassword'),
+
 
     /*
     |--------------------------------------------------------------------------
