@@ -28,8 +28,7 @@ class MobileFPController extends Controller
             ['token' => $token, 'created_at' => now()]
         );
 
-       $scheme = config('app.mobile_reset_url', 'applysmartmobile://auth/resetpassword');
-       $resetLink = "{$scheme}?email=" . urlencode($request->email) . "&token=" . urlencode($token);
+       $resetLink = url("/mobile-reset?email=" . urlencode($request->email) . "&token=" . urlencode($token));
 
         try {
             Mail::send('emails.mobile-reset-password', ['link' => $resetLink], function ($message) use ($request) {

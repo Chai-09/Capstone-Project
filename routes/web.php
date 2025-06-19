@@ -26,6 +26,16 @@ use App\Http\Controllers\AdmissionChartController;
 use App\Http\Controllers\AccountingChartController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AccountProfileController;
+use Illuminate\Http\Request;
+
+Route::get('/mobile-reset', function (Request $request) {
+    $email = urlencode($request->email);
+    $token = urlencode($request->token);
+
+    $deepLink = "applysmartmobile://auth/resetpassword?email={$email}&token={$token}";
+    return redirect()->away($deepLink);
+});
+
 
 
 //THESE ARE PUBLIC ROUTES ACCESIBLE VIA URL
