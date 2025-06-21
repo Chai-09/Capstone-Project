@@ -15,7 +15,7 @@
     @endif
     @vite('resources/js/admission/applicant-list.js')
 
-    <form method="GET">
+    <form method="GET" id="filterForm">
         <div class="filter-bar" style="gap: 10px;">
             <div class="dropdown">
                 <button class="btn btn-filter dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -167,5 +167,21 @@
     </div>
 </div>
 @endsection
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('filterForm');
+        const selects = form.querySelectorAll('select');
+
+        selects.forEach(select => {
+            select.addEventListener('change', () => {
+                form.submit();
+            });
+        });
+    });
+</script>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>

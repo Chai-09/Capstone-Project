@@ -67,6 +67,7 @@
 
             <div class="form-group">
                 <label for="current_school">Current School <span class="required">*</span></label>
+                <p>If incoming Grade is Kinder, type N/A</p>
                 <input type="text" name="current_school" id="current_school" required>
             </div>
 

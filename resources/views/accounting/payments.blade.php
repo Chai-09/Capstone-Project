@@ -78,7 +78,7 @@
 
 
     {{-- Filter Methods --}}
-    <form method="GET" action="{{ route('accountingdashboard') }}">
+    <form method="GET" id="filterForm" action="{{ route('accountingdashboard') }}">
       <div class="filter-bar" style="gap: 10px;">
         
         {{-- Filter Button --}}
@@ -384,6 +384,20 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('filterForm');
+    const selects = form.querySelectorAll('select');
+
+    selects.forEach(select => {
+      select.addEventListener('change', () => {
+        form.submit();
+      });
+    });
+  });
+</script>
+
 
 @endsection
 

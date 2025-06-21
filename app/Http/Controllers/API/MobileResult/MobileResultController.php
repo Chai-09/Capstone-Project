@@ -59,6 +59,10 @@ class MobileResultController extends Controller
             $examResult->exam_result = 'no_show';
             $examResult->save();
         }
+
+        $hasReschedPayment = \App\Models\Payment::where('applicant_id', $applicant->id)
+        ->where('payment_for', 'resched')
+        ->exists();
     
         return response()->json([
             'admission_number' => $schedule->admission_number,
@@ -68,6 +72,8 @@ class MobileResultController extends Controller
             'end_time' => optional($schedule)->end_time,
             'exam_result' => $examResult->exam_result,
             'current_step' => $applicant->current_step,
+            
+            'show_resubmit_button' => $examResult->exam_result === 'no_show' && !$hasReschedPayment,
         ]);
     }
     

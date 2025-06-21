@@ -30,7 +30,7 @@ class MobileAuthController extends Controller
                 'remoteip' => $request->ip(),
             ],
         ]);
-    
+        
         $body = json_decode((string) $response->getBody(), true);
     
         if (!$body['success']) {
