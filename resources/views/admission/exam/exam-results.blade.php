@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 <style>
 .custom-exam-result {
     background-color: #f8f9fa;
@@ -86,7 +87,7 @@
                     <thead>
                         <tr>   
                             <th style="width: 10%;">#</th>
-                            <th style="width: 25%;">
+                            <th style="width: 25%; position: relative;">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span>Applicant Name</span>
                                     <div class="dropdown">
@@ -98,7 +99,7 @@
                                         style="line-height: 1;">
                                         <i class="bi bi-funnel"></i>
                                     </button>
-                                     <ul class="dropdown-menu dropdown-menu-end">
+                                     <ul class="dropdown-menu dropdown-menu-end" >
                                         <li class="dropdown-header fw-semibold">Sort by Name</li>
                                         <li><a class="dropdown-item {{ request('sort_name') == 'asc' ? 'active' : '' }}"
                                             href="{{ request()->fullUrlWithQuery(['sort_name' => 'asc', 'sort_date' => null, 'sort_grade' => null]) }}">A-Z</a></li>

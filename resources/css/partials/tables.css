@@ -2,7 +2,8 @@
 @import '../app.css';
 
 .table-wrapper {
-  overflow: hidden;
+  position: relative;
+  overflow: visible;
   border-radius: 0.5em;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -27,11 +28,17 @@
 
 
 .custom-table th {
-    background-color: #00753F;
-    color: white;
-    font-weight: 500;
-    border: #9e9c9c54 0.2px solid;
+  background-color: #00753F; 
+  color: white;
+  font-weight: 500;
+  border: #9e9c9c54 0.2px solid;
+  position: relative;
+  overflow: visible !important;
+  vertical-align: middle;
+  padding: 0.75rem 1rem;
+  z-index: 1; 
 }
+
 
 
 .custom-table tr:hover {
@@ -160,4 +167,51 @@ input.form-control::placeholder {
   min-width: max-content;
   max-height: 300px;
   overflow-y: auto;
+}
+
+@media (max-width: 1600px) {
+  .custom-table th,
+  .custom-table td {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.6rem;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .custom-table th .dropdown button {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+  }
+
+  .search-input {
+    font-size: 0.85rem;
+  }
+
+  .filter-bar {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .custom-table th,
+  .custom-table td {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .custom-table {
+    font-size: 0.8rem;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .btn.btn-search,
+  .btn.btn-filter,
+  .search-wrapper {
+    width: 100%;
+  }
 }

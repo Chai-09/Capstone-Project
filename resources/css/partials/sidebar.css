@@ -167,3 +167,54 @@ body {
 .nav-link .icon-wrapper {
   padding-top: 4px;
 }
+
+@media (max-height: 700px) {
+  #sidebar-logo {
+    max-height: 40px;
+  }
+
+  #logo-wrapper {
+    height: 80px;
+    padding: 5px;
+  }
+
+  .user-labels {
+    font-size: 0.75rem;
+    padding: 2px;
+  }
+
+  #sidebar-content .nav-link {
+    padding: 8px 22px;
+    font-size: 0.85rem;
+    gap: 10px;
+  }
+
+  #sidebar-content .nav-link i {
+    font-size: 1.1rem;
+    min-width: 25px;
+  }
+
+  #toggleSidebar {
+    font-size: 1.2rem;
+    padding: 6px;
+  }
+}
+
+@media (max-height: 500px) {
+  #logo-wrapper {
+    height: 60px;
+  }
+
+  .user-labels {
+    display: none;
+  }
+
+  #sidebar-content .nav-link {
+    padding: 6px 24px;
+    font-size: 0.75rem;
+  }
+
+  #sidebar-content .nav-link i {
+    font-size: 1rem;
+  }
+}
