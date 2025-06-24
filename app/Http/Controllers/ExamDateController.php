@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ExamSchedule;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class ExamDateController extends Controller
 {
@@ -12,33 +14,39 @@ class ExamDateController extends Controller
     return view('admission.add-exam-date');
 }
 
-public function store(Request $request) // << Add this function
-    {
-        // Validate the incoming form data
-        $request->validate([
-            'exam_date' => 'required|date',
-            'start_time' => 'required|array',
-            'end_time' => 'required|array',
-            'venue' => 'required|array', // for venue
-            'max_participants' => 'required|array',
-            'educational_level' => 'required|array',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:start_date',
+        'venue' => 'required|string',
+        'max_participants' => 'required|integer|min:1',
+        'educational_level' => 'required|string',
+        'time_slots' => 'required|array|min:1',
+        'time_slots.*' => 'regex:/^\d{2}:\d{2}-\d{2}:\d{2}$/',
+    ]);
 
-        $examDate = $request->exam_date;
+    $startDate = Carbon::parse($request->start_date);
+    $endDate = Carbon::parse($request->end_date);
+    $dateRange = CarbonPeriod::create($startDate, $endDate);
 
-        // Save each timeframe
-        for ($i = 0; $i < count($request->start_time); $i++) {
+    foreach ($dateRange as $date) {
+        foreach ($request->time_slots as $slot) {
+            [$startTime, $endTime] = explode('-', $slot);
+
             ExamSchedule::create([
-                'exam_date' => $examDate,
-                'start_time' => $request->start_time[$i],
-                'end_time' => $request->end_time[$i],
-                'venue' => $request->venue[$i], // for venue
-                'max_participants' => $request->max_participants[$i],
-                'educational_level' => $request->educational_level[$i],
+                'exam_date' => $date->format('Y-m-d'),
+                'start_time' => $startTime . ':00',
+                'end_time' => $endTime . ':00',
+                'venue' => $request->venue,
+                'max_participants' => $request->max_participants,
+                'educational_level' => $request->educational_level,
             ]);
         }
-
-        // Redirect back with a success message
-        return redirect()->back()->with('success', 'Exam schedule(s) added successfully!');
     }
+
+    return redirect()->back()->with('success', 'Exam schedule(s) added successfully!');
+}
+
+
 }

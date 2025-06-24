@@ -277,11 +277,11 @@ class ExamScheduleController extends Controller
         ->orderBy('exam_date')
         ->orderBy('start_time');
 
-    if (in_array($educationalLevel, ['Grade School', 'Junior High School'])) {
-        $query->where('educational_level', 'Grade School and Junior High School');
-    } elseif ($educationalLevel === 'Senior High School') {
-        $query->where('educational_level', 'Senior High School');
-    }
+        if (in_array($educationalLevel, ['Grade School', 'Junior High School'])) {
+            $query->whereIn('educational_level', ['Grade School', 'Junior High School']);
+        } elseif ($educationalLevel === 'Senior High School') {
+            $query->where('educational_level', 'Senior High School');
+        }        
 
     $examSchedules = $query->get()->filter(function ($schedule) {
         $usedSlots = \App\Models\ApplicantSchedule::with('applicant.formSubmission')
@@ -325,10 +325,11 @@ class ExamScheduleController extends Controller
                     $level = $app->applicant->formSubmission->educational_level ?? null;
 
                     return match ($schedule->educational_level) {
-                        'Grade School and Junior High School' => in_array($level, ['Grade School', 'Junior High School']),
+                        'Grade School' => $level === 'Grade School',
+                        'Junior High School' => $level === 'Junior High School',
                         'Senior High School' => $level === 'Senior High School',
                         default => false,
-                    };
+                    };                    
                 })
                 ->count();
 
