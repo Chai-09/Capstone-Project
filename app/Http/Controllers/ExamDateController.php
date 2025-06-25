@@ -24,13 +24,22 @@ public function store(Request $request)
         'educational_level' => 'required|string',
         'time_slots' => 'required|array|min:1',
         'time_slots.*' => 'regex:/^\d{2}:\d{2}-\d{2}:\d{2}$/',
+        'weekdays' => 'nullable|array', // ✅ used only during this request
     ]);
+
+    $excludedDays = $request->input('weekdays', []); // ['Thursday', 'Friday'], etc.
 
     $startDate = Carbon::parse($request->start_date);
     $endDate = Carbon::parse($request->end_date);
     $dateRange = CarbonPeriod::create($startDate, $endDate);
 
     foreach ($dateRange as $date) {
+        $dayName = $date->format('l'); // e.g., 'Friday'
+
+        if (in_array($dayName, $excludedDays)) {
+            continue; // ⛔ skip this day
+        }
+
         foreach ($request->time_slots as $slot) {
             [$startTime, $endTime] = explode('-', $slot);
 
@@ -47,6 +56,7 @@ public function store(Request $request)
 
     return redirect()->back()->with('success', 'Exam schedule(s) added successfully!');
 }
+
 
 
 }

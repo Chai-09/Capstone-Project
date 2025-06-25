@@ -230,6 +230,8 @@ Route::middleware(['auth', 'role:admission,administrator', 'prevent-back-history
 
     Route::get('/admission/exam/exam-schedule/by-date', [ExamScheduleController::class, 'fetchByDateTable']);
 
+    Route::delete('/exam-schedule/delete-all/{date}', [ExamScheduleController::class, 'deleteAllByDate']);
+
     Route::post('/admission/exam-results/mark', [ExamResultController::class, 'markAttendance'])->name('exam-results.mark');
 
 

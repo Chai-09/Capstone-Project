@@ -47,11 +47,19 @@
                 <label class="form-label">Educational Level</label>
                 <select class="form-select" id="educational_level" name="educational_level" required>
                     <option value="">-- Select Level --</option>
-                    <option value="Grade School">Grade School</option>
-                    <option value="Junior High School">Junior High School</option>
+                    <option value="Grade School and Junior High School">Grade School and Junior High School</option>
                     <option value="Senior High School">Senior High School</option>
                 </select>
             </div>
+            <div class="mb-3" id="grade-school-checkbox" style="display: none;">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="kinder_to_grade3" id="kinder_to_grade3">
+                    <label class="form-check-label" for="kinder_to_grade3">
+                        Kinder to Grade 3 Only
+                    </label>
+                </div>
+            </div>
+
 
             <div class="mb-3">
                 <label class="form-label">Venue</label>
@@ -88,6 +96,24 @@
                     </select>
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label">Select Days of the Week</label>
+                    <div class="d-flex flex-wrap gap-3">
+                        @php
+                            $weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                        @endphp
+                        @foreach($weekdays as $day)
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="weekdays[]" value="{{ $day }}" id="day_{{ strtolower($day) }}">
+                                <label class="form-check-label" for="day_{{ strtolower($day) }}">
+                                    {{ $day }}
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+
                 <div class="mb-3" id="custom_duration_div" style="display: none;">
                     <label class="form-label">Custom Time (minutes)</label>
                     <input type="number" class="form-control" name="custom_duration" min="1">
@@ -114,6 +140,7 @@
         </form>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     const eduSelect = document.getElementById('educational_level');
@@ -124,18 +151,24 @@
     const sideOptions = document.getElementById('side-options');
 
     eduSelect.addEventListener('change', () => {
-        const value = eduSelect.value;
-        if (value === 'Grade School' || value === 'Junior High School') {
-            durationSelect.value = '60';
-            customDiv.style.display = 'none';
-        } else if (value === 'Senior High School') {
-            durationSelect.value = '180';
-            customDiv.style.display = 'none';
-        } else {
-            durationSelect.value = '';
-        }
-        generateTimeSlots();
-    });
+    const value = eduSelect.value;
+    const gradeSchoolCheckbox = document.getElementById('grade-school-checkbox');
+
+    if (value === 'Grade School and Junior High School') {
+        durationSelect.value = '60';
+        customDiv.style.display = 'none';
+    } else if (value === 'Senior High School') {
+        durationSelect.value = '180';
+        customDiv.style.display = 'none';
+        gradeSchoolCheckbox.style.display = 'none';
+    } else {
+        durationSelect.value = '';
+        gradeSchoolCheckbox.style.display = 'none';
+    }
+
+    generateTimeSlots();
+});
+
 
     durationSelect.addEventListener('change', () => {
         customDiv.style.display = durationSelect.value === 'custom' ? 'block' : 'none';
@@ -166,55 +199,68 @@
     }
 
     function generateTimeSlots() {
-        const previewList = document.getElementById('time_slots_preview');
-        previewList.innerHTML = '';
+    const previewList = document.getElementById('time_slots_preview');
+    previewList.innerHTML = '';
 
-        const startVal = startTime.value;
-        const endVal = endTime.value;
-        if (!startVal || !endVal) return;
+    const startVal = startTime.value;
+    const endVal = endTime.value;
+    const startDateVal = document.querySelector('input[name="start_date"]').value;
+    const endDateVal = document.querySelector('input[name="end_date"]').value;
+    if (!startVal || !endVal || !startDateVal || !endDateVal) return;
 
-        const start = parseTimeToDate(startVal);
-        const end = parseTimeToDate(endVal);
+    const start = parseTimeToDate(startVal);
+    const end = parseTimeToDate(endVal);
 
-        let durationMins = 0;
-        const selected = durationSelect.value;
+    let durationMins = 0;
+    const selected = durationSelect.value;
 
-        if (selected === 'custom') {
-            const customVal = document.querySelector('input[name="custom_duration"]').value;
-            durationMins = parseInt(customVal || 0);
-        } else {
-            durationMins = parseInt(selected || 0);
-        }
-
-        if (durationMins <= 0 || start >= end) return;
-
-        // Gather excluded time ranges
-        const exclusions = [];
-        document.querySelectorAll('#excluded-times .d-flex').forEach(div => {
-            const exStart = div.querySelector('.excluded-start')?.value;
-            const exEnd = div.querySelector('.excluded-end')?.value;
-            if (exStart && exEnd) {
-                exclusions.push([parseTimeToDate(exStart), parseTimeToDate(exEnd)]);
-            }
-        });
-
-        const cursor = new Date(start);
-        while (cursor.getTime() + durationMins * 60000 <= end.getTime()) {
-            const slotEnd = new Date(cursor.getTime() + durationMins * 60000);
-            if (!isExcluded(cursor, slotEnd, exclusions)) {
-                const li = document.createElement('li');
-                li.className = 'list-group-item d-flex justify-content-between align-items-center';
-                li.innerHTML = `
-    ${formatTime(cursor)} - ${formatTime(slotEnd)}
-    <input type="hidden" name="time_slots[]" value="${formatTime(cursor)}-${formatTime(slotEnd)}" />
-    <button type="button" class="btn btn-sm btn-outline-danger ms-auto" onclick="this.parentElement.remove()">Remove</button>
-`;
-
-                previewList.appendChild(li);
-            }
-            cursor.setTime(cursor.getTime() + durationMins * 60000);
-        }
+    if (selected === 'custom') {
+        const customVal = document.querySelector('input[name="custom_duration"]').value;
+        durationMins = parseInt(customVal || 0);
+    } else {
+        durationMins = parseInt(selected || 0);
     }
+
+    if (durationMins <= 0 || start >= end) return;
+
+    // ✅ Get excluded weekdays (like Friday)
+    const excludedWeekdays = Array.from(document.querySelectorAll('input[name="weekdays[]"]:checked'))
+        .map(cb => cb.value); // e.g., ['Friday', 'Thursday']
+
+    // ✅ Check if at least one day in the range is allowed
+    let hasAllowedDay = false;
+    let dateCursor = new Date(startDateVal);
+    const endDate = new Date(endDateVal);
+
+    while (dateCursor <= endDate) {
+        const weekday = dateCursor.toLocaleDateString('en-US', { weekday: 'long' });
+        if (!excludedWeekdays.includes(weekday)) {
+            hasAllowedDay = true;
+            break;
+        }
+        dateCursor.setDate(dateCursor.getDate() + 1);
+    }
+
+    if (!hasAllowedDay) return; // ❌ all days excluded, do not generate slots
+
+    // ✅ Generate time slots once only (not per day)
+    const cursor = new Date(start);
+    while (cursor.getTime() + durationMins * 60000 <= end.getTime()) {
+        const slotEnd = new Date(cursor.getTime() + durationMins * 60000);
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+            ${formatTime(cursor)} - ${formatTime(slotEnd)}
+            <input type="hidden" name="time_slots[]" value="${formatTime(cursor)}-${formatTime(slotEnd)}" />
+            <button type="button" class="btn btn-sm btn-outline-danger ms-auto" onclick="this.parentElement.remove()">Remove</button>
+        `;
+        previewList.appendChild(li);
+        cursor.setTime(cursor.getTime() + durationMins * 60000);
+    }
+}
+
+
+
 
     // Listeners
     startTime.addEventListener('input', () => { toggleSideOptions(); generateTimeSlots(); });
@@ -242,7 +288,10 @@
         }
     });
 
-    @if(session('success'))
+    
+</script>
+@if(session('success'))
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 icon: 'success',
@@ -252,7 +301,7 @@
                 confirmButtonText: 'OK'
             });
         });
-    @endif
-</script>
+    </script>
+@endif
 
 @endsection
