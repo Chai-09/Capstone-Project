@@ -59,9 +59,10 @@
     }
 
     function isValidPassword(passwordInput) {
-        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        const passwordPattern = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
         return passwordPattern.test(passwordInput.trim());
     }
+
 
     document.getElementById('reset-btn').addEventListener('click', function (e) {
         e.preventDefault(); 
@@ -86,12 +87,13 @@
 
         // Validate password format
         if (!isValidPassword(password)) {
-            showSignupError('Password must be at least 8 characters and include uppercase, lowercase, number, and special character.');
+            showSignupError('Password must be at least 8 characters long and include at least one uppercase letter and one number.');
             document.getElementById('reset-password').classList.add('border-danger');
             return;
         } else {
             document.getElementById('reset-password').classList.remove('border-danger');
         }
+
 
         // Check password match
         if (password !== confirmPassword) {

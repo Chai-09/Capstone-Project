@@ -38,6 +38,7 @@
 
             <div class="form-group">
                 <label for="password">Password <span class="required">*</span></label>
+                <p>Password must be at least 8 characters long and include at least one uppercase letter and one number.</p>
                 <input type="password" name="password" id="signup-password" required>
             </div>
 
@@ -181,14 +182,16 @@
 
         //  Password Validation (Paki comment-out to try)
         function isValidPassword(passwordInput) {
-            const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+            const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
             return passwordInput === "" || passwordPattern.test(passwordInput.trim());
         }
 
         if (!isValidPassword(password)) {
-            showSignupError('Password must be at least 8 characters and include uppercase, lowercase, number, and special character.');
+            showSignupError('Password must be at least 8 characters long and include at least 1 uppercase letter and 1 number.');
             document.getElementById('signup-password').classList.add('border-danger');
             return;
+        } else {
+            document.getElementById('signup-password').classList.remove('border-danger');
         }
 
 

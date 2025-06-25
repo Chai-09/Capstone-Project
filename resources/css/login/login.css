@@ -333,7 +333,7 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     max-height: 90vh;
     width: 90%;
-    max-width: 800px;
+    max-width: 850px;
     overflow-y: auto;
     z-index: 100;
     border-radius: 12px;
@@ -392,6 +392,10 @@
 #formsModal b {
     font-size: 0.9rem;
     color: #666;
+}
+
+#formsModal p {
+    margin-bottom: .2rem;
 }
 
 .name-fields {

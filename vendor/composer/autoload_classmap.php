@@ -48,6 +48,7 @@ return array(
     'App\\Http\\Middleware\\EnsurePaymentApprovedForExam' => $baseDir . '/app/Http/Middleware/EnsurePaymentApprovedForExam.php',
     'App\\Http\\Middleware\\EnsurePaymentSubmitted' => $baseDir . '/app/Http/Middleware/EnsurePaymentSubmitted.php',
     'App\\Http\\Middleware\\ExamScheduleSelected' => $baseDir . '/app/Http/Middleware/ExamScheduleSelected.php',
+    'App\\Http\\Middleware\\PreventBackHistory' => $baseDir . '/app/Http/Middleware/PreventBackHistory.php',
     'App\\Http\\Middleware\\RoleMiddleware' => $baseDir . '/app/Http/Middleware/RoleMiddleware.php',
     'App\\Mail\\PaymentStatusMail' => $baseDir . '/app/Mail/PaymentStatusMail.php',
     'App\\Models\\Accounts' => $baseDir . '/app/Models/Accounts.php',

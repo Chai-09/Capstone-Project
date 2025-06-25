@@ -684,6 +684,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'App\\Http\\Middleware\\EnsurePaymentApprovedForExam' => __DIR__ . '/../..' . '/app/Http/Middleware/EnsurePaymentApprovedForExam.php',
         'App\\Http\\Middleware\\EnsurePaymentSubmitted' => __DIR__ . '/../..' . '/app/Http/Middleware/EnsurePaymentSubmitted.php',
         'App\\Http\\Middleware\\ExamScheduleSelected' => __DIR__ . '/../..' . '/app/Http/Middleware/ExamScheduleSelected.php',
+        'App\\Http\\Middleware\\PreventBackHistory' => __DIR__ . '/../..' . '/app/Http/Middleware/PreventBackHistory.php',
         'App\\Http\\Middleware\\RoleMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/RoleMiddleware.php',
         'App\\Mail\\PaymentStatusMail' => __DIR__ . '/../..' . '/app/Mail/PaymentStatusMail.php',
         'App\\Models\\Accounts' => __DIR__ . '/../..' . '/app/Models/Accounts.php',
