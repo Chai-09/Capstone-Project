@@ -62,7 +62,7 @@
                 <div class="form-row">
                     <div class="form-col">
                         <label>Applicant's Contact Number<span class="text-danger">*</span></label>
-                        <input type="tel" name="applicant_contact_number" value="{{ old('applicant_contact_number', $formSubmission->applicant_contact_number ?? '') }}" placeholder="09XXXXXXXXX" required {{ $readOnly ? 'disabled' : '' }}>
+                        <input type="tel" name="applicant_contact_number" value="{{ old('applicant_contact_number', $formSubmission->applicant_contact_number ?? '') }}" placeholder="09XXXXXXXXX" maxlength="11"   required {{ $readOnly ? 'disabled' : '' }}>
                     </div>
                 </div>
 
@@ -113,9 +113,12 @@
                     </div>
                     <div class="form-col">
                         <label class="text-muted">Postal Code</label>
-                        <input type="number" name="postal_code"
-                        value="{{ old('postal_code', $formSubmission->postal_code ?? '')}}"
-                        placeholder="Enter postal code" required {{ $readOnly ? 'disabled' : '' }}>
+                        <input type="text" name="postal_code"
+                            value="{{ old('postal_code', $formSubmission->postal_code ?? '')}}"
+                            placeholder="Enter postal code"
+                            required
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 4);"
+                            {{ $readOnly ? 'disabled' : '' }}>
                     </div>
                 </div>
             </div>
@@ -125,8 +128,9 @@
                     <label>Age<span class="text-danger">*</span></label>
                 
                     <input type="number" name="age" 
-                    value="{{ old('age', $formSubmission->age ?? '')}}"
-                    placeholder="Enter age" required {{ $readOnly ? 'disabled' : '' }}>
+                    value="{{ old('age', $formSubmission->age ?? '')}}" min="4" max="70"
+                    placeholder="Enter age" required {{ $readOnly ? 'disabled' : '' }}
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 2);">
                 </div>
                 <div class="form-col">
                     <label>Gender<span class="text-danger">*</span></label>
@@ -209,7 +213,7 @@
                 <div class="form-row">
                     <div class="form-col">
                         <label>Guardian's Contact Number<span class="text-danger">*</span></label>
-                        <input type="tel" name="guardian_contact_number" placeholder="09XXXXXXXXX" required value="{{ $formSubmission->guardian_contact_number ?? '' }}" {{ $readOnly ? 'disabled' : '' }}>
+                        <input type="tel" name="guardian_contact_number" placeholder="09XXXXXXXXX" maxlength="11" required value="{{ $formSubmission->guardian_contact_number ?? '' }}" {{ $readOnly ? 'disabled' : '' }}>
                     </div>
                 </div>
 

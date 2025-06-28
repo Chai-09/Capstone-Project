@@ -20,8 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 altInput: true,                   
                 altFormat: "F j, Y",              
                 maxDate: "today",                 
-                allowInput: true,
-                disableMobile: true               
+                allowInput: false,
+                disableMobile: true,       
+                defaultDate: "2018-10-01",
             });
         }
 

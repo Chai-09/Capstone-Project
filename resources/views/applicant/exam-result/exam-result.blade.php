@@ -40,24 +40,26 @@
                             <strong>Exam Summary</strong>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered text-center mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Admission No.</th>
-                                        <th>Applicant Name</th>
-                                        <th>Exam Date</th>
-                                        <th>Result</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{ $examResult->admission_number }}</td>
-                                        <td>{{ $examResult->applicant_name }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($examResult->exam_date)->format('F d, Y') }}</td>
-                                        <td class="text-capitalize">{{ $examResult->exam_result }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Admission No.</th>
+                                            <th>Applicant Name</th>
+                                            <th>Exam Date</th>
+                                            <th>Result</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-label="Admission No.">{{ $examResult->admission_number }}</td>
+                                            <td data-label="Applicant Name">{{ $examResult->applicant_name }}</td>
+                                            <td data-label="Exam Date">{{ \Carbon\Carbon::parse($examResult->exam_date)->format('F d, Y') }}</td>
+                                            <td data-label="Result" class="text-capitalize">{{ $examResult->exam_result }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

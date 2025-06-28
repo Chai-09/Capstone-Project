@@ -99,6 +99,17 @@
 <script>
     let signupWidgetId;
 
+    function isValidSchoolName(input) {
+        const schoolPattern = /^[A-Za-z\s\.\'\-]+$/; 
+        return schoolPattern.test(input.trim());
+    }
+
+    function isValidName(input) {
+        const namePattern = /^[A-Za-z\s]+$/; // Names: only letters and spaces
+        return namePattern.test(input.trim());
+    }
+
+
     function initSignupRecaptcha() {
         const container = document.createElement('div');
         container.style.display = 'none';
@@ -142,7 +153,38 @@
         const repassword = document.getElementById('signup-repassword').value.trim();
         const guardianMi = form.querySelector('[name="guardian_mname"]').value.trim();
         const applicantMi = form.querySelector('[name="applicant_mname"]').value.trim();
+        const schoolField = form.querySelector('[name="current_school"]');
 
+        // Name Fields Validation - only letters allowed
+        const nameFields = [
+            form.querySelector('[name="guardian_fname"]'),
+            form.querySelector('[name="guardian_mname"]'),
+            form.querySelector('[name="guardian_lname"]'),
+            form.querySelector('[name="applicant_fname"]'),
+            form.querySelector('[name="applicant_mname"]'),
+            form.querySelector('[name="applicant_lname"]')
+        ];
+
+        for (let field of nameFields) {
+            const value = field.value.trim();
+            if (value && !isValidName(value)) {
+                field.classList.add('border-danger');
+                showSignupError('Names can only contain letters and spaces. No numbers or special characters allowed.');
+                return;
+            } else {
+                field.classList.remove('border-danger');
+            }
+        }
+
+        
+        const schoolValue = schoolField.value.trim();
+        if (schoolValue && !isValidSchoolName(schoolValue)) {
+            schoolField.classList.add('border-danger');
+            showSignupError('School name can only contain letters, spaces, dots, apostrophes, or dashes.');
+            return;
+        } else {
+            schoolField.classList.remove('border-danger');
+        }
 
         requiredFields.forEach(field => {
             const value = field.value.trim();
@@ -239,7 +281,7 @@
             form.querySelector('[name="applicant_mname"]').classList.remove('border-danger');
         }
 
-        // ✅ Checkbox Validation
+        // Checkbox Validation
         if (!checkbox.checked) {
             showSignupError('You must agree to the Terms, Privacy Policy, and Cookie Use before signing up.');
             return;

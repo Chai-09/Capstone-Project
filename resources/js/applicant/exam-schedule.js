@@ -2,22 +2,34 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/themes/material_green.css";
 
 
+
 document.addEventListener('DOMContentLoaded', function () {
-    const availableDates = (window.availableExamDates || []).map(d => d.trim());
+
+    const today = new Date().toISOString().split('T')[0];
+    const availableDates = (window.availableExamDates || []).filter(d => d > today);
+
+    // Get min and max from the available dates
+    const sortedDates = [...availableDates].sort();
+    const minAvailableDate = sortedDates[0];
+    const maxAvailableDate = sortedDates[sortedDates.length - 1];
+
+
 
     flatpickr("#datePicker", {
-        dateFormat: "Y-m-d",                 
-        altInput: true,                      
-        altFormat: "F j, Y",                 
-        minDate: "today",
-        enable: availableDates,
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "F j, Y",
         disableMobile: true,
+
+        enable: availableDates,
+        minDate: minAvailableDate,
+        maxDate: maxAvailableDate,
+
         onChange: function (selectedDates, dateStr, instance) {
             const event = new Event('change');
             instance.input.dispatchEvent(event);
         }
     });
-    
 
     const datePicker = document.getElementById('datePicker');
     const route = document.getElementById('saveExamScheduleRoute').value;
