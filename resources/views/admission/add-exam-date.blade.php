@@ -32,6 +32,17 @@
         <form action="{{ route('examdate.store') }}" method="POST">
             @csrf
 
+            @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+
             <div class="row mb-3">
                 <div class="col">
                     <label for="start_date" class="form-label">Start Date</label>
@@ -97,10 +108,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Select Days of the Week</label>
+                    <label class="form-label">Select Days of the Week to Exclude</label>
                     <div class="d-flex flex-wrap gap-3">
                         @php
-                            $weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                            $weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                         @endphp
                         @foreach($weekdays as $day)
                             <div class="form-check">
@@ -138,6 +149,7 @@
             </div>
 
         </form>
+
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -182,8 +194,28 @@
     }
 
     function formatTime(date) {
-        return date.toTimeString().slice(0, 5);
-    }
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12; // Convert 0 (midnight) to 12
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours}:${minutes} ${ampm}`;
+}
+
+function formatTime24(date) {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+}
+
+
+function formatTimeStr(timeStr) {
+    const [h, m] = timeStr.split(':').map(Number);
+    const date = new Date();
+    date.setHours(h, m);
+    return formatTime(date);
+}
+
 
     function parseTimeToDate(timeStr) {
         const [h, m] = timeStr.split(":").map(Number);
@@ -223,6 +255,30 @@
 
     if (durationMins <= 0 || start >= end) return;
 
+    const maxAllowedDuration = (end.getTime() - start.getTime()) / 60000;
+
+    if (selected === 'custom' && durationMins > maxAllowedDuration) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Custom Time',
+            text: `Custom time (${durationMins} mins) exceeds the selected time range (${formatTimeStr(startTime.value)} to ${formatTimeStr(endTime.value)}).`,
+            confirmButtonColor: '#d33',
+        });
+        return;
+    }
+
+    if (durationMins > 0 && maxAllowedDuration % durationMins !== 0) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Invalid Time Duration',
+        text: `Selected duration (${durationMins} mins) does not fit evenly into the total time range (${formatTimeStr(startTime.value)} to ${formatTimeStr(endTime.value)}).`,
+
+        confirmButtonColor: '#d33',
+    });
+    return;
+}
+
+
     // ✅ Get excluded weekdays (like Friday)
     const excludedWeekdays = Array.from(document.querySelectorAll('input[name="weekdays[]"]:checked'))
         .map(cb => cb.value); // e.g., ['Friday', 'Thursday']
@@ -246,17 +302,24 @@
     // ✅ Generate time slots once only (not per day)
     const cursor = new Date(start);
     while (cursor.getTime() + durationMins * 60000 <= end.getTime()) {
-        const slotEnd = new Date(cursor.getTime() + durationMins * 60000);
-        const li = document.createElement('li');
-        li.className = 'list-group-item d-flex justify-content-between align-items-center';
-        li.innerHTML = `
-            ${formatTime(cursor)} - ${formatTime(slotEnd)}
-            <input type="hidden" name="time_slots[]" value="${formatTime(cursor)}-${formatTime(slotEnd)}" />
-            <button type="button" class="btn btn-sm btn-outline-danger ms-auto" onclick="this.parentElement.remove()">Remove</button>
-        `;
-        previewList.appendChild(li);
-        cursor.setTime(cursor.getTime() + durationMins * 60000);
-    }
+    const slotEnd = new Date(cursor.getTime() + durationMins * 60000);
+
+    const display = `${formatTime(cursor)} - ${formatTime(slotEnd)}`;        // 🟢 User sees: 8:00 AM - 9:00 AM
+    const hidden = `${formatTime24(cursor)}-${formatTime24(slotEnd)}`;      // ✅ Laravel gets: 08:00-09:00
+
+    const li = document.createElement('li');
+    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+    li.innerHTML = `
+        ${display}
+        <input type="hidden" name="time_slots[]" value="${hidden}" />
+        <button type="button" class="btn btn-sm btn-outline-danger ms-auto" onclick="this.parentElement.remove()">Remove</button>
+    `;
+    previewList.appendChild(li);
+
+    cursor.setTime(cursor.getTime() + durationMins * 60000);
+}
+
+
 }
 
 

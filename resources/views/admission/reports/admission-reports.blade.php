@@ -124,13 +124,13 @@
         </div>
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 chart-section academic" style="display: none;">
-            <div class="col">
+            <div class="col strand-charts" style="display: none;">
                 <div class="card chart-card">
                     <div class="card-header bg-primary text-white">Senior High School Strands</div>
                     <div class="card-body"><canvas id="StrandChart"></canvas></div>
                 </div>
             </div>
-            <div class="col">
+            <div class="col strand-charts" style="display: none;">
                 <div class="card chart-card">
             <div class="card-header bg-primary text-white">Recommended Strands (Base on Recommender)</div>
             <div class="card-body"><canvas id="RecommendedStrandChart"></canvas></div>
@@ -244,39 +244,51 @@
     }
 
     document.querySelectorAll('.chart-toggle .btn-toggle').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.chart-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
+    btn.addEventListener('click', function () {
+        document.querySelectorAll('.chart-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
 
-            const selected = this.getAttribute('data-filter');
-
-            document.querySelectorAll('.chart-section').forEach(section => {
-                section.style.display = section.classList.contains(selected) ? 'flex' : 'none';
-            });
-
-            const levelToggleContainer = document.querySelector('.level-toggle-container');
-            if (selected === 'academic') {
-                levelToggleContainer.style.display = 'none';
-                document.querySelectorAll('.level-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
-                const allBtn = document.querySelector('.level-toggle .btn-toggle[data-level="all"]');
-                if (allBtn) allBtn.classList.add('active');
-                selectedLevel = 'all';
-                fetchChartData();
-            } else {
-                levelToggleContainer.style.display = 'block';
-                fetchChartData();
-            }
+        const selected = this.getAttribute('data-filter');
+        document.querySelectorAll('.chart-section').forEach(section => {
+            section.style.display = section.classList.contains(selected) ? 'flex' : 'none';
         });
-    });
 
-    document.querySelectorAll('.level-toggle .btn-toggle').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.level-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            selectedLevel = this.getAttribute('data-level');
-            fetchChartData();
-        });
+        // Show strand charts if academic + all
+        const strandCharts = document.querySelectorAll('.strand-charts');
+        if (selected === 'academic' && selectedLevel === 'all') {
+            strandCharts.forEach(div => div.style.display = 'block');
+        } else if (selected === 'academic' && selectedLevel === 'Senior High School') {
+            strandCharts.forEach(div => div.style.display = 'block');
+        } else {
+            strandCharts.forEach(div => div.style.display = 'none');
+        }
+
+        fetchChartData();
     });
+});
+
+
+document.querySelectorAll('.level-toggle .btn-toggle').forEach(btn => {
+    btn.addEventListener('click', function () {
+        document.querySelectorAll('.level-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedLevel = this.getAttribute('data-level');
+
+        // Show strand charts if Academic + All or Academic + SHS
+        const selectedChartFilter = document.querySelector('.chart-toggle .btn-toggle.active')?.getAttribute('data-filter');
+        const strandCharts = document.querySelectorAll('.strand-charts');
+
+        if (selectedChartFilter === 'academic' && (selectedLevel === 'Senior High School' || selectedLevel === 'all')) {
+            strandCharts.forEach(div => div.style.display = 'block');
+        } else {
+            strandCharts.forEach(div => div.style.display = 'none');
+        }
+
+        fetchChartData();
+    });
+});
+
+
 
     document.querySelectorAll('.date-toggle .btn-toggle').forEach(btn => {
         btn.addEventListener('click', function () {
