@@ -161,6 +161,11 @@
     const endTime = document.getElementById('end_time');
     const customDiv = document.getElementById('custom_duration_div');
     const sideOptions = document.getElementById('side-options');
+    // Add lunch time as fixed exclusion
+const lunchStart = parseTimeToDate('12:00');
+const lunchEnd = parseTimeToDate('13:00');
+const fixedExclusions = [[lunchStart, lunchEnd]];
+
 
     eduSelect.addEventListener('change', () => {
     const value = eduSelect.value;
@@ -267,16 +272,18 @@ function formatTimeStr(timeStr) {
         return;
     }
 
-    if (durationMins > 0 && maxAllowedDuration % durationMins !== 0) {
+    const hasFixedExclusions = eduSelect.value === 'Senior High School'; // or use another flag
+
+if (durationMins > 0 && maxAllowedDuration % durationMins !== 0 && !hasFixedExclusions) {
     Swal.fire({
         icon: 'error',
         title: 'Invalid Time Duration',
         text: `Selected duration (${durationMins} mins) does not fit evenly into the total time range (${formatTimeStr(startTime.value)} to ${formatTimeStr(endTime.value)}).`,
-
         confirmButtonColor: '#d33',
     });
     return;
 }
+
 
 
     // ✅ Get excluded weekdays (like Friday)
@@ -304,8 +311,14 @@ function formatTimeStr(timeStr) {
     while (cursor.getTime() + durationMins * 60000 <= end.getTime()) {
     const slotEnd = new Date(cursor.getTime() + durationMins * 60000);
 
-    const display = `${formatTime(cursor)} - ${formatTime(slotEnd)}`;        // 🟢 User sees: 8:00 AM - 9:00 AM
-    const hidden = `${formatTime24(cursor)}-${formatTime24(slotEnd)}`;      // ✅ Laravel gets: 08:00-09:00
+    // Skip if this time slot overlaps with lunch
+    if (isExcluded(cursor, slotEnd, fixedExclusions)) {
+        cursor.setTime(cursor.getTime() + 15 * 60000); // Move cursor in 15 min steps to find next valid slot
+        continue;
+    }
+
+    const display = `${formatTime(cursor)} - ${formatTime(slotEnd)}`;
+    const hidden = `${formatTime24(cursor)}-${formatTime24(slotEnd)}`;
 
     const li = document.createElement('li');
     li.className = 'list-group-item d-flex justify-content-between align-items-center';
@@ -318,6 +331,7 @@ function formatTimeStr(timeStr) {
 
     cursor.setTime(cursor.getTime() + durationMins * 60000);
 }
+
 
 
 }
