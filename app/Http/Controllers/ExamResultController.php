@@ -145,7 +145,24 @@ class ExamResultController extends Controller
                 ->subject('Your Exam Status Has Been Updated');
     });
 
+    // SMS Notification for Exam Status
+if ($applicant->formSubmission && $applicant->formSubmission->guardian_contact_number) {
+    $guardianNumber = $applicant->formSubmission->guardian_contact_number;
+    $lname = strtoupper($applicant->applicant_lname ?? 'Applicant');
+
+    $smsMessage = "Hi Ma'am/Sir $lname, your exam status is now marked as: " . strtoupper($status) . ". ";
+    
+    if ($status === 'no show') {
+        $smsMessage .= "Please contact Admissions to reschedule.";
+    } else {
+        $smsMessage .= "We will notify you once the result is available.";
+    }
+
+    \App\Services\SmsService::send($guardianNumber, $smsMessage);
+}
+
         return back()->with('alert_type', 'success')->with('alert_message', 'Applicant marked as ' . strtoupper($status));
+
     }
 
     public function update(Request $request)
@@ -190,7 +207,18 @@ class ExamResultController extends Controller
         });
     }
 
-    
+        // SMS Notification for Exam Result
+    if ($applicant->formSubmission && $applicant->formSubmission->guardian_contact_number) {
+        $guardianNumber = $applicant->formSubmission->guardian_contact_number;
+        $lname = strtoupper($applicant->applicant_lname ?? 'Applicant');
+        $resultReadable = strtoupper($request->exam_result);
+
+        $smsMessage = "Hi Ma'am/Sir $lname, your exam result is now available: $resultReadable. ";
+        $smsMessage .= "Please check your ApplySmart account for full details.";
+
+        \App\Services\SmsService::send($guardianNumber, $smsMessage);
+    }
+
         return redirect()->back()->with('success', 'Exam result updated successfully.');
     }
 

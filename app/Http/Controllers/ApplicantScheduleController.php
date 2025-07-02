@@ -132,6 +132,17 @@ ExamResult::updateOrCreate(
                 ->subject('Your Exam Schedule Has Been Confirmed');
         });
     }
+
+    // SMS Notification to guardian about exam schedule
+if ($form->guardian_contact_number) {
+    $guardianNumber = $form->guardian_contact_number;
+    $lname = strtoupper($form->applicant_lname ?? 'Applicant');
+
+    $smsMessage = "Hi Ma'am/Sir $lname, your child's exam schedule is confirmed.\nAdmission No: $admissionNumber\nDate: $formattedDate\nTime: $formattedTime\nVenue: MPR Annex, FEU Diliman.";
+
+    \App\Services\SmsService::send($guardianNumber, $smsMessage);
+}
+
         return response()->json(['success' => true, 'redirect' => route('reminders.view')]);
     }
 }

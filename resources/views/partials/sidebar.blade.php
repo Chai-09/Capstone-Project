@@ -88,10 +88,6 @@
           <div class="icon-wrapper"><i class="fa-solid fa-certificate"></i></div>
           <span>Exam Results</span>
         </a>
-        <a href="{{ route('accountingdashboard') }}" class="nav-link" title="Payment">
-          <div class="icon-wrapper"><i class="fa-solid fa-money-bill"></i></div>
-          <span>Payment</span>
-        </a>
         <a href="{{ route('admission.reports') }}" class="nav-link" title="Reports">
           <div class="icon-wrapper"><i class="fa-solid fa-square-poll-vertical"></i></div>
           <span>Reports</span>

@@ -298,8 +298,5 @@ Route::view('/terms-and-condition', 'legal.terms')->name('terms-and-condition');
 Route::view('/privacy-policy', 'legal.privacy-policy')->name('privacy-policy');
 Route::view('/cookies-use', 'legal.cookies')->name('cookies-use');
 
-//Sidebar
-Route::view('/sidebar', 'partials.sidebar')->name('sidebar');
-
 // //Accountant Dashboard
 // Route::view('/accountant-dashboard', 'accounting.index')->name('accounting');
