@@ -258,7 +258,11 @@ function formatTimeStr(timeStr) {
         durationMins = parseInt(selected || 0);
     }
 
-    if (durationMins <= 0 || start >= end) return;
+    // If duration or time range invalid, show no slots message and return
+    if (durationMins <= 0 || start >= end) {
+        previewList.innerHTML = '<li class="list-group-item text-danger">No Time Slot</li>';
+        return;
+    }
 
     const maxAllowedDuration = (end.getTime() - start.getTime()) / 60000;
 
@@ -269,28 +273,29 @@ function formatTimeStr(timeStr) {
             text: `Custom time (${durationMins} mins) exceeds the selected time range (${formatTimeStr(startTime.value)} to ${formatTimeStr(endTime.value)}).`,
             confirmButtonColor: '#d33',
         });
+        previewList.innerHTML = '<li class="list-group-item text-danger">No Time Slot</li>';
         return;
     }
 
     const hasFixedExclusions = eduSelect.value === 'Senior High School'; // or use another flag
 
-if (durationMins > 0 && maxAllowedDuration % durationMins !== 0 && !hasFixedExclusions) {
-    Swal.fire({
-        icon: 'error',
-        title: 'Invalid Time Duration',
-        text: `Selected duration (${durationMins} mins) does not fit evenly into the total time range (${formatTimeStr(startTime.value)} to ${formatTimeStr(endTime.value)}).`,
-        confirmButtonColor: '#d33',
-    });
-    return;
-}
+    if (durationMins > 0 && maxAllowedDuration % durationMins !== 0 && !hasFixedExclusions) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Time Duration',
+            text: `Selected duration (${durationMins} mins) does not fit evenly into the total time range (${formatTimeStr(startTime.value)} to ${formatTimeStr(endTime.value)}).`,
+            confirmButtonColor: '#d33',
+        });
+        previewList.innerHTML = '<li class="list-group-item text-danger">No Time Slot</li>';
+        return;
+    }
 
+    // ... rest of your code for exclusions and slot generation ...
 
-
-    // ✅ Get excluded weekdays (like Friday)
+    // Generate slots:
     const excludedWeekdays = Array.from(document.querySelectorAll('input[name="weekdays[]"]:checked'))
-        .map(cb => cb.value); // e.g., ['Friday', 'Thursday']
+        .map(cb => cb.value);
 
-    // ✅ Check if at least one day in the range is allowed
     let hasAllowedDay = false;
     let dateCursor = new Date(startDateVal);
     const endDate = new Date(endDateVal);
@@ -304,37 +309,44 @@ if (durationMins > 0 && maxAllowedDuration % durationMins !== 0 && !hasFixedExcl
         dateCursor.setDate(dateCursor.getDate() + 1);
     }
 
-    if (!hasAllowedDay) return; // ❌ all days excluded, do not generate slots
-
-    // ✅ Generate time slots once only (not per day)
-    const cursor = new Date(start);
-    while (cursor.getTime() + durationMins * 60000 <= end.getTime()) {
-    const slotEnd = new Date(cursor.getTime() + durationMins * 60000);
-
-    // Skip if this time slot overlaps with lunch
-    if (isExcluded(cursor, slotEnd, fixedExclusions)) {
-        cursor.setTime(cursor.getTime() + 15 * 60000); // Move cursor in 15 min steps to find next valid slot
-        continue;
+    if (!hasAllowedDay) {
+        previewList.innerHTML = '<li class="list-group-item text-danger">No Time Slot</li>';
+        return;
     }
 
-    const display = `${formatTime(cursor)} - ${formatTime(slotEnd)}`;
-    const hidden = `${formatTime24(cursor)}-${formatTime24(slotEnd)}`;
+    const cursor = new Date(start);
+    let slotCount = 0;
 
-    const li = document.createElement('li');
-    li.className = 'list-group-item d-flex justify-content-between align-items-center';
-    li.innerHTML = `
-        ${display}
-        <input type="hidden" name="time_slots[]" value="${hidden}" />
-        <button type="button" class="btn btn-sm btn-outline-danger ms-auto" onclick="this.parentElement.remove()">Remove</button>
-    `;
-    previewList.appendChild(li);
+    while (cursor.getTime() + durationMins * 60000 <= end.getTime()) {
+        const slotEnd = new Date(cursor.getTime() + durationMins * 60000);
 
-    cursor.setTime(cursor.getTime() + durationMins * 60000);
+        if (isExcluded(cursor, slotEnd, fixedExclusions)) {
+            cursor.setTime(cursor.getTime() + 15 * 60000);
+            continue;
+        }
+
+        const display = `${formatTime(cursor)} - ${formatTime(slotEnd)}`;
+        const hidden = `${formatTime24(cursor)}-${formatTime24(slotEnd)}`;
+
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+            ${display}
+            <input type="hidden" name="time_slots[]" value="${hidden}" />
+            <button type="button" class="btn btn-sm btn-outline-danger ms-auto" onclick="this.parentElement.remove()">Remove</button>
+        `;
+        previewList.appendChild(li);
+
+        cursor.setTime(cursor.getTime() + durationMins * 60000);
+        slotCount++;
+    }
+
+    // If no slots generated, show the message
+    if (slotCount === 0) {
+        previewList.innerHTML = '<li class="list-group-item text-danger">No Time Slot</li>';
+    }
 }
 
-
-
-}
 
 
 
