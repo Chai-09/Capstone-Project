@@ -137,8 +137,8 @@
                             <td>{{ $applicant->applicant_fname }} {{ $applicant->applicant_mname ?? '' }} {{ $applicant->applicant_lname }}</td>
                             <td>{{ $applicant->formSubmission->applicant_email ?? 'N/A' }}</td>
                             <td>{{ $applicant->formSubmission->applicant_contact_number ?? 'N/A' }}</td>
-                            <td>{{ $applicant->current_school ?? 'N/A' }}</td>
-                            <td>{{ $applicant->incoming_grlvl ?? 'N/A' }}</td>
+                            <td>{{ $applicant->formSubmission->current_school ?? 'N/A' }}</td>
+                            <td>{{ $applicant->formSubmission->incoming_grlvl ?? 'N/A' }}</td>
                             <td>{{ $applicant->current_step }}</td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
