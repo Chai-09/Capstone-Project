@@ -158,10 +158,8 @@
         // Name Fields Validation - only letters allowed
         const nameFields = [
             form.querySelector('[name="guardian_fname"]'),
-            form.querySelector('[name="guardian_mname"]'),
             form.querySelector('[name="guardian_lname"]'),
             form.querySelector('[name="applicant_fname"]'),
-            form.querySelector('[name="applicant_mname"]'),
             form.querySelector('[name="applicant_lname"]')
         ];
 

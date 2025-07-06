@@ -9,7 +9,7 @@
                 <h2>You're almost there — just a few more steps to becoming a <span class="tamaraw-text">Tamaraw!</span></h2>
             </div>
             <div class="form-row">
-                <p class="second-line">Please wait for an email or sms confirming your payment verification; this process may take <span class="tamaraw-text">1-4 days</span>. If you have any issues, kindly please email us on <span class="tamaraw-text">admissions@feudiliman.edu.ph</span></p>
+                <p class="second-line">Please wait for an email or sms confirming your payment verification; this process may take <span class="tamaraw-text">1-4 business days</span>. If you have any issues, kindly please email us on <span class="tamaraw-text">admissions@feudiliman.edu.ph</span></p>
             </div>
         </div>
         <div class="form-section">

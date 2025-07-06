@@ -18,7 +18,7 @@
     <div class="content">
        <div class="explain">
             <p>This is the Cookies Policy (the "Policy") for ApplySmart, accessible from 
-            <a href="https://applysmart.feudiliman.edu.ph" target="_blank" rel="noopener noreferrer">https://applysmart.feudiliman.edu.ph</a>. To make this site function properly, we sometimes place 
+            <a href="https://applysmart.feudiliman.edu.ph" target="_blank" rel="noopener noreferrer">https://applysmart.live</a>. To make this site function properly, we sometimes place 
             small data files called cookies on your device. These cookies are downloaded to your computer 
             to improve your browsing experience as well as other purposes that are outlined in this Policy.</p>
 
