@@ -39,6 +39,13 @@
             <div class="forms col-lg-9">
                 @yield('content')
             </div>
+
+            <div class="col-lg-3">
+            </div>
+            <div class="col-lg-9 bg-success">
+                 @include('partials.footer')
+            </div>
+
         </div>
     </div>
 
