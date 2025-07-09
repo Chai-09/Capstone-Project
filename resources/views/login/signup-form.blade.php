@@ -100,7 +100,7 @@
     let signupWidgetId;
 
     function isValidSchoolName(input) {
-        const schoolPattern = /^[A-Za-z\s\.\'\-]+$/; 
+        const schoolPattern = /^[A-Za-z\s\.\'\-\/]+$/;
         return schoolPattern.test(input.trim());
     }
 
@@ -178,7 +178,7 @@
         const schoolValue = schoolField.value.trim();
         if (schoolValue && !isValidSchoolName(schoolValue)) {
             schoolField.classList.add('border-danger');
-            showSignupError('School name can only contain letters, spaces, dots, apostrophes, or dashes.');
+            showSignupError('School name can only contain letters, spaces, dots, apostrophes, dashes, or slashes.');
             return;
         } else {
             schoolField.classList.remove('border-danger');
