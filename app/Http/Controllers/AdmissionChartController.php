@@ -134,7 +134,54 @@ class AdmissionChartController extends Controller
         'source' => (clone $baseQuery)->selectRaw('source, COUNT(*) as total')->groupBy('source')->get(),
         'strand' => (clone $baseQuery)->whereNotNull('strand')->selectRaw('strand, COUNT(*) as total')->groupBy('strand')->get(),
         'incomingGrades' => (clone $baseQuery)->selectRaw('incoming_grlvl, COUNT(*) as total')->groupBy('incoming_grlvl')->get(),
-        'examResult' => \App\Models\ExamResult::whereNotNull('exam_result')->selectRaw('exam_result, COUNT(*) as total')->groupBy('exam_result')->orderBy('exam_result')->get(),
+        'examResult' => \App\Models\ExamResult::whereNotNull('exam_result')
+        ->whereHas('applicant.formSubmission', function ($query) use ($level, $range) {
+            if ($level && $level !== 'all') {
+                $query->where('educational_level', $level);
+            }
+
+            switch ($range) {
+                case 'daily':
+                    $query->whereDate('created_at', now()->toDateString());
+                    break;
+                case 'monthly':
+                    $query->whereYear('created_at', now()->year)
+                        ->whereMonth('created_at', now()->month);
+                    break;
+                case 'annually':
+                    $query->whereYear('created_at', now()->year);
+                    break;
+            }
+        })
+        ->selectRaw('exam_result, COUNT(*) as total')
+        ->groupBy('exam_result')
+        ->orderBy('exam_result')
+        ->get(),
+        'recommendedStrand' => \App\Models\Applicant::whereNotNull('recommended_strand')
+        ->when($level && $level !== 'all', function ($q) use ($level) {
+            // Join form_submissions to get educational_level
+            $q->whereHas('formSubmission', function ($sub) use ($level) {
+                $sub->where('educational_level', $level);
+            });
+        })
+        ->when(true, function ($q) use ($range) {
+            switch ($range) {
+                case 'daily':
+                    $q->whereDate('created_at', now()->toDateString());
+                    break;
+                case 'monthly':
+                    $q->whereYear('created_at', now()->year)
+                    ->whereMonth('created_at', now()->month);
+                    break;
+                case 'annually':
+                    $q->whereYear('created_at', now()->year);
+                    break;
+            }
+        })
+        ->selectRaw('recommended_strand, COUNT(*) as total')
+        ->groupBy('recommended_strand')
+        ->orderBy('recommended_strand')
+        ->get(),
 
     ];
 

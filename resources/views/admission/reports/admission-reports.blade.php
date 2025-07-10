@@ -239,6 +239,11 @@
             examResultChart.data.datasets[0].data = data.examResult.map(e => e.total);
             examResultChart.update();
 
+            // Recommended Strand Chart
+            recommendedStrandChart.data.labels = data.recommendedStrand.map(s => s.recommended_strand);
+            recommendedStrandChart.data.datasets[0].data = data.recommendedStrand.map(s => s.total);
+            recommendedStrandChart.update();
+
         });
         
     }
