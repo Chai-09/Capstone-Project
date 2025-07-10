@@ -19,68 +19,54 @@ class MobilePaymentController extends Controller
             'payment_mode' => 'required|string|max:255',
             'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png|max:2048',
         ]);
-        
 
         $user = $request->user();
         $applicant = Applicant::where('account_id', $user->id)->firstOrFail();
 
-        $hasPreviousApproved = Payment::where('applicant_id', $applicant->id)
-            ->where('payment_for', 'first-time')
-            ->where('payment_status', 'approved')
-            ->exists();
-
-        $paymentPurpose = $hasPreviousApproved ? 'resched' : 'first-time';
-
-        // Delete last denied payment (if exists)
-        $latestDenied = Payment::where('applicant_id', $applicant->id)
-        ->where('payment_status', 'denied')
-        ->latest()
-        ->first();
-
-        if ($latestDenied) {
-        if ($latestDenied->proof_of_payment && Storage::disk('public')->exists($latestDenied->proof_of_payment)) {
-            Storage::disk('public')->delete($latestDenied->proof_of_payment);
-        }
-        $latestDenied->delete();
-        }
-
         $formSubmission = FillupForms::where('applicant_id', $applicant->id)->first();
-
-
         if (!$formSubmission) {
             return response()->json(['message' => 'Form data not found.'], 404);
         }
 
+        $hasApprovedFirstTime = Payment::where('applicant_id', $applicant->id)
+            ->where('payment_for', 'first-time')
+            ->where('payment_status', 'approved')
+            ->exists();
+
+        // Determine if this is a reschedule
+        $isReschedule = $hasApprovedFirstTime && $applicant->is_reschedule_active;
+        $paymentPurpose = $isReschedule ? 'resched' : 'first-time';
+
+        if ($isReschedule) {
+            // Delete exam result and schedule
+            \App\Models\ExamResult::where('applicant_id', $applicant->id)->delete();
+            \App\Models\ApplicantSchedule::where('applicant_id', $applicant->id)->delete();
+
+            // Delete only DENIED payments
+            $deniedPayments = Payment::where('applicant_id', $applicant->id)
+                ->where('payment_status', 'denied')
+                ->get();
+
+            foreach ($deniedPayments as $denied) {
+                if ($denied->proof_of_payment && Storage::disk('public')->exists($denied->proof_of_payment)) {
+                    Storage::disk('public')->delete($denied->proof_of_payment);
+                }
+                if ($denied->receipt && Storage::disk('public')->exists($denied->receipt)) {
+                    Storage::disk('public')->delete($denied->receipt);
+                }
+                $denied->delete();
+            }
+            // Reset step
+            $applicant->current_step = 2;
+            $applicant->is_reschedule_active = true; 
+        }
+
+        // Upload new file
         $file = $request->file('proof_of_payment');
         $filename = uniqid('proof_', true) . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('payment_proofs', $filename, 'public');
 
         $now = Carbon::now('Asia/Manila');
-
-        // Remove all existing schedule, exam result, and payments if rescheduling
-        if ($hasPreviousApproved) {
-            // Delete all old exam results
-            \App\Models\ExamResult::where('applicant_id', $applicant->id)->delete();
-
-            // Delete all old schedules
-            \App\Models\ApplicantSchedule::where('applicant_id', $applicant->id)->delete();
-
-            // Delete all payments EXCEPT the latest one we're about to submit
-            $oldPayments = Payment::where('applicant_id', $applicant->id)->get();
-            foreach ($oldPayments as $oldPayment) {
-                if ($oldPayment->proof_of_payment && Storage::disk('public')->exists($oldPayment->proof_of_payment)) {
-                    Storage::disk('public')->delete($oldPayment->proof_of_payment);
-                }
-                if ($oldPayment->receipt && Storage::disk('public')->exists($oldPayment->receipt)) {
-                    Storage::disk('public')->delete($oldPayment->receipt);
-                }
-                $oldPayment->delete();
-            }
-
-            // Reset applicant progress to allow reprocessing
-            $applicant->current_step = 2;
-        }
-
 
         Payment::create([
             'applicant_id' => $applicant->id,
@@ -103,8 +89,7 @@ class MobilePaymentController extends Controller
         ]);
 
         $applicant->current_step = 3;
-        $applicant->is_reschedule_active = false;
-        $applicant->save();
+        $applicant->save(); // is_reschedule_active is already set above
 
         return response()->json(['message' => 'Payment submitted successfully!']);
     }

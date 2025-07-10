@@ -8,6 +8,9 @@ use App\Models\Applicant;
 use App\Models\FillupForms;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
 
 class PaymentController extends Controller
 {
