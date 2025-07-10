@@ -1,7 +1,7 @@
 @extends('applicant.index')
 
 @section('content')
-<div class="container exam-date">
+<div class="exam-date">
   <div class="step-form">
     <div class="form-section">
       <h2 class="mb-4 text-center">Entrance Exam Schedule</h2>
@@ -52,9 +52,9 @@
       @if (isset($currentStep) && $currentStep > 4)
         <div class="alert alert-info">
           Your entrance exam has already been scheduled. Kindly proceed to the next step.
-        <div>
+        </div>
       @endif
-    <div>
+        </div>
   </div>
 </div>
 @endsection

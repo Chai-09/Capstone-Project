@@ -37,11 +37,18 @@ class PaymentController extends Controller
         ->latest()
         ->first();
 
-    // Use resched if it exists, else fallback
-    $existingPayment = $reschedPayment ?? $firstTimePayment;
-    $isReschedPayment = $existingPayment && $existingPayment->payment_for === 'resched';
+    // If resched is active, we prioritize resched logic
+    if ($applicant->is_reschedule_active) {
+        $existingPayment = $reschedPayment; // might be null
+        $isReschedPayment = true;
+        $isPaymentSubmitted = $reschedPayment && in_array($reschedPayment->payment_status, ['pending', 'approved']);
+    } else {
+        $existingPayment = $firstTimePayment;
+        $isReschedPayment = false;
+        $isPaymentSubmitted = $firstTimePayment && in_array($firstTimePayment->payment_status, ['pending', 'approved']);
+    }
 
-    $isPaymentSubmitted = !$applicant->is_reschedule_active && $existingPayment;
+
 
     return view('applicant.steps.payment.payment', [
         'formSubmission' => $formSubmission,
@@ -106,9 +113,13 @@ class PaymentController extends Controller
             'payment_for' => $paymentPurpose,
         ]);
 
+       if ($paymentPurpose === 'first-time') {
+            $applicant->is_reschedule_active = false;
+        }
+
         $applicant->current_step = 3;
-        $applicant->is_reschedule_active = false; 
         $applicant->save();
+
 
 
 

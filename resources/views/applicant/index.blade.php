@@ -40,12 +40,11 @@
                 @yield('content')
             </div>
 
-            <div class="col-lg-3">
+        
+            <div class="col-lg-3 d-none d-lg-block p-0"></div> 
+            <div class="col-lg-9 bg-success p-0">
+                @include('partials.footer')
             </div>
-            <div class="col-lg-9 bg-success">
-                 @include('partials.footer')
-            </div>
-
         </div>
     </div>
 
