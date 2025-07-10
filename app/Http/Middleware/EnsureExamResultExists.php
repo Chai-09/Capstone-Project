@@ -19,9 +19,13 @@ class EnsureExamResultExists
             abort(404);
         }
 
-        $hasExamResult = ExamResult::where('applicant_id', $applicant->id)->exists();
+        $examResult = ExamResult::where('applicant_id', $applicant->id)->first();
 
-        if (!$hasExamResult) {
+        if (
+            !$examResult ||
+            empty($examResult->exam_status) ||
+            empty($examResult->exam_result)
+        ) {
             return redirect()->route('reminders.view')
                 ->with('alert_type', 'error')
                 ->with('alert_message', 'You cannot view your exam result yet.');

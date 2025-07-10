@@ -97,18 +97,7 @@ class ApplicantScheduleController extends Controller
         ]);
 
 
-        // Reset exam result only if it already exists
-ExamResult::updateOrCreate(
-    ['applicant_id' => $applicant->id],
-    [
-        'applicant_name' => strtoupper($form->applicant_fname . ' ' . $form->applicant_mname . ' ' . $form->applicant_lname),
-        'incoming_grade_level' => $form->incoming_grlvl,
-        'exam_date' => $request->exam_date,
-        'exam_status' => null, // ← this clears "done" or "no show"
-        'exam_result' => null,
-        'admission_number' => $admissionNumber,
-    ]
-);
+        
 
         //Update Current step to 5 (gawin mong == na din lahat ng update para no issues)
         if ($applicant->current_step == 4) {

@@ -55,7 +55,7 @@
                                             <td data-label="Admission No.">{{ $examResult->admission_number }}</td>
                                             <td data-label="Applicant Name">{{ $examResult->applicant_name }}</td>
                                             <td data-label="Exam Date">{{ \Carbon\Carbon::parse($examResult->exam_date)->format('F d, Y') }}</td>
-                                            <td data-label="Result" class="text-capitalize">{{ $examResult->exam_result }}</td>
+                                            <td data-label="Result">{{ ucwords(str_replace('_', ' ', $examResult->exam_result)) }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

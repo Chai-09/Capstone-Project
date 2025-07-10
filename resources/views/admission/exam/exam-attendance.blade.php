@@ -119,4 +119,22 @@
     @endif
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('form[action="{{ route('exam.markAttendance') }}"]').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                Swal.fire({
+                    title: 'Submitting...',
+                    text: 'Please wait while the attendance is being marked.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
 @endsection

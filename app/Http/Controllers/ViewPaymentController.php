@@ -7,6 +7,8 @@ use App\Models\Payment;
 use App\Models\FillupForms;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Applicant;
+use App\Models\ExamResult;
+use App\Models\ApplicantSchedule;
 
 class ViewPaymentController extends Controller
 {
@@ -63,6 +65,8 @@ class ViewPaymentController extends Controller
         $applicant = Applicant::where('account_id', Auth::id())->first();
 
         if ($applicant && $applicant->current_step < 4) {
+            ExamResult::where('applicant_id', $applicant->id)->delete();
+            ApplicantSchedule::where('applicant_id', $applicant->id)->delete();
             $applicant->current_step = 4;
             $applicant->save();
         }

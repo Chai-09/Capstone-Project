@@ -95,6 +95,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     const [startTimeRaw, endTimeRaw] = timeText.split(' to ');
                     const dateFormatted = dateGroup.getAttribute('data-date');
 
+                         Swal.fire({
+                        title: 'Saving your schedule...',
+                        text: 'Please wait a moment.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
                     fetch(route, {
                         method: "POST",
                         headers: {

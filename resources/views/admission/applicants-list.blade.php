@@ -36,7 +36,7 @@
                         <label for="stage" class="form-label">Current Stage</label>
                         <select name="stage" id="stage" class="form-select form-select-sm">
                             <option value="">All Stages</option>
-                            @for ($s = 1; $s <= 6; $s++)
+                            @for ($s = 1; $s <= 7; $s++)
                                 <option value="{{ $s }}" {{ request('stage') == $s ? 'selected' : '' }}>{{ $s }}</option>
                             @endfor
                         </select>
@@ -137,14 +137,22 @@
                             <td>{{ $applicant->applicant_fname }} {{ $applicant->applicant_mname ?? '' }} {{ $applicant->applicant_lname }}</td>
                             <td>{{ $applicant->formSubmission->applicant_email ?? 'N/A' }}</td>
                             <td>{{ $applicant->formSubmission->applicant_contact_number ?? 'N/A' }}</td>
-                            <td>{{ $applicant->formSubmission->current_school ?? 'N/A' }}</td>
-                            <td>{{ $applicant->formSubmission->incoming_grlvl ?? 'N/A' }}</td>
+                            <td>{{ $applicant->current_school ?? 'N/A' }}</td>
+                            <td>{{ $applicant->incoming_grlvl ?? 'N/A' }}</td>
                             <td>{{ $applicant->current_step }}</td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
-                                    <a href="{{ route('admission.editApplicant', $applicant->id) }}" class="btn btn-sm btn-primary">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
+                                    @if ($applicant->current_step == 1)
+                                        <button type="button"
+                                                onclick="showIncompleteAlert('{{ $applicant->applicant_fname }} {{ $applicant->applicant_lname }}')" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                    @else
+                                        <a href="{{ route('admission.editApplicant', $applicant->id) }}" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                    @endif
+
                                     <form action="{{ route('admission.applicants.destroy', $applicant->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this applicant?');">
                                         @csrf
                                         @method('DELETE')
@@ -182,6 +190,18 @@
     });
 </script>
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function showIncompleteAlert(applicantName) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Form Incomplete',
+            text: applicantName + ' has not submitted their application form yet. Editing is not available at this stage.',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+        });
+    }
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+
