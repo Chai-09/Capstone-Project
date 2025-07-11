@@ -69,7 +69,20 @@ document.addEventListener('DOMContentLoaded', function () {
         newForm.action = `/accountant/payment-decision/${data.id}`;
 
         newForm.addEventListener('submit', function (e) {
+
             const isApproved = document.getElementById('acceptStatus')?.checked;
+            const isDenied = document.getElementById('denyStatus')?.checked;
+
+            if (!isApproved && !isDenied) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Please select a payment status',
+                    text: 'Choose either Accept or Deny before submitting.',
+                    confirmButtonColor: '#266a32',
+                });
+                return;
+            }
 
             if (isApproved) {
                 const ocrValue = document.getElementById('ocr_number').value.trim();
@@ -82,7 +95,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Missing Required Fields',
-                        text: 'Please upload a receipt and enter the OCR number before submitting.'
+                        text: 'Please upload a receipt and enter the OCR number before submitting.',
+                        confirmButtonColor: '#266a32',
                     });
                     return;
                 }

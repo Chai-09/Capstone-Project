@@ -345,7 +345,13 @@
                 </a>
               </div>
               <div class="col-md-4">
-       
+                {{-- @if ($payment->receipt)
+                  <label>Payment Receipt:</label><br> 
+                    <a href="javascript:void(0);" onclick="viewProof('{{ asset('storage/' . $payment->receipt) }}')" class="proof-text">
+                      Click here to view
+                    </a>
+                  </p>
+                @endif --}}
               </div>
             </div>
 
@@ -400,6 +406,5 @@
 
 
 @endsection
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>

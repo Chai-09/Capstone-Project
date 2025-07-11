@@ -308,4 +308,23 @@
     }
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const gradeSelect = document.getElementById('incoming_grlvl');
+        const schoolInput = document.getElementById('current_school');
+
+        gradeSelect.addEventListener('change', function () {
+            if (this.value === 'Kinder') {
+                schoolInput.value = 'N/A';
+                schoolInput.readOnly = true;
+            } else {
+                if (schoolInput.value === 'N/A') {
+                    schoolInput.value = '';
+                }
+                schoolInput.readOnly = false;
+            }
+        });
+    });
+</script>
+
 </html>
