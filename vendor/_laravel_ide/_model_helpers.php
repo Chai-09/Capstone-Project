@@ -1304,6 +1304,7 @@ namespace App\Models {
    * @property \Illuminate\Support\Carbon|null $created_at
    * @property string $educational_level
    * @property mixed $max_participants
+   * @property string $venue
    * @property string $end_time
    * @property string $start_time
    * @property string $exam_date
@@ -1314,6 +1315,7 @@ namespace App\Models {
    * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereExamDate($value)
    * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereStartTime($value)
    * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereEndTime($value)
+   * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereVenue($value)
    * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereMaxParticipants($value)
    * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereEducationalLevel($value)
    * @method static \Illuminate\Database\Eloquent\Builder<ExamSchedule>|ExamSchedule whereCreatedAt($value)

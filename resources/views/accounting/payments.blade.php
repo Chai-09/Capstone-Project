@@ -371,7 +371,7 @@
               <!-- Upload Receipt Dropzone -->
               <div class="col-md-6">
                 <label class="form-label fw-semibold">Upload Receipt</label>
-                <div class="small text-muted mb-2">Max 2MB. Accepted: PNG, JPG, JPEG, PDF.</div>
+                <div class="small text-muted mb-2">Max 2MB. Accepted: PNG, JPG, and JPEG.</div>
                 <div id="receiptDropzone" class="dropzone border border-secondary rounded p-3" style="min-height: 120px;"></div>
                 <input type="hidden" name="receipt" id="receipt">
               </div>

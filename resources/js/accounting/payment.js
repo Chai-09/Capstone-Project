@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     url: window.uploadReceiptUrl,
                     autoProcessQueue: false,
                     maxFiles: 1,
-                    acceptedFiles: "image/*,.pdf",
+                    acceptedFiles: "image/*,",
                     addRemoveLinks: true,
                     dictRemoveFile: 'Remove',
                     headers: {
