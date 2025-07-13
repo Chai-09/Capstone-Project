@@ -29,6 +29,25 @@ document.addEventListener('DOMContentLoaded', function () {
         const level = (educationalLevelInput?.value || "").trim();
         const grade = (incomingGradeInput?.value || "").trim();
 
+        const schoolCityInput = document.getElementById('current_school_city');
+        const citySuggestions = document.getElementById('citySuggestions');
+
+        if (schoolCityInput) {
+            if (grade === "KINDER") {
+                schoolCityInput.value = "N/A";
+                schoolCityInput.readOnly = true;
+                schoolCityInput.classList.add('readonly');
+                if (citySuggestions) citySuggestions.innerHTML = '';
+            } else {
+                if (schoolCityInput.value === "N/A") {
+                    schoolCityInput.value = "";
+                }
+                schoolCityInput.readOnly = false;
+                schoolCityInput.classList.remove('readonly');
+            }
+        }
+
+
         
         gradeLevelContainer.style.display = 'none';
         sourceContainer.style.display = 'none';
