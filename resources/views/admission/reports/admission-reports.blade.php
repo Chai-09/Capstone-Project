@@ -67,6 +67,16 @@
             <button type="button" class="btn btn-toggle" data-range="monthly">Monthly</button>
             <button type="button" class="btn btn-toggle active" data-range="annually">Annually</button>
         </div>
+
+        <div class="btn-group toggle-group year-filter-group" role="group" style="display: none;">
+            <select id="yearFilterDropdown" class="form-select form-select-sm">
+                <option value="">All Years</option>
+                @foreach($yearlyApplicants as $item)
+                    <option value="{{ $item->year }}">{{ $item->year }}</option>
+                @endforeach
+            </select>
+        </div>
+
     </div>
 
 
@@ -166,7 +176,15 @@
     let selectedLevel = 'all';      // Default
 
     function fetchChartData() {
-        fetch(`/chart-data?level=${encodeURIComponent(selectedLevel)}&range=${encodeURIComponent(selectedRange)}`)
+
+        const selectedYear = yearFilterDropdown.value;
+        let url = `/chart-data?level=${encodeURIComponent(selectedLevel)}&range=${encodeURIComponent(selectedRange)}`;
+
+        if (selectedRange === 'annually' && selectedYear) {
+            url += `&year=${encodeURIComponent(selectedYear)}`;
+        }
+
+        fetch(url)
         .then(res => res.json())
         .then(data => {
             const allEmpty = Object.values(data).every(arr => arr.length === 0);
@@ -308,7 +326,9 @@ document.querySelectorAll('.level-toggle .btn-toggle').forEach(btn => {
     });
 });
 
-
+window.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('.date-toggle .btn-toggle.active')?.click();
+});
 
     document.querySelectorAll('.date-toggle .btn-toggle').forEach(btn => {
         btn.addEventListener('click', function () {
@@ -817,6 +837,30 @@ document.querySelectorAll('.level-toggle .btn-toggle').forEach(btn => {
         plugins: [ChartDataLabels]
     });
 
+    const yearFilterGroup = document.querySelector('.year-filter-group');
+    const yearFilterDropdown = document.getElementById('yearFilterDropdown');
+
+    document.querySelectorAll('.date-toggle .btn-toggle').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.date-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            selectedRange = this.getAttribute('data-range');
+
+            // Show year filter only if annually is selected
+            if (selectedRange === 'annually') {
+                yearFilterGroup.style.display = 'block';
+            } else {
+                yearFilterGroup.style.display = 'none';
+                yearFilterDropdown.value = ''; // Reset when hidden
+            }
+
+            fetchChartData();
+        });
+    });
+
+    yearFilterDropdown.addEventListener('change', function () {
+        fetchChartData();
+    });
 
     document.querySelectorAll('.chart-toggle .btn-toggle').forEach(btn => {
         btn.addEventListener('click', function () {

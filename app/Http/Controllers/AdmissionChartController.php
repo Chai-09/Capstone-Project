@@ -131,9 +131,14 @@ class AdmissionChartController extends Controller
         $level = $request->query('level');
         $range = $request->query('range', 'annually'); // default = annually
         $baseQuery = FillupForms::query();
+        $filterYear = $request->query('year');
 
         if ($level && $level !== 'all') {
             $baseQuery->where('educational_level', $level);
+        }
+
+        if ($range === 'annually' && $filterYear) {
+            $baseQuery->whereYear('created_at', $filterYear);
         }
 
         // Applicant Count Grouped by Selected Range
@@ -167,7 +172,9 @@ class AdmissionChartController extends Controller
                     ->orderBy('period')
                     ->get();
 
-                $baseQuery->whereYear('created_at', now()->year);
+                if ($filterYear) {
+                    $baseQuery->whereYear('created_at', $filterYear);
+                }
                 break;
         }
 
@@ -183,7 +190,7 @@ class AdmissionChartController extends Controller
             'strand' => (clone $baseQuery)->whereNotNull('strand')->selectRaw('strand, COUNT(*) as total')->groupBy('strand')->get(),
             'incomingGrades' => (clone $baseQuery)->selectRaw('incoming_grlvl, COUNT(*) as total')->groupBy('incoming_grlvl')->get(),
             'examResult' => \App\Models\ExamResult::whereNotNull('exam_result')
-                ->whereHas('applicant.formSubmission', function ($query) use ($level, $range) {
+                ->whereHas('applicant.formSubmission', function ($query) use ($level, $range, $filterYear) {
                     if ($level && $level !== 'all') {
                         $query->where('educational_level', $level);
                     }
@@ -197,7 +204,9 @@ class AdmissionChartController extends Controller
                                 ->whereMonth('created_at', now()->month);
                             break;
                         case 'annually':
-                            $query->whereYear('created_at', now()->year);
+                            if ($filterYear) {
+                                $query->whereYear('created_at', $filterYear);
+                            }
                             break;
                     }
                 })
@@ -207,12 +216,11 @@ class AdmissionChartController extends Controller
                 ->get(),
             'recommendedStrand' => \App\Models\Applicant::whereNotNull('recommended_strand')
                 ->when($level && $level !== 'all', function ($q) use ($level) {
-                    // Join form_submissions to get educational_level
                     $q->whereHas('formSubmission', function ($sub) use ($level) {
                         $sub->where('educational_level', $level);
                     });
                 })
-                ->when(true, function ($q) use ($range) {
+                ->when(true, function ($q) use ($range, $filterYear) {
                     switch ($range) {
                         case 'daily':
                             $q->whereDate('created_at', now()->toDateString());
@@ -222,7 +230,9 @@ class AdmissionChartController extends Controller
                                 ->whereMonth('created_at', now()->month);
                             break;
                         case 'annually':
-                            $q->whereYear('created_at', now()->year);
+                            if ($filterYear) {
+                                $q->whereYear('created_at', $filterYear);
+                            }
                             break;
                     }
                 })
@@ -230,7 +240,6 @@ class AdmissionChartController extends Controller
                 ->groupBy('recommended_strand')
                 ->orderBy('recommended_strand')
                 ->get(),
-
         ];
         $data['applicantsPerRange'] = $applicantsPerRange;
         return response()->json($data);
