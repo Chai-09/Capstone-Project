@@ -75,6 +75,14 @@
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 chart-section demographic">
             <div class="col">
                 <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">Applicants Count</div>
+                    <div class="card-body">
+                        <canvas id="ApplicantsPerRangeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card chart-card">
                     <div class="card-header bg-primary text-white">Educational Level</div>
                     <div class="card-body"><canvas id="EducationalLevelChart"></canvas></div>
                 </div>
@@ -174,7 +182,8 @@
                 // Clear all charts
                 [
                     educationalChart, applicantGenderChart, ageChart, cityChart, regionChart,
-                    nationalityChart, schoolTypeChart, sourceChart, strandChart, incomingGradeChart
+                    nationalityChart, schoolTypeChart, sourceChart, strandChart, incomingGradeChart,
+                    examResultChart, recommendedStrandChart, applicantsPerRangeChart
                 ].forEach(chart => {
                     chart.data.labels = [];
                     chart.data.datasets[0].data = [];
@@ -243,6 +252,12 @@
             recommendedStrandChart.data.labels = data.recommendedStrand.map(s => s.recommended_strand);
             recommendedStrandChart.data.datasets[0].data = data.recommendedStrand.map(s => s.total);
             recommendedStrandChart.update();
+
+            // Applicants Per Range Chart
+            applicantsPerRangeChart.data.labels = data.applicantsPerRange.map(a => a.period);
+            applicantsPerRangeChart.data.datasets[0].data = data.applicantsPerRange.map(a => a.total);
+            applicantsPerRangeChart.update();
+
 
         });
         
@@ -773,6 +788,36 @@ document.querySelectorAll('.level-toggle .btn-toggle').forEach(btn => {
         plugins: [ChartDataLabels]
     });
 
+    const applicantsRangeCtx = document.getElementById('ApplicantsPerRangeChart').getContext('2d');
+    const applicantsPerRangeChart = new Chart(applicantsRangeCtx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Total Applicants',
+                data: [],
+                backgroundColor: '#129439',
+                borderColor: '#129439',
+                fill: false,
+                tension: 0.4,
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true, position: 'bottom' }
+            },
+            scales: {
+                y: { beginAtZero: true, ticks: { precision: 0 } }
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
+
+
     document.querySelectorAll('.chart-toggle .btn-toggle').forEach(btn => {
         btn.addEventListener('click', function () {
             document.querySelectorAll('.chart-toggle .btn-toggle').forEach(b => b.classList.remove('active'));
@@ -825,6 +870,11 @@ document.querySelectorAll('.level-toggle .btn-toggle').forEach(btn => {
     });
 });
 </script>
+
+<script>
+    fetchChartData();  // Trigger on page load
+</script>
+
 
 @endsection
 
