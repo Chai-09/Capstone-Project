@@ -144,6 +144,8 @@ class AdmissionChartController extends Controller
                     ->groupBy('period')
                     ->orderBy('period')
                     ->get();
+
+                $baseQuery->whereDate('created_at', now()->toDateString());
                 break;
 
             case 'monthly':
@@ -152,6 +154,9 @@ class AdmissionChartController extends Controller
                     ->groupBy('period')
                     ->orderBy('period')
                     ->get();
+
+                $baseQuery->whereYear('created_at', now()->year)
+                    ->whereMonth('created_at', now()->month);
                 break;
 
             case 'annually':
@@ -161,6 +166,8 @@ class AdmissionChartController extends Controller
                     ->groupBy('period')
                     ->orderBy('period')
                     ->get();
+
+                $baseQuery->whereYear('created_at', now()->year);
                 break;
         }
 
