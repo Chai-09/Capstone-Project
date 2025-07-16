@@ -432,6 +432,18 @@
                     <p class="text-muted small mt-3 mb-0">
                         *Only main strands are included in this breakdown. Sub-strands are calculated separately.
                     </p>
+
+                     @if (isset($applicant->strand_description))
+                    <div class="mt-3 p-3 bg-white rounded-3 shadow-sm border">
+                        <strong>Why this strand?</strong>
+                        <p class="mb-0">{{ $applicant->strand_description }}</p>
+                    </div>
+                @endif
+
+                    <p class="text-muted small mt-3 mb-0">
+                        *This description is based on your recommended strand and its actual percentage.
+                    </p>
+
                 </div>
 
                 <!-- Right: Chart -->

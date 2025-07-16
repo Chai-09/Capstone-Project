@@ -359,12 +359,23 @@ class FillupFormsController extends Controller
                 }
 
 
+
+            $percentage = $strandBreakdown[strtolower($topStrand)] ?? 0; 
+
+            $description = $this->getStrandDescription($finalStrand);
+            $strengthLevel = $this->getStrengthLevelDescription($percentage);
+
+            $fullDescription = $description . ' ' . $strengthLevel;
+
+
+
                 // Store temporarily in session to prefill later
-                session(['recommended_strand' => $finalStrand]);
+                session(['recommended_strand' => $finalStrand, 'strand_description' => $fullDescription]);
 
                  // save sa db
                 $applicant = Applicant::where('account_id', auth()->user()->id)->first();
                 if ($applicant) {
+                    $applicant->strand_description = $fullDescription;
                     $applicant->recommended_strand = $finalStrand;
                     $applicant->strand_breakdown = json_encode($strandBreakdown);
                     $applicant->save();
@@ -375,5 +386,35 @@ class FillupFormsController extends Controller
 
 
             }
+
+                // Description per strand
+                private function getStrandDescription($strand)
+                {
+                    $descriptions = [
+                        'STEM Health Allied' => 'You are inclined towards health sciences you likely have a passion for biology, care for others, and interest in healthcare professions.',
+                        'STEM Engineering' => 'You show strength in logical reasoning, problem-solving, and an interest in how things work ideal for engineering and technical fields.',
+                        'STEM Information Technology' => 'You show strong analytical thinking and an interest in computers, software, and emerging technology.',
+                        'ABM Accountancy' => 'You have a keen eye for numbers, detail-oriented mindset, and interest in financial systems suited for accountancy and financial careers.',
+                        'ABM Business Management' => 'Your leadership, entrepreneurial mindset, and business acumen make you fit for management and entrepreneurship.',
+                        'HUMSS' => 'You have strong communication skills, empathy, and interest in humanities, social sciences, or community service.',
+                        'GAS' => 'You exhibit a wide range of interests and skills, making you versatile and adaptable ideal for general academic exploration.',
+                        'SPORTS' => 'Your energy, discipline, and competitive nature align with sports, physical education, and athletic development.',
+                    ];
+
+                    return $descriptions[$strand] ?? 'No description available for this strand.';
+                }
+
+                // Level description based on percentage
+                private function getStrengthLevelDescription($percentage)
+                {
+                    return match (true) {
+                        $percentage >= 50 => 'This is a key strength for you. You show exceptional interest and aptitude in this area.',
+                        $percentage >= 40 => 'You have a strong inclination for this strand, making it a likely good fit.',
+                        $percentage >= 30 => 'You show potential in this area. With further exploration, this could suit you well.',
+                        $percentage >= 25 => 'You have moderate interest here, but may want to consider other options too.',
+                        default => 'This may not be your sole area of focus or interest, but could still be worth exploring further if you’re curious.',
+                    };
+                }
+
 
             }
