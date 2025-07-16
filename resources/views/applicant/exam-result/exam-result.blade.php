@@ -65,15 +65,14 @@
                 </div>
 
                 @if ($hasScheduled && !$hasReschedPayment && $examResult->exam_result === 'no_show')
-
-                <form method="POST" action="{{ route('payment.resched.trigger') }}">
-                    @csrf
-                    <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-submit w-auto">
-                            Reschedule (Submit New Payment)
-                        </button>
-                    </div>
-                </form>
+                    <form method="POST" action="{{ route('payment.resched.trigger') }}">
+                        @csrf
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-submit w-auto">
+                                Reschedule (Submit New Payment)
+                            </button>
+                        </div>
+                    </form>
                 @endif
                 
             @else
@@ -85,5 +84,20 @@
         </div>
     </div>
 </div>
+
+@if($examResult && $examResult->exam_result === 'failed')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: 'warning',
+            title: 'Important Notice',
+            html: `Due to the failed status and no refund policy, your account will be archived in 3 days after giving your exam result.<br><br>
+                   Please note that you will be unable to log back in after logging out.<br><br>
+                   For more information, contact the Admissions Office (<strong>admissions@feudiliman.edu.ph</strong>).`,
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
+
 
 @endsection

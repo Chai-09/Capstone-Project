@@ -11,7 +11,9 @@ class AdmissionsAppListController extends Controller
 {
     public function index(Request $request)
 {
-    $query = Applicant::with('formSubmission');
+    $query = Applicant::with('formSubmission')->whereHas('account', function ($q) {
+        $q->where('is_archive', 'no');
+    });
 
     // Search by name or email
     if ($request->filled('search')) {
@@ -86,20 +88,58 @@ class AdmissionsAppListController extends Controller
 
 }
 
-public function destroy($id)
+public function archive($id)
 {
-    // Step 1: Find the applicant first
     $applicant = Applicant::findOrFail($id);
-
-    // Step 2: Use the applicant's account_id to find the related account
     $account = Accounts::find($applicant->account_id);
 
-    // Step 3: Delete the account if it exists
     if ($account) {
-        $account->delete();
+        $account->update(['is_archive' => 'yes']);
     }
 
-    return redirect()->route('applicantlist')->with('success', 'Account associated with applicant deleted successfully.');
+    return redirect()->route('applicantlist')->with('success', 'Applicant archived successfully.');
 }
+
+public function archivedList(Request $request)
+{
+    $query = Applicant::with('formSubmission')->whereHas('account', function ($q) {
+        $q->where('is_archive', 'yes');
+    });
+
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('applicant_fname', 'like', "%$search%")
+              ->orWhere('applicant_lname', 'like', "%$search%")
+              ->orWhereHas('formSubmission', function ($q2) use ($search) {
+                  $q2->where('applicant_email', 'like', "%$search%");
+              });
+        });
+    }
+    
+    if ($request->filled('grade_level')) {
+        $query->where('incoming_grlvl', $request->grade_level);
+    }
+    
+
+    $applicants = $query->orderBy('created_at', 'desc')->paginate(12);
+
+    return view('admission.archived-list', compact('applicants'));
+}
+
+
+public function restore($id)
+{
+    $applicant = Applicant::findOrFail($id);
+    $account = Accounts::find($applicant->account_id);
+
+    if ($account) {
+        $account->update(['is_archive' => 'no']);
+    }
+
+    return redirect()->route('admission.archivedList')->with('success', 'Applicant restored successfully.');
+}
+
+
 
 }

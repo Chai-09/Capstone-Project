@@ -12,11 +12,14 @@ class AdminAccountController extends Controller
     public function index(Request $request)
     {
         $query = Accounts::query();
-
+    
+        // Exclude archived accounts
+        $query->where('is_archive', '!=', 'yes');
+    
         if ($request->filled('role')) {
             $query->where('role', strtolower($request->role));
         }
-
+    
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -24,19 +27,20 @@ class AdminAccountController extends Controller
                     ->orWhere('email', 'like', '%' . $search . '%');
             });
         }
-
+    
         // Sorting logic
-        $sort = $request->input('sort', 'created_at'); // default sort by created_at
-        $direction = $request->input('direction', 'desc'); // default direction
-
+        $sort = $request->input('sort', 'created_at');
+        $direction = $request->input('direction', 'desc');
+    
         if (in_array($sort, ['name', 'created_at']) && in_array($direction, ['asc', 'desc'])) {
             $query->orderBy($sort, $direction);
         }
-
+    
         $accounts = $query->paginate(15)->appends($request->all());
-
+    
         return view('administrator.dashboard', compact('accounts'));
     }
+    
 
     public function edit($id)
     {

@@ -122,4 +122,14 @@
         location.reload(); 
     }
 </script>
+@if (session('archive_error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Account Disabled',
+        text: '{{ session('archive_error') }}',
+    });
+</script>
+@endif
+
 </html>

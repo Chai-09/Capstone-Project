@@ -153,13 +153,15 @@
                                         </a>
                                     @endif
 
-                                    <form action="{{ route('admission.applicants.destroy', $applicant->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this applicant?');">
+                                    <button type="button" class="btn btn-sm btn-warning archive-btn" data-id="{{ $applicant->id }}" data-name="{{ $applicant->applicant_fname }} {{ $applicant->applicant_lname }}">
+                                        <i class="bi bi-archive"></i>
+                                    </button>
+
+                                    <form id="archive-form-{{ $applicant->id }}" action="{{ route('admission.applicants.archive', $applicant->id) }}" method="POST" style="display: none;">
                                         @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
                                     </form>
+
+
                                 </div>
                             </td>
                         </tr>
@@ -174,7 +176,7 @@
         @endif
     </div>
 </div>
-@endsection
+
 
 
 <script>
@@ -205,3 +207,28 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 
+
+<script>
+    document.querySelectorAll('.archive-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const applicantName = this.dataset.name;
+            const applicantId = this.dataset.id;
+
+            Swal.fire({
+                title: 'Archive Applicant?',
+                text: `Are you sure you want to archive ${applicantName}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, archive',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`archive-form-${applicantId}`).submit();
+                }
+            });
+        });
+    });
+</script>
+@endsection

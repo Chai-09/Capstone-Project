@@ -56,6 +56,10 @@
           <div class="icon-wrapper"><i class="fa-solid fa-certificate"></i></div>
           <span>Exam Results</span>
         </a>
+        <a href="{{ route('admission.archivedList') }}" class="nav-link" title="Archived Applicants">
+          <div class="icon-wrapper"><i class="fa-solid fa-box-archive"></i></div>
+          <span>Archived Applicants</span>
+        </a>
         <a href="{{ route('admission.reports') }}" class="nav-link" title="Reports">
           <div class="icon-wrapper"><i class="fa-solid fa-square-poll-vertical"></i></div>
           <span>Reports</span>
@@ -87,6 +91,10 @@
         <a href="{{ route('admission.exam.result') }}" class="nav-link" title="Exam Results">
           <div class="icon-wrapper"><i class="fa-solid fa-certificate"></i></div>
           <span>Exam Results</span>
+        </a>
+        <a href="{{ route('admission.archivedList') }}" class="nav-link" title="Archived Applicants">
+          <div class="icon-wrapper"><i class="fa-solid fa-box-archive"></i></div>
+          <span>Archived Applicants</span>
         </a>
         <a href="{{ route('admission.reports') }}" class="nav-link" title="Reports">
           <div class="icon-wrapper"><i class="fa-solid fa-square-poll-vertical"></i></div>

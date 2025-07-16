@@ -39,6 +39,10 @@ class AuthController extends Controller
         $account = Accounts::where('email', $request->email)->first();
 
         if ($account && Hash::check($request->password, $account->password)) {
+            if ($account->is_archive === 'yes') {
+                return back()->with('archive_error', 'Your account has been disabled.');
+            }
+        
             Auth::login($account);
             session()->regenerate();
             session([
@@ -46,16 +50,16 @@ class AuthController extends Controller
                 'email' => $account->email,
                 'role' => $account->role,
             ]);
-
-
+        
             return match ($account->role) {
-                'applicant' => $this->redirectApplicantBasedOnStep(), //redirect based sa step nila
+                'applicant' => $this->redirectApplicantBasedOnStep(),
                 'admission' => redirect()->route('admissiondashboard'),
                 'accounting' => redirect()->route('accountingdashboard'),
                 'administrator' => redirect()->route('admindashboard'),
                 default => redirect()->route('login'),
             };
         }
+        
 
         return back()->withErrors(['Invalid email or password']);
     }
