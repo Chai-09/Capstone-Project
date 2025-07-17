@@ -126,8 +126,9 @@
 <script>
     Swal.fire({
         icon: 'error',
-        title: 'Account Disabled',
-        text: '{{ session('archive_error') }}',
+        title: 'Account Has Been Archived',
+        html: `Please Contact Admissions to Unarchive`,
+            confirmButtonText: 'OK'
     });
 </script>
 @endif

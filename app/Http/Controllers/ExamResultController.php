@@ -244,23 +244,25 @@ if ($applicant->formSubmission && $applicant->formSubmission->guardian_contact_n
 
     public function autoArchiveFailedApplicants()
     {
-        $cutoffDate = \Carbon\Carbon::now()->subDays(1);
+        $cutoffDate = \Carbon\Carbon::now()->subMinutes(2);
 
+    
         $results = \App\Models\ExamResult::where('exam_result', 'failed')
             ->where('updated_at', '<=', $cutoffDate)
             ->get();
-
+    
         $archivedCount = 0;
-
+    
         foreach ($results as $result) {
             $applicant = $result->applicant;
-            if ($applicant && $applicant->account && !$applicant->account->is_archive) {
-                $applicant->account->update(['is_archive' => true]);
+            if ($applicant && $applicant->account && $applicant->account->is_archive === 'no') {
+                $applicant->account->update(['is_archive' => 'yes']);
                 $archivedCount++;
             }
         }
-
+    
         return response()->json(['message' => "Auto-archived $archivedCount applicant(s)."]);
     }
+    
 
 }
