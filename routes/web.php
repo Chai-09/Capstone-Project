@@ -218,7 +218,7 @@ Route::middleware(['auth', 'role:admission,administrator', 'prevent-back-history
         Route::post('/admission/applicants/{id}/archive', [AdmissionsAppListController::class, 'archive'])->name('admission.applicants.archive');
         Route::get('/admission/archived-list', [AdmissionsAppListController::class, 'archivedList'])->name('admission.archivedList');
         Route::post('/admission/applicants/{id}/restore', [AdmissionsAppListController::class, 'restore'])->name('admission.applicants.restore');
-        Route::get('/auto-archive-failed', [ExamResultController::class, 'autoArchiveFailedApplicants']);
+        
 
 
     Route::post('/admission/exam/exam-schedule/delete-date', [ExamScheduleController::class, 'deleteDate'])
